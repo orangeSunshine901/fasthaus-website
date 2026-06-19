@@ -25,6 +25,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   return (
     <ShopLayout>
       <div className="max-w-[1280px] mx-auto px-6 py-12">
+        {/* Breadcrumb */}
         <nav className="text-sm mb-2" style={{ color: "var(--color-text-secondary)" }}>
           <Link href="/" className="hover:underline">Home</Link>
           {" / "}
@@ -33,6 +34,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           <span style={{ color: "var(--color-text-primary)" }}>{label}</span>
         </nav>
 
+        {/* Page header + sort dropdown */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-semibold" style={{ color: "var(--color-text-primary)" }}>
@@ -52,6 +54,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           </select>
         </div>
 
+        {/* Product grid / empty state */}
         {products.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             {products.map((product) => (

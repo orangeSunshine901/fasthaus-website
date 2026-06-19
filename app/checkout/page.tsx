@@ -43,6 +43,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
+      /* Empty cart guard */
       <div className="min-h-screen flex items-center justify-center flex-col gap-4">
         <p style={{ color: "var(--color-text-secondary)" }}>Your cart is empty.</p>
         <Link href="/shop" className="text-sm" style={{ color: "var(--color-accent-amber)" }}>
@@ -81,6 +82,7 @@ export default function CheckoutPage() {
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
       <AnnouncementBar />
       {/* Checkout header — minimal nav */}
+      {/* Checkout header — minimal nav with logo + secure badge */}
       <header
         className="border-b px-6 h-16 flex items-center justify-between"
         style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}

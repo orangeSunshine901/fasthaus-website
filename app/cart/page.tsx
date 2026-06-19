@@ -13,6 +13,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <ShopLayout>
+        {/* Empty state */}
         <div className="max-w-[1280px] mx-auto px-6 py-24 text-center">
           <h1 className="text-3xl font-semibold mb-4" style={{ color: "var(--color-text-primary)" }}>Your Cart</h1>
           <p className="mb-8" style={{ color: "var(--color-text-secondary)" }}>Your cart is empty.</p>
@@ -140,6 +141,7 @@ export default function CartPage() {
             <p className="text-xs text-center mt-3" style={{ color: "var(--color-text-secondary)" }}>
               Free shipping on all orders
             </p>
+            {/* Payment method icons */}
             <div className="flex justify-center gap-2 mt-3 flex-wrap">
               {["Visa", "Mastercard", "G Pay", "Apple Pay"].map((p) => (
                 <span

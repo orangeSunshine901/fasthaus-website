@@ -37,6 +37,7 @@ export default function WarrantyPage() {
   return (
     <ShopLayout>
       <div className="max-w-[1280px] mx-auto px-6 py-14">
+        {/* Page header */}
         <h1 className="text-4xl font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>
           2-Year Warranty
         </h1>

@@ -37,6 +37,7 @@ export default function CollectionsPage() {
           <span style={{ color: "var(--color-text-primary)" }}>Shop</span>
         </nav>
 
+        {/* Page header + sort dropdown */}
         <div className="flex items-start justify-between mb-8">
           <div>
             <h1 className="text-3xl font-semibold" style={{ color: "var(--color-text-primary)" }}>
@@ -57,6 +58,7 @@ export default function CollectionsPage() {
           </select>
         </div>
 
+        {/* Product grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
           {PRODUCTS.map((product) => (
             <ProductCard key={product.id} product={product} showRating />

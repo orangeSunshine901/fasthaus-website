@@ -26,6 +26,7 @@ export default function OrderConfirmationPage() {
   if (!order) {
     return (
       <ShopLayout>
+        {/* Not found guard */}
         <div className="text-center py-24">
           <p style={{ color: "var(--color-text-secondary)" }}>Order not found.</p>
           <Link href="/" className="text-sm mt-4 block" style={{ color: "var(--color-accent-amber)" }}>
@@ -39,6 +40,7 @@ export default function OrderConfirmationPage() {
   return (
     <ShopLayout>
       <div className="max-w-[640px] mx-auto px-6 py-16 text-center">
+        {/* Confirmation icon */}
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
           style={{ backgroundColor: "var(--color-surface-muted)" }}
@@ -46,6 +48,7 @@ export default function OrderConfirmationPage() {
           <ShieldCheck size={28} style={{ color: "var(--color-accent-amber)" }} />
         </div>
 
+        {/* Order header — number + confirmation message */}
         <h1 className="text-2xl font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>
           Thank you! Your order is confirmed.
         </h1>
@@ -106,10 +109,12 @@ export default function OrderConfirmationPage() {
           </div>
         </div>
 
+        {/* Help link */}
         <p className="text-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
           Need help? <a href="mailto:support@fasthaus.ae" className="underline" style={{ color: "var(--color-text-secondary)" }}>support@fasthaus.ae</a>
         </p>
 
+        {/* Continue shopping CTA */}
         <Link
           href="/shop"
           className="inline-block px-6 py-3 rounded-full text-sm font-medium text-white"

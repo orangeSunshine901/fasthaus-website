@@ -63,7 +63,7 @@ export const PRODUCTS: Product[] = [
         sku: "LDL-TRC",
         price: 220,
         stock: 12,
-        images: ["/lamp-feature-1.png", "/lamp-feature-2.png", "/lamp-feature-3.png"],
+        images: ["/lamp-feature-1.png"],
       },
       {
         id: "1-beige",
@@ -114,7 +114,7 @@ export const PRODUCTS: Product[] = [
         sku: "ATL-WHT",
         price: 190,
         stock: 10,
-        images: ["/collection-image-1.png", "/lamp-feature-4.png"],
+        images: ["/lamp-feature-2.png","/collection-image-2.png"],
       },
       {
         id: "2-black",
@@ -155,7 +155,7 @@ export const PRODUCTS: Product[] = [
         sku: "PTL-SND",
         price: 175,
         stock: 14,
-        images: ["/collection-image-2.png", "/lamp-feature-1.png"],
+        images: ["/lamp-feature-3.png","/collection-image-2.png"],
       },
       {
         id: "3-sage",
@@ -164,7 +164,7 @@ export const PRODUCTS: Product[] = [
         sku: "PTL-SGE",
         price: 175,
         stock: 7,
-        images: ["/lamp-feature-1.png", "/collection-image-2.png"],
+        images: ["/lamp-feature-4.png", "/collection-image-2.png"],
       },
     ],
     specs: [
@@ -196,7 +196,7 @@ export const PRODUCTS: Product[] = [
         sku: "RTL-TRC",
         price: 195,
         stock: 9,
-        images: ["/collection-image-3.png", "/lamp-feature-2.png"],
+        images: ["/lamp-feature-4.png","/collection-image-3.png"],
       },
       {
         id: "4-chalk",

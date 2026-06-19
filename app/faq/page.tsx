@@ -50,6 +50,7 @@ export default function FAQPage() {
   return (
     <ShopLayout>
       <div className="max-w-[720px] mx-auto px-6 py-14">
+        {/* Page header */}
         <h1 className="text-4xl font-semibold text-center mb-2" style={{ color: "var(--color-text-primary)" }}>
           You Ask. We Answer.
         </h1>

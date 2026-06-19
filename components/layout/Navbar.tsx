@@ -9,6 +9,7 @@ import { useCartStore } from "@/lib/store/cart";
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
+  const hydrated = useCartStore((s) => s.hydrated);
   const itemCount = useCartStore((s) => s.itemCount());
 
   return (
@@ -87,7 +88,7 @@ export default function Navbar() {
           </Link>
           <Link href="/cart" className="relative" aria-label="Cart">
             <ShoppingCart size={20} style={{ color: "var(--color-text-primary)" }} className="hover:opacity-70 transition-opacity" />
-            {itemCount > 0 && (
+            {hydrated && itemCount > 0 && (
               <span
                 className="absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-semibold flex items-center justify-center text-white"
                 style={{ backgroundColor: "var(--color-accent-amber)" }}
