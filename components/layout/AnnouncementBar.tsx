@@ -10,7 +10,13 @@ const items = [
 export default function AnnouncementBar() {
   return (
     <div className="w-full py-2 px-4" style={{ backgroundColor: "var(--color-highlight)" }}>
-      <div className="max-w-[1280px] mx-auto flex items-center justify-center gap-8 flex-wrap">
+      {/* Mobile: condensed single-line text */}
+      <p className="md:hidden text-center text-xs font-medium truncate" style={{ color: "var(--color-text-primary)" }}>
+        Free Shipping · 30-Day Returns · 2-Year Warranty
+      </p>
+
+      {/* Desktop: icon strip */}
+      <div className="hidden md:flex max-w-[1280px] mx-auto items-center justify-center gap-8">
         {items.map(({ icon: Icon, label }) => (
           <div key={label} className="flex items-center gap-1.5">
             <Icon size={14} style={{ color: "var(--color-text-primary)" }} />

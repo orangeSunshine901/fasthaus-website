@@ -24,7 +24,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
   return (
     <ShopLayout>
-      <div className="max-w-[1280px] mx-auto px-6 py-12">
+      <div className="container-page py-8 md:py-12">
         {/* Breadcrumb */}
         <nav className="text-sm mb-2" style={{ color: "var(--color-text-secondary)" }}>
           <Link href="/" className="hover:underline">Home</Link>
@@ -35,17 +35,17 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         </nav>
 
         {/* Page header + sort dropdown */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-semibold" style={{ color: "var(--color-text-primary)" }}>
+            <h1 className="type-display-xl" style={{ color: "var(--color-text-primary)" }}>
               {label}
             </h1>
-            <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
+            <p className="type-body-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
               {products.length} products
             </p>
           </div>
           <select
-            className="h-10 px-3 rounded-lg border text-sm outline-none"
+            className="input-field min-h-10 self-start px-3 sm:self-auto"
             style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
           >
             <option>Sort: Featured</option>
@@ -56,20 +56,19 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
         {/* Product grid / empty state */}
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} showRating />
             ))}
           </div>
         ) : (
           <div className="text-center py-24">
-            <p className="text-lg font-medium mb-4" style={{ color: "var(--color-text-primary)" }}>
+            <p className="type-display-sm mb-4" style={{ color: "var(--color-text-primary)" }}>
               No products found
             </p>
             <Link
               href="/shop"
-              className="inline-block px-6 py-3 rounded-full text-sm font-medium text-white"
-              style={{ backgroundColor: "var(--color-accent-amber)" }}
+              className="btn btn-primary"
             >
               Browse all products
             </Link>

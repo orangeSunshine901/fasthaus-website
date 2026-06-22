@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Star, Minus, Plus, Truck, RotateCcw, Shield, ChevronDown } from "lucide-react";
+import { Star, Minus, Plus, Truck, RotateCcw, Shield } from "lucide-react";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
@@ -56,11 +56,11 @@ export default function PDPClient({ product }: { product: Product }) {
   const images = selectedVariant.images;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
       {/* Image Gallery */}
       <div>
         <div
-          className="relative rounded-xl overflow-hidden mb-3"
+          className="media-rounded relative mb-3"
           style={{ aspectRatio: "4/3", backgroundColor: "var(--color-surface-muted)" }}
         >
           <Image
@@ -71,12 +71,12 @@ export default function PDPClient({ product }: { product: Product }) {
             priority
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-1">
           {images.map((img, i) => (
             <button
               key={i}
               onClick={() => setActiveImage(i)}
-              className="relative rounded-lg overflow-hidden border-2 transition-all"
+              className="relative overflow-hidden rounded-[var(--radius-sm)] border-2 transition-all"
               style={{
                 width: 72,
                 height: 72,
@@ -95,13 +95,13 @@ export default function PDPClient({ product }: { product: Product }) {
         {/* Add-ons panel (right side) */}
         {product.addOns && product.addOns.length > 0 && (
           <div
-            className="rounded-xl p-4 mb-6 border"
+            className="panel-surface mb-6 p-4"
             style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-semibold" style={{ color: "var(--color-text-primary)" }}>Add-ons</span>
+              <span className="type-title-md" style={{ color: "var(--color-text-primary)" }}>Add-ons</span>
               <span
-                className="text-xs px-2 py-0.5 rounded-full border"
+                className="type-badge rounded-full border px-2 py-1"
                 style={{ borderColor: "var(--color-accent-amber)", color: "var(--color-accent-amber)" }}
               >
                 Recommended
@@ -117,13 +117,13 @@ export default function PDPClient({ product }: { product: Product }) {
                   type="checkbox"
                   checked={selectedAddOns.has(ao.id)}
                   onChange={() => toggleAddOnSelection(ao.id)}
-                  className="w-4 h-4 rounded accent-[var(--color-accent-amber)]"
+                  className="h-4 w-4 rounded accent-[var(--color-accent-amber)]"
                 />
                 <div className="flex-1">
-                  <p className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>{ao.name}</p>
-                  <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>{ao.description}</p>
+                  <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>{ao.name}</p>
+                  <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>{ao.description}</p>
                 </div>
-                <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0" style={{ backgroundColor: "var(--color-surface-muted)" }}>
+                <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-[var(--radius-sm)]" style={{ backgroundColor: "var(--color-surface-muted)" }}>
                   <Image src={ao.image} alt={ao.name} fill className="object-cover" />
                 </div>
                 <DirhamPrice amount={ao.price} size="sm" />
@@ -133,7 +133,7 @@ export default function PDPClient({ product }: { product: Product }) {
         )}
 
         {/* Name + Rating */}
-        <h1 className="text-3xl font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>
+        <h1 className="type-display-xl mb-2" style={{ color: "var(--color-text-primary)" }}>
           {product.name}
         </h1>
         <div className="flex items-center gap-2 mb-3">
@@ -147,7 +147,7 @@ export default function PDPClient({ product }: { product: Product }) {
               />
             ))}
           </div>
-          <span className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+          <span className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
             {product.rating} ({product.reviewCount} reviews)
           </span>
         </div>
@@ -164,15 +164,15 @@ export default function PDPClient({ product }: { product: Product }) {
         {/* Color selector */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>Base Color:</span>
-            <span className="text-sm" style={{ color: "var(--color-text-secondary)" }}>{selectedVariant.color}</span>
+            <span className="type-caption" style={{ color: "var(--color-text-primary)" }}>Base Color:</span>
+            <span className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>{selectedVariant.color}</span>
           </div>
           <div className="flex gap-2">
             {product.variants.map((v) => (
               <button
                 key={v.id}
                 onClick={() => { setSelectedVariant(v); setActiveImage(0); }}
-                className="w-7 h-7 rounded-full border-2 transition-all"
+                className="h-7 w-7 rounded-full border-2 transition-all"
                 style={{
                   backgroundColor: v.colorHex,
                   borderColor: selectedVariant.id === v.id ? "var(--color-accent-amber)" : "var(--color-border)",
@@ -187,9 +187,9 @@ export default function PDPClient({ product }: { product: Product }) {
 
         {/* Quantity + Actions */}
         <div className="flex items-center gap-3 mb-4">
-          <span className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>Amount</span>
+          <span className="type-caption" style={{ color: "var(--color-text-primary)" }}>Amount</span>
           <div
-            className="flex items-center rounded-lg border overflow-hidden"
+            className="flex items-center overflow-hidden rounded-[var(--radius-sm)] border"
             style={{ borderColor: "var(--color-border)" }}
           >
             <button
@@ -199,7 +199,7 @@ export default function PDPClient({ product }: { product: Product }) {
             >
               <Minus size={14} />
             </button>
-            <span className="px-4 text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>{quantity}</span>
+            <span className="type-caption px-4" style={{ color: "var(--color-text-primary)" }}>{quantity}</span>
             <button
               onClick={() => setQuantity(Math.min(selectedVariant.stock, quantity + 1))}
               disabled={quantity >= selectedVariant.stock}
@@ -213,15 +213,14 @@ export default function PDPClient({ product }: { product: Product }) {
         <div className="flex flex-col gap-2 mb-6">
           <button
             onClick={() => handleAddToCart()}
-            className="w-full h-12 rounded-full border text-sm font-medium transition-colors hover:bg-[var(--color-surface-muted)]"
+            className="btn btn-outline w-full"
             style={{ borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
           >
             Add to cart
           </button>
           <button
             onClick={handleBuyNow}
-            className="w-full h-12 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "var(--color-accent-amber)" }}
+            className="btn btn-primary w-full"
           >
             Buy Now — <DirhamPrice amount={selectedVariant.price * quantity} size="sm" className="text-white" />
           </button>
@@ -236,20 +235,20 @@ export default function PDPClient({ product }: { product: Product }) {
           ].map(({ icon: Icon, label }) => (
             <div key={label} className="flex items-center gap-2">
               <Icon size={14} style={{ color: "var(--color-text-secondary)" }} />
-              <span className="text-sm" style={{ color: "var(--color-text-secondary)" }}>{label}</span>
+              <span className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>{label}</span>
             </div>
           ))}
         </div>
 
         {/* Delivery */}
         <div
-          className="rounded-xl p-4 border mb-6"
+          className="panel-surface mb-6 p-4"
           style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
         >
-          <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>Delivery & Production</h3>
-          <p className="text-sm mb-1" style={{ color: "var(--color-text-secondary)" }}>Made to order</p>
-          <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>Production time: 2–3 business days</p>
-          <button className="mt-2 text-sm" style={{ color: "var(--color-accent-amber)" }}>
+          <h3 className="type-title-md mb-2" style={{ color: "var(--color-text-primary)" }}>Delivery & Production</h3>
+          <p className="type-body-sm mb-1" style={{ color: "var(--color-text-secondary)" }}>Made to order</p>
+          <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>Production time: 2–3 business days</p>
+          <button className="btn-text mt-2">
             See shipping details →
           </button>
         </div>
@@ -259,13 +258,13 @@ export default function PDPClient({ product }: { product: Product }) {
           {product.specs.map((spec) => (
             <div
               key={spec.label}
-              className="flex items-center gap-2 p-3 rounded-lg border"
+              className="flex items-center gap-2 rounded-[var(--radius-sm)] border p-3"
               style={{ borderColor: "var(--color-border)" }}
             >
               <span className="text-base">{spec.icon}</span>
               <div>
-                <p className="text-xs font-medium" style={{ color: "var(--color-text-primary)" }}>{spec.label}</p>
-                <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>{spec.sublabel}</p>
+                <p className="type-badge" style={{ color: "var(--color-text-primary)" }}>{spec.label}</p>
+                <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>{spec.sublabel}</p>
               </div>
             </div>
           ))}
@@ -274,14 +273,14 @@ export default function PDPClient({ product }: { product: Product }) {
         {/* Tabs */}
         <div className="mb-4">
           <div
-            className="flex rounded-full p-1 gap-1"
+            className="flex overflow-x-auto rounded-[var(--radius-full)] p-1 gap-1"
             style={{ backgroundColor: "var(--color-surface-muted)" }}
           >
             {TABS.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className="flex-1 py-1.5 rounded-full text-xs font-medium transition-all"
+                className="type-badge flex-1 whitespace-nowrap rounded-[var(--radius-full)] py-2 transition-all"
                 style={{
                   backgroundColor: activeTab === tab ? "var(--color-accent-amber)" : "transparent",
                   color: activeTab === tab ? "#fff" : "var(--color-text-secondary)",
@@ -291,18 +290,18 @@ export default function PDPClient({ product }: { product: Product }) {
               </button>
             ))}
           </div>
-          <div className="mt-4 text-sm" style={{ color: "var(--color-text-secondary)" }}>
+          <div className="type-body-sm mt-4" style={{ color: "var(--color-text-secondary)" }}>
             {activeTab === "Product Info" && (
               <div>
-                <h4 className="font-semibold mb-2 text-sm" style={{ color: "var(--color-text-primary)" }}>Design Story</h4>
+                <h4 className="type-title-md mb-2" style={{ color: "var(--color-text-primary)" }}>Design Story</h4>
                 <p>{product.designStory}</p>
                 <div className="mt-4">
-                  <h4 className="font-semibold mb-2 text-sm" style={{ color: "var(--color-text-primary)" }}>Perfect For</h4>
+                  <h4 className="type-title-md mb-2" style={{ color: "var(--color-text-primary)" }}>Perfect For</h4>
                   <div className="flex flex-wrap gap-2">
                     {product.perfectFor.map((tag) => (
                       <span
                         key={tag}
-                        className="px-3 py-1 rounded-full border text-xs"
+                        className="type-badge rounded-full border px-3 py-1"
                         style={{ borderColor: "var(--color-border)", color: "var(--color-text-secondary)" }}
                       >
                         {tag}

@@ -96,14 +96,14 @@ export default function CheckoutPage() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-[1280px] mx-auto w-full px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <main className="container-page grid flex-1 grid-cols-1 gap-8 py-8 md:gap-10 md:py-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
           {/* Step progress */}
           <div className="flex items-center gap-2 mb-8">
             {STEPS.map((s, i) => (
               <div key={s} className="flex items-center gap-2">
                 <div
-                  className="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold"
+                  className="type-badge flex h-6 w-6 items-center justify-center rounded-full"
                   style={{
                     backgroundColor: i <= step ? "var(--color-accent-amber)" : "var(--color-surface-muted)",
                     color: i <= step ? "#fff" : "var(--color-text-disabled)",
@@ -112,7 +112,7 @@ export default function CheckoutPage() {
                   {i < step ? <CheckCircle2 size={14} /> : i + 1}
                 </div>
                 <span
-                  className="text-xs font-medium hidden sm:block"
+                  className="type-badge hidden sm:block"
                   style={{ color: i === step ? "var(--color-text-primary)" : "var(--color-text-disabled)" }}
                 >
                   {s}
@@ -127,52 +127,52 @@ export default function CheckoutPage() {
           {/* Step 0: Contact & Shipping */}
           {step === 0 && (
             <form onSubmit={handleShippingSubmit} className="flex flex-col gap-4">
-              <h2 className="text-xl font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>
+              <h2 className="type-display-md mb-2" style={{ color: "var(--color-text-primary)" }}>
                 Contact & Shipping
               </h2>
               <input
                 required type="email" placeholder="Email address"
                 value={shipping.email} onChange={(e) => setShipping({ ...shipping, email: e.target.value })}
-                className="h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                className="input-field"
                 style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
               />
               <div className="grid grid-cols-2 gap-4">
                 <input
                   required placeholder="First name" value={shipping.firstName}
                   onChange={(e) => setShipping({ ...shipping, firstName: e.target.value })}
-                  className="h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                  className="input-field"
                   style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
                 />
                 <input
                   required placeholder="Last name" value={shipping.lastName}
                   onChange={(e) => setShipping({ ...shipping, lastName: e.target.value })}
-                  className="h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                  className="input-field"
                   style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
                 />
               </div>
               <input
                 required placeholder="Phone number (+971…)" value={shipping.phone}
                 onChange={(e) => setShipping({ ...shipping, phone: e.target.value })}
-                className="h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                className="input-field"
                 style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
               />
               <input
                 required placeholder="Address line 1" value={shipping.address}
                 onChange={(e) => setShipping({ ...shipping, address: e.target.value })}
-                className="h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                className="input-field"
                 style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
               />
               <input
                 placeholder="Address line 2 (optional)" value={shipping.address2}
                 onChange={(e) => setShipping({ ...shipping, address2: e.target.value })}
-                className="h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                className="input-field"
                 style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
               />
               <div className="grid grid-cols-2 gap-4">
                 <select
                   value={shipping.emirate}
                   onChange={(e) => setShipping({ ...shipping, emirate: e.target.value })}
-                  className="h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                  className="input-field"
                   style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
                 >
                   {EMIRATES.map((em) => <option key={em}>{em}</option>)}
@@ -180,14 +180,13 @@ export default function CheckoutPage() {
                 <input
                   placeholder="Postal code" value={shipping.postalCode}
                   onChange={(e) => setShipping({ ...shipping, postalCode: e.target.value })}
-                  className="h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                  className="input-field"
                   style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
                 />
               </div>
               <button
                 type="submit"
-                className="mt-2 h-12 rounded-full text-sm font-medium text-white"
-                style={{ backgroundColor: "var(--color-accent-amber)" }}
+                className="btn btn-primary mt-2"
               >
                 Continue to Payment →
               </button>
@@ -197,14 +196,14 @@ export default function CheckoutPage() {
           {/* Step 1: Payment */}
           {step === 1 && (
             <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-4">
-              <h2 className="text-xl font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>
+              <h2 className="type-display-md mb-2" style={{ color: "var(--color-text-primary)" }}>
                 Payment
               </h2>
               <div
-                className="rounded-xl border p-4"
+                className="panel-surface p-4"
                 style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
               >
-                <p className="text-sm font-medium mb-4" style={{ color: "var(--color-text-primary)" }}>
+                <p className="type-caption mb-4" style={{ color: "var(--color-text-primary)" }}>
                   Select payment method
                 </p>
                 {["card", "apple-pay", "google-pay"].map((method) => (
@@ -217,7 +216,7 @@ export default function CheckoutPage() {
                       onChange={() => setPaymentMethod(method)}
                       className="accent-[var(--color-accent-amber)]"
                     />
-                    <span className="text-sm capitalize" style={{ color: "var(--color-text-primary)" }}>
+                    <span className="type-body-sm capitalize" style={{ color: "var(--color-text-primary)" }}>
                       {method === "card" ? "Credit / Debit Card" : method === "apple-pay" ? "Apple Pay" : "Google Pay"}
                     </span>
                   </label>
@@ -226,22 +225,22 @@ export default function CheckoutPage() {
                   <div className="flex flex-col gap-3 mt-4 pt-4 border-t" style={{ borderColor: "var(--color-border)" }}>
                     <input
                       placeholder="Card number" defaultValue="4242 4242 4242 4242"
-                      className="h-12 px-4 rounded-lg border text-sm outline-none"
+                      className="input-field"
                       style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
                     />
                     <div className="grid grid-cols-2 gap-3">
                       <input
                         placeholder="MM / YY" defaultValue="12 / 28"
-                        className="h-12 px-4 rounded-lg border text-sm outline-none"
+                        className="input-field"
                         style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
                       />
                       <input
                         placeholder="CVC" defaultValue="123"
-                        className="h-12 px-4 rounded-lg border text-sm outline-none"
+                        className="input-field"
                         style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
                       />
                     </div>
-                    <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                    <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>
                       This is a prototype — no real payment is processed.
                     </p>
                   </div>
@@ -251,15 +250,14 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setStep(0)}
-                  className="flex-1 h-12 rounded-full border text-sm font-medium"
+                  className="btn btn-outline flex-1"
                   style={{ borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
                 >
                   ← Back
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 h-12 rounded-full text-sm font-medium text-white"
-                  style={{ backgroundColor: "var(--color-accent-amber)" }}
+                  className="btn btn-primary flex-1"
                 >
                   Review Order →
                 </button>
@@ -270,17 +268,17 @@ export default function CheckoutPage() {
           {/* Step 2: Review */}
           {step === 2 && (
             <div className="flex flex-col gap-6">
-              <h2 className="text-xl font-semibold" style={{ color: "var(--color-text-primary)" }}>
+              <h2 className="type-display-md" style={{ color: "var(--color-text-primary)" }}>
                 Review & Place Order
               </h2>
               <div
-                className="rounded-xl border p-4"
+                className="panel-surface p-4"
                 style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
               >
-                <h3 className="text-sm font-semibold mb-3" style={{ color: "var(--color-text-primary)" }}>
+                <h3 className="type-title-md mb-3" style={{ color: "var(--color-text-primary)" }}>
                   Shipping to
                 </h3>
-                <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+                <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
                   {shipping.firstName} {shipping.lastName}<br />
                   {shipping.address}{shipping.address2 ? `, ${shipping.address2}` : ""}<br />
                   {shipping.emirate}, UAE {shipping.postalCode}<br />
@@ -288,28 +286,27 @@ export default function CheckoutPage() {
                 </p>
               </div>
               <div
-                className="rounded-xl border p-4"
+                className="panel-surface p-4"
                 style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
               >
-                <h3 className="text-sm font-semibold mb-3" style={{ color: "var(--color-text-primary)" }}>
+                <h3 className="type-title-md mb-3" style={{ color: "var(--color-text-primary)" }}>
                   Payment
                 </h3>
-                <p className="text-sm capitalize" style={{ color: "var(--color-text-secondary)" }}>
+                <p className="type-body-sm capitalize" style={{ color: "var(--color-text-secondary)" }}>
                   {paymentMethod === "card" ? "Credit / Debit Card (•••• 4242)" : paymentMethod.replace("-", " ")}
                 </p>
               </div>
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep(1)}
-                  className="flex-1 h-12 rounded-full border text-sm font-medium"
+                  className="btn btn-outline flex-1"
                   style={{ borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
                 >
                   ← Back
                 </button>
                 <button
                   onClick={handlePlaceOrder}
-                  className="flex-1 h-12 rounded-full text-sm font-medium text-white"
-                  style={{ backgroundColor: "var(--color-accent-amber)" }}
+                  className="btn btn-primary flex-1"
                 >
                   Place Order
                 </button>
@@ -320,30 +317,30 @@ export default function CheckoutPage() {
 
         {/* Order summary sidebar */}
         <div
-          className="rounded-xl border p-6 h-fit"
+          className="panel-surface h-fit p-6"
           style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}
         >
-          <h3 className="font-semibold mb-4" style={{ color: "var(--color-text-primary)" }}>Order Summary</h3>
+          <h3 className="type-display-sm mb-4" style={{ color: "var(--color-text-primary)" }}>Order Summary</h3>
           {items.map((item) => (
             <div key={item.id} className="flex gap-3 mb-3">
-              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 52, height: 52, backgroundColor: "var(--color-surface-muted)" }}>
+              <div className="relative flex-shrink-0 overflow-hidden rounded-[var(--radius-sm)]" style={{ width: 52, height: 52, backgroundColor: "var(--color-surface-muted)" }}>
                 <Image src={item.image} alt={item.productName} fill className="object-cover" />
               </div>
               <div className="flex-1">
-                <p className="text-xs font-medium" style={{ color: "var(--color-text-primary)" }}>{item.productName}</p>
-                <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>{item.variantColor} × {item.quantity}</p>
+                <p className="type-badge" style={{ color: "var(--color-text-primary)" }}>{item.productName}</p>
+                <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>{item.variantColor} × {item.quantity}</p>
               </div>
               <DirhamPrice amount={item.price * item.quantity} size="sm" />
             </div>
           ))}
           {addOns.map((ao) => (
-            <div key={ao.id} className="flex justify-between text-xs mb-2">
+            <div key={ao.id} className="type-caption-sm mb-2 flex justify-between">
               <span style={{ color: "var(--color-text-secondary)" }}>Add-on: {ao.name}</span>
               <DirhamPrice amount={ao.price} size="sm" />
             </div>
           ))}
           <div className="border-t mt-4 pt-4 flex flex-col gap-2" style={{ borderColor: "var(--color-border)" }}>
-            <div className="flex justify-between text-sm">
+            <div className="type-body-sm flex justify-between">
               <span style={{ color: "var(--color-text-secondary)" }}>Shipping</span>
               <span className="font-medium" style={{ color: "var(--color-success)" }}>Free</span>
             </div>

@@ -43,7 +43,7 @@ export default function ProductCard({ product, showRating = false }: Props) {
   return (
     <Link href={`/product/${product.slug}`} className="group block">
       <div
-        className="relative rounded-xl overflow-hidden"
+        className="media-rounded relative"
         style={{ aspectRatio: "4/5", backgroundColor: "var(--color-surface-muted)" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -57,7 +57,7 @@ export default function ProductCard({ product, showRating = false }: Props) {
         />
         {badge && (
           <span
-            className="absolute top-3 left-3 text-xs font-semibold px-2 py-0.5 rounded-full"
+            className="type-badge absolute left-3 top-3 rounded-full px-2 py-1"
             style={{ backgroundColor: badge.bg, color: badge.color, border: badge.border }}
           >
             {product.badge}
@@ -66,7 +66,7 @@ export default function ProductCard({ product, showRating = false }: Props) {
         {/* Quick add overlay */}
         <button
           onClick={handleQuickAdd}
-          className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-2 py-3 text-sm font-medium text-white transition-all duration-150"
+          className="btn btn-primary absolute bottom-0 left-0 right-0 min-h-12 rounded-none border-0"
           style={{
             backgroundColor: "var(--color-accent-amber)",
             transform: hovered ? "translateY(0)" : "translateY(100%)",
@@ -95,7 +95,7 @@ export default function ProductCard({ product, showRating = false }: Props) {
           </div>
         )}
         <div className="flex items-center justify-between">
-          <span className="text-base font-medium" style={{ color: "var(--color-text-primary)" }}>
+          <span className="type-title-sm" style={{ color: "var(--color-text-primary)" }}>
             {product.name}
           </span>
           <DirhamPrice
@@ -103,7 +103,7 @@ export default function ProductCard({ product, showRating = false }: Props) {
             compareAmount={defaultVariant.comparePrice}
           />
         </div>
-        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+        <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
           {product.variants.map((v) => v.color).join(", ")}
         </p>
       </div>

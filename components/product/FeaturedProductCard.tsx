@@ -15,14 +15,14 @@ export default function FeaturedProductCard({ product, summary }: Props) {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="flex h-full flex-col gap-3 rounded-[12px] border p-4 transition-transform duration-200 hover:-translate-y-0.5"
+      className="flex h-full flex-col gap-3 rounded-[14px] border p-4 transition-transform duration-200 hover:-translate-y-0.5"
       style={{
         borderColor: "#575757",
         backgroundColor: "transparent",
       }}
     >
       <div
-        className="relative w-full overflow-hidden rounded-[10px]"
+        className="media-rounded relative w-full"
         style={{
           backgroundColor: "#111111",
           aspectRatio: "238 / 325",
@@ -39,13 +39,13 @@ export default function FeaturedProductCard({ product, summary }: Props) {
 
       <div className="flex items-start justify-between gap-4">
         <h3
-          className="text-[17px] font-medium leading-none"
+          className="type-title-sm"
           style={{ color: "#FFFFFF" }}
         >
           {product.name}
         </h3>
         <span
-          className="inline-flex shrink-0 items-center gap-1 text-sm font-medium leading-none"
+          className="type-caption inline-flex shrink-0 items-center gap-1"
           style={{ color: "#FFFFFF" }}
         >
           <Image
@@ -60,7 +60,7 @@ export default function FeaturedProductCard({ product, summary }: Props) {
       </div>
 
       <p
-        className="text-[13px] leading-[1.45]"
+        className="type-caption-sm"
         style={{ color: "#FFFFFF" }}
       >
         {summary}

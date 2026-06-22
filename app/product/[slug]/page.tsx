@@ -33,7 +33,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         {/* You May Also Like */}
         {related.length > 0 && (
           <section className="mt-20">
-            <h2 className="text-2xl font-semibold mb-8" style={{ color: "var(--color-text-primary)" }}>
+            <h2 className="text-[24px] font-semibold mb-8" style={{ color: "var(--color-text-primary)" }}>
               You May Also Like
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

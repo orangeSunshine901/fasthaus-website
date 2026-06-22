@@ -53,13 +53,13 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
       <form className="mx-auto flex w-full max-w-[620px] flex-col gap-3" onSubmit={handleSubmit}>
         <label
           htmlFor="newsletter-email"
-          className="text-left text-[14px] font-medium leading-none"
+          className="type-caption text-left"
           style={{ color: "var(--color-text-primary)" }}
         >
           Subscribe to Newsletter *
         </label>
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <div className="flex h-[58px] flex-1 items-center gap-3 rounded-full bg-white px-5">
+          <div className="flex min-h-14 flex-1 items-center gap-3 rounded-[var(--radius-full)] bg-white px-5">
             <svg
               aria-hidden="true"
               className="h-5 w-5 shrink-0"
@@ -88,13 +88,13 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={state === "loading"}
-              className="h-full flex-1 bg-transparent text-sm text-[#1A1A1A] outline-none placeholder:text-[#6B6B6B]"
+              className="type-body-sm h-full flex-1 bg-transparent text-[#1A1A1A] outline-none placeholder:text-[#6B6B6B]"
             />
           </div>
           <button
             type="submit"
             disabled={state === "loading"}
-            className="h-[58px] rounded-full bg-[#1A1A1A] px-7 text-sm font-medium text-white transition-opacity disabled:opacity-60"
+            className="btn btn-secondary min-h-14 rounded-[var(--radius-full)] px-7 disabled:opacity-60"
           >
             {state === "loading" ? "…" : "subscribe"}
           </button>
@@ -116,13 +116,13 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         disabled={state === "loading"}
-        className="flex-1 h-11 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+        className="input-field min-h-12 flex-1"
         style={{ borderColor: errorMsg ? "var(--color-error)" : "var(--color-border)", backgroundColor: "var(--color-bg)" }}
       />
       <button
         type="submit"
         disabled={state === "loading"}
-        className="h-11 px-5 rounded-full text-sm font-medium text-white disabled:opacity-60"
+        className="btn btn-secondary min-h-12 px-5 disabled:opacity-60"
         style={{ backgroundColor: "var(--color-text-primary)" }}
       >
         {state === "loading" ? "…" : "Subscribe"}

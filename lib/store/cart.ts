@@ -24,7 +24,6 @@ export type CartItem = {
 type CartState = {
   items: CartItem[];
   addOns: CartAddOn[];
-  hydrated: boolean;
   addItem: (item: CartItem) => void;
   removeItem: (variantId: string) => void;
   updateQuantity: (variantId: string, quantity: number) => void;
@@ -40,7 +39,6 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
       addOns: [],
-      hydrated: false,
 
       addItem: (item) => {
         const existing = get().items.find((i) => i.id === item.id);
@@ -100,9 +98,6 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "fasthaus-cart",
-      onRehydrateStorage: () => () => {
-        set({ hydrated: true });
-      },
     }
   )
 );

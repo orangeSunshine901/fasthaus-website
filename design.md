@@ -78,13 +78,33 @@
 
 **Grid:** 12-column on desktop, 4-column on mobile. Max content width: `1280px`.
 
-**Spacing scale** (multiples of 4px):
+**Spacing scale** (8px base, with 2/4/12px support steps):
 
 ```
-0 · 1 · 2 · 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128
+0 · 2 · 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64
 ```
 
-**Section rhythm:** top/bottom padding alternates between `64px` (compact) and `96px` (breathing sections).
+**Section rhythm:** `48px` top/bottom on mobile, `64px` on desktop. Use `32px` for dense product grids and forms. Avoid 96px+ vertical padding unless there is a full-bleed editorial image carrying the viewport.
+
+**Border radius scale**
+
+| Token | Value | Usage |
+|---|---:|---|
+| `--radius-none` | `0px` | Dividers, layout grid only |
+| `--radius-xs` | `4px` | Tiny badges, payment marks |
+| `--radius-sm` | `8px` | Buttons, inputs, compact chips |
+| `--radius-md` | `14px` | Product images, cards, panels |
+| `--radius-lg` | `20px` | Editorial image blocks |
+| `--radius-xl` | `32px` | Large image tiles and feature media |
+| `--radius-full` | `9999px` | Pills, icon buttons, swatches |
+
+**Responsive behavior**
+- Mobile first: 4-column grid, 20px side padding, 48px section padding.
+- Tablet: 24px side padding, product grids move to 2-3 columns depending on density.
+- Desktop: 12-column grid, 32px side padding, max content width `1280px`, 64px section padding.
+- Product listing grids: `2 columns` mobile, `3 columns` tablet, `4 columns` desktop when inventory supports it.
+- CTA groups stack full-width on mobile and become inline on tablet/desktop.
+- Text wraps naturally; do not scale font sizes with viewport width.
 
 ---
 
@@ -93,7 +113,7 @@
 > Source of truth: the [Fasthaus Wireframe](https://www.figma.com/design/sGT6fd4ZYy6E8wzHIWvVNb/Fasthaus-Wireframe?node-id=87-114) (lighting / lamps store). Components below are transcribed from those screens. Two corrections from earlier drafts: corners are **rounded**, not sharp, and the wordmark is **lowercase** `fasthaus` with amber-tinted letterforms.
 
 **Design language observed in the wireframe**
-- Rounded geometry throughout: buttons `rounded-full` / `rounded-lg`, cards `rounded-xl`, inputs `rounded-lg`
+- Rounded geometry throughout: buttons `rounded-xl` / `rounded-lg`, cards `rounded-xl`, inputs `rounded-lg`
 - No heavy drop shadows; separation comes from `--color-surface` panels on a white page and `1px` borders
 - Amber (`--color-accent-amber`) drives every primary action, active state, link, and "remove"; near-black (`--color-text-primary`) is reserved for the newsletter/secondary CTA; yellow (`--color-highlight`) is the announcement bar only
 - Prices render with the **AED dirham** symbol and two decimals. Use the SVG icon at `assets/dirham-icon.svg` (inline `<img>` / `<svg>`, sized to match the price text via `1em` height and `currentColor`), followed by the amount — e.g. `[dirham] 32.00`
@@ -109,12 +129,14 @@
 
 | Variant | Usage in wireframe | Style |
 |---|---|---|
-| Primary | Buy Now, Checkout, Quick Add, Visit about us | `bg-accent-amber text-white`, `rounded-full`, `px-6 py-3`, `text-sm font-medium`; hover `bg-accent-amber-hover` |
-| Secondary (dark) | Newsletter "Subscribe" | `bg-text-primary text-white`, `rounded-full`, `px-6 py-3` |
-| Outline | "Add to cart" (paired with Buy Now) | `border border-border text-text-primary bg-surface`, `rounded-full`, optional leading cart icon |
+| Primary | Buy Now, Checkout, Quick Add, Visit about us | `bg-accent-amber text-white`, `rounded-sm` (`8px`), `inline-flex justify-center items-center gap-2`, `height: 48px`, `padding: 14px 24px`, `text-button-md`; hover/active `bg-accent-amber-hover` |
+| Secondary (dark) | Newsletter "Subscribe" | `bg-text-primary text-white`, `rounded-sm`, `height: 48px`, `padding: 14px 24px`, `text-button-md` |
+| Secondary (light) | Hero alternate CTA, utility actions | `bg-bg text-text-primary`, `border border-border`, `rounded-sm`, `height: 48px`, `padding: 13px 23px`, `text-button-md` |
+| Outline | "Add to cart" (paired with Buy Now) | `border border-border text-text-primary bg-bg`, `rounded-sm`, `height: 48px`, `padding: 13px 23px`, `text-button-md`, optional leading cart icon |
+| Pill | Small promo CTA, category strip | `rounded-full`, `padding: 10px 20px`, `text-button-sm` |
 | Text / Link | "Remove", "Free shipping details", "See all" | `text-accent-amber`, no underline at rest, `hover:underline` |
 
-- All buttons share `rounded-full` and a `150ms ease` transition on `background-color`
+- All buttons share a `150ms ease-out` transition on `background-color`, `border-color`, `color`, and `opacity`
 - Primary CTAs go full-width inside cards/forms (Buy Now, Checkout)
 - Loading state: swap label for a slim spinner, keep width fixed
 

@@ -49,12 +49,12 @@ export default function FAQPage() {
 
   return (
     <ShopLayout>
-      <div className="max-w-[720px] mx-auto px-6 py-14">
+      <div className="mx-auto max-w-[720px] px-5 py-10 md:py-14">
         {/* Page header */}
-        <h1 className="text-4xl font-semibold text-center mb-2" style={{ color: "var(--color-text-primary)" }}>
+        <h1 className="type-display-xl mb-2 text-center" style={{ color: "var(--color-text-primary)" }}>
           You Ask. We Answer.
         </h1>
-        <p className="text-base text-center mb-10" style={{ color: "var(--color-text-secondary)" }}>
+        <p className="type-body-md mb-10 text-center" style={{ color: "var(--color-text-secondary)" }}>
           Everything you need to know about our lamps, shipping, returns and custom work.
         </p>
 
@@ -64,7 +64,7 @@ export default function FAQPage() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
+              className="btn btn-pill min-h-0 px-4 py-1.5 transition-all"
               style={{
                 backgroundColor: activeCategory === cat ? "var(--color-accent-amber)" : "var(--color-surface-muted)",
                 color: activeCategory === cat ? "#fff" : "var(--color-text-secondary)",
@@ -83,7 +83,7 @@ export default function FAQPage() {
                 className="w-full flex items-center justify-between text-left gap-4"
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
               >
-                <span className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>
+                <span className="type-caption" style={{ color: "var(--color-text-primary)" }}>
                   {faq.question}
                 </span>
                 <ChevronDown
@@ -96,7 +96,7 @@ export default function FAQPage() {
                 />
               </button>
               {openIndex === i && (
-                <p className="mt-3 text-sm" style={{ color: "var(--color-text-secondary)" }}>
+                <p className="type-body-sm mt-3" style={{ color: "var(--color-text-secondary)" }}>
                   {faq.answer}
                 </p>
               )}

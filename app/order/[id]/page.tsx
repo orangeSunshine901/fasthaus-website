@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ShieldCheck } from "lucide-react";
 import ShopLayout from "@/components/layout/ShopLayout";
 import DirhamPrice from "@/components/ui/DirhamPrice";
@@ -16,12 +15,11 @@ type StoredOrder = {
 };
 
 export default function OrderConfirmationPage() {
-  const [order, setOrder] = useState<StoredOrder | null>(null);
-
-  useEffect(() => {
-    const raw = localStorage.getItem("fasthaus-last-order");
-    if (raw) setOrder(JSON.parse(raw));
-  }, []);
+  const [order] = useState<StoredOrder | null>(() => {
+    if (typeof window === "undefined") return null;
+    const raw = window.localStorage.getItem("fasthaus-last-order");
+    return raw ? JSON.parse(raw) : null;
+  });
 
   if (!order) {
     return (
@@ -39,7 +37,7 @@ export default function OrderConfirmationPage() {
 
   return (
     <ShopLayout>
-      <div className="max-w-[640px] mx-auto px-6 py-16 text-center">
+      <div className="mx-auto max-w-[640px] px-5 py-10 text-center md:py-16">
         {/* Confirmation icon */}
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
@@ -49,13 +47,13 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Order header — number + confirmation message */}
-        <h1 className="text-2xl font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>
+        <h1 className="type-display-md mb-2" style={{ color: "var(--color-text-primary)" }}>
           Thank you! Your order is confirmed.
         </h1>
-        <p className="text-sm mb-1" style={{ color: "var(--color-accent-amber)", fontWeight: 600 }}>
+        <p className="type-caption mb-1" style={{ color: "var(--color-accent-amber)" }}>
           Order #{order.id}
         </p>
-        <p className="text-sm mb-10" style={{ color: "var(--color-text-secondary)" }}>
+        <p className="type-body-sm mb-10" style={{ color: "var(--color-text-secondary)" }}>
           A confirmation email with your receipt and order details is on its way to you.
         </p>
 
@@ -72,22 +70,22 @@ export default function OrderConfirmationPage() {
                 style={{ backgroundColor: s.active ? "var(--color-accent-amber)" : "var(--color-border)" }}
               />
               {i < 2 && <div className="absolute" />}
-              <p className="text-xs font-medium" style={{ color: "var(--color-text-primary)" }}>{s.label}</p>
-              <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>{s.sub}</p>
+              <p className="type-badge" style={{ color: "var(--color-text-primary)" }}>{s.label}</p>
+              <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>{s.sub}</p>
             </div>
           ))}
         </div>
 
         {/* Order summary card */}
         <div
-          className="rounded-xl border p-5 text-left mb-8"
+          className="panel-surface mb-8 p-5 text-left"
           style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
         >
-          <h2 className="font-semibold mb-4 text-sm" style={{ color: "var(--color-text-primary)" }}>
+          <h2 className="type-title-md mb-4" style={{ color: "var(--color-text-primary)" }}>
             Order Summary
           </h2>
           {order.items.map((item, i) => (
-            <div key={i} className="flex justify-between text-sm mb-2">
+            <div key={i} className="type-body-sm mb-2 flex justify-between">
               <span style={{ color: "var(--color-text-primary)" }}>
                 {item.productName} · {item.variantColor}
               </span>
@@ -95,7 +93,7 @@ export default function OrderConfirmationPage() {
             </div>
           ))}
           {order.addOns.map((ao, i) => (
-            <div key={i} className="flex justify-between text-sm mb-2">
+            <div key={i} className="type-body-sm mb-2 flex justify-between">
               <span style={{ color: "var(--color-text-secondary)" }}>Add-on: {ao.name}</span>
               <DirhamPrice amount={ao.price} size="sm" />
             </div>
@@ -110,15 +108,14 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Help link */}
-        <p className="text-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
+        <p className="type-body-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
           Need help? <a href="mailto:support@fasthaus.ae" className="underline" style={{ color: "var(--color-text-secondary)" }}>support@fasthaus.ae</a>
         </p>
 
         {/* Continue shopping CTA */}
         <Link
           href="/shop"
-          className="inline-block px-6 py-3 rounded-full text-sm font-medium text-white"
-          style={{ backgroundColor: "var(--color-accent-amber)" }}
+          className="btn btn-primary"
         >
           Continue shopping
         </Link>

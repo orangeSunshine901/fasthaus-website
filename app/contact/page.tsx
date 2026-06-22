@@ -45,72 +45,72 @@ export default function ContactPage() {
 
   return (
     <ShopLayout>
-      <div className="max-w-[1280px] mx-auto px-6 py-14">
+      <div className="container-page py-10 md:py-14">
         {/* Page header */}
-        <h1 className="text-4xl font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>
+        <h1 className="type-display-xl mb-2" style={{ color: "var(--color-text-primary)" }}>
           Get in Touch
         </h1>
-        <p className="text-base mb-12" style={{ color: "var(--color-text-secondary)" }}>
+        <p className="type-body-md mb-12" style={{ color: "var(--color-text-secondary)" }}>
           Questions about a lamp, an order, or a custom project? We usually reply within one business day.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Contact form */}
           <div
-            className="rounded-xl border p-6"
+            className="card-surface p-6"
             style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
           >
-            <h2 className="text-lg font-semibold mb-5" style={{ color: "var(--color-text-primary)" }}>
+            <h2 className="type-display-sm mb-5" style={{ color: "var(--color-text-primary)" }}>
               Send us a message
             </h2>
             {/* Success state */}
             {state === "success" ? (
               <div className="py-8 text-center">
-                <p className="text-base font-medium mb-2" style={{ color: "var(--color-success)" }}>
+                <p className="type-title-sm mb-2" style={{ color: "var(--color-success)" }}>
                   Message sent!
                 </p>
-                <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+                <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
                   We&apos;ll get back to you within 24 hours.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Name</label>
+                    <label className="type-badge mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Name</label>
                     <input
                       required placeholder="Your full name"
                       value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="w-full h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                      className="input-field w-full"
                       style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
                     />
                   </div>
                   <div>
-                    <label className="text-xs mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Email</label>
+                    <label className="type-badge mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Email</label>
                     <input
                       required type="email" placeholder="you@example.com"
                       value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                      className="input-field w-full"
                       style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Subject</label>
+                  <label className="type-badge mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Subject</label>
                   <input
                     required placeholder="What's this about?"
                     value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                    className="w-full h-12 px-4 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)]"
+                    className="input-field w-full"
                     style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
                   />
                 </div>
                 <div>
-                  <label className="text-xs mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Message</label>
+                  <label className="type-badge mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Message</label>
                   <textarea
                     required placeholder="How can we help?"
                     value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
                     rows={5}
-                    className="w-full px-4 py-3 rounded-lg border text-sm outline-none focus:border-[var(--color-accent-amber)] resize-none"
+                    className="input-field w-full resize-none"
                     style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
                   />
                 </div>
@@ -120,8 +120,7 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={state === "loading"}
-                  className="w-full h-12 rounded-full text-sm font-medium text-white disabled:opacity-60"
-                  style={{ backgroundColor: "var(--color-accent-amber)" }}
+                  className="btn btn-primary w-full disabled:opacity-60"
                 >
                   {state === "loading" ? "Sending…" : "Send message"}
                 </button>
@@ -131,24 +130,24 @@ export default function ContactPage() {
 
           {/* Contact details */}
           <div
-            className="rounded-xl border p-6 h-fit"
+            className="card-surface h-fit p-6"
             style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
           >
-            <h2 className="text-lg font-semibold mb-5" style={{ color: "var(--color-text-primary)" }}>
+            <h2 className="type-display-sm mb-5" style={{ color: "var(--color-text-primary)" }}>
               Contact details
             </h2>
             <div className="flex flex-col gap-4">
               {details.map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex items-center gap-3">
                   <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[var(--radius-sm)]"
                     style={{ backgroundColor: "var(--color-surface-muted)" }}
                   >
                     <Icon size={16} style={{ color: "var(--color-text-secondary)" }} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>{label}</p>
-                    <p className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>{value}</p>
+                    <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>{label}</p>
+                    <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>{value}</p>
                   </div>
                 </div>
               ))}

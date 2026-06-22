@@ -83,7 +83,7 @@ export default function HomePage() {
   return (
     <ShopLayout>
       {/* Hero */}
-      <section className="relative w-full overflow-hidden" style={{ minHeight: 520 }}>
+      <section className="relative h-[540px] w-full overflow-hidden md:min-h-[460px] md:h-auto">
         <Image
           src="/hero-img.png"
           alt="Modern Lamps"
@@ -91,40 +91,69 @@ export default function HomePage() {
           className="object-cover object-center"
           priority
         />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="relative z-10 mx-auto flex max-w-[1280px] flex-col items-start gap-6 px-6 py-24">
-          <h1 className="max-w-lg text-4xl font-semibold text-white md:text-5xl">
-            Modern Lamps,
-            <br />
-            Made to Glow Differently
+        <div className="absolute inset-0 bg-gradient-to-b from-neutral-900/75 to-neutral-900/20" />
+
+        <div className="absolute left-5 top-[220px] z-10 flex w-[calc(100%-40px)] max-w-100 flex-col items-start gap-3.5 overflow-hidden md:hidden">
+          <h1 className="type-display-xl self-stretch text-white">
+            Modern Lamps, Made to Glow Differently
           </h1>
-          <p className="max-w-md text-base text-white/80">
+          <p className="type-body-md self-stretch text-white/90">
             Sculptural 3D-printed lamps designed to bring warmth, form, and character into everyday spaces.
           </p>
           <Link
             href="/shop"
-            className="inline-block rounded-full px-6 py-3 text-sm font-medium text-white transition-colors hover:opacity-90"
-            style={{ backgroundColor: "var(--color-accent-amber)" }}
+            className="btn btn-primary w-full self-stretch"
           >
             Shop Collection
           </Link>
+          <Link
+            href="/about"
+            className="btn btn-light w-full self-stretch border-white bg-white hover:bg-white/90"
+          >
+            Our Story
+          </Link>
+        </div>
+
+        <div className="container-page relative z-10 hidden flex-col items-start gap-6 py-14 md:flex md:min-h-[460px] md:justify-center">
+          <h1 className="type-display-xl max-w-lg text-white">
+            Modern Lamps,
+            <br />
+            Made to Glow Differently
+          </h1>
+          <p className="type-body-md max-w-md text-white/80">
+            Sculptural 3D-printed lamps designed to bring warmth, form, and character into everyday spaces.
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/shop"
+              className="btn btn-primary"
+            >
+              Shop Collection
+            </Link>
+            <Link
+              href="/about"
+              className="btn border-white/60 bg-transparent text-white hover:bg-white/10"
+            >
+              Our Story
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Featured Products */}
       <section className="w-full" style={{ backgroundColor: "#060606" }}>
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-12 px-6 py-14 md:px-10 lg:px-10">
+        <div className="container-page section-pad flex flex-col gap-12">
           <div className="flex max-w-[548px] flex-col gap-2">
             <p
-              className="text-xs font-medium tracking-[1.5px]"
+              className="eyebrow"
               style={{ color: "var(--color-accent-amber)" }}
             >
               OUR PRODUCTS
             </p>
-            <h2 className="text-[32px] font-semibold tracking-[-0.24px] text-white md:text-[40px]">
+            <h2 className="type-display-lg text-white">
               Lamps with Character
             </h2>
-            <p className="text-base font-light leading-7 md:text-xl" style={{ color: "#E5E5E5" }}>
+            <p className="type-body-md" style={{ color: "#E5E5E5" }}>
               A small collection of sculptural lights designed for desks, shelves, bedside corners, and quiet evening spaces.
             </p>
           </div>
@@ -143,12 +172,12 @@ export default function HomePage() {
 
       {/* Our Process */}
       <section className="w-full" style={{ backgroundColor: "#E5E5E5" }}>
-        <div className="mx-auto max-w-[1280px] px-6 py-14 md:px-10 lg:px-10 lg:py-[56px]">
+        <div className="container-page section-pad">
           <div className="flex max-w-[640px] flex-col gap-[10px]">
-          <h2 className="text-[30px] font-semibold tracking-[-0.24px] md:text-[40px]" style={{ color: "#1A1A1A" }}>
+          <h2 className="type-display-lg" style={{ color: "#1A1A1A" }}>
               From Digital Form to Warm Light
             </h2>
-            <p className="text-[16px] font-light leading-7 md:text-[17px]" style={{ color: "#575757" }}>
+            <p className="type-body-md" style={{ color: "#575757" }}>
               Every FastHaus lamp begins as a digital design, then moves through prototyping, material testing, 3D printing, finishing, and assembly.
             </p>
           </div>
@@ -156,19 +185,19 @@ export default function HomePage() {
             {processSteps.map((step) => (
               <article
                 key={step.number}
-                className="flex h-full flex-col gap-3 rounded-2xl border p-[22px]"
+                className="card-surface flex h-full flex-col gap-3 p-6"
                 style={{ borderColor: "#D6D6D6", backgroundColor: "#FFFFFF" }}
               >
                 <span
-                  className="inline-flex h-8 w-fit items-center rounded-full px-[11px] text-sm font-medium text-white"
+                  className="btn-pill inline-flex w-fit items-center text-white"
                   style={{ backgroundColor: "#FF4B1F" }}
                 >
                   {step.number}
                 </span>
-                <h3 className="text-[17px] font-semibold" style={{ color: "#1A1A1A" }}>
+                <h3 className="type-title-md" style={{ color: "#1A1A1A" }}>
                   {step.title}
                 </h3>
-                <p className="text-[13px] leading-6" style={{ color: "#575757" }}>
+                <p className="type-caption-sm" style={{ color: "#575757" }}>
                   {step.description}
                 </p>
               </article>
@@ -178,20 +207,20 @@ export default function HomePage() {
       </section>
 
       {/* Editorial */}
-      <section className="mx-auto max-w-[1280px] px-6 py-14 md:px-10 lg:px-10 lg:py-[72px]">
+      <section className="container-page section-pad">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)] lg:gap-14">
-          <div className="relative overflow-hidden rounded-[20px]" style={{ aspectRatio: "560 / 440" }}>
+          <div className="media-rounded-lg relative" style={{ aspectRatio: "560 / 440" }}>
             <Image src="/collections-hero-img-1.png" alt="Designed in Layers" fill className="object-cover" />
           </div>
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <h2 className="text-[30px] font-semibold tracking-[-0.24px] md:text-[40px]" style={{ color: "#1A1A1A" }}>
+              <h2 className="type-display-lg" style={{ color: "#1A1A1A" }}>
                 Designed in Layers
               </h2>
-              <p className="max-w-[620px] text-[17px] font-light leading-8" style={{ color: "#575757" }}>
+              <p className="type-body-md max-w-[620px]" style={{ color: "#575757" }}>
                 We create lighting objects with purpose, shaped to bring form, function, and mood into a space.
               </p>
-              <p className="max-w-[620px] text-[17px] font-light leading-8" style={{ color: "#575757" }}>
+              <p className="type-body-md max-w-[620px]" style={{ color: "#575757" }}>
                 Our filaments give each piece its clean finish, light structure, and layered detail. The result is a lamp that feels soft from a distance and considered up close.
               </p>
             </div>
@@ -199,13 +228,13 @@ export default function HomePage() {
               {editorialPillars.map((pillar) => (
                 <article
                   key={pillar.title}
-                  className="flex h-full flex-col gap-3 rounded-2xl border p-5"
+                  className="card-surface flex h-full flex-col gap-3 p-5"
                   style={{ borderColor: "#E5E5E5", backgroundColor: "#FFFFFF" }}
                 >
-                  <h3 className="text-[17px] font-semibold" style={{ color: "#1A1A1A" }}>
+                  <h3 className="type-title-md" style={{ color: "#1A1A1A" }}>
                     {pillar.title}
                   </h3>
-                  <p className="text-[13px] leading-6" style={{ color: "#575757" }}>
+                  <p className="type-caption-sm" style={{ color: "#575757" }}>
                     {pillar.description}
                   </p>
                 </article>
@@ -217,27 +246,27 @@ export default function HomePage() {
 
       {/* Who We Are */}
       <section className="w-full" style={{ backgroundColor: "#E5E5E5" }}>
-        <div className="mx-auto max-w-[1280px] px-6 py-14 md:px-10 lg:px-10 lg:py-[72px]">
+        <div className="container-page section-pad">
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_520px] lg:gap-14">
             <div className="max-w-[580px]">
-              <h2 className="text-[30px] font-semibold tracking-[-0.24px] md:text-[40px]" style={{ color: "#1A1A1A" }}>
+              <h2 className="type-display-lg" style={{ color: "#1A1A1A" }}>
                 Who We Are
               </h2>
-              <p className="mt-4 text-[17px] font-light leading-8" style={{ color: "#575757" }}>
+              <p className="type-body-md mt-4" style={{ color: "#575757" }}>
                 Fueled by a love for design and storytelling, we create 3D-printed spatial objects that bring form, function, and character into personal spaces.
               </p>
-              <p className="mt-4 text-[17px] font-light leading-8" style={{ color: "#575757" }}>
+              <p className="type-body-md mt-4" style={{ color: "#575757" }}>
                 Each piece is shaped with intention, built with considered materials, and made to make your room feel a little more like you.
               </p>
               <Link
                 href="/about"
-                className="mt-8 inline-flex h-12 items-center rounded-full border px-6 text-sm font-medium transition-colors hover:bg-black hover:text-white"
+                className="btn btn-outline mt-8 hover:bg-black hover:text-white"
                 style={{ borderColor: "#1A1A1A", color: "#1A1A1A" }}
               >
                 Learn more about FastHaus
               </Link>
             </div>
-            <div className="relative overflow-hidden rounded-[20px]" style={{ aspectRatio: "520 / 400" }}>
+            <div className="media-rounded-lg relative" style={{ aspectRatio: "520 / 400" }}>
               <Image src="/who-we-are-img.png" alt="Who We Are" fill className="object-cover" />
             </div>
           </div>
@@ -246,14 +275,14 @@ export default function HomePage() {
 
       {/* Newsletter */}
       <section
-        className="relative w-full overflow-hidden px-6 py-16 md:px-10 md:py-20 lg:px-10 lg:py-24"
+        className="relative w-full overflow-hidden px-5 py-12 md:px-8 md:py-16"
         style={{ backgroundColor: "var(--color-accent-amber)" }}
       >
         <div className="relative mx-auto max-w-[1280px]">
           {newsletterImages.map((image) => (
             <div
               key={image.src}
-              className={`absolute h-[128px] w-[128px] overflow-hidden rounded-[28px] border border-black/10 shadow-[0_24px_50px_rgba(0,0,0,0.18)] lg:h-[148px] lg:w-[148px] ${image.className}`}
+              className={`absolute h-[128px] w-[128px] overflow-hidden rounded-[32px] border border-black/10 shadow-[0_24px_50px_rgba(0,0,0,0.18)] lg:h-[148px] lg:w-[148px] ${image.className}`}
             >
               <Image src={image.src} alt={image.alt} fill className="object-cover" />
             </div>
@@ -264,13 +293,13 @@ export default function HomePage() {
               <Image src="/newsletter-icon.svg" alt="" width={40} height={40} className="h-12 w-12" />
             </div>
             <h2
-              className="text-[32px] font-semibold tracking-[-0.24px] md:text-[48px] w-[405px] text-center"
+              className="type-display-xl w-full max-w-[405px] text-center"
               style={{ color: "var(--color-text-primary)" }}
             >
               Subscribe to our Newsletter
             </h2>
             <p
-              className="mt-4 max-w-[520px] text-[16px] font-light leading-7 md:text-[17px]"
+              className="type-body-md mt-4 max-w-[520px]"
               style={{ color: "var(--color-text-primary)" }}
             >
               New arrivals, studio stories, and the occasional lighting tip.
