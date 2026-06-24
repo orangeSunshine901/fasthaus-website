@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Search, ShoppingCart, Menu, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Search, ShoppingCart, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
 import { useCartStore } from "@/lib/store/cart";
@@ -27,12 +27,6 @@ const MOBILE_NAV = [
   { label: "Collection", href: "/shop" },
   { label: "About", href: "/about" },
   { label: "Contact us", href: "/contact" },
-];
-
-const FLOATING_NAV_ITEMS = [
-  { name: "collection", link: "/shop" },
-  { name: "about", link: "/about" },
-  { name: "contact us", link: "/contact" },
 ];
 
 const SHOP_FEATURES = [
@@ -80,6 +74,58 @@ function CartBadge({ size = 20, className = "" }: { size?: number; className?: s
   );
 }
 
+function CollectionMegaMenuContent() {
+  return (
+    <div className="grid grid-cols-[0.9fr_1.1fr] gap-3">
+      <NavigationMenuLink asChild>
+        <Link
+          href="/shop"
+          className="flex min-h-[220px] flex-col justify-between rounded-[var(--radius-sm)] bg-[var(--color-text-primary)] p-5 text-white outline-none transition-colors hover:bg-[#2a272a] focus:bg-[#2a272a]"
+        >
+          <div>
+            <p className="text-sm font-medium text-white/65">Fasthaus collection</p>
+            <p className="mt-3 text-2xl font-semibold leading-7">
+              Warm, sculptural lighting for modern rooms.
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent-amber)]">
+            Shop all
+            <ArrowRight size={15} aria-hidden="true" />
+          </span>
+        </Link>
+      </NavigationMenuLink>
+
+      <div className="grid gap-1">
+        {SHOP_FEATURES.map((item) => (
+          <NavigationMenuLink key={item.href} asChild>
+            <Link
+              href={item.href}
+              className="rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
+            >
+              <span className="block text-base font-semibold leading-6">{item.label}</span>
+              <span className="mt-1 block text-sm leading-5 text-[var(--color-text-secondary)]">
+                {item.description}
+              </span>
+            </Link>
+          </NavigationMenuLink>
+        ))}
+        <div className="mt-2 grid grid-cols-2 gap-1 border-t border-[var(--color-border)] pt-2">
+          {SHOP_LINKS.slice(0, 2).map((item) => (
+            <NavigationMenuLink key={item.href} asChild>
+              <Link
+                href={item.href}
+                className="rounded-[var(--radius-sm)] px-3 py-2 text-sm font-semibold outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
+              >
+                {item.label}
+              </Link>
+            </NavigationMenuLink>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -91,28 +137,33 @@ export default function Navbar() {
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
     backgroundColor: "rgba(33, 33, 33, 0.36)",
-    boxShadow: "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
+    boxShadow:
+      "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
   };
+  const floatingNavItems = [
+    { name: "collection", link: "/shop", megaMenu: <CollectionMegaMenuContent /> },
+    { name: "about", link: "/about" },
+    { name: "contact us", link: "/contact" },
+  ];
 
   return (
     <>
       {usesHeroOverlay && (
         <FloatingNav
-          navItems={FLOATING_NAV_ITEMS}
+          navItems={floatingNavItems}
           className="hidden md:flex"
           leftSlot={
             <Link href="/" className="inline-flex items-center" aria-label="Fasthaus home">
-              <Image
-                src="/fasthaus-logo-final-ivory.svg"
-                alt="Fasthaus"
-                width={104}
-                height={22}
-              />
+              <Image src="/fasthaus-logo-final-ivory.svg" alt="Fasthaus" width={104} height={22} />
             </Link>
           }
           rightSlot={
             <div className="flex items-center gap-4 px-1">
-              <Link href="/shop" aria-label="Search" className="inline-flex h-6 w-6 items-center justify-center">
+              <Link
+                href="/shop"
+                aria-label="Search"
+                className="inline-flex h-6 w-6 items-center justify-center"
+              >
                 <Search size={20} className="transition-opacity hover:opacity-70" />
               </Link>
               <CartBadge size={20} />
@@ -159,61 +210,29 @@ export default function Navbar() {
             <NavigationMenu className="h-full w-[453px] flex-none text-current" viewport={false}>
               <NavigationMenuList className="h-full w-full justify-between gap-0">
                 <NavigationMenuItem className="flex h-full items-center">
-                  <NavigationMenuTrigger className="h-16 min-w-20 rounded-none bg-transparent p-2 text-base font-semibold leading-6 text-current hover:bg-transparent hover:text-[var(--color-accent-amber)] focus:bg-transparent focus:text-[var(--color-accent-amber)] data-[state=open]:bg-transparent data-[state=open]:text-[var(--color-accent-amber)]">
-                    collection
+                  <NavigationMenuTrigger asChild showChevron={false} unstyled>
+                    <Link
+                      href="/shop"
+                      className="group box-content flex h-16 w-[100px] items-center justify-center rounded-none p-2 text-sm font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]"
+                    >
+                      collection
+                      <ChevronDown
+                        className="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
+                        aria-hidden="true"
+                      />
+                    </Link>
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="left-1/2 top-[calc(100%+12px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
-                    <div className="grid grid-cols-[0.9fr_1.1fr] gap-3">
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/shop"
-                          className="flex min-h-[220px] flex-col justify-between rounded-[var(--radius-sm)] bg-[var(--color-text-primary)] p-5 text-white outline-none transition-colors hover:bg-[#2a272a] focus:bg-[#2a272a]"
-                        >
-                          <div>
-                            <p className="text-sm font-medium text-white/65">Fasthaus collection</p>
-                            <p className="mt-3 text-2xl font-semibold leading-7">Warm, sculptural lighting for modern rooms.</p>
-                          </div>
-                          <span className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent-amber)]">
-                            Shop all
-                            <ArrowRight size={15} aria-hidden="true" />
-                          </span>
-                        </Link>
-                      </NavigationMenuLink>
-
-                      <div className="grid gap-1">
-                        {SHOP_FEATURES.map((item) => (
-                          <NavigationMenuLink key={item.href} asChild>
-                            <Link
-                              href={item.href}
-                              className="rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
-                            >
-                              <span className="block text-base font-semibold leading-6">{item.label}</span>
-                              <span className="mt-1 block text-sm leading-5 text-[var(--color-text-secondary)]">
-                                {item.description}
-                              </span>
-                            </Link>
-                          </NavigationMenuLink>
-                        ))}
-                        <div className="mt-2 grid grid-cols-2 gap-1 border-t border-[var(--color-border)] pt-2">
-                          {SHOP_LINKS.slice(0, 2).map((item) => (
-                            <NavigationMenuLink key={item.href} asChild>
-                              <Link
-                                href={item.href}
-                                className="rounded-[var(--radius-sm)] px-3 py-2 text-sm font-semibold outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
-                              >
-                                {item.label}
-                              </Link>
-                            </NavigationMenuLink>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                    <CollectionMegaMenuContent />
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem className="flex h-full items-center">
                   <NavigationMenuLink asChild>
-                    <Link href="/about" className="flex h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]">
+                    <Link
+                      href="/about"
+                      className="flex  w-[100px] h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]"
+                    >
                       about
                     </Link>
                   </NavigationMenuLink>
@@ -221,7 +240,10 @@ export default function Navbar() {
 
                 <NavigationMenuItem className="flex h-full items-center">
                   <NavigationMenuLink asChild>
-                    <Link href="/contact" className="flex h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]">
+                    <Link
+                      href="/contact"
+                      className="flex w-[100px] h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]"
+                    >
                       contact us
                     </Link>
                   </NavigationMenuLink>
@@ -232,9 +254,9 @@ export default function Navbar() {
             {/* Right icons */}
             <div className="flex flex-1 items-center justify-end">
               <div className="flex w-24 items-center justify-center gap-6">
-                <Link href="/shop" aria-label="Search" className="inline-flex h-6 w-6 items-center justify-center">
+                {/* <Link href="/shop" aria-label="Search" className="inline-flex h-6 w-6 items-center justify-center">
                   <Search size={22} className="transition-opacity hover:opacity-70" />
-                </Link>
+                </Link> */}
                 <CartBadge size={22} />
               </div>
             </div>

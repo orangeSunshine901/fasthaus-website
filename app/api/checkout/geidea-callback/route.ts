@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import { Resend } from "resend";
 import { createServiceClient } from "@/lib/supabase/server";
 import { OrderConfirmation } from "@/lib/email/OrderConfirmation";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from "@/lib/email/resend";
 
 function verifyGeideaSignature(payload: Record<string, string>, signature: string): boolean {
   // Geidea HMAC-SHA256 over sorted key=value pairs joined by &
@@ -80,7 +78,7 @@ export async function POST(request: Request) {
       postalCode?: string;
     };
 
-    await resend.emails.send({
+    await getResend().emails.send({
       from: "Fasthaus <orders@fasthaus.ae>",
       to: order.guest_email!,
       subject: `Your order #${orderId.slice(0, 8).toUpperCase()} is confirmed`,

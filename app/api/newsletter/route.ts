@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { NewsletterSchema } from "@/lib/schemas/newsletter";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NewsletterWelcome } from "@/lib/email/NewsletterWelcome";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from "@/lib/email/resend";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -35,7 +33,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: "Fasthaus <hello@fasthaus.ae>",
     to: email,
     subject: "Welcome to Fasthaus",

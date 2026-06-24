@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { ContactFormSchema } from "@/lib/schemas/contact";
 import { createServiceClient } from "@/lib/supabase/server";
 import { ContactInternal } from "@/lib/email/ContactInternal";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from "@/lib/email/resend";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -31,7 +29,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: "Fasthaus Contact <noreply@fasthaus.ae>",
     to: process.env.INTERNAL_EMAIL!,
     replyTo: email,
