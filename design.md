@@ -61,6 +61,20 @@
 
 **Type Scale**
 
+**Mobile Type Scale**
+
+| Token | Size | Weight | Line Height | Usage |
+|---|---|---|---|---|
+| `--text-xs` | 12px | 500 | 17px | Labels, badges |
+| `--text-sm` | 14px | 400 | 20px | Captions, metadata |
+| `--text-base` | 16px | 400 | 22px | Body copy |
+| `--text-md` | 20px | 300 | 18px | Sub-headings, emphasized UI |
+| `--text-lg` | 28px | 600 | 25px | Section titles |
+| `--text-xl` | 32px | 600 | 28px | Page headings |
+| `--text-2xl` | 40px | 600 | 36px | Hero titles |
+| `--text-3xl` | 48px | 600 | 43px | Large editorial moments |
+
+**Desktop Type Scale**
 | Token | Size | Weight | Line Height | Usage |
 |---|---|---|---|---|
 | `--text-xs` | 12px | 500 | 17px | Labels, badges |

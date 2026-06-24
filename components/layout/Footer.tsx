@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail } from "lucide-react";
 
-const desktopColumns = [
+type FooterLink = {
+  label: string;
+  href?: string;
+};
+
+type FooterColumn = {
+  heading: string;
+  links: FooterLink[];
+};
+
+const desktopColumns: FooterColumn[] = [
   {
     heading: "Company",
     links: [
@@ -16,15 +26,15 @@ const desktopColumns = [
   {
     heading: "Social",
     links: [
-      { label: "Twitter", href: "#" },
-      { label: "LinkedIn", href: "#" },
-      { label: "Facebook", href: "#" },
-      { label: "Instagram", href: "#" },
+      { label: "Twitter" },
+      { label: "LinkedIn" },
+      { label: "Facebook" },
+      { label: "Instagram" },
     ],
   },
 ];
 
-const mobileColumns = [
+const mobileColumns: FooterColumn[] = [
   {
     heading: "Shop",
     links: [
@@ -39,7 +49,7 @@ const mobileColumns = [
     links: [
       { label: "About FastHaus", href: "/about" },
       { label: "Custom Projects", href: "/contact" },
-      { label: "Journal", href: "#" },
+      { label: "Journal" },
     ],
   },
   {
@@ -47,16 +57,16 @@ const mobileColumns = [
     links: [
       { label: "Shipping & Returns", href: "/shipping-returns" },
       { label: "Warranty", href: "/warranty" },
-      { label: "Care Guide", href: "#" },
+      { label: "Care Guide" },
       { label: "FAQ", href: "/faq" },
     ],
   },
   {
     heading: "Contact",
     links: [
-      { label: "WhatsApp", href: "#" },
+      { label: "WhatsApp" },
       { label: "Email", href: "/contact" },
-      { label: "Instagram", href: "#" },
+      { label: "Instagram" },
     ],
   },
 ];
@@ -152,9 +162,15 @@ export default function Footer() {
                 {col.heading}
               </p>
               {col.links.map((link) => (
-                <Link key={link.label} href={link.href} className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
-                  {link.label}
-                </Link>
+                link.href ? (
+                  <Link key={link.label} href={link.href} className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
+                    {link.label}
+                  </Link>
+                ) : (
+                  <span key={link.label} className="type-body-sm cursor-default" style={{ color: "var(--color-text-disabled)" }}>
+                    {link.label}
+                  </span>
+                )
               ))}
             </div>
           ))}
@@ -187,9 +203,9 @@ export default function Footer() {
               <FooterNewsletter />
               <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
                 Agree{" "}
-                <Link href="#" className="underline" style={{ color: "var(--color-text-secondary)" }}>Terms</Link>{" "}
+                <span style={{ color: "var(--color-text-secondary)" }}>Terms</span>{" "}
                 and{" "}
-                <Link href="#" className="underline" style={{ color: "var(--color-text-secondary)" }}>Conditions</Link>.
+                <span style={{ color: "var(--color-text-secondary)" }}>Conditions</span>.
               </p>
             </div>
           </div>
@@ -200,9 +216,15 @@ export default function Footer() {
               <div key={col.heading} className="flex flex-col gap-2">
                 <p className="type-caption mb-1" style={{ color: "var(--color-text-primary)" }}>{col.heading}</p>
                 {col.links.map((link) => (
-                  <Link key={link.label} href={link.href} className="type-body-sm transition-colors hover:text-[var(--color-accent-amber)]" style={{ color: "var(--color-text-secondary)" }}>
-                    {link.label}
-                  </Link>
+                  link.href ? (
+                    <Link key={link.label} href={link.href} className="type-body-sm transition-colors hover:text-[var(--color-accent-amber)]" style={{ color: "var(--color-text-secondary)" }}>
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <span key={link.label} className="type-body-sm cursor-default" style={{ color: "var(--color-text-disabled)" }}>
+                      {link.label}
+                    </span>
+                  )
                 ))}
               </div>
             ))}

@@ -53,13 +53,13 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
       <form className="mx-auto flex w-full max-w-[620px] flex-col gap-3" onSubmit={handleSubmit}>
         <label
           htmlFor="newsletter-email"
-          className="type-caption text-left"
+          className="type-caption text-left pl-1"
           style={{ color: "var(--color-text-primary)" }}
         >
           Subscribe to Newsletter *
         </label>
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <div className="flex min-h-14 flex-1 items-center gap-3 rounded-[var(--radius-full)] bg-white px-5">
+          <div className="flex min-h-14 flex-1 items-center gap-3 rounded-2xl bg-white px-5">
             <svg
               aria-hidden="true"
               className="h-5 w-5 shrink-0"

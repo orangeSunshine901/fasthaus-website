@@ -12,45 +12,21 @@ const featuredSummaries: Record<string, string> = {
   "ribbed-table-lamp": "A tactile ceramic form that throws warm light and subtle shadow through its ribbed surface.",
 };
 
-const processSteps = [
-  {
-    number: "1",
-    title: "Design",
-    description:
-      "We shape each lamp digitally, focusing on proportion, mood, and how the light will sit in a room.",
-  },
-  {
-    number: "2",
-    title: "Prototype",
-    description:
-      "Forms are tested, adjusted, and refined until the lamp feels right in scale, texture, and glow.",
-  },
-  {
-    number: "3",
-    title: "Print",
-    description:
-      "Each piece is produced using carefully selected materials and print settings for a clean, layered finish.",
-  },
-  {
-    number: "4",
-    title: "Finish & Assemble",
-    description:
-      "The final lamp is cleaned, checked, assembled, and prepared for everyday use.",
-  },
-];
-
-const editorialPillars = [
+const purposeSteps = [
   {
     title: "Form",
-    description: "Designed to feel sculptural, simple, and warm.",
+    description: "Simple shapes with a quiet charm. Made to sit beautifully in a space without trying too hard.",
+    icon: "/lamp-icon.svg",
   },
   {
-    title: "Material",
-    description: "Selected for clean detail, lightness, and durability.",
+    title: "Made to order",
+    description: "We make what is needed, avoid excess, and create each piece with more care.",
+    icon: "/3d-printer-icon.svg",
   },
   {
     title: "Glow",
-    description: "Diffused to create atmosphere rather than harsh brightness.",
+    description: "Soft light for better moods, calmer corners and spaces that feel a little more alive.",
+    icon: "/bulb-glow-icon.svg",
   },
 ];
 
@@ -83,15 +59,15 @@ export default function HomePage() {
   return (
     <ShopLayout>
       {/* Hero */}
-      <section className="relative h-[540px] w-full overflow-hidden md:min-h-[460px] md:h-auto">
+      <section className="relative h-[540px] w-full overflow-hidden md:h-[740px]">
         <Image
-          src="/hero-img.png"
+          src="/hero-img-1.jpg"
           alt="Modern Lamps"
           fill
           className="object-cover object-center"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-neutral-900/75 to-neutral-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-neutral-950/35 to-transparent" />
 
         <div className="absolute left-5 top-[220px] z-10 flex w-[calc(100%-40px)] max-w-100 flex-col items-start gap-3.5 overflow-hidden md:hidden">
           <h1 className="type-display-xl self-stretch text-white">
@@ -114,7 +90,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="container-page relative z-10 hidden flex-col items-start gap-6 py-14 md:flex md:min-h-[460px] md:justify-center">
+        <div className="container-page absolute left-1/2 top-[447px] z-10 hidden -translate-x-1/2 flex-col items-start gap-6 md:flex">
           <h1 className="type-display-xl max-w-lg text-white">
             Modern Lamps,
             <br />
@@ -141,9 +117,9 @@ export default function HomePage() {
       </section>
 
       {/* Featured Products */}
-      <section className="w-full" style={{ backgroundColor: "#060606" }}>
+      <section id="featured-products" className="scroll-target w-full" style={{ backgroundColor: "#060606" }}>
         <div className="container-page section-pad flex flex-col gap-12">
-          <div className="flex max-w-[548px] flex-col gap-2">
+          <div className="flex max-w-[548px] flex-col gap-4">
             <p
               className="eyebrow"
               style={{ color: "var(--color-accent-amber)" }}
@@ -171,81 +147,82 @@ export default function HomePage() {
       </section>
 
       {/* Our Process */}
-      <section className="w-full" style={{ backgroundColor: "#E5E5E5" }}>
-        <div className="container-page section-pad">
-          <div className="flex max-w-[640px] flex-col gap-[10px]">
-          <h2 className="type-display-lg" style={{ color: "#1A1A1A" }}>
-              From Digital Form to Warm Light
-            </h2>
-            <p className="type-body-md" style={{ color: "#575757" }}>
-              Every FastHaus lamp begins as a digital design, then moves through prototyping, material testing, 3D printing, finishing, and assembly.
+        <section id="designed-in-layers" className="scroll-target w-full bg-[var(--color-bg)] px-6 pb-10 pt-16 md:px-8 md:py-24">
+          <div className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-10 xl:min-h-[fit-content] xl:gap-[32px]">
+            <div className="flex w-full flex-col items-start gap-4 md:max-w-[704px]">
+               <p
+              className="eyebrow"
+              style={{ color: "var(--color-accent-amber)" }}
+            >
+              OUR PROCESS
             </p>
-          </div>
-          <div className="mt-7 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {processSteps.map((step) => (
-              <article
-                key={step.number}
-                className="card-surface flex h-full flex-col gap-3 p-6"
-                style={{ borderColor: "#D6D6D6", backgroundColor: "#FFFFFF" }}
-              >
-                <span
-                  className="btn-pill inline-flex w-fit items-center text-white"
-                  style={{ backgroundColor: "#FF4B1F" }}
-                >
-                  {step.number}
-                </span>
-                <h3 className="type-title-md" style={{ color: "#1A1A1A" }}>
-                  {step.title}
-                </h3>
-                <p className="type-caption-sm" style={{ color: "#575757" }}>
-                  {step.description}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Editorial */}
-      <section className="container-page section-pad">
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)] lg:gap-14">
-          <div className="media-rounded-lg relative" style={{ aspectRatio: "560 / 440" }}>
-            <Image src="/collections-hero-img-1.png" alt="Designed in Layers" fill className="object-cover" />
-          </div>
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-4">
-              <h2 className="type-display-lg" style={{ color: "#1A1A1A" }}>
-                Designed in Layers
+              <h2 className="type-display-lg font-bold leading-[120px] text-[var(--color-text-primary)] md:text-6xl md:leading-[68px] w-[400px]">
+                Designed with Purpose
+                Made with Care
               </h2>
-              <p className="type-body-md max-w-[620px]" style={{ color: "#575757" }}>
-                We create lighting objects with purpose, shaped to bring form, function, and mood into a space.
-              </p>
-              <p className="type-body-md max-w-[620px]" style={{ color: "#575757" }}>
-                Our filaments give each piece its clean finish, light structure, and layered detail. The result is a lamp that feels soft from a distance and considered up close.
-              </p>
+              {/* <div className="h-[3px] w-16 bg-[var(--color-accent-amber)]" /> */}
             </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              {editorialPillars.map((pillar) => (
-                <article
-                  key={pillar.title}
-                  className="card-surface flex h-full flex-col gap-3 p-5"
-                  style={{ borderColor: "#E5E5E5", backgroundColor: "#FFFFFF" }}
-                >
-                  <h3 className="type-title-md" style={{ color: "#1A1A1A" }}>
-                    {pillar.title}
+
+            <div className="flex w-full flex-col items-start gap-4">
+              <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+                {purposeSteps.map((step) => (
+                  <article
+                    key={step.title}
+                    className="flex w-full flex-col items-start gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-6 md:h-60 md:gap-5 md:p-8"
+                  >
+                    <div className="hidden h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[12px] bg-[var(--color-surface)] md:flex">
+                      <Image
+                        src={step.icon}
+                        alt=""
+                        width={24}
+                        height={24}
+                        aria-hidden="true"
+                        className="h-6 w-6"
+                      />
+                    </div>
+                    <Image
+                      src={step.icon}
+                      alt=""
+                      width={44}
+                      height={44}
+                      aria-hidden="true"
+                      className="h-11 w-11 md:hidden"
+                    />
+                    <div className="flex w-full flex-col items-start gap-3">
+                      <div className="flex w-full flex-col items-start gap-2 md:gap-3">
+                        <h3 className="w-full type-display-md font-bold leading-7 text-[var(--color-text-primary)]">
+                          {step.title}
+                        </h3>
+                        <div className="h-0.5 w-10 bg-[var(--color-accent-amber)]" />
+                      </div>
+                      <p className="w-full text-base font-normal leading-6 text-[var(--color-text-secondary)]">
+                        {step.description}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <div className="flex w-full items-center gap-4 rounded-2xl bg-[#EEF7E8] p-5 md:h-20 md:gap-8 md:p-6">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)]">
+                  <Image src="/leaf-icon.svg" alt="" width={20} height={20} aria-hidden="true" />
+                </div>
+                <div className="flex flex-1 flex-col items-start gap-1 md:flex-row md:items-center md:gap-8">
+                  <h3 className="text-display-md font-semibold text-[var(--color-text-primary)] md:shrink-0">
+                    Eco-friendly Material
                   </h3>
-                  <p className="type-caption-sm" style={{ color: "#575757" }}>
-                    {pillar.description}
+                  <div className="h-20 w-[1px] shrink-0 bg-[var(--color-border)] md:h-10" />
+                  <p className="text-sm font-normal leading-5 text-[var(--color-text-secondary)] md:text-base md:leading-6">
+                    Our filaments are biodegradable, odorless, and kinder to the spaces we live in.
                   </p>
-                </article>
-              ))}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Who We Are */}
-      <section className="w-full" style={{ backgroundColor: "#E5E5E5" }}>
+      <section id="who-we-are" className="scroll-target w-full" style={{ backgroundColor: "#E5E5E5" }}>
         <div className="container-page section-pad">
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_520px] lg:gap-14">
             <div className="max-w-[580px]">
@@ -275,7 +252,8 @@ export default function HomePage() {
 
       {/* Newsletter */}
       <section
-        className="relative w-full overflow-hidden px-5 py-12 md:px-8 md:py-16"
+        id="newsletter"
+        className="scroll-target relative w-full overflow-hidden px-5 py-12 md:px-8 md:py-16"
         style={{ backgroundColor: "var(--color-accent-amber)" }}
       >
         <div className="relative mx-auto max-w-[1280px]">

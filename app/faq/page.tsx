@@ -49,7 +49,7 @@ export default function FAQPage() {
 
   return (
     <ShopLayout>
-      <div className="mx-auto max-w-[720px] px-5 py-10 md:py-14">
+      <div id="faq" className="scroll-target mx-auto max-w-[720px] px-5 py-10 md:py-14">
         {/* Page header */}
         <h1 className="type-display-xl mb-2 text-center" style={{ color: "var(--color-text-primary)" }}>
           You Ask. We Answer.

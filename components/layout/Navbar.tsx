@@ -2,9 +2,19 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight, Search, ShoppingCart, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useState, useSyncExternalStore } from "react";
 import { useCartStore } from "@/lib/store/cart";
+import { FloatingNav } from "@/components/ui/floating-navbar";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 const SHOP_LINKS = [
   { label: "All Products", href: "/shop" },
@@ -19,12 +29,46 @@ const MOBILE_NAV = [
   { label: "Contact us", href: "/contact" },
 ];
 
-function CartBadge({ size = 20 }: { size?: number }) {
+const FLOATING_NAV_ITEMS = [
+  { name: "collection", link: "/shop" },
+  { name: "about", link: "/about" },
+  { name: "contact us", link: "/contact" },
+];
+
+const SHOP_FEATURES = [
+  {
+    label: "Desk lamps",
+    href: "/shop/desk-lamps",
+    description: "Focused lighting for workspaces, studios, and reading corners.",
+  },
+  {
+    label: "Table lamps",
+    href: "/shop/table-lamps",
+    description: "Sculptural pieces for sideboards, bedsides, and dining surfaces.",
+  },
+  {
+    label: "Floor lamps",
+    href: "/shop/floor-lamps",
+    description: "Tall ambient lighting for lounges and open-plan rooms.",
+  },
+];
+
+function useCartHydrated() {
+  return useSyncExternalStore(
+    (onStoreChange) => useCartStore.persist.onFinishHydration(onStoreChange),
+    () => useCartStore.persist.hasHydrated(),
+    () => false
+  );
+}
+
+function CartBadge({ size = 20, className = "" }: { size?: number; className?: string }) {
   const itemCount = useCartStore((s) => s.itemCount());
+  const cartHydrated = useCartHydrated();
+
   return (
-    <Link href="/cart" className="relative" aria-label="Cart">
-      <ShoppingCart size={size} style={{ color: "var(--color-text-primary)" }} className="transition-opacity hover:opacity-70" />
-      {itemCount > 0 && (
+    <Link href="/cart" className={`relative inline-flex ${className}`} aria-label="Cart">
+      <ShoppingCart size={size} className="transition-opacity hover:opacity-70" />
+      {cartHydrated && itemCount > 0 && (
         <span
           className="absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-semibold flex items-center justify-center text-white"
           style={{ backgroundColor: "var(--color-accent-amber)" }}
@@ -38,13 +82,51 @@ function CartBadge({ size = 20 }: { size?: number }) {
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [shopOpen, setShopOpen] = useState(false);
+  const pathname = usePathname();
+  const usesHeroOverlay = pathname === "/" || pathname === "/shop";
+  const desktopTextColor = "#FFFDF5";
+  const desktopNavStyle = {
+    color: desktopTextColor,
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)",
+    backgroundColor: "rgba(33, 33, 33, 0.36)",
+    boxShadow: "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
+  };
 
   return (
     <>
+      {usesHeroOverlay && (
+        <FloatingNav
+          navItems={FLOATING_NAV_ITEMS}
+          className="hidden md:flex"
+          leftSlot={
+            <Link href="/" className="inline-flex items-center" aria-label="Fasthaus home">
+              <Image
+                src="/fasthaus-logo-final-ivory.svg"
+                alt="Fasthaus"
+                width={104}
+                height={22}
+              />
+            </Link>
+          }
+          rightSlot={
+            <div className="flex items-center gap-4 px-1">
+              <Link href="/shop" aria-label="Search" className="inline-flex h-6 w-6 items-center justify-center">
+                <Search size={20} className="transition-opacity hover:opacity-70" />
+              </Link>
+              <CartBadge size={20} />
+            </div>
+          }
+        />
+      )}
+
       <header
-        className="sticky top-0 z-40 w-full border-b"
-        style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}
+        className={
+          usesHeroOverlay
+            ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
+            : "sticky top-0 z-40 w-full border-b border-[var(--color-border)] bg-[var(--color-surface)] md:mt-8"
+        }
       >
         {/* Mobile nav — hamburger | logo | cart */}
         <div className="flex h-14 items-center justify-between px-5 md:hidden">
@@ -54,66 +136,108 @@ export default function Navbar() {
           <Link href="/" className="absolute left-1/2 -translate-x-1/2">
             <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={100} height={24} priority />
           </Link>
-          <CartBadge size={22} />
+          <CartBadge size={22} className="text-[var(--color-text-primary)]" />
         </div>
 
         {/* Desktop nav — logo | links | icons */}
-        <div className="container-page hidden h-20 items-center justify-between md:flex">
-          <Link href="/" className="flex-shrink-0">
-            <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={120} height={28} priority />
-          </Link>
+        <div
+          className="mx-auto hidden h-16 w-full max-w-[1240px] items-center justify-center rounded-[24px] px-8 md:flex md:translate-y-8"
+          style={desktopNavStyle}
+        >
+          <div className="flex h-full w-full max-w-[1148px] items-center justify-between">
+            <Link href="/" className="flex flex-1 items-center justify-start">
+              <Image
+                src="/fasthaus-logo-final-ivory.svg"
+                alt="Fasthaus"
+                width={128}
+                height={26}
+                priority
+              />
+            </Link>
 
-          {/* Center links */}
-          <nav className="flex items-center gap-8">
-            <div className="relative">
-              <button
-                className="type-title-sm flex items-center gap-1 transition-colors"
-                style={{ color: shopOpen ? "var(--color-accent-amber)" : "var(--color-text-primary)" }}
-                onClick={() => setShopOpen(!shopOpen)}
-              >
-                collection
-                <ChevronDown
-                  size={14}
-                  className="transition-transform"
-                  style={{ transform: shopOpen ? "rotate(180deg)" : "rotate(0)" }}
-                />
-              </button>
-              {shopOpen && (
-                <>
-                  <div className="fixed inset-0 z-10" onClick={() => setShopOpen(false)} />
-                  <div
-                    className="absolute left-1/2 top-8 z-20 w-48 -translate-x-1/2 rounded-[var(--radius-md)] border p-2 shadow-lg"
-                    style={{ backgroundColor: "var(--color-bg)", borderColor: "var(--color-border)" }}
-                  >
-                    {SHOP_LINKS.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="type-body-sm block rounded-[var(--radius-sm)] px-3 py-2 transition-colors hover:bg-[var(--color-surface-muted)]"
-                        style={{ color: "var(--color-text-primary)" }}
-                        onClick={() => setShopOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
+            {/* Center links */}
+            <NavigationMenu className="h-full w-[453px] flex-none text-current" viewport={false}>
+              <NavigationMenuList className="h-full w-full justify-between gap-0">
+                <NavigationMenuItem className="flex h-full items-center">
+                  <NavigationMenuTrigger className="h-16 min-w-20 rounded-none bg-transparent p-2 text-base font-semibold leading-6 text-current hover:bg-transparent hover:text-[var(--color-accent-amber)] focus:bg-transparent focus:text-[var(--color-accent-amber)] data-[state=open]:bg-transparent data-[state=open]:text-[var(--color-accent-amber)]">
+                    collection
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent className="left-1/2 top-[calc(100%+12px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
+                    <div className="grid grid-cols-[0.9fr_1.1fr] gap-3">
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href="/shop"
+                          className="flex min-h-[220px] flex-col justify-between rounded-[var(--radius-sm)] bg-[var(--color-text-primary)] p-5 text-white outline-none transition-colors hover:bg-[#2a272a] focus:bg-[#2a272a]"
+                        >
+                          <div>
+                            <p className="text-sm font-medium text-white/65">Fasthaus collection</p>
+                            <p className="mt-3 text-2xl font-semibold leading-7">Warm, sculptural lighting for modern rooms.</p>
+                          </div>
+                          <span className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent-amber)]">
+                            Shop all
+                            <ArrowRight size={15} aria-hidden="true" />
+                          </span>
+                        </Link>
+                      </NavigationMenuLink>
+
+                      <div className="grid gap-1">
+                        {SHOP_FEATURES.map((item) => (
+                          <NavigationMenuLink key={item.href} asChild>
+                            <Link
+                              href={item.href}
+                              className="rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
+                            >
+                              <span className="block text-base font-semibold leading-6">{item.label}</span>
+                              <span className="mt-1 block text-sm leading-5 text-[var(--color-text-secondary)]">
+                                {item.description}
+                              </span>
+                            </Link>
+                          </NavigationMenuLink>
+                        ))}
+                        <div className="mt-2 grid grid-cols-2 gap-1 border-t border-[var(--color-border)] pt-2">
+                          {SHOP_LINKS.slice(0, 2).map((item) => (
+                            <NavigationMenuLink key={item.href} asChild>
+                              <Link
+                                href={item.href}
+                                className="rounded-[var(--radius-sm)] px-3 py-2 text-sm font-semibold outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
+                              >
+                                {item.label}
+                              </Link>
+                            </NavigationMenuLink>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem className="flex h-full items-center">
+                  <NavigationMenuLink asChild>
+                    <Link href="/about" className="flex h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]">
+                      about
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem className="flex h-full items-center">
+                  <NavigationMenuLink asChild>
+                    <Link href="/contact" className="flex h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]">
+                      contact us
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+
+            {/* Right icons */}
+            <div className="flex flex-1 items-center justify-end">
+              <div className="flex w-24 items-center justify-center gap-6">
+                <Link href="/shop" aria-label="Search" className="inline-flex h-6 w-6 items-center justify-center">
+                  <Search size={22} className="transition-opacity hover:opacity-70" />
+                </Link>
+                <CartBadge size={22} />
+              </div>
             </div>
-            <Link href="/about" className="type-title-sm transition-colors hover:text-[var(--color-accent-amber)]" style={{ color: "var(--color-text-primary)" }}>
-              about
-            </Link>
-            <Link href="/contact" className="type-title-sm transition-colors hover:text-[var(--color-accent-amber)]" style={{ color: "var(--color-text-primary)" }}>
-              contact us
-            </Link>
-          </nav>
-
-          {/* Right icons */}
-          <div className="flex items-center gap-4">
-            <Link href="/shop" aria-label="Search">
-              <Search size={20} style={{ color: "var(--color-text-primary)" }} className="hover:opacity-70 transition-opacity" />
-            </Link>
-            <CartBadge />
           </div>
         </div>
       </header>
@@ -143,7 +267,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-            className="type-display-sm border-b py-5"
+                className="type-display-sm border-b py-5"
                 style={{ color: "var(--color-text-primary)", borderColor: "var(--color-border)" }}
                 onClick={() => setMobileOpen(false)}
               >
