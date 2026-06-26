@@ -10,11 +10,7 @@ const categoryLabels: Record<string, string> = {
 };
 
 export function generateStaticParams() {
-  return [
-    { category: "desk-lamps" },
-    { category: "table-lamps" },
-    { category: "floor-lamps" },
-  ];
+  return [{ category: "desk-lamps" }, { category: "table-lamps" }, { category: "floor-lamps" }];
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
@@ -27,9 +23,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       <div className="container-page py-8 md:py-12">
         {/* Breadcrumb */}
         <nav className="text-sm mb-2" style={{ color: "var(--color-text-secondary)" }}>
-          <Link href="/" className="hover:underline">Home</Link>
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
           {" / "}
-          <Link href="/shop" className="hover:underline">Shop</Link>
+          <Link href="/collection" className="hover:underline">
+            Collection
+          </Link>
           {" / "}
           <span style={{ color: "var(--color-text-primary)" }}>{label}</span>
         </nav>
@@ -66,10 +66,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             <p className="type-display-sm mb-4" style={{ color: "var(--color-text-primary)" }}>
               No products found
             </p>
-            <Link
-              href="/shop"
-              className="btn btn-primary"
-            >
+            <Link href="/collection" className="btn btn-primary">
               Browse all products
             </Link>
           </div>

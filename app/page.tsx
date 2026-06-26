@@ -227,31 +227,51 @@ export default function HomePage() {
         className="scroll-target w-full"
         style={{ backgroundColor: "#E5E5E5" }}
       >
-        <div className="container-page section-pad">
-          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_520px] lg:gap-14">
-            <div className="max-w-[580px]">
-              <h2 className="type-display-lg" style={{ color: "#1A1A1A" }}>
-                Who We Are
-              </h2>
-              <p className="type-body-md mt-4" style={{ color: "#575757" }}>
-                Fueled by a love for design and storytelling, we create 3D-printed spatial objects
-                that bring form, function, and character into personal spaces.
-              </p>
-              <p className="type-body-md mt-4" style={{ color: "#575757" }}>
-                Each piece is shaped with intention, built with considered materials, and made to
-                make your room feel a little more like you.
-              </p>
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col items-start gap-8 overflow-hidden px-5 py-12 md:px-8 md:py-16 lg:flex-row lg:items-center lg:gap-14 lg:px-20">
+          <div className="flex w-full flex-1 flex-col items-start overflow-hidden">
+            <div className="flex w-full max-w-[704px] flex-col items-start overflow-hidden md:gap-6">
+              <div>
+                <p className="eyebrow" style={{ color: "var(--color-accent-amber)" }}>
+                  ABOUT US
+                </p>
+                <h2 className="flex flex-wrap items-end gap-x-3 gap-y-2 text-3xl font-semibold leading-[1.15] text-zinc-900 md:gap-x-4 md:text-4xl">
+                  <span>What is</span>
+                  <Image
+                    src="/fasthaus-logo-final.svg"
+                    alt="fasthaus"
+                    width={208}
+                    height={42}
+                    className="h-auto w-[168px] md:w-[208px]"
+                    style={{ height: "59px", position: "relative", top: "2px" }}
+                  />
+                </h2>{" "}
+              </div>
+              <div className="flex w-full flex-col gap-4">
+                <p className="max-w-[704px] text-base font-light leading-5 text-zinc-600">
+                  Fueled by a love for design and storytelling, we create 3D-printed spatial objects
+                  that bring form, function, and character into personal spaces.
+                </p>
+                <p className="max-w-[704px] text-base font-light leading-5 text-zinc-600">
+                  Each piece is shaped with intention, built with considered materials, and made to
+                  make your room feel a little more like you.
+                </p>
+              </div>
               <Link
                 href="/about"
-                className="btn btn-outline mt-8 hover:bg-black hover:text-white"
-                style={{ borderColor: "#1A1A1A", color: "#1A1A1A" }}
+                className="btn btn-secondary text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.04)] transition-colors hover:bg-neutral-700 mt-4"
               >
-                Learn more about FastHaus
+                Learn more about fasthaus
               </Link>
             </div>
-            <div className="media-rounded-lg relative" style={{ aspectRatio: "520 / 400" }}>
-              <Image src="/who-we-are-img.png" alt="Who We Are" fill className="object-cover" />
-            </div>
+          </div>
+          <div className="relative aspect-[520/400] w-full overflow-hidden rounded-[20px] lg:h-96 lg:w-[520px] lg:shrink-0">
+            <Image
+              src="/who-we-are-img.png"
+              alt="Fasthaus spatial lamp in a warm interior"
+              fill
+              sizes="(min-width: 1024px) 520px, calc(100vw - 40px)"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>

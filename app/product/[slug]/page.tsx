@@ -21,9 +21,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="max-w-[1280px] mx-auto px-6 py-8">
         {/* Breadcrumb */}
         <nav className="text-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
-          <Link href="/" className="hover:underline">Home</Link>
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
           {" / "}
-          <Link href="/shop" className="hover:underline">Shop</Link>
+          <Link href="/collection" className="hover:underline">
+            Collection
+          </Link>
           {" / "}
           <span style={{ color: "var(--color-text-primary)" }}>{product.name}</span>
         </nav>
@@ -33,7 +37,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         {/* You May Also Like */}
         {related.length > 0 && (
           <section className="mt-20">
-            <h2 className="text-[24px] font-semibold mb-8" style={{ color: "var(--color-text-primary)" }}>
+            <h2
+              className="text-[24px] font-semibold mb-8"
+              style={{ color: "var(--color-text-primary)" }}
+            >
               You May Also Like
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

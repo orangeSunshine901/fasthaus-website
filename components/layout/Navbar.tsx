@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowRight, ChevronDown, Search, ShoppingCart, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
+import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import {
@@ -17,14 +18,14 @@ import {
 } from "@/components/ui/navigation-menu";
 
 const SHOP_LINKS = [
-  { label: "All Products", href: "/shop" },
-  { label: "Desk Lamps", href: "/shop/desk-lamps" },
-  { label: "Table Lamps", href: "/shop/table-lamps" },
-  { label: "Floor Lamps", href: "/shop/floor-lamps" },
+  { label: "All Products", href: "/collection" },
+  { label: "Desk Lamps", href: "/collection/desk-lamps" },
+  { label: "Table Lamps", href: "/collection/table-lamps" },
+  { label: "Floor Lamps", href: "/collection/floor-lamps" },
 ];
 
 const MOBILE_NAV = [
-  { label: "Collection", href: "/shop" },
+  { label: "Collection", href: "/collection" },
   { label: "About", href: "/about" },
   { label: "Contact us", href: "/contact" },
 ];
@@ -32,17 +33,17 @@ const MOBILE_NAV = [
 const SHOP_FEATURES = [
   {
     label: "Desk lamps",
-    href: "/shop/desk-lamps",
+    href: "/collection/desk-lamps",
     description: "Focused lighting for workspaces, studios, and reading corners.",
   },
   {
     label: "Table lamps",
-    href: "/shop/table-lamps",
+    href: "/collection/table-lamps",
     description: "Sculptural pieces for sideboards, bedsides, and dining surfaces.",
   },
   {
     label: "Floor lamps",
-    href: "/shop/floor-lamps",
+    href: "/collection/floor-lamps",
     description: "Tall ambient lighting for lounges and open-plan rooms.",
   },
 ];
@@ -79,7 +80,7 @@ function CollectionMegaMenuContent() {
     <div className="grid grid-cols-[0.9fr_1.1fr] gap-3">
       <NavigationMenuLink asChild>
         <Link
-          href="/shop"
+          href="/collection"
           className="flex min-h-[220px] flex-col justify-between rounded-[var(--radius-sm)] bg-[var(--color-text-primary)] p-5 text-white outline-none transition-colors hover:bg-[#2a272a] focus:bg-[#2a272a]"
         >
           <div>
@@ -129,7 +130,9 @@ function CollectionMegaMenuContent() {
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const usesHeroOverlay = pathname === "/" || pathname === "/shop";
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const usesHeroOverlay =
+    pathname === "/" || pathname === "/collection" || pathname.startsWith("/collection/");
   const desktopTextColor = "#FFFDF5";
   const desktopNavStyle = {
     color: desktopTextColor,
@@ -141,7 +144,7 @@ export default function Navbar() {
       "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
   };
   const floatingNavItems = [
-    { name: "collection", link: "/shop", megaMenu: <CollectionMegaMenuContent /> },
+    { name: "collection", link: "/collection", megaMenu: <CollectionMegaMenuContent /> },
     { name: "about", link: "/about" },
     { name: "contact us", link: "/contact" },
   ];
@@ -160,8 +163,8 @@ export default function Navbar() {
           rightSlot={
             <div className="flex items-center gap-4 px-1">
               <Link
-                href="/shop"
-                aria-label="Search"
+                href="/collection"
+                aria-label="Collection"
                 className="inline-flex h-6 w-6 items-center justify-center"
               >
                 <Search size={20} className="transition-opacity hover:opacity-70" />
@@ -212,8 +215,13 @@ export default function Navbar() {
                 <NavigationMenuItem className="flex h-full items-center">
                   <NavigationMenuTrigger asChild showChevron={false} unstyled>
                     <Link
-                      href="/shop"
-                      className="group box-content flex h-16 w-[100px] items-center justify-center rounded-none p-2 text-sm font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]"
+                      href="/collection"
+                      className={cn(
+                        "group box-content flex h-16 w-[100px] items-center justify-center rounded-none p-2 text-sm font-semibold leading-6 outline-none transition-colors focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]",
+                        isActive("/collection")
+                          ? "text-[var(--color-accent-amber)]"
+                          : "text-current"
+                      )}
                     >
                       collection
                       <ChevronDown
@@ -231,7 +239,10 @@ export default function Navbar() {
                   <NavigationMenuLink asChild>
                     <Link
                       href="/about"
-                      className="flex  w-[100px] h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]"
+                      className={cn(
+                        "flex  w-[100px] h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]",
+                        isActive("/about") ? "text-[var(--color-accent-amber)]" : "text-current"
+                      )}
                     >
                       about
                     </Link>
@@ -242,7 +253,10 @@ export default function Navbar() {
                   <NavigationMenuLink asChild>
                     <Link
                       href="/contact"
-                      className="flex w-[100px] h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 text-current outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]"
+                      className={cn(
+                        "flex w-[100px] h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]",
+                        isActive("/contact") ? "text-[var(--color-accent-amber)]" : "text-current"
+                      )}
                     >
                       contact us
                     </Link>
@@ -289,8 +303,13 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="type-display-sm border-b py-5"
-                style={{ color: "var(--color-text-primary)", borderColor: "var(--color-border)" }}
+                className={cn(
+                  "type-display-sm border-b py-5",
+                  isActive(link.href)
+                    ? "text-[var(--color-accent-amber)]"
+                    : "text-[var(--color-text-primary)]"
+                )}
+                style={{ borderColor: "var(--color-border)" }}
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}

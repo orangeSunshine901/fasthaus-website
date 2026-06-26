@@ -8,7 +8,13 @@ import DirhamPrice from "@/components/ui/DirhamPrice";
 
 type StoredOrder = {
   id: string;
-  items: { productName: string; variantColor: string; price: number; quantity: number; image: string }[];
+  items: {
+    productName: string;
+    variantColor: string;
+    price: number;
+    quantity: number;
+    image: string;
+  }[];
   addOns: { name: string; price: number }[];
   total: number;
   shipping: { firstName: string; lastName: string; email: string; emirate: string };
@@ -27,7 +33,11 @@ export default function OrderConfirmationPage() {
         {/* Not found guard */}
         <div className="text-center py-24">
           <p style={{ color: "var(--color-text-secondary)" }}>Order not found.</p>
-          <Link href="/" className="text-sm mt-4 block" style={{ color: "var(--color-accent-amber)" }}>
+          <Link
+            href="/"
+            className="text-sm mt-4 block"
+            style={{ color: "var(--color-accent-amber)" }}
+          >
             Return home
           </Link>
         </div>
@@ -67,11 +77,17 @@ export default function OrderConfirmationPage() {
             <div key={s.label} className="flex flex-col items-center gap-1 flex-1">
               <div
                 className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: s.active ? "var(--color-accent-amber)" : "var(--color-border)" }}
+                style={{
+                  backgroundColor: s.active ? "var(--color-accent-amber)" : "var(--color-border)",
+                }}
               />
               {i < 2 && <div className="absolute" />}
-              <p className="type-badge" style={{ color: "var(--color-text-primary)" }}>{s.label}</p>
-              <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>{s.sub}</p>
+              <p className="type-badge" style={{ color: "var(--color-text-primary)" }}>
+                {s.label}
+              </p>
+              <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>
+                {s.sub}
+              </p>
             </div>
           ))}
         </div>
@@ -109,14 +125,18 @@ export default function OrderConfirmationPage() {
 
         {/* Help link */}
         <p className="type-body-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
-          Need help? <a href="mailto:support@fasthaus.ae" className="underline" style={{ color: "var(--color-text-secondary)" }}>support@fasthaus.ae</a>
+          Need help?{" "}
+          <a
+            href="mailto:support@fasthaus.ae"
+            className="underline"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
+            support@fasthaus.ae
+          </a>
         </p>
 
         {/* Continue shopping CTA */}
-        <Link
-          href="/shop"
-          className="btn btn-primary"
-        >
+        <Link href="/collection" className="btn btn-primary">
           Continue shopping
         </Link>
       </div>

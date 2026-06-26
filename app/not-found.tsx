@@ -7,12 +7,7 @@ export default function NotFound() {
     <ShopLayout>
       <div className="flex flex-col items-center justify-center py-20 md:py-32 px-6 text-center">
         <div className="relative w-40 h-40 md:w-56 md:h-56 mb-6 opacity-80">
-          <Image
-            src="/luna-lamp-rendering.png"
-            alt="Lamp"
-            fill
-            className="object-contain"
-          />
+          <Image src="/luna-lamp-rendering.png" alt="Lamp" fill className="object-contain" />
         </div>
         <h1
           className="text-8xl md:text-9xl font-semibold mb-4"
@@ -27,14 +22,11 @@ export default function NotFound() {
           The page you are looking for does not exist or has been moved.
         </p>
         <div className="flex flex-col gap-3 w-full max-w-xs sm:flex-row sm:max-w-none sm:w-auto">
-          <Link
-            href="/"
-            className="btn btn-primary px-8"
-          >
+          <Link href="/" className="btn btn-primary px-8">
             Return home
           </Link>
           <Link
-            href="/shop"
+            href="/collection"
             className="btn btn-outline px-8"
             style={{ borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
           >

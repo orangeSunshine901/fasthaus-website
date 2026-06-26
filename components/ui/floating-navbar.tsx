@@ -72,8 +72,12 @@ export const FloatingNav = ({
           <div className="flex items-center gap-1">
             {navItems.map((navItem, idx: number) =>
               navItem.megaMenu ? (
-                <NavigationMenu key={`link-${idx}`} className="h-full flex-none text-current" viewport={false}>
-                  <NavigationMenuList className="h-full gap-0">
+                <NavigationMenu
+                  key={`link-${idx}`}
+                  className="h-full flex-none text-current"
+                  viewport={false}
+                >
+                  <NavigationMenuList className="h-full gap-0 mt-[1px]">
                     <NavigationMenuItem className="flex h-full items-center">
                       <NavigationMenuTrigger asChild showChevron={false} unstyled>
                         <Link
@@ -88,7 +92,7 @@ export const FloatingNav = ({
                           />
                         </Link>
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent className="left-1/2 top-[calc(100%+12px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
+                      <NavigationMenuContent className="left-1/2 top-[calc(100%+16px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
                         {navItem.megaMenu}
                       </NavigationMenuContent>
                     </NavigationMenuItem>

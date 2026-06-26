@@ -1,40 +1,24 @@
 import ShopLayout from "@/components/layout/ShopLayout";
 import ProductCard from "@/components/product/ProductCard";
 import { PRODUCTS } from "@/lib/data/products";
-import Image from "next/image";
 import Link from "next/link";
+import CollectionHero from "@/components/collection/CollectionHero";
 
 export default function CollectionsPage() {
   return (
     <ShopLayout>
       {/* Hero */}
-      <section className="relative w-full overflow-hidden" style={{ minHeight: 320 }}>
-        <Image src="/collections-hero-img-2.png" alt="Collection" fill className="object-cover" />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="relative z-10 max-w-[1280px] mx-auto px-6 py-16">
-          <div
-            className="inline-flex items-center gap-3 rounded-full px-4 py-2"
-            style={{ backgroundColor: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)" }}
-          >
-            <span className="text-white text-sm font-medium">Lamp 2</span>
-            <Link
-              href="/product/luna-desk-lamp"
-              className="btn btn-primary btn-pill min-h-0 px-4 py-1.5"
-              style={{ backgroundColor: "var(--color-accent-amber)" }}
-            >
-              Shop now
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CollectionHero />
 
       {/* Collection Grid */}
       <div className="container-page py-8 md:py-12">
         {/* Breadcrumb */}
         <nav className="text-sm mb-2" style={{ color: "var(--color-text-secondary)" }}>
-          <Link href="/" className="hover:underline">Home</Link>
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
           {" / "}
-          <span style={{ color: "var(--color-text-primary)" }}>Shop</span>
+          <span style={{ color: "var(--color-text-primary)" }}>Collection</span>
         </nav>
 
         {/* Page header + sort dropdown */}
@@ -44,7 +28,8 @@ export default function CollectionsPage() {
               Collection
             </h1>
             <p className="type-body-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
-              Browse our full collection of considered everyday lighting — built to last and made to love.
+              Browse our full collection of considered everyday lighting — built to last and made to
+              love.
             </p>
           </div>
           <select

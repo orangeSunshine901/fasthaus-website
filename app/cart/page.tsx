@@ -8,19 +8,21 @@ import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
 
 export default function CartPage() {
-  const { items, addOns, removeItem, updateQuantity, toggleAddOn, subtotal, total } = useCartStore();
+  const { items, addOns, removeItem, updateQuantity, toggleAddOn, subtotal, total } =
+    useCartStore();
 
   if (items.length === 0) {
     return (
       <ShopLayout>
         {/* Empty state */}
         <div className="container-page py-24 text-center">
-          <h1 className="type-display-xl mb-4" style={{ color: "var(--color-text-primary)" }}>Your Cart</h1>
-          <p className="type-body-md mb-8" style={{ color: "var(--color-text-secondary)" }}>Your cart is empty.</p>
-          <Link
-            href="/shop"
-            className="btn btn-primary"
-          >
+          <h1 className="type-display-xl mb-4" style={{ color: "var(--color-text-primary)" }}>
+            Your Cart
+          </h1>
+          <p className="type-body-md mb-8" style={{ color: "var(--color-text-secondary)" }}>
+            Your cart is empty.
+          </p>
+          <Link href="/collection" className="btn btn-primary">
             Continue Shopping
           </Link>
         </div>
@@ -47,16 +49,21 @@ export default function CartPage() {
                 className="flex gap-4 pb-4 border-b"
                 style={{ borderColor: "var(--color-border)" }}
               >
-                <Link href={`/product/${item.productSlug}`} className="media-rounded relative h-[72px] w-[72px] flex-shrink-0 md:h-20 md:w-20" style={{ backgroundColor: "var(--color-surface-muted)" }}>
+                <Link
+                  href={`/product/${item.productSlug}`}
+                  className="media-rounded relative h-[72px] w-[72px] flex-shrink-0 md:h-20 md:w-20"
+                  style={{ backgroundColor: "var(--color-surface-muted)" }}
+                >
                   <Image src={item.image} alt={item.productName} fill className="object-cover" />
                 </Link>
                 <div className="flex-1 flex flex-col gap-1">
-                  <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>{item.productName}</p>
-                  <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>Base Color: {item.variantColor}</p>
-                  <button
-                    onClick={() => removeItem(item.id)}
-                    className="btn-text w-fit"
-                  >
+                  <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>
+                    {item.productName}
+                  </p>
+                  <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
+                    Base Color: {item.variantColor}
+                  </p>
+                  <button onClick={() => removeItem(item.id)} className="btn-text w-fit">
                     Remove
                   </button>
                 </div>
@@ -99,7 +106,9 @@ export default function CartPage() {
                     onChange={() => toggleAddOn(ao)}
                     className="w-4 h-4 accent-[var(--color-accent-amber)]"
                   />
-                  <span className="type-body-sm" style={{ color: "var(--color-text-primary)" }}>Add-on: {ao.name}</span>
+                  <span className="type-body-sm" style={{ color: "var(--color-text-primary)" }}>
+                    Add-on: {ao.name}
+                  </span>
                 </div>
                 <DirhamPrice amount={ao.price} className="ml-auto" />
               </div>
@@ -120,7 +129,9 @@ export default function CartPage() {
             </div>
             <div className="type-body-sm mb-4 flex justify-between">
               <span style={{ color: "var(--color-text-secondary)" }}>Shipping</span>
-              <span className="font-medium" style={{ color: "var(--color-success)" }}>Free</span>
+              <span className="font-medium" style={{ color: "var(--color-success)" }}>
+                Free
+              </span>
             </div>
             <div
               className="flex justify-between font-semibold text-base pt-4 border-t mb-5"
@@ -129,13 +140,13 @@ export default function CartPage() {
               <span style={{ color: "var(--color-text-primary)" }}>Total</span>
               <DirhamPrice amount={total()} size="lg" />
             </div>
-            <Link
-              href="/checkout"
-              className="btn btn-primary w-full"
-            >
+            <Link href="/checkout" className="btn btn-primary w-full">
               Checkout
             </Link>
-            <p className="type-caption-sm mt-3 text-center" style={{ color: "var(--color-text-secondary)" }}>
+            <p
+              className="type-caption-sm mt-3 text-center"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
               Free shipping on all orders
             </p>
             {/* Payment method icons */}
@@ -144,7 +155,10 @@ export default function CartPage() {
                 <span
                   key={p}
                   className="text-[10px] px-2 py-0.5 rounded border"
-                  style={{ borderColor: "var(--color-border)", color: "var(--color-text-secondary)" }}
+                  style={{
+                    borderColor: "var(--color-border)",
+                    color: "var(--color-text-secondary)",
+                  }}
                 >
                   {p}
                 </span>
