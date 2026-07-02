@@ -177,6 +177,59 @@ a {
   scroll-margin-top: var(--scroll-offset);
 }
 
+/* Scroll animation helpers stay inert until the homepage provider marks JS ready. */
+.scroll-reveal,
+.scroll-reveal-up,
+.scroll-reveal-soft {
+  will-change: opacity, transform;
+}
+
+.scroll-parallax-layer {
+  will-change: transform;
+}
+
+.scroll-animations-ready .scroll-reveal,
+.scroll-animations-ready .scroll-reveal-up,
+.scroll-animations-ready .scroll-reveal-soft {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 700ms ease,
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--scroll-delay, 0ms);
+}
+
+.scroll-animations-ready .scroll-reveal-soft {
+  transform: translate3d(0, 10px, 0);
+}
+
+.scroll-animations-ready .scroll-reveal-up {
+  transform: translate3d(0, 28px, 0);
+}
+
+.scroll-animations-ready .scroll-reveal.is-inview,
+.scroll-animations-ready .scroll-reveal-up.is-inview,
+.scroll-animations-ready .scroll-reveal-soft.is-inview {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.scroll-stagger-1 {
+  --scroll-delay: 80ms;
+}
+
+.scroll-stagger-2 {
+  --scroll-delay: 140ms;
+}
+
+.scroll-stagger-3 {
+  --scroll-delay: 200ms;
+}
+
+.scroll-stagger-4 {
+  --scroll-delay: 260ms;
+}
+
 @media (min-width: 768px) {
   .section-pad {
     padding-block: 64px;
@@ -186,6 +239,15 @@ a {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .scroll-reveal,
+  .scroll-reveal-up,
+  .scroll-reveal-soft,
+  .scroll-parallax-layer {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 

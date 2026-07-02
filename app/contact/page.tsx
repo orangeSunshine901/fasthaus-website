@@ -45,13 +45,14 @@ export default function ContactPage() {
 
   return (
     <ShopLayout>
-      <div className="container-page py-10 md:py-14">
+      <div className="container-page mt-[40px] pb-10 md:py-14">
         {/* Page header */}
         <h1 className="type-display-xl mb-2" style={{ color: "var(--color-text-primary)" }}>
           Get in Touch
         </h1>
         <p className="type-body-md mb-12" style={{ color: "var(--color-text-secondary)" }}>
-          Questions about a lamp, an order, or a custom project? We usually reply within one business day.
+          Questions about a lamp, an order, or a custom project? We usually reply within one
+          business day.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -77,45 +78,88 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="type-badge mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Name</label>
+                    <label
+                      className="type-badge mb-1 block"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      Name
+                    </label>
                     <input
-                      required placeholder="Your full name"
-                      value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      required
+                      placeholder="Your full name"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
                       className="input-field w-full"
-                      style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
+                      style={{
+                        borderColor: "var(--color-border)",
+                        backgroundColor: "var(--color-surface)",
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="type-badge mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Email</label>
+                    <label
+                      className="type-badge mb-1 block"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      Email
+                    </label>
                     <input
-                      required type="email" placeholder="you@example.com"
-                      value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      required
+                      type="email"
+                      placeholder="you@example.com"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
                       className="input-field w-full"
-                      style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
+                      style={{
+                        borderColor: "var(--color-border)",
+                        backgroundColor: "var(--color-surface)",
+                      }}
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="type-badge mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Subject</label>
+                  <label
+                    className="type-badge mb-1 block"
+                    style={{ color: "var(--color-text-secondary)" }}
+                  >
+                    Subject
+                  </label>
                   <input
-                    required placeholder="What's this about?"
-                    value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                    required
+                    placeholder="What's this about?"
+                    value={form.subject}
+                    onChange={(e) => setForm({ ...form, subject: e.target.value })}
                     className="input-field w-full"
-                    style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
+                    style={{
+                      borderColor: "var(--color-border)",
+                      backgroundColor: "var(--color-surface)",
+                    }}
                   />
                 </div>
                 <div>
-                  <label className="type-badge mb-1 block" style={{ color: "var(--color-text-secondary)" }}>Message</label>
+                  <label
+                    className="type-badge mb-1 block"
+                    style={{ color: "var(--color-text-secondary)" }}
+                  >
+                    Message
+                  </label>
                   <textarea
-                    required placeholder="How can we help?"
-                    value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    required
+                    placeholder="How can we help?"
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
                     rows={5}
                     className="input-field w-full resize-none"
-                    style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
+                    style={{
+                      borderColor: "var(--color-border)",
+                      backgroundColor: "var(--color-surface)",
+                    }}
                   />
                 </div>
                 {errorMsg && (
-                  <p className="text-xs" style={{ color: "var(--color-error)" }}>{errorMsg}</p>
+                  <p className="text-xs" style={{ color: "var(--color-error)" }}>
+                    {errorMsg}
+                  </p>
                 )}
                 <button
                   type="submit"
@@ -146,8 +190,12 @@ export default function ContactPage() {
                     <Icon size={16} style={{ color: "var(--color-text-secondary)" }} />
                   </div>
                   <div>
-                    <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>{label}</p>
-                    <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>{value}</p>
+                    <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>
+                      {label}
+                    </p>
+                    <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>
+                      {value}
+                    </p>
                   </div>
                 </div>
               ))}

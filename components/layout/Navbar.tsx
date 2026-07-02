@@ -179,7 +179,7 @@ export default function Navbar() {
         className={
           usesHeroOverlay
             ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
-            : "sticky top-0 z-40 w-full border-b border-[var(--color-border)] bg-[var(--color-surface)] md:mt-8"
+            : "sticky top-0 z-40 w-full]"
         }
       >
         {/* Mobile nav — hamburger | logo | cart */}

@@ -12,12 +12,13 @@ export default function CollectionHero() {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="h-full w-full">
             <UnicornScene
-              projectId="DeUHgGVaUUmVEBzn7d74"
+              projectId="GUtXoEosjH4L5DFLpEjE"
               width="100%"
               height="95vh"
               scale={1}
               dpi={1.5}
               sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.6/dist/unicornStudio.umd.js"
+
               // style={{ width: "100vw", height: "100%" }}
             />
           </div>

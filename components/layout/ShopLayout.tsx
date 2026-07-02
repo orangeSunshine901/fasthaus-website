@@ -1,6 +1,6 @@
 import AnnouncementBar from "./AnnouncementBar";
-import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
   return (

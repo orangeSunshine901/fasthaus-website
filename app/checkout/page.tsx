@@ -8,6 +8,7 @@ import { CheckCircle2 } from "lucide-react";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
+import Navbar from "@/components/layout/Navbar";
 
 const EMIRATES = [
   "Abu Dhabi",
@@ -55,11 +56,19 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       /* Empty cart guard */
-      <div className="min-h-screen flex items-center justify-center flex-col gap-4">
-        <p style={{ color: "var(--color-text-secondary)" }}>Your cart is empty.</p>
-        <Link href="/collection" className="text-sm" style={{ color: "var(--color-accent-amber)" }}>
-          Back to collection
-        </Link>
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
+        <AnnouncementBar />
+        <Navbar />
+        <main className="flex flex-1 items-center justify-center flex-col gap-4">
+          <p style={{ color: "var(--color-text-secondary)" }}>Your cart is empty.</p>
+          <Link
+            href="/collection"
+            className="text-sm"
+            style={{ color: "var(--color-accent-amber)" }}
+          >
+            Back to collection
+          </Link>
+        </main>
       </div>
     );
   }
@@ -92,23 +101,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
       <AnnouncementBar />
-      {/* Checkout header — minimal nav */}
-      {/* Checkout header — minimal nav with logo + secure badge */}
-      <header
-        className="border-b px-6 h-16 flex items-center justify-between"
-        style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
-      >
-        <Link href="/">
-          <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={110} height={26} />
-        </Link>
-        <div
-          className="flex items-center gap-1 text-xs"
-          style={{ color: "var(--color-text-secondary)" }}
-        >
-          <span>🔒</span>
-          <span>Secure checkout</span>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="container-page grid flex-1 grid-cols-1 gap-8 py-8 md:gap-10 md:py-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
