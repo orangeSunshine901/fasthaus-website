@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Progress } from "@/components/ui/progress";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -86,6 +87,8 @@ function SplitHeroText() {
 
 export default function AboutScrollStory() {
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const progressFrameRef = useRef<number | null>(null);
+  const [storyProgress, setStoryProgress] = useState({ value: 0, isVisible: true });
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -110,10 +113,21 @@ export default function AboutScrollStory() {
           return;
         }
 
+        const updateStoryProgress = (progress: number, isVisible = true) => {
+          if (progressFrameRef.current !== null) {
+            window.cancelAnimationFrame(progressFrameRef.current);
+          }
+
+          progressFrameRef.current = window.requestAnimationFrame(() => {
+            setStoryProgress({ value: Math.round(progress * 100), isVisible });
+            progressFrameRef.current = null;
+          });
+        };
+
         gsap.set(words, { color: "#d8d8d8" });
         gsap.set(imageWrap, { autoAlpha: 0, x: -180 });
-        gsap.set(imagePanels, { autoAlpha: 0 });
-        gsap.set(imagePanels[0], { autoAlpha: 1 });
+        gsap.set(imagePanels, { autoAlpha: 0, zIndex: 0 });
+        gsap.set(imagePanels[0], { autoAlpha: 1, zIndex: 1 });
         gsap.set(copyPanels, { autoAlpha: 0, y: 22 });
 
         const storyTimeline = gsap.timeline({
@@ -121,20 +135,25 @@ export default function AboutScrollStory() {
           scrollTrigger: {
             trigger: storySection,
             start: "top 32px",
-            end: () => `+=${Math.round(window.innerHeight * 4.4)}`,
+            end: () => `+=${Math.round(window.innerHeight * 2.64)}`,
             scrub: true,
             pin: storyPin,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            onUpdate: (self) => updateStoryProgress(self.progress, self.progress < 1),
+            onEnter: () => updateStoryProgress(0, true),
+            onEnterBack: (self) => updateStoryProgress(self.progress, true),
+            onLeave: () => updateStoryProgress(1, false),
+            onLeaveBack: () => updateStoryProgress(0, true),
           },
         });
 
         storyTimeline
           .to(words, {
             color: "#575757",
-            duration: 1.4,
+            duration: 0.175,
             stagger: {
-              each: 0.045,
+              each: 0.005625,
               ease: "none",
             },
           })
@@ -156,6 +175,8 @@ export default function AboutScrollStory() {
             "<"
           );
 
+        const transitionHoldDuration = 0.35;
+
         copyPanels.forEach((copy, index) => {
           const previousCopy = copyPanels[index - 1];
           const previousImage = imagePanels[index];
@@ -166,15 +187,18 @@ export default function AboutScrollStory() {
           }
 
           if (index === 0) {
-            storyTimeline.to(heroCopy, { autoAlpha: 0, y: -20, duration: 0.55 }, ">+=0.45");
+            storyTimeline.to(heroCopy, { autoAlpha: 0, y: -20, duration: 0.1375 }, ">+=0.1125");
           } else if (previousCopy) {
-            storyTimeline.to(previousCopy, { autoAlpha: 0, y: -20, duration: 0.55 }, ">+=0.45");
+            storyTimeline.to(previousCopy, { autoAlpha: 0, y: -20, duration: 0.1375 }, ">+=0.1125");
           }
 
           storyTimeline
-            .to(copy, { autoAlpha: 1, y: 0, duration: 0.55 }, "<")
-            .to(previousImage, { autoAlpha: 0, duration: 0.55 }, "<")
-            .to(nextImage, { autoAlpha: 1, duration: 0.55 }, "<");
+            .to(copy, { autoAlpha: 1, y: 0, duration: 0.1375 }, "<")
+            .set(previousImage, { autoAlpha: 1, zIndex: 1 }, "<")
+            .set(nextImage, { zIndex: 2 }, "<")
+            .to(nextImage, { autoAlpha: 1, duration: 0.18 }, "<")
+            .set(previousImage, { autoAlpha: 0, zIndex: 0 })
+            .to({}, { duration: transitionHoldDuration });
         });
 
         const revealViewport = {
@@ -234,6 +258,10 @@ export default function AboutScrollStory() {
 
         return () => {
           window.cancelAnimationFrame(refreshFrame);
+          if (progressFrameRef.current !== null) {
+            window.cancelAnimationFrame(progressFrameRef.current);
+            progressFrameRef.current = null;
+          }
         };
       });
     }, root);
@@ -246,6 +274,18 @@ export default function AboutScrollStory() {
 
   return (
     <div ref={rootRef} className="bg-white">
+      <div
+        className={`fixed right-8 top-1/2 z-30 hidden h-[220px] -translate-y-1/2 items-center transition-opacity duration-300 md:flex ${
+          storyProgress.isVisible ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        aria-label="About story scroll progress"
+      >
+        <Progress
+          value={storyProgress.value}
+          orientation="vertical"
+          className="h-full w-1.5 bg-[rgba(20,17,20,0.12)]"
+        />
+      </div>
       <section data-story-section className="relative overflow-hidden bg-white">
         <div
           data-story-pin
