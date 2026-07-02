@@ -17,6 +17,7 @@ export const FloatingNav = ({
   leftSlot,
   rightSlot,
   className,
+  allowVisibleAtTop = false,
 }: {
   navItems: {
     name: string;
@@ -27,6 +28,7 @@ export const FloatingNav = ({
   leftSlot?: React.ReactNode;
   rightSlot?: React.ReactNode;
   className?: string;
+  allowVisibleAtTop?: boolean;
 }) => {
   const { scrollYProgress } = useScroll();
   const [visible, setVisible] = useState(false);
@@ -36,7 +38,9 @@ export const FloatingNav = ({
       const direction = current - scrollYProgress.getPrevious()!;
 
       if (scrollYProgress.get() < 0.05) {
-        setVisible(false);
+        if (!allowVisibleAtTop) {
+          setVisible(false);
+        }
       } else {
         if (direction < 0) {
           setVisible(true);
@@ -66,7 +70,17 @@ export const FloatingNav = ({
           className
         )}
       >
-        <div className="flex items-center justify-center gap-3 rounded-[16px] border border-white/15 bg-[#212121]/70 px-7 py-2 text-[#FFFDF5] shadow-lg shadow-black/10 backdrop-blur-md">
+        <div
+          className="flex items-center justify-center gap-3 rounded-[24px] px-8 py-2 text-[#FFFDF5]"
+          style={{
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            backgroundColor: "rgba(33, 33, 33, 0.36)",
+            boxShadow:
+              "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
+          }}
+        >
           {leftSlot && <div className="flex items-center pr-1">{leftSlot}</div>}
 
           <div className="flex items-center gap-1">

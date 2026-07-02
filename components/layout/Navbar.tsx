@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ChevronDown, Search, ShoppingCart, Menu, X } from "lucide-react";
+import { ArrowRight, ChevronDown, ShoppingCart, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
 import { FloatingNav } from "@/components/ui/floating-navbar";
@@ -129,10 +129,17 @@ function CollectionMegaMenuContent() {
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hiddenMainNavPath, setHiddenMainNavPath] = useState<string | null>(null);
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const isAboutPage = pathname === "/about";
+  const aboutMainNavHidden = isAboutPage && hiddenMainNavPath === pathname;
   const usesHeroOverlay =
-    pathname === "/" || pathname === "/collection" || pathname.startsWith("/collection/");
+    pathname === "/" ||
+    isAboutPage ||
+    pathname === "/contact" ||
+    pathname === "/collection" ||
+    pathname.startsWith("/collection/");
   const desktopTextColor = "#FFFDF5";
   const desktopNavStyle = {
     color: desktopTextColor,
@@ -149,12 +156,32 @@ export default function Navbar() {
     { name: "contact us", link: "/contact" },
   ];
 
+  useEffect(() => {
+    if (!isAboutPage) {
+      return;
+    }
+
+    const hideAfterScroll = () => {
+      if (window.scrollY > 80) {
+        setHiddenMainNavPath(pathname);
+      }
+    };
+
+    window.addEventListener("scroll", hideAfterScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", hideAfterScroll);
+    };
+  }, [isAboutPage, pathname]);
+
   return (
     <>
       {usesHeroOverlay && (
         <FloatingNav
+          key={pathname}
           navItems={floatingNavItems}
           className="hidden md:flex"
+          allowVisibleAtTop={aboutMainNavHidden}
           leftSlot={
             <Link href="/" className="inline-flex items-center" aria-label="Fasthaus home">
               <Image src="/fasthaus-logo-final-ivory.svg" alt="Fasthaus" width={104} height={22} />
@@ -162,13 +189,6 @@ export default function Navbar() {
           }
           rightSlot={
             <div className="flex items-center gap-4 px-1">
-              <Link
-                href="/collection"
-                aria-label="Collection"
-                className="inline-flex h-6 w-6 items-center justify-center"
-              >
-                <Search size={20} className="transition-opacity hover:opacity-70" />
-              </Link>
               <CartBadge size={20} />
             </div>
           }
@@ -176,11 +196,12 @@ export default function Navbar() {
       )}
 
       <header
-        className={
+        className={cn(
           usesHeroOverlay
             ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
-            : "sticky top-0 z-40 w-full]"
-        }
+            : "sticky top-0 z-40 w-full]",
+          aboutMainNavHidden && "md:pointer-events-none md:opacity-0"
+        )}
       >
         {/* Mobile nav — hamburger | logo | cart */}
         <div className="flex h-14 items-center justify-between px-5 md:hidden">

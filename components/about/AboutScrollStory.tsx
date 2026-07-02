@@ -120,7 +120,7 @@ export default function AboutScrollStory() {
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: storySection,
-            start: "top top",
+            start: "top 32px",
             end: () => `+=${Math.round(window.innerHeight * 4.4)}`,
             scrub: true,
             pin: storyPin,
@@ -177,89 +177,54 @@ export default function AboutScrollStory() {
             .to(nextImage, { autoAlpha: 1, duration: 0.55 }, "<");
         });
 
+        const revealViewport = {
+          start: "top 64%",
+          toggleActions: "play none none none",
+          once: true,
+        };
+
+        const studioRevealViewport = {
+          ...revealViewport,
+          start: "top 64%",
+        };
+
         const philosophyItems = gsap.utils.toArray<HTMLElement>("[data-philosophy-reveal]", root);
         const philosophySection = root.querySelector<HTMLElement>("[data-philosophy-section]");
 
-        if (philosophySection) {
-          let philosophyCompleted = false;
-          const philosophyTween = gsap.fromTo(
+        if (philosophySection && philosophyItems.length > 0) {
+          gsap.fromTo(
             philosophyItems,
-            { autoAlpha: 0.2, x: -110 },
+            { autoAlpha: 0, x: -80 },
             {
               autoAlpha: 1,
               x: 0,
-              stagger: 0.12,
-              ease: "none",
+              duration: 0.85,
+              stagger: 0.1,
+              ease: "power3.out",
               scrollTrigger: {
                 trigger: philosophySection,
-                start: "top 82%",
-                end: "top 30%",
-                scrub: true,
-                onLeave: () => {
-                  philosophyCompleted = true;
-                  philosophyTween.progress(1);
-                },
-                onEnterBack: () => {
-                  if (philosophyCompleted) {
-                    philosophyTween.progress(1);
-                  }
-                },
-                onLeaveBack: () => {
-                  if (philosophyCompleted) {
-                    philosophyTween.progress(1);
-                  }
-                },
-                onUpdate: () => {
-                  if (philosophyCompleted) {
-                    philosophyTween.progress(1);
-                  }
-                },
+                ...revealViewport,
               },
             }
           );
         }
 
         const studioSection = root.querySelector<HTMLElement>("[data-studio-section]");
-        const studioPin = root.querySelector<HTMLElement>("[data-studio-pin]");
         const studioItems = gsap.utils.toArray<HTMLElement>("[data-studio-reveal]", root);
 
-        if (studioSection && studioPin) {
-          let studioCompleted = false;
-          const studioTween = gsap.fromTo(
+        if (studioSection && studioItems.length > 0) {
+          gsap.fromTo(
             studioItems,
-            { autoAlpha: 0, x: -180 },
+            { autoAlpha: 0, x: -80 },
             {
               autoAlpha: 1,
               x: 0,
-              stagger: 0.2,
-              ease: "none",
+              duration: 0.9,
+              stagger: 0.14,
+              ease: "power3.out",
               scrollTrigger: {
                 trigger: studioSection,
-                start: "top top",
-                end: () => `+=${Math.round(window.innerHeight * 1.35)}`,
-                scrub: true,
-                pin: studioPin,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-                onLeave: () => {
-                  studioCompleted = true;
-                  studioTween.progress(1);
-                },
-                onEnterBack: () => {
-                  if (studioCompleted) {
-                    studioTween.progress(1);
-                  }
-                },
-                onLeaveBack: () => {
-                  if (studioCompleted) {
-                    studioTween.progress(1);
-                  }
-                },
-                onUpdate: () => {
-                  if (studioCompleted) {
-                    studioTween.progress(1);
-                  }
-                },
+                ...studioRevealViewport,
               },
             }
           );
@@ -286,10 +251,10 @@ export default function AboutScrollStory() {
           data-story-pin
           className="relative hidden h-[calc(100vh-104px)] min-h-[620px] overflow-hidden md:block"
         >
-          <div className="relative mx-auto h-full w-full max-w-[1120px] px-8">
+          <div className="relative mx-auto h-full w-full max-w-[1240px] pt-[60px]">
             <div
               data-story-image-wrap
-              className="invisible absolute left-8 top-1/2 aspect-square w-[min(34vw,360px)] -translate-y-1/2 overflow-hidden rounded-[8px] opacity-0 h-[409px]"
+              className="invisible absolute top-1/2 aspect-square w-[min(34vw,579px)] -translate-y-1/2 overflow-hidden rounded-[8px] opacity-0 h-[640px]"
             >
               {storyPanels.map((panel) => (
                 <div key={panel.image} data-story-image className="absolute inset-0">
@@ -307,7 +272,7 @@ export default function AboutScrollStory() {
 
             <div
               data-story-text-block
-              className="absolute left-1/2 top-1/2 w-[min(58vw,680px)] -translate-x-1/2 -translate-y-1/2"
+              className="absolute right-[-110px] top-1/2 w-[min(58vw,680px)] -translate-x-1/2 -translate-y-1/2"
             >
               <h1
                 data-hero-copy
@@ -351,14 +316,17 @@ export default function AboutScrollStory() {
         </div>
       </section>
 
-      <section data-philosophy-section className="container-page overflow-hidden py-14 md:py-24">
+      <section
+        data-philosophy-section
+        className="container-page overflow-hidden pt-14 pb-8 md:pt-16 md:pb-8"
+      >
         <h2
           data-philosophy-reveal
           className="type-display-lg mb-8 text-[var(--color-text-primary)]"
         >
           Design Philosophy
         </h2>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4 md:gap-6">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2 md:gap-6">
           {philosophy.map((item) => (
             <article
               key={item.label}
@@ -376,8 +344,8 @@ export default function AboutScrollStory() {
       </section>
 
       <section data-studio-section className="overflow-hidden bg-white">
-        <div data-studio-pin className="container-page py-14 md:min-h-screen md:py-0">
-          <div className="flex h-full flex-col justify-center gap-8 md:min-h-screen md:gap-10">
+        <div className="container-page pt-12 pb-14 md:pt-12 md:pb-16">
+          <div className="flex flex-col gap-8 md:gap-10">
             <div data-studio-reveal className="max-w-[640px]">
               <h2 className="type-display-lg text-[var(--color-text-primary)]">
                 Inside the Studio

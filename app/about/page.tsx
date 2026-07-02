@@ -5,7 +5,7 @@ import LocomotiveScrollProvider from "@/components/scroll/LocomotiveScrollProvid
 export default function AboutPage() {
   return (
     <LocomotiveScrollProvider>
-      <ShopLayout>
+      <ShopLayout showAnnouncement={false}>
         <AboutScrollStory />
       </ShopLayout>
     </LocomotiveScrollProvider>
