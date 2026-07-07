@@ -62,8 +62,8 @@
   --leading-xs:   17px;
   --leading-sm:   20px;
   --leading-base: 22px;
-  --leading-md:   18px;
-  --leading-lg:   28px;
+  --leading-md:   26px;
+  --leading-lg:   32px;
   --leading-xl:   43px;
   --leading-2xl:  36px;
   --leading-3xl:  43px;
@@ -114,6 +114,8 @@ html {
   color: var(--color-text-primary);
   font-family: 'DM Sans', system-ui, sans-serif;
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -139,8 +141,26 @@ select {
 }
 
 button,
-a {
+a,
+label,
+select,
+input[type="checkbox"],
+input[type="radio"] {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* On touch devices, give small inline text links/buttons a larger hit area
+   without shifting the surrounding layout. */
+@media (pointer: coarse) {
+  .btn-text {
+    padding-block: 8px;
+    margin-block: -8px;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
 }
 
 :focus-visible {
@@ -175,6 +195,16 @@ a {
 
 .scroll-target {
   scroll-margin-top: var(--scroll-offset);
+}
+
+/* Horizontal swipe rails (tab bars, carousels) — scrollable but chromeless */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* Scroll animation helpers stay inert until the homepage provider marks JS ready. */
@@ -383,7 +413,8 @@ a {
     background-color 150ms ease-out,
     border-color     150ms ease-out,
     color            150ms ease-out,
-    opacity          150ms ease-out;
+    opacity          150ms ease-out,
+    transform        100ms ease-out;
 }
 
 .btn:disabled {
@@ -431,6 +462,15 @@ a {
   padding: 10px 20px;
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
+}
+
+.btn-compact {
+  min-height: 32px;
+  border-radius: 12px;
+  padding: 6px 16px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.4px;
 }
 
 .btn-text {

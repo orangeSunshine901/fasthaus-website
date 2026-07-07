@@ -45,7 +45,7 @@ export default function ContactPage() {
 
   return (
     <ShopLayout>
-      <div className="container-page mt-[40px] pb-10 md:py-14">
+      <div className="container-page mt-[32px] pb-10 md:py-32">
         {/* Page header */}
         <h1 className="type-display-xl mb-2" style={{ color: "var(--color-text-primary)" }}>
           Get in Touch

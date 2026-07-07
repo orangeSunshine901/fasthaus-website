@@ -148,7 +148,10 @@ export default function Footer() {
       style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}
     >
       {/* ── MOBILE ── */}
-      <div className="flex flex-col gap-8 px-5 pb-6 pt-10 md:hidden">
+      <div
+        className="flex flex-col gap-8 px-5 pt-10 md:hidden"
+        style={{ paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}
+      >
         <div className="flex flex-col gap-4">
           <Link href="/">
             <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={110} height={26} />
@@ -159,8 +162,8 @@ export default function Footer() {
         {/* 2×2 link grid */}
         <div className="grid grid-cols-2 gap-x-6 gap-y-8">
           {mobileColumns.map((col) => (
-            <div key={col.heading} className="flex flex-col gap-2">
-              <p className="type-title-md mb-1" style={{ color: "var(--color-text-primary)" }}>
+            <div key={col.heading} className="flex flex-col gap-1">
+              <p className="type-title-sm mb-1" style={{ color: "var(--color-text-primary)" }}>
                 {col.heading}
               </p>
               {col.links.map((link) =>
@@ -168,7 +171,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="type-body-sm"
+                    className="type-body-sm py-1.5"
                     style={{ color: "var(--color-text-secondary)" }}
                   >
                     {link.label}
@@ -176,7 +179,7 @@ export default function Footer() {
                 ) : (
                   <span
                     key={link.label}
-                    className="type-body-sm cursor-default"
+                    className="type-body-sm cursor-default py-1.5"
                     style={{ color: "var(--color-text-disabled)" }}
                   >
                     {link.label}

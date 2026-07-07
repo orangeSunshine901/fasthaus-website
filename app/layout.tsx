@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
+import PageTransition from "@/components/layout/PageTransition";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 import "./globals.css";
 
@@ -8,6 +9,13 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#FFFFFF",
+};
 
 export const metadata: Metadata = {
   title: "Fasthaus — Modern Lamps, Made to Glow Differently",
@@ -20,9 +28,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} h-full antialiased`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${dmSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', system-ui, sans-serif)" }}>
-        {children}
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );

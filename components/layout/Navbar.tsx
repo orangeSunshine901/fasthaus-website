@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowRight, ChevronDown, ShoppingCart, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
 import { FloatingNav } from "@/components/ui/floating-navbar";
@@ -61,11 +62,15 @@ function CartBadge({ size = 20, className = "" }: { size?: number; className?: s
   const cartHydrated = useCartHydrated();
 
   return (
-    <Link href="/cart" className={`relative inline-flex ${className}`} aria-label="Cart">
+    <Link
+      href="/cart"
+      className={`relative inline-flex p-2.5 -m-2.5 ${className}`}
+      aria-label="Cart"
+    >
       <ShoppingCart size={size} className="transition-opacity hover:opacity-70" />
       {cartHydrated && itemCount > 0 && (
         <span
-          className="absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-semibold flex items-center justify-center text-white"
+          className="absolute top-0 right-0 w-4 h-4 rounded-full text-[10px] font-semibold flex items-center justify-center text-white"
           style={{ backgroundColor: "var(--color-accent-amber)" }}
         >
           {itemCount}
@@ -133,13 +138,15 @@ export default function Navbar() {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const isAboutPage = pathname === "/about";
+  const isProductPage = pathname.startsWith("/product/");
   const aboutMainNavHidden = isAboutPage && hiddenMainNavPath === pathname;
   const usesHeroOverlay =
     pathname === "/" ||
     isAboutPage ||
     pathname === "/contact" ||
     pathname === "/collection" ||
-    pathname.startsWith("/collection/");
+    pathname.startsWith("/collection/") ||
+    isProductPage;
   const desktopTextColor = "#FFFDF5";
   const desktopNavStyle = {
     color: desktopTextColor,
@@ -155,6 +162,26 @@ export default function Navbar() {
     { name: "about", link: "/about" },
     { name: "contact us", link: "/contact" },
   ];
+
+  // Lock body scroll while the mobile menu overlay is open.
+  useEffect(() => {
+    if (!mobileOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const closeOnEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [mobileOpen]);
 
   useEffect(() => {
     if (!isAboutPage) {
@@ -199,26 +226,38 @@ export default function Navbar() {
         className={cn(
           usesHeroOverlay
             ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
-            : "sticky top-0 z-40 w-full]",
+            : "sticky top-0 z-40 w-full",
           aboutMainNavHidden && "md:pointer-events-none md:opacity-0"
         )}
       >
         {/* Mobile nav — hamburger | logo | cart */}
         <div className="flex h-14 items-center justify-between px-5 md:hidden">
-          <button onClick={() => setMobileOpen(true)} aria-label="Open menu">
+          <button
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={mobileOpen}
+            className="grid h-11 w-11 -ml-3 place-items-center"
+          >
             <Menu size={22} style={{ color: "var(--color-text-primary)" }} />
           </button>
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 p-2" aria-label="Fasthaus home">
             <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={100} height={24} priority />
           </Link>
           <CartBadge size={22} className="text-[var(--color-text-primary)]" />
         </div>
 
         {/* Desktop nav — logo | links | icons */}
-        <div
-          className="mx-auto hidden h-16 w-full max-w-[1240px] items-center justify-center rounded-[24px] px-8 md:flex md:translate-y-8"
-          style={desktopNavStyle}
-        >
+        <div className="relative mx-auto hidden h-16 w-full max-w-[1240px] md:flex md:translate-y-8">
+          {/* Glass background layer — clipped separately so the blur doesn't leak past the rounded corners on hover-triggered repaints */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]"
+            style={desktopNavStyle}
+          />
+          <div
+            className="relative flex h-full w-full items-center justify-center px-8"
+            style={{ color: desktopTextColor }}
+          >
           <div className="flex h-full w-full max-w-[1148px] items-center justify-between">
             <Link href="/" className="flex flex-1 items-center justify-start">
               <Image
@@ -296,62 +335,98 @@ export default function Navbar() {
               </div>
             </div>
           </div>
+          </div>
         </div>
       </header>
 
       {/* Mobile full-screen overlay */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-50 flex flex-col"
-          style={{ backgroundColor: "var(--color-bg)" }}
-        >
-          {/* Overlay header */}
-          <div
-            className="flex items-center justify-between px-4 h-14 border-b flex-shrink-0"
-            style={{ borderColor: "var(--color-border)" }}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-50 flex flex-col overflow-y-auto"
+            style={{ backgroundColor: "var(--color-bg)" }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
           >
-            <Link href="/" onClick={() => setMobileOpen(false)}>
-              <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={100} height={24} />
-            </Link>
-            <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
-              <X size={22} style={{ color: "var(--color-text-primary)" }} />
-            </button>
-          </div>
+            {/* Overlay header */}
+            <div
+              className="flex items-center justify-between pl-5 pr-2 h-14 border-b flex-shrink-0"
+              style={{ borderColor: "var(--color-border)" }}
+            >
+              <Link href="/" onClick={() => setMobileOpen(false)} aria-label="Fasthaus home">
+                <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={100} height={24} />
+              </Link>
+              <button
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+                className="grid h-11 w-11 place-items-center"
+              >
+                <X size={22} style={{ color: "var(--color-text-primary)" }} />
+              </button>
+            </div>
 
-          {/* Overlay links */}
-          <nav className="flex flex-col px-6 pt-4">
-            {MOBILE_NAV.map((link) => (
+            {/* Overlay links */}
+            <motion.nav
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.28, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col px-6 pt-4"
+            >
+              {MOBILE_NAV.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "type-display-sm border-b py-5",
+                    isActive(link.href)
+                      ? "text-[var(--color-accent-amber)]"
+                      : "text-[var(--color-text-primary)]"
+                  )}
+                  style={{ borderColor: "var(--color-border)" }}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+
+              {/* Category shortcuts */}
+              <div className="grid grid-cols-2 gap-x-4 pt-5">
+                {SHOP_LINKS.slice(1).map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="type-body-md py-2.5"
+                    style={{ color: "var(--color-text-secondary)" }}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </motion.nav>
+
+            {/* Bottom cart shortcut */}
+            <div
+              className="px-6 mt-auto"
+              style={{ paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}
+            >
               <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "type-display-sm border-b py-5",
-                  isActive(link.href)
-                    ? "text-[var(--color-accent-amber)]"
-                    : "text-[var(--color-text-primary)]"
-                )}
-                style={{ borderColor: "var(--color-border)" }}
+                href="/cart"
+                className="btn btn-light w-full gap-2.5"
                 onClick={() => setMobileOpen(false)}
               >
-                {link.label}
+                <ShoppingCart size={18} />
+                View Cart
               </Link>
-            ))}
-          </nav>
-
-          {/* Bottom cart shortcut */}
-          <div className="px-6 mt-auto pb-8">
-            <Link
-              href="/cart"
-              className="type-caption flex items-center gap-3 py-5"
-              style={{ color: "var(--color-text-secondary)" }}
-              onClick={() => setMobileOpen(false)}
-            >
-              <ShoppingCart size={18} />
-              View Cart
-            </Link>
-          </div>
-        </div>
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

@@ -31,7 +31,7 @@ const infoCards = [
   {
     icon: Shield,
     title: "Warranty",
-    body: "Every lamp comes with a 2-year warranty covering manufacturing defects, LED module failure, and structural integrity. See our full Warranty page for details.",
+    body: "Every lamp comes with a 1-year warranty covering manufacturing defects, LED module failure, and structural integrity. See our full Warranty page for details.",
     link: { href: "/warranty", label: "View warranty details →" },
   },
 ];

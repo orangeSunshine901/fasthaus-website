@@ -254,10 +254,19 @@ export default function AboutScrollStory() {
           );
         }
 
+        const refreshTimers = [
+          window.setTimeout(() => ScrollTrigger.refresh(), 360),
+          window.setTimeout(() => ScrollTrigger.refresh(), 700),
+        ];
         const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+        const refreshOnLoad = () => ScrollTrigger.refresh();
+
+        window.addEventListener("load", refreshOnLoad, { once: true });
 
         return () => {
           window.cancelAnimationFrame(refreshFrame);
+          refreshTimers.forEach((timer) => window.clearTimeout(timer));
+          window.removeEventListener("load", refreshOnLoad);
           if (progressFrameRef.current !== null) {
             window.cancelAnimationFrame(progressFrameRef.current);
             progressFrameRef.current = null;

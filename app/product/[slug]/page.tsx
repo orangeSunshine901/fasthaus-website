@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { PRODUCTS, getProductBySlug, getRelatedProducts } from "@/lib/data/products";
 import ShopLayout from "@/components/layout/ShopLayout";
-import ProductCard from "@/components/product/ProductCard";
+import RelatedProductCard from "@/components/product/pdp/RelatedProductCard";
 import PDPClient from "./PDPClient";
 import Link from "next/link";
 
@@ -18,38 +18,50 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <ShopLayout>
-      <div className="max-w-[1280px] mx-auto px-6 py-8">
-        {/* Breadcrumb */}
-        <nav className="text-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
-          <Link href="/" className="hover:underline">
-            Home
-          </Link>
-          {" / "}
-          <Link href="/collection" className="hover:underline">
-            Collection
-          </Link>
-          {" / "}
-          <span style={{ color: "var(--color-text-primary)" }}>{product.name}</span>
-        </nav>
-
-        <PDPClient product={product} />
-
-        {/* You May Also Like */}
-        {related.length > 0 && (
-          <section className="mt-20">
-            <h2
-              className="text-[24px] font-semibold mb-8"
-              style={{ color: "var(--color-text-primary)" }}
+      <div className="bg-white pb-16 md:mt-28 md:pb-24">
+        <div className="mx-auto max-w-[1240px] px-5 md:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-2.5 pb-4 pt-4 text-[13.5px] md:pb-6 md:pt-7">
+            <Link
+              href="/"
+              className="font-medium transition-colors hover:text-[var(--color-accent-amber)]"
+              style={{ color: "var(--color-text-secondary)" }}
             >
-              You May Also Like
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {related.map((p) => (
-                <ProductCard key={p.id} product={p} showRating />
-              ))}
-            </div>
-          </section>
-        )}
+              Home
+            </Link>
+            <span style={{ color: "var(--color-text-disabled)" }}>/</span>
+            <Link
+              href="/collection"
+              className="font-medium transition-colors hover:text-[var(--color-accent-amber)]"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Collection
+            </Link>
+            <span style={{ color: "var(--color-text-disabled)" }}>/</span>
+            <span className="font-semibold" style={{ color: "var(--color-text-primary)" }}>
+              {product.name}
+            </span>
+          </nav>
+
+          <PDPClient product={product} />
+
+          {/* You may also like */}
+          {related.length > 0 && (
+            <section className="mt-14 md:mt-[72px]">
+              <h2
+                className="mb-5 text-[24px] font-extrabold tracking-[-0.02em] md:mb-6 md:text-[28px]"
+                style={{ color: "var(--color-text-primary)" }}
+              >
+                You may also like
+              </h2>
+              <div className="grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-4">
+                {related.map((p) => (
+                  <RelatedProductCard key={p.id} product={p} />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       </div>
     </ShopLayout>
   );

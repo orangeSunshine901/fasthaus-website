@@ -8,6 +8,11 @@ export type CartAddOn = {
   name: string;
   price: number;
   image: string;
+  quantity?: number;
+};
+
+export type CartLineAddOn = CartAddOn & {
+  quantity: number;
 };
 
 export type CartItem = {
@@ -19,14 +24,18 @@ export type CartItem = {
   price: number;
   quantity: number;
   image: string;
+  addOns?: CartLineAddOn[];
 };
 
 type CartState = {
   items: CartItem[];
+  // Legacy global add-ons from older persisted carts. New add-ons are stored on CartItem.addOns.
   addOns: CartAddOn[];
-  addItem: (item: CartItem) => void;
+  addItem: (item: CartItem, addOns?: CartAddOn[]) => void;
   removeItem: (variantId: string) => void;
   updateQuantity: (variantId: string, quantity: number) => void;
+  updateAddOnQuantity: (variantId: string, addOnId: string, quantity: number) => void;
+  removeAddOn: (variantId: string, addOnId: string) => void;
   toggleAddOn: (addOn: CartAddOn) => void;
   clearCart: () => void;
   itemCount: () => number;
@@ -40,18 +49,37 @@ export const useCartStore = create<CartState>()(
       items: [],
       addOns: [],
 
-      addItem: (item) => {
+      addItem: (item, addOns = []) => {
+        const incomingAddOns = addOns.map((addOn) => ({
+          ...addOn,
+          quantity: addOn.quantity ?? item.quantity,
+        }));
         const existing = get().items.find((i) => i.id === item.id);
         if (existing) {
           set((state) => ({
-            items: state.items.map((i) =>
-              i.id === item.id
-                ? { ...i, quantity: i.quantity + item.quantity }
-                : i
-            ),
+            items: state.items.map((i) => {
+              if (i.id !== item.id) return i;
+
+              const addOnMap = new Map((i.addOns ?? []).map((ao) => [ao.id, ao]));
+              incomingAddOns.forEach((addOn) => {
+                const current = addOnMap.get(addOn.id);
+                addOnMap.set(addOn.id, {
+                  ...addOn,
+                  quantity: (current?.quantity ?? 0) + addOn.quantity,
+                });
+              });
+
+              return {
+                ...i,
+                quantity: i.quantity + item.quantity,
+                addOns: Array.from(addOnMap.values()),
+              };
+            }),
           }));
         } else {
-          set((state) => ({ items: [...state.items, item] }));
+          set((state) => ({
+            items: [...state.items, { ...item, addOns: incomingAddOns }],
+          }));
         }
       },
 
@@ -65,7 +93,43 @@ export const useCartStore = create<CartState>()(
         if (quantity < 1) return;
         set((state) => ({
           items: state.items.map((i) =>
-            i.id === variantId ? { ...i, quantity } : i
+            i.id === variantId
+              ? {
+                  ...i,
+                  quantity,
+                  addOns: (i.addOns ?? []).map((ao) =>
+                    ao.quantity > quantity ? { ...ao, quantity } : ao
+                  ),
+                }
+              : i
+          ),
+        }));
+      },
+
+      updateAddOnQuantity: (variantId, addOnId, quantity) => {
+        if (quantity < 1) return;
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.id === variantId
+              ? {
+                  ...i,
+                  addOns: (i.addOns ?? []).map((ao) =>
+                    ao.id === addOnId
+                      ? { ...ao, quantity: Math.min(quantity, i.quantity) }
+                      : ao
+                  ),
+                }
+              : i
+          ),
+        }));
+      },
+
+      removeAddOn: (variantId, addOnId) => {
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.id === variantId
+              ? { ...i, addOns: (i.addOns ?? []).filter((ao) => ao.id !== addOnId) }
+              : i
           ),
         }));
       },
@@ -87,10 +151,16 @@ export const useCartStore = create<CartState>()(
 
       subtotal: () => {
         const itemsTotal = get().items.reduce(
-          (sum, i) => sum + i.price * i.quantity,
+          (sum, i) =>
+            sum +
+            i.price * i.quantity +
+            (i.addOns ?? []).reduce((addOnSum, ao) => addOnSum + ao.price * ao.quantity, 0),
           0
         );
-        const addOnsTotal = get().addOns.reduce((sum, a) => sum + a.price, 0);
+        const addOnsTotal = get().addOns.reduce(
+          (sum, a) => sum + a.price * (a.quantity ?? 1),
+          0
+        );
         return itemsTotal + addOnsTotal;
       },
 

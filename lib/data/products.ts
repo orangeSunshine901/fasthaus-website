@@ -9,6 +9,20 @@ export type ProductVariant = {
   images: string[];
 };
 
+export type FeatureItem = { icon: string; label: string };
+export type SpecificationItem = { icon: string; lines: string[] };
+export type PerfectForItem = { icon: string; label: string };
+export type Dimensions = { image: string; heightCm: number; widthCm: number };
+
+export type AddOn = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+  bullets?: string[];
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -20,26 +34,30 @@ export type Product = {
   rating: number;
   reviewCount: number;
   variants: ProductVariant[];
-  specs: { icon: string; label: string; sublabel: string }[];
-  perfectFor: string[];
+  features: FeatureItem[];
+  specifications: SpecificationItem[];
+  materials: string[];
+  dimensions: Dimensions;
+  perfectFor: PerfectForItem[];
   designStory: string;
-  addOns?: { id: string; name: string; price: number; image: string; description: string }[];
+  addOns?: AddOn[];
 };
 
-export const ADD_ONS = [
+export const ADD_ONS: AddOn[] = [
   {
     id: "dimmer-switch",
     name: "Dimmer Switch",
     price: 99,
     image: "/add-on-dimmer-switch.png",
-    description: "Adjust brightness to feel like perfect mood.",
+    description: "Adjust brightness to set the perfect mood.",
+    bullets: ["Turn to dim", "10% – 100% brightness", "Compatible with Luna Desk Lamp"],
   },
   {
     id: "care-kit",
     name: "Care Kit",
-    price: 45,
+    price: 49,
     image: "/add-on-care-kit.png",
-    description: "Keep your lamp feeling perfect for years.",
+    description: "Keep your lamp looking perfect for years.",
   },
 ];
 
@@ -50,7 +68,7 @@ export const PRODUCTS: Product[] = [
     name: "Luna Desk Lamp",
     category: "desk-lamps",
     description:
-      "A modern desk lamp featuring a textured 3D-printed diffuser, warm integrated LED lighting, and a powder-coated aluminium base.",
+      "A modern desk lamp featuring a textured 3D-printed diffuser, warm integrated LED lighting, and a powder-coated aluminium stem. \n A modern desk lamp featuring a textured 3D-printed diffuser, warm integrated LED lighting, and a powder-coated aluminium stem.",
     featured: true,
     badge: "BESTSELLER",
     rating: 4.4,
@@ -63,7 +81,13 @@ export const PRODUCTS: Product[] = [
         sku: "LDL-TRC",
         price: 220,
         stock: 12,
-        images: ["/lamp-feature-1.png"],
+        images: [
+          "/lamp-feature-1.png",
+          "/lamp-feature-2.png",
+          "/lamp-feature-3.png",
+          "/lamp-feature-4.png",
+          "/collection-image-1.png",
+        ],
       },
       {
         id: "1-beige",
@@ -72,7 +96,13 @@ export const PRODUCTS: Product[] = [
         sku: "LDL-BGE",
         price: 220,
         stock: 8,
-        images: ["/lamp-feature-2.png", "/lamp-feature-1.png", "/lamp-feature-3.png"],
+        images: [
+          "/lamp-feature-2.png",
+          "/lamp-feature-1.png",
+          "/lamp-feature-3.png",
+          "/lamp-feature-4.png",
+          "/collection-image-2.png",
+        ],
       },
       {
         id: "1-charcoal",
@@ -81,18 +111,45 @@ export const PRODUCTS: Product[] = [
         sku: "LDL-CHR",
         price: 220,
         stock: 5,
-        images: ["/lamp-feature-3.png", "/lamp-feature-1.png", "/lamp-feature-2.png"],
+        images: [
+          "/lamp-feature-3.png",
+          "/lamp-feature-1.png",
+          "/lamp-feature-2.png",
+          "/lamp-feature-4.png",
+          "/collection-image-3.png",
+        ],
       },
     ],
-    specs: [
-      { icon: "🖨️", label: "3D Print", sublabel: "soft matte" },
-      { icon: "💡", label: "LED light", sublabel: "2700K warm" },
-      { icon: "✨", label: "Premium materials", sublabel: "aluminium base" },
-      { icon: "🏠", label: "Designed in-house", sublabel: "Dubai studio" },
+    features: [
+      { icon: "/3d-printer-icon.svg", label: "3D printed with care" },
+      { icon: "/warm-led-icon.svg", label: "Warm LED Light" },
+      { icon: "/premium-material-icon.svg", label: "Premium Materials" },
+      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
     ],
-    perfectFor: ["Workspace", "Bedside", "Living Room", "Reading Nook"],
+    specifications: [
+      {
+        icon: "/e27-switch-icon.svg",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+      },
+      {
+        icon: "/e27-bulb-icon-amber.svg",
+        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
+      },
+      {
+        icon: "/smart-bulb-icon.svg",
+        lines: ["Smart bulb compatible"],
+      },
+    ],
+    materials: ["PLA", "Stainless Steel"],
+    dimensions: { image: "/dimensions-lamp.png", heightCm: 28, widthCm: 22 },
+    perfectFor: [
+      { icon: "/workspaces-icon.svg", label: "Workspaces" },
+      { icon: "/bedside-icon.svg", label: "Bedside" },
+      { icon: "/living-room-icon.svg", label: "Living Room" },
+      { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
+    ],
     designStory:
-      "Inspired by architectural forms and soft evening light, the Luna Desk Lamp was designed to create a calm focal point within a workspace. The layered diffuser transforms the visible characteristics of additive manufacturing into a deliberate design feature, creating a warm glow and subtle texture that changes throughout the day.",
+      "Inspired by architectural forms and soft evening light, the Luna Desk Lamp was designed to create a calm focal point within a workspace. The layered diffuser transforms the visible characteristics of additive manufacturing into a deliberate design feature, producing a warm glow and subtle texture that changes throughout the day.",
     addOns: ADD_ONS,
   },
   {
@@ -114,7 +171,7 @@ export const PRODUCTS: Product[] = [
         sku: "ATL-WHT",
         price: 190,
         stock: 10,
-        images: ["/lamp-feature-2.png","/collection-image-2.png"],
+        images: ["/lamp-feature-2.png", "/collection-image-2.png"],
       },
       {
         id: "2-black",
@@ -126,13 +183,33 @@ export const PRODUCTS: Product[] = [
         images: ["/lamp-feature-4.png", "/collection-image-1.png"],
       },
     ],
-    specs: [
-      { icon: "🔮", label: "Frosted glass", sublabel: "diffused light" },
-      { icon: "💡", label: "LED light", sublabel: "3000K natural" },
-      { icon: "✨", label: "Premium materials", sublabel: "steel frame" },
-      { icon: "🏠", label: "Designed in-house", sublabel: "Dubai studio" },
+    features: [
+      { icon: "/premium-material-icon.svg", label: "Frosted glass diffuser" },
+      { icon: "/warm-led-icon.svg", label: "Natural LED Light" },
+      { icon: "/premium-material-icon.svg", label: "Premium Materials" },
+      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
     ],
-    perfectFor: ["Living Room", "Bedside", "Reading Nook"],
+    specifications: [
+      {
+        icon: "/spec-plug-icon.svg",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+      },
+      {
+        icon: "/spec-bulb-icon.svg",
+        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
+      },
+      {
+        icon: "/smart-bulb-icon.svg",
+        lines: ["Smart bulb compatible"],
+      },
+    ],
+    materials: ["Frosted Glass", "Powder-Coated Steel"],
+    dimensions: { image: "/lamp-feature-2.png", heightCm: 38, widthCm: 26 },
+    perfectFor: [
+      { icon: "/living-room-icon.svg", label: "Living Room" },
+      { icon: "/bedside-icon.svg", label: "Bedside" },
+      { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
+    ],
     designStory:
       "The Arc Table Lamp draws from the geometry of suspension bridges — tension and balance expressed in a single sweeping form. The frosted glass diffuser softens the LED source into an even, comfortable glow suited for long evenings.",
     addOns: ADD_ONS,
@@ -155,7 +232,7 @@ export const PRODUCTS: Product[] = [
         sku: "PTL-SND",
         price: 175,
         stock: 14,
-        images: ["/lamp-feature-3.png","/collection-image-2.png"],
+        images: ["/lamp-feature-3.png", "/collection-image-2.png"],
       },
       {
         id: "3-sage",
@@ -167,13 +244,30 @@ export const PRODUCTS: Product[] = [
         images: ["/lamp-feature-4.png", "/collection-image-2.png"],
       },
     ],
-    specs: [
-      { icon: "🔋", label: "Rechargeable", sublabel: "12hr battery" },
-      { icon: "💡", label: "LED light", sublabel: "adjustable warmth" },
-      { icon: "✨", label: "Premium materials", sublabel: "ceramic body" },
-      { icon: "🏠", label: "Designed in-house", sublabel: "Dubai studio" },
+    features: [
+      { icon: "/premium-material-icon.svg", label: "12hr battery life" },
+      { icon: "/warm-led-icon.svg", label: "Adjustable warmth" },
+      { icon: "/premium-material-icon.svg", label: "Ceramic body" },
+      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
     ],
-    perfectFor: ["Workspace", "Dining", "Bedside", "Outdoor"],
+    specifications: [
+      {
+        icon: "/spec-plug-icon.svg",
+        lines: ["USB-C Charging 5V/2A", "12-hour battery runtime"],
+      },
+      {
+        icon: "/spec-bulb-icon.svg",
+        lines: ["Integrated LED 350lm 5W", "Adjustable 2700–4000K"],
+      },
+    ],
+    materials: ["Ceramic", "Aluminium"],
+    dimensions: { image: "/lamp-feature-3.png", heightCm: 24, widthCm: 14 },
+    perfectFor: [
+      { icon: "/workspaces-icon.svg", label: "Workspaces" },
+      { icon: "/living-room-icon.svg", label: "Dining" },
+      { icon: "/bedside-icon.svg", label: "Bedside" },
+      { icon: "/reading-nook-icon.svg", label: "Outdoor" },
+    ],
     designStory:
       "The Porta was designed around one constraint: freedom. No cable, no fixed spot. A 12-hour rechargeable base and a magnetic USB-C port mean it goes where you go — from morning work session to evening dinner table.",
     addOns: [ADD_ONS[0]],
@@ -196,7 +290,7 @@ export const PRODUCTS: Product[] = [
         sku: "RTL-TRC",
         price: 195,
         stock: 9,
-        images: ["/lamp-feature-4.png","/collection-image-3.png"],
+        images: ["/lamp-feature-4.png", "/collection-image-3.png"],
       },
       {
         id: "4-chalk",
@@ -208,13 +302,33 @@ export const PRODUCTS: Product[] = [
         images: ["/lamp-feature-2.png", "/collection-image-3.png"],
       },
     ],
-    specs: [
-      { icon: "🏺", label: "Handfinished", sublabel: "ceramic body" },
-      { icon: "💡", label: "LED light", sublabel: "2700K warm" },
-      { icon: "✨", label: "Premium materials", sublabel: "linen shade" },
-      { icon: "🏠", label: "Designed in-house", sublabel: "Dubai studio" },
+    features: [
+      { icon: "/premium-material-icon.svg", label: "Handfinished ceramic" },
+      { icon: "/warm-led-icon.svg", label: "Warm LED Light" },
+      { icon: "/premium-material-icon.svg", label: "Linen shade" },
+      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
     ],
-    perfectFor: ["Living Room", "Bedside", "Reading Nook"],
+    specifications: [
+      {
+        icon: "/spec-plug-icon.svg",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+      },
+      {
+        icon: "/spec-bulb-icon.svg",
+        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
+      },
+      {
+        icon: "/smart-bulb-icon.svg",
+        lines: ["Smart bulb compatible"],
+      },
+    ],
+    materials: ["Ceramic", "Linen"],
+    dimensions: { image: "/lamp-feature-4.png", heightCm: 32, widthCm: 20 },
+    perfectFor: [
+      { icon: "/living-room-icon.svg", label: "Living Room" },
+      { icon: "/bedside-icon.svg", label: "Bedside" },
+      { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
+    ],
     designStory:
       "The ribbed texture was born from a material experiment — pressing linen weave into soft clay to see what light would do with the result. The answer: something that feels alive as the sun moves through the room.",
     addOns: ADD_ONS,
@@ -252,13 +366,33 @@ export const PRODUCTS: Product[] = [
         images: ["/lamp-feature-4.png", "/collection-image-4.png"],
       },
     ],
-    specs: [
-      { icon: "🔩", label: "Spun aluminium", sublabel: "lightweight" },
-      { icon: "💡", label: "LED light", sublabel: "3000K natural" },
-      { icon: "✨", label: "Premium materials", sublabel: "matte finish" },
-      { icon: "🏠", label: "Designed in-house", sublabel: "Dubai studio" },
+    features: [
+      { icon: "/premium-material-icon.svg", label: "Spun aluminium" },
+      { icon: "/warm-led-icon.svg", label: "Natural LED Light" },
+      { icon: "/premium-material-icon.svg", label: "Matte finish" },
+      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
     ],
-    perfectFor: ["Workspace", "Studio", "Living Room"],
+    specifications: [
+      {
+        icon: "/spec-plug-icon.svg",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+      },
+      {
+        icon: "/spec-bulb-icon.svg",
+        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
+      },
+      {
+        icon: "/smart-bulb-icon.svg",
+        lines: ["Smart bulb compatible"],
+      },
+    ],
+    materials: ["Spun Aluminium"],
+    dimensions: { image: "/collection-image-4.png", heightCm: 30, widthCm: 24 },
+    perfectFor: [
+      { icon: "/workspaces-icon.svg", label: "Workspaces" },
+      { icon: "/workspaces-icon.svg", label: "Studio" },
+      { icon: "/living-room-icon.svg", label: "Living Room" },
+    ],
     designStory:
       "The Dome is the lamp that disappears. Its single-radius silhouette was refined over 14 iterations to achieve a form that reads as obvious in retrospect — the kind of design that just belongs in a room.",
     addOns: ADD_ONS,
@@ -284,13 +418,33 @@ export const PRODUCTS: Product[] = [
         images: ["/collections-hero-img-1.png", "/lamp-feature-3.png"],
       },
     ],
-    specs: [
-      { icon: "🌿", label: "Natural canvas", sublabel: "hand-sewn shade" },
-      { icon: "💡", label: "LED bulb", sublabel: "2700K warm" },
-      { icon: "🪵", label: "Oak tripod", sublabel: "solid wood" },
-      { icon: "🏠", label: "Designed in-house", sublabel: "Dubai studio" },
+    features: [
+      { icon: "/premium-material-icon.svg", label: "Hand-sewn canvas" },
+      { icon: "/warm-led-icon.svg", label: "Warm LED Light" },
+      { icon: "/premium-material-icon.svg", label: "Solid oak tripod" },
+      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
     ],
-    perfectFor: ["Living Room", "Reading Nook", "Bedroom"],
+    specifications: [
+      {
+        icon: "/spec-plug-icon.svg",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 60W Cord Length 2.2m / 87 in"],
+      },
+      {
+        icon: "/spec-bulb-icon.svg",
+        lines: ["E27 Solhetta Bulb 806lm 60W", "Bulb Included."],
+      },
+      {
+        icon: "/smart-bulb-icon.svg",
+        lines: ["Smart bulb compatible"],
+      },
+    ],
+    materials: ["Canvas", "Solid Oak"],
+    dimensions: { image: "/collections-hero-img-1.png", heightCm: 140, widthCm: 55 },
+    perfectFor: [
+      { icon: "/living-room-icon.svg", label: "Living Room" },
+      { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
+      { icon: "/bedside-icon.svg", label: "Bedroom" },
+    ],
     designStory:
       "The Canvas Floor Lamp started as a sketch of a structure you'd find in a photographer's studio. The oak tripod grounds it; the hand-sewn canvas shade softens it. The result is a lamp that feels curated rather than bought.",
     addOns: [ADD_ONS[1]],
@@ -310,7 +464,9 @@ export function getNewArrivals(): Product[] {
 }
 
 export function getRelatedProducts(currentSlug: string, category: string): Product[] {
-  return PRODUCTS.filter((p) => p.slug !== currentSlug && p.category === category).slice(0, 4);
+  const sameCategory = PRODUCTS.filter((p) => p.slug !== currentSlug && p.category === category);
+  const others = PRODUCTS.filter((p) => p.slug !== currentSlug && p.category !== category);
+  return [...sameCategory, ...others].slice(0, 4);
 }
 
 export function getDefaultVariant(product: Product): ProductVariant {

@@ -33,7 +33,8 @@ export default function CollectionsPage() {
             </p>
           </div>
           <select
-            className="input-field min-h-10 self-start px-3 pr-8 sm:self-auto"
+            aria-label="Sort products"
+            className="input-field min-h-12 w-full px-3 pr-8 sm:min-h-10 sm:w-auto sm:self-auto"
             style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
           >
             <option>Sort: Best Sellers</option>

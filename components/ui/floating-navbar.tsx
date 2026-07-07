@@ -70,17 +70,21 @@ export const FloatingNav = ({
           className
         )}
       >
-        <div
-          className="flex items-center justify-center gap-3 rounded-[24px] px-8 py-2 text-[#FFFDF5]"
-          style={{
-            border: "1px solid rgba(255, 255, 255, 0.2)",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
-            backgroundColor: "rgba(33, 33, 33, 0.36)",
-            boxShadow:
-              "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
-          }}
-        >
+        <div className="relative flex items-center justify-center">
+          {/* Glass background layer — clipped separately so the blur doesn't leak past the rounded corners on hover-triggered repaints */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]"
+            style={{
+              border: "1px solid rgba(255, 255, 255, 0.2)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              backgroundColor: "rgba(33, 33, 33, 0.36)",
+              boxShadow:
+                "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
+            }}
+          />
+          <div className="relative flex items-center justify-center gap-3 px-8 py-2 text-[#FFFDF5]">
           {leftSlot && <div className="flex items-center pr-1">{leftSlot}</div>}
 
           <div className="flex items-center gap-1">
@@ -133,6 +137,7 @@ export const FloatingNav = ({
               <div className="flex items-center">{rightSlot}</div>
             </>
           )}
+          </div>
         </div>
       </motion.div>
     </AnimatePresence>

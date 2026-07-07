@@ -78,7 +78,7 @@ export default function HomePage() {
 
           <div
             data-scroll
-            className="scroll-reveal-up absolute left-5 top-[220px] z-10 flex w-[calc(100%-40px)] max-w-100 flex-col items-start gap-3.5 overflow-hidden md:hidden"
+            className="scroll-reveal-up absolute inset-x-5 bottom-10 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
           >
             <h1 className="type-display-xl self-stretch text-white">
               Modern Lamps, Made to Glow Differently
@@ -87,7 +87,7 @@ export default function HomePage() {
               Sculptural 3D-printed lamps designed to bring warmth, form, and character into
               everyday spaces.
             </p>
-            <Link href="/shop" className="btn btn-primary w-full self-stretch">
+            <Link href="/collection" className="btn btn-primary w-full self-stretch">
               Shop Collection
             </Link>
             <Link
@@ -110,7 +110,7 @@ export default function HomePage() {
                 everyday spaces.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Link href="/shop" className="btn btn-primary">
+                <Link href="/collection" className="btn btn-primary">
                   Shop Collection
                 </Link>
                 <Link
@@ -172,7 +172,7 @@ export default function HomePage() {
               <p className="eyebrow" style={{ color: "var(--color-accent-amber)" }}>
                 OUR PROCESS
               </p>
-              <h2 className="type-display-lg font-bold leading-[120px] text-[var(--color-text-primary)] md:text-6xl md:leading-[68px] w-[400px]">
+              <h2 className="type-display-lg max-w-[400px] font-bold text-[var(--color-text-primary)] md:text-6xl md:leading-[68px]">
                 Designed with Purpose Made with Care
               </h2>
               {/* <div className="h-[3px] w-16 bg-[var(--color-accent-amber)]" /> */}
@@ -230,7 +230,7 @@ export default function HomePage() {
                   <h3 className="text-display-md font-semibold text-[var(--color-text-primary)] md:shrink-0">
                     Eco-friendly Material
                   </h3>
-                  <div className="h-20 w-[1px] shrink-0 bg-[var(--color-border)] md:h-10" />
+                  <div className="hidden w-[1px] shrink-0 bg-[var(--color-border)] md:block md:h-10" />
                   <p className="text-sm font-normal leading-5 text-[var(--color-text-secondary)] md:text-base md:leading-6">
                     Our filaments are biodegradable, odorless, and kinder to the spaces we live in.
                   </p>

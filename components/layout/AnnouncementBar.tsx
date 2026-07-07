@@ -4,7 +4,7 @@ const items = [
   { icon: Truck, label: "Free shipping" },
   { icon: RotateCcw, label: "30-day hassle-free returns" },
   { icon: Leaf, label: "Eco-friendly materials" },
-  { icon: Shield, label: "2-year warranty" },
+  { icon: Shield, label: "1-year warranty" },
 ];
 
 export default function AnnouncementBar() {
@@ -12,7 +12,7 @@ export default function AnnouncementBar() {
     <div className="w-full py-2 px-4" style={{ backgroundColor: "var(--color-highlight)" }}>
       {/* Mobile: condensed single-line text */}
       <p className="md:hidden text-center text-xs font-medium truncate" style={{ color: "var(--color-text-primary)" }}>
-        Free Shipping · 30-Day Returns · 2-Year Warranty
+        Free Shipping · 30-Day Returns · 1-Year Warranty
       </p>
 
       {/* Desktop: icon strip */}

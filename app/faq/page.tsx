@@ -34,7 +34,7 @@ const FAQS: { category: string; question: string; answer: string }[] = [
   },
   {
     category: "Warranty",
-    question: "What does the 2-year warranty cover?",
+    question: "What does the 1-year warranty cover?",
     answer: "Our warranty covers manufacturing defects, LED module failure, electrical components, and structural integrity. It does not cover accidental damage, misuse, or normal wear and surface marks.",
   },
 ];

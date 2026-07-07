@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node nav_bug2.mjs)",
+      "Bash(curl -sf -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/cart)",
+      "Bash(node nav_fix_verify.mjs)",
+      "Bash(node nav_fix_verify2.mjs)",
+      "Bash(npm run *)",
+      "Bash(git -C /Users/Latif11/Documents/Fasthaus/Website/Web-App diff HEAD --stat)",
+      "Read(//Applications/Google Chrome.app/Contents/MacOS/**)",
+      "Read(//Applications/**)",
+      "Read(//Users/Latif11/Library/Caches/ms-playwright/**)",
+      "Bash(PORT=3117 npm run dev)"
+    ]
+  }
+}

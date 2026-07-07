@@ -45,7 +45,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             </p>
           </div>
           <select
-            className="input-field min-h-10 self-start px-3 sm:self-auto"
+            aria-label="Sort products"
+            className="input-field min-h-12 w-full px-3 sm:min-h-10 sm:w-auto sm:self-auto"
             style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
           >
             <option>Sort: Featured</option>

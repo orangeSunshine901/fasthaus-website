@@ -39,10 +39,10 @@ export default function WarrantyPage() {
       <div className="container-page py-10 md:py-14">
         {/* Page header */}
         <h1 className="type-display-xl mb-2" style={{ color: "var(--color-text-primary)" }}>
-          2-Year Warranty
+          1-Year Warranty
         </h1>
         <p className="type-body-md mb-12 max-w-xl" style={{ color: "var(--color-text-secondary)" }}>
-          Every FastHaus lamp is covered for two years from the date of delivery. Simple, honest coverage — no fine print games.
+          Every FastHaus lamp is covered for one year from the date of delivery. Simple, honest coverage — no fine print games.
         </p>
 
         {/* Coverage grid */}
