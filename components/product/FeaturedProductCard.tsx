@@ -23,10 +23,10 @@ export default function FeaturedProductCard({ product, summary, hoverImages }: P
       }}
     >
       <div
-        className="media-rounded relative w-full"
+        className={`media-rounded relative ${hoverImages ? "-mx-4 w-[calc(100%+2rem)]" : "w-full"}`}
         style={{
           backgroundColor: "#111111",
-          aspectRatio: "238 / 325",
+          aspectRatio: hoverImages ? "4 / 5" : "238 / 325",
         }}
       >
         <Image
