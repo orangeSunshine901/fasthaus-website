@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import { Clock, Truck, CalendarCheck, ThumbsUp, Info, ShieldCheck } from "lucide-react";
 import type { Product } from "@/lib/data/products";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const TABS = ["Product Info", "Specifications", "Materials", "Shipping & Returns"] as const;
 export type ProductTab = (typeof TABS)[number];
@@ -61,29 +62,32 @@ export default function ProductTabs({
   return (
     <section>
       {/* Tab bar */}
-      <div
-        className="scrollbar-hide -mx-5 flex gap-1 overflow-x-auto border-b px-5 md:mx-0 md:px-0"
+      <ScrollArea
+        className="-mx-5 border-b px-5 md:mx-0 md:px-0"
         style={{ borderColor: "var(--color-border)" }}
       >
-        {TABS.map((tab) => {
-          const active = activeTab === tab;
-          return (
-            <button
-              key={tab}
-              onClick={() => onTabChange(tab)}
-              className={`whitespace-nowrap px-[18px] py-3.5 text-[15px] transition-colors hover:text-[var(--color-text-primary)] md:py-3 ${
-                active ? "font-bold" : "font-semibold"
-              }`}
-              style={{
-                color: active ? "var(--color-text-primary)" : "var(--color-text-secondary)",
-                boxShadow: active ? "inset 0 -2px 0 var(--color-accent-amber)" : "none",
-              }}
-            >
-              {tab}
-            </button>
-          );
-        })}
-      </div>
+        <div className="flex w-max gap-1 pb-2 md:w-full">
+          {TABS.map((tab) => {
+            const active = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => onTabChange(tab)}
+                className={`whitespace-nowrap px-[18px] py-3.5 text-[15px] transition-colors hover:text-[var(--color-text-primary)] md:py-3 ${
+                  active ? "font-bold" : "font-semibold"
+                }`}
+                style={{
+                  color: active ? "var(--color-text-primary)" : "var(--color-text-secondary)",
+                  boxShadow: active ? "inset 0 -2px 0 var(--color-accent-amber)" : "none",
+                }}
+              >
+                {tab}
+              </button>
+            );
+          })}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
 
       {/* Tab content */}
       <div className="px-1 pt-7">

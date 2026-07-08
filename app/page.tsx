@@ -152,6 +152,11 @@ export default function HomePage() {
                   <FeaturedProductCard
                     product={product}
                     summary={featuredSummaries[product.slug] ?? product.description}
+                    hoverImages={
+                      product.slug === "luna-desk-lamp"
+                        ? { off: "/luna-lamp-off.png", on: "/luna-lamp-on.png" }
+                        : undefined
+                    }
                   />
                 </div>
               ))}

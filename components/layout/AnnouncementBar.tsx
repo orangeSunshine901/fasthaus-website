@@ -9,9 +9,12 @@ const items = [
 
 export default function AnnouncementBar() {
   return (
-    <div className="w-full py-2 px-4" style={{ backgroundColor: "var(--color-highlight)" }}>
+    <div className="w-full py-2 px-4" style={{ backgroundColor: "#ff7a1a" }}>
       {/* Mobile: condensed single-line text */}
-      <p className="md:hidden text-center text-xs font-medium truncate" style={{ color: "var(--color-text-primary)" }}>
+      <p
+        className="md:hidden text-center text-xs font-medium truncate"
+        style={{ color: "var(--color-text-primary)" }}
+      >
         Free Shipping · 30-Day Returns · 1-Year Warranty
       </p>
 

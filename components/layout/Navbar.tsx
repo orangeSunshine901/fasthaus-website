@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
 import { FloatingNav } from "@/components/ui/floating-navbar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -347,7 +348,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-50 flex flex-col overflow-y-auto"
+            className="fixed inset-0 z-50 flex flex-col"
             style={{ backgroundColor: "var(--color-bg)" }}
             role="dialog"
             aria-modal="true"
@@ -370,60 +371,64 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Overlay links */}
-            <motion.nav
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.28, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col px-6 pt-4"
-            >
-              {MOBILE_NAV.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "type-display-sm border-b py-5",
-                    isActive(link.href)
-                      ? "text-[var(--color-accent-amber)]"
-                      : "text-[var(--color-text-primary)]"
-                  )}
-                  style={{ borderColor: "var(--color-border)" }}
-                  onClick={() => setMobileOpen(false)}
+            <ScrollArea className="min-h-0 flex-1" data-lenis-prevent>
+              <div className="flex min-h-[calc(100vh-56px)] flex-col">
+                {/* Overlay links */}
+                <motion.nav
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.28, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex flex-col px-6 pt-4"
                 >
-                  {link.label}
-                </Link>
-              ))}
+                  {MOBILE_NAV.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={cn(
+                        "type-display-sm border-b py-5",
+                        isActive(link.href)
+                          ? "text-[var(--color-accent-amber)]"
+                          : "text-[var(--color-text-primary)]"
+                      )}
+                      style={{ borderColor: "var(--color-border)" }}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
 
-              {/* Category shortcuts */}
-              <div className="grid grid-cols-2 gap-x-4 pt-5">
-                {SHOP_LINKS.slice(1).map((link) => (
+                  {/* Category shortcuts */}
+                  <div className="grid grid-cols-2 gap-x-4 pt-5">
+                    {SHOP_LINKS.slice(1).map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="type-body-md py-2.5"
+                        style={{ color: "var(--color-text-secondary)" }}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </motion.nav>
+
+                {/* Bottom cart shortcut */}
+                <div
+                  className="mt-auto px-6"
+                  style={{ paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}
+                >
                   <Link
-                    key={link.href}
-                    href={link.href}
-                    className="type-body-md py-2.5"
-                    style={{ color: "var(--color-text-secondary)" }}
+                    href="/cart"
+                    className="btn btn-light w-full gap-2.5"
                     onClick={() => setMobileOpen(false)}
                   >
-                    {link.label}
+                    <ShoppingCart size={18} />
+                    View Cart
                   </Link>
-                ))}
+                </div>
               </div>
-            </motion.nav>
-
-            {/* Bottom cart shortcut */}
-            <div
-              className="px-6 mt-auto"
-              style={{ paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}
-            >
-              <Link
-                href="/cart"
-                className="btn btn-light w-full gap-2.5"
-                onClick={() => setMobileOpen(false)}
-              >
-                <ShoppingCart size={18} />
-                View Cart
-              </Link>
-            </div>
+            </ScrollArea>
           </motion.div>
         )}
       </AnimatePresence>

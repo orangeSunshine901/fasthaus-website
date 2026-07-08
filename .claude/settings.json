@@ -10,7 +10,10 @@
       "Read(//Applications/Google Chrome.app/Contents/MacOS/**)",
       "Read(//Applications/**)",
       "Read(//Users/Latif11/Library/Caches/ms-playwright/**)",
-      "Bash(PORT=3117 npm run dev)"
+      "Bash(PORT=3117 npm run dev)",
+      "Bash(sips -c 8 8 --out corner-on.png /Users/Latif11/Documents/Fasthaus/Website/Web-App/public/luna-lamp-on.png)",
+      "Bash(sips -z 1 1 corner-on.png)",
+      "Bash(xxd corner-on.png)"
     ]
   }
 }

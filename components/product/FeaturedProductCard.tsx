@@ -7,9 +7,10 @@ import type { Product } from "@/lib/data/products";
 type Props = {
   product: Product;
   summary: string;
+  hoverImages?: { off: string; on: string };
 };
 
-export default function FeaturedProductCard({ product, summary }: Props) {
+export default function FeaturedProductCard({ product, summary, hoverImages }: Props) {
   const defaultVariant = product.variants[0];
 
   return (
@@ -29,12 +30,21 @@ export default function FeaturedProductCard({ product, summary }: Props) {
         }}
       >
         <Image
-          src={defaultVariant.images[0]}
+          src={hoverImages ? hoverImages.off : defaultVariant.images[0]}
           alt={product.name}
           fill
-          className="object-cover"
+          className="object-contain"
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
         />
+        {hoverImages && (
+          <Image
+            src={hoverImages.on}
+            alt=""
+            fill
+            className="object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+          />
+        )}
       </div>
 
       <div
