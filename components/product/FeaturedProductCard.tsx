@@ -26,14 +26,14 @@ export default function FeaturedProductCard({ product, summary, hoverImages }: P
         className={`media-rounded relative ${hoverImages ? "-mx-4 w-[calc(100%+2rem)]" : "w-full"}`}
         style={{
           backgroundColor: "#111111",
-          aspectRatio: hoverImages ? "4 / 5" : "238 / 325",
+          aspectRatio: hoverImages ? "1260 / 1720" : "238 / 325",
         }}
       >
         <Image
           src={hoverImages ? hoverImages.off : defaultVariant.images[0]}
           alt={product.name}
           fill
-          className="object-contain"
+          className="object-cover"
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
         />
         {hoverImages && (
@@ -41,7 +41,7 @@ export default function FeaturedProductCard({ product, summary, hoverImages }: P
             src={hoverImages.on}
             alt=""
             fill
-            className="object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
           />
         )}
