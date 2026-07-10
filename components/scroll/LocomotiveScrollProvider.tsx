@@ -30,6 +30,7 @@ type LocomotiveScrollConstructor = new (options?: {
 }) => LocomotiveScrollInstance;
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const NATIVE_TOUCH_SCROLL_QUERY = "(hover: none) and (pointer: coarse)";
 
 function shouldPreventSmoothScroll(node: HTMLElement) {
   return Boolean(
@@ -42,6 +43,7 @@ function shouldPreventSmoothScroll(node: HTMLElement) {
 export default function LocomotiveScrollProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const reducedMotion = window.matchMedia(REDUCED_MOTION_QUERY);
+    const nativeTouchScroll = window.matchMedia(NATIVE_TOUCH_SCROLL_QUERY);
     gsap.ticker.lagSmoothing(0);
 
     if (reducedMotion.matches) {
@@ -49,6 +51,10 @@ export default function LocomotiveScrollProvider({ children }: { children: React
       return () => {
         document.documentElement.classList.remove("scroll-animations-reduced");
       };
+    }
+
+    if (nativeTouchScroll.matches) {
+      return undefined;
     }
 
     let scroll: LocomotiveScrollInstance | null = null;

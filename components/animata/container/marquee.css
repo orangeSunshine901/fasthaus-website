@@ -1,0 +1,33 @@
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-y {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+.marquee-horizontal {
+  animation: marquee-x var(--duration) infinite linear;
+  will-change: transform;
+}
+
+.marquee-vertical {
+  animation: marquee-y var(--duration) infinite linear;
+  will-change: transform;
+}
+
+.group\/marquee:hover .marquee-pause-on-hover {
+  animation-play-state: paused;
+}

@@ -8,15 +8,25 @@ type Props = {
   product: Product;
   summary: string;
   hoverImages?: { off: string; on: string };
+  compactMobile?: boolean;
+  activeMobile?: boolean;
 };
 
-export default function FeaturedProductCard({ product, summary, hoverImages }: Props) {
+export default function FeaturedProductCard({
+  product,
+  summary,
+  hoverImages,
+  compactMobile = false,
+  activeMobile,
+}: Props) {
   const defaultVariant = product.variants[0];
 
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="group flex h-full flex-col gap-3 rounded-[14px] border p-4 transition-transform duration-200 hover:-translate-y-0.5"
+      className={`group flex h-full flex-col rounded-[14px] border transition-transform duration-200 hover:-translate-y-0.5 ${
+        compactMobile ? "gap-2 p-3 md:gap-3 md:p-4" : "gap-3 p-4"
+      }`}
       style={{
         borderColor: "#575757",
         backgroundColor: "transparent",
@@ -25,15 +35,23 @@ export default function FeaturedProductCard({ product, summary, hoverImages }: P
       <div
         className={`media-rounded relative ${hoverImages ? "-mx-4 w-[calc(100%+2rem)]" : "w-full"}`}
         style={{
-          backgroundColor: "#111111",
-          aspectRatio: hoverImages ? "1260 / 1720" : "238 / 325",
+          // backgroundColor: "#111111",
+          aspectRatio: compactMobile
+            ? hoverImages
+              ? "1260 / 1376"
+              : "238 / 260"
+            : hoverImages
+              ? "1260 / 1720"
+              : "238 / 325",
         }}
       >
         <Image
           src={hoverImages ? hoverImages.off : defaultVariant.images[0]}
           alt={product.name}
           fill
-          className="object-cover"
+          className={`object-cover ${
+            product.slug === "luna-desk-lamp" ? "scale-80 md:scale-100" : ""
+          }`}
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
         />
         {hoverImages && (
@@ -41,14 +59,22 @@ export default function FeaturedProductCard({ product, summary, hoverImages }: P
             src={hoverImages.on}
             alt=""
             fill
-            className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            className={`object-cover transition-all duration-500 ${
+              activeMobile === undefined
+                ? "opacity-0 group-hover:opacity-100"
+                : activeMobile
+                  ? "opacity-100"
+                  : "opacity-0"
+            } ${
+              product.slug === "luna-desk-lamp" ? "scale-80 md:scale-100" : ""
+            }`}
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
           />
         )}
       </div>
 
       <div
-        className="mt-4 flex justify-center opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0"
+        className={`${compactMobile ? "mt-2 md:mt-4" : "mt-4"} flex justify-center opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0`}
         style={{ perspective: "1000px" }}
       >
         <div

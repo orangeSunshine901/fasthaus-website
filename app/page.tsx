@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ShopLayout from "@/components/layout/ShopLayout";
-import FeaturedProductCard from "@/components/product/FeaturedProductCard";
+import FeaturedProductsCarousel from "@/components/product/FeaturedProductsCarousel";
 import { getFeaturedProducts } from "@/lib/data/products";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 import LocomotiveScrollProvider from "@/components/scroll/LocomotiveScrollProvider";
@@ -142,25 +142,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {featured.map((product, index) => (
-                <div
-                  key={product.id}
-                  data-scroll
-                  className={`scroll-reveal-up scroll-stagger-${Math.min(index + 1, 4)} h-full`}
-                >
-                  <FeaturedProductCard
-                    product={product}
-                    summary={featuredSummaries[product.slug] ?? product.description}
-                    hoverImages={
-                      product.slug === "luna-desk-lamp"
-                        ? { off: "/luna-lamp-off.png", on: "/luna-lamp-on.png" }
-                        : undefined
-                    }
-                  />
-                </div>
-              ))}
-            </div>
+            <FeaturedProductsCarousel products={featured} summaries={featuredSummaries} />
           </div>
         </section>
 

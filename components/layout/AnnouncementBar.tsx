@@ -1,34 +1,49 @@
 import { Truck, RotateCcw, Leaf, Shield } from "lucide-react";
+import AnnouncementRibbon from "@/components/animata/container/announcement-ribbon";
 
 const items = [
   { icon: Truck, label: "Free shipping" },
-  { icon: RotateCcw, label: "30-day hassle-free returns" },
+  // { icon: RotateCcw, label: "7-day hassle-free returns" },
   { icon: Leaf, label: "Eco-friendly materials" },
   { icon: Shield, label: "1-year warranty" },
 ];
 
 export default function AnnouncementBar() {
   return (
-    <div className="w-full py-2 px-4" style={{ backgroundColor: "#ff7a1a" }}>
-      {/* Mobile: condensed single-line text */}
-      <p
-        className="md:hidden text-center text-xs font-medium truncate"
-        style={{ color: "var(--color-text-primary)" }}
-      >
-        Free Shipping · 30-Day Returns · 1-Year Warranty
-      </p>
+    <>
+      <AnnouncementRibbon
+        className="bg-[#ff7a1a] md:hidden"
+        pauseOnHover={false}
+        message={
+          <div className="flex items-center gap-8 px-4">
+            {items.map(({ icon: Icon, label }) => (
+              <div key={label} className="flex shrink-0 items-center gap-1.5">
+                <Icon size={14} style={{ color: "var(--color-text-primary)" }} />
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: "var(--color-text-primary)" }}
+                >
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+        }
+      />
 
       {/* Desktop: icon strip */}
-      <div className="hidden md:flex max-w-[1280px] mx-auto items-center justify-center gap-8">
-        {items.map(({ icon: Icon, label }) => (
-          <div key={label} className="flex items-center gap-1.5">
-            <Icon size={14} style={{ color: "var(--color-text-primary)" }} />
-            <span className="text-xs font-medium" style={{ color: "var(--color-text-primary)" }}>
-              {label}
-            </span>
-          </div>
-        ))}
+      <div className="hidden w-full bg-[#ff7a1a] px-4 py-2 md:block">
+        <div className="mx-auto flex max-w-[1280px] items-center justify-center gap-8">
+          {items.map(({ icon: Icon, label }) => (
+            <div key={label} className="flex items-center gap-1.5">
+              <Icon size={14} style={{ color: "var(--color-text-primary)" }} />
+              <span className="text-xs font-medium" style={{ color: "var(--color-text-primary)" }}>
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
