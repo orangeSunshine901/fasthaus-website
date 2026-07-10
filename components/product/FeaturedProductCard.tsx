@@ -25,7 +25,7 @@ export default function FeaturedProductCard({
     <Link
       href={`/product/${product.slug}`}
       className={`group flex h-full flex-col rounded-[14px] border transition-transform duration-200 hover:-translate-y-0.5 ${
-        compactMobile ? "gap-2 p-3 md:gap-3 md:p-4" : "gap-3 p-4"
+        compactMobile ? "gap-2 p-3 md:gap-3 md:p-4" : "gap-2 p-4 pt-0"
       }`}
       style={{
         borderColor: "#575757",
@@ -65,9 +65,7 @@ export default function FeaturedProductCard({
                 : activeMobile
                   ? "opacity-100"
                   : "opacity-0"
-            } ${
-              product.slug === "luna-desk-lamp" ? "scale-80 md:scale-100" : ""
-            }`}
+            } ${product.slug === "luna-desk-lamp" ? "scale-80 md:scale-100" : ""}`}
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
           />
         )}

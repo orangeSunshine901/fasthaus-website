@@ -27,11 +27,7 @@ function ProductCard({
       summary={summary}
       compactMobile={compactMobile}
       activeMobile={activeMobile}
-      hoverImages={
-        product.slug === "luna-desk-lamp"
-          ? { off: "/luna-lamp-off.png", on: "/luna-lamp-on.png" }
-          : undefined
-      }
+      hoverImages={{ off: "/luna-lamp-off.png", on: "/luna-lamp-on.png" }}
     />
   );
 }
