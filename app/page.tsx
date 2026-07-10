@@ -66,7 +66,7 @@ export default function HomePage() {
     <LocomotiveScrollProvider>
       <ShopLayout>
         {/* Hero */}
-        <section className="relative h-[540px] w-full overflow-hidden md:h-[740px]">
+        <section className="relative h-[640px] w-full overflow-hidden md:h-[740px]">
           <Image
             src="/hero-img-1.jpg"
             alt="Modern Lamps"
@@ -78,7 +78,7 @@ export default function HomePage() {
 
           <div
             data-scroll
-            className="scroll-reveal-up absolute inset-x-5 bottom-10 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
+            className="scroll-reveal-up absolute inset-x-5 bottom-2 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
           >
             <h1 className="type-display-xl self-stretch text-white">
               Modern Lamps, Made to Glow Differently

@@ -74,7 +74,13 @@ export default function FeaturedProductCard({
       </div>
 
       <div
-        className={`${compactMobile ? "mt-2 md:mt-4" : "mt-4"} flex justify-center opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0`}
+        className={`${compactMobile ? "mt-2 md:mt-4" : "mt-4"} flex justify-center transition-all duration-500 ${
+          activeMobile === undefined
+            ? "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+            : activeMobile
+              ? "translate-y-0 opacity-100"
+              : "translate-y-2 opacity-0"
+        }`}
         style={{ perspective: "1000px" }}
       >
         <div

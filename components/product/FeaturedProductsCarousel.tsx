@@ -40,7 +40,7 @@ export default function FeaturedProductsCarousel({ products, summaries }: Props)
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", containScroll: "trimSnaps" });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-  const [isInViewport, setIsInViewport] = useState(false);
+  const [viewportVisibility, setViewportVisibility] = useState(0);
   const lunaProduct = products.find((product) => product.slug === "luna-desk-lamp") ?? products[0];
 
   const updateCarouselState = useCallback(() => {
@@ -66,8 +66,8 @@ export default function FeaturedProductsCarousel({ products, summaries }: Props)
     if (!viewport) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setIsInViewport(entry.isIntersecting),
-      { threshold: 0.45 },
+      ([entry]) => setViewportVisibility(entry.intersectionRatio),
+      { threshold: [0, 0.45, 1] }
     );
 
     observer.observe(viewport);
@@ -90,7 +90,9 @@ export default function FeaturedProductsCarousel({ products, summaries }: Props)
                   product={lunaProduct}
                   summary={summaries[lunaProduct.slug] ?? lunaProduct.description}
                   compactMobile
-                  activeMobile={isInViewport && selectedIndex === index}
+                  activeMobile={
+                    selectedIndex === index && viewportVisibility >= (index === 0 ? 0.65 : 0.45)
+                  }
                 />
               </div>
             ))}
