@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
@@ -8,6 +8,8 @@ import ProductGallery from "@/components/product/pdp/ProductGallery";
 import PurchaseRow from "@/components/product/pdp/PurchaseRow";
 import ProductTabs, { type ProductTab } from "@/components/product/pdp/ProductTabs";
 import ProductSidebar from "@/components/product/pdp/ProductSidebar";
+import { capture } from "@/lib/analytics/client";
+import { analyticsEvents } from "@/lib/analytics/events";
 
 export default function PDPClient({ product }: { product: Product }) {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
@@ -19,6 +21,14 @@ export default function PDPClient({ product }: { product: Product }) {
 
   const addItem = useCartStore((s) => s.addItem);
   const router = useRouter();
+
+  useEffect(() => {
+    capture(analyticsEvents.productViewed, {
+      product_id: product.id, product_name: product.name, category: product.category,
+      collection: product.category, price: product.variants[0].price, currency: "AED",
+      stock_status: product.variants[0].stock > 0 ? "in_stock" : "out_of_stock", made_to_order: true,
+    });
+  }, [product]);
 
   function handleAddToCart() {
     const addOns = (product.addOns ?? [])
@@ -44,6 +54,11 @@ export default function PDPClient({ product }: { product: Product }) {
       },
       addOns
     );
+    capture(analyticsEvents.productAddedToCart, {
+      product_id: product.id, product_name: product.name, category: product.category,
+      price: selectedVariant.price, currency: "AED", quantity,
+      cart_value: (selectedVariant.price + addOns.reduce((sum, item) => sum + item.price, 0)) * quantity,
+    });
   }
 
   function handleBuyNow() {
@@ -58,11 +73,14 @@ export default function PDPClient({ product }: { product: Product }) {
       else next.add(id);
       return next;
     });
+    const addOn = product.addOns?.find((item) => item.id === id);
+    if (addOn && !selectedAddOns.has(id)) capture(analyticsEvents.addonSelected, { product_id: product.id, addon_id: id, addon_name: addOn.name, price: addOn.price, currency: "AED" });
   }
 
   function handleVariantChange(variant: ProductVariant) {
     setSelectedVariant(variant);
     setActiveImage(0);
+    capture(analyticsEvents.productOptionSelected, { product_id: product.id, option_type: "color", option_value: variant.color, price: variant.price, currency: "AED" });
   }
 
   function handleShowShippingDetails() {
@@ -87,7 +105,10 @@ export default function PDPClient({ product }: { product: Product }) {
             images={selectedVariant.images}
             name={product.name}
             activeIndex={activeImage}
-            onSelect={setActiveImage}
+            onSelect={(index) => {
+              setActiveImage(index);
+              capture(analyticsEvents.productImageViewed, { product_id: product.id, image_index: index });
+            }}
           />
         </div>
         <div className="order-3 lg:order-none lg:col-start-2 lg:row-start-1">

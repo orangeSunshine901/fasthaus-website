@@ -12,7 +12,7 @@ export default function AnnouncementBar() {
   return (
     <>
       <AnnouncementRibbon
-        className="bg-[#ff7a1a] md:hidden"
+        className="md:hidden"
         pauseOnHover={false}
         message={
           <div className="flex items-center gap-8 px-4">
@@ -32,8 +32,8 @@ export default function AnnouncementBar() {
       />
 
       {/* Desktop: icon strip */}
-      <div className="hidden w-full bg-[#ff7a1a] px-4 py-2 md:block">
-        <div className="mx-auto flex max-w-[1280px] items-center justify-center gap-8">
+      <div className="hidden w-full bg-[#ff7a1a] px-4 py-3 md:block">
+        <div className="mx-auto flex max-w-[1280px] items-center justify-center gap-32">
           {items.map(({ icon: Icon, label }) => (
             <div key={label} className="flex items-center gap-1.5">
               <Icon size={14} style={{ color: "var(--color-text-primary)" }} />

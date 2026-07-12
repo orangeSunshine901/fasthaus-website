@@ -3,6 +3,8 @@ import crypto from "crypto";
 import { createServiceClient } from "@/lib/supabase/server";
 import { OrderConfirmation } from "@/lib/email/OrderConfirmation";
 import { getResend } from "@/lib/email/resend";
+import { captureServerEvent } from "@/lib/analytics/server";
+import { analyticsEvents } from "@/lib/analytics/events";
 
 function verifyGeideaSignature(payload: Record<string, string>, signature: string): boolean {
   // Geidea HMAC-SHA256 over sorted key=value pairs joined by &
@@ -60,6 +62,14 @@ export async function POST(request: Request) {
       .from("order_items")
       .select("quantity, unit_price, product_variants(products(name), color)")
       .eq("order_id", orderId);
+
+    await captureServerEvent(orderId, analyticsEvents.purchaseCompleted, {
+      order_id: orderId,
+      revenue: order.total,
+      currency: "AED",
+      item_count: (items ?? []).reduce((sum, item) => sum + Number(item.quantity), 0),
+      source: "geidea_callback",
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const emailItems = (items ?? []).map((i: any) => ({

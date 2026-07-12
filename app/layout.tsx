@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
 import PageTransition from "@/components/layout/PageTransition";
+import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
+import { Suspense } from "react";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 import "./globals.css";
 
@@ -30,7 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${dmSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', system-ui, sans-serif)" }}>
-        <PageTransition>{children}</PageTransition>
+        <Suspense fallback={<PageTransition>{children}</PageTransition>}>
+          <AnalyticsProvider><PageTransition>{children}</PageTransition></AnalyticsProvider>
+        </Suspense>
       </body>
     </html>
   );

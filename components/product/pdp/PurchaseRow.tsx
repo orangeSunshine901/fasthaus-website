@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Star, ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck } from "lucide-react";
+import { Tooltip } from "radix-ui";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 
@@ -120,23 +121,38 @@ export default function PurchaseRow({
             >
               Lamp Color
             </span>
-            <div className="flex gap-2.5">
-              {product.variants.map((v) => (
-                <button
-                  key={v.id}
-                  onClick={() => onVariantChange(v)}
-                  className="h-9 w-9 rounded-full border-2 border-white transition-all md:h-[30px] md:w-[30px]"
-                  style={{
-                    backgroundColor: v.colorHex,
-                    outline: `2px solid ${
-                      selectedVariant.id === v.id ? "var(--color-accent-amber)" : "transparent"
-                    }`,
-                  }}
-                  title={v.color}
-                  aria-label={v.color}
-                />
-              ))}
-            </div>
+            <Tooltip.Provider delayDuration={0}>
+              <div className="flex gap-2.5">
+                {product.variants.map((v) => (
+                  <Tooltip.Root key={v.id}>
+                    <Tooltip.Trigger asChild>
+                      <button
+                        onClick={() => onVariantChange(v)}
+                        className="h-9 w-9 rounded-full border-2 border-white transition-all md:h-[30px] md:w-[30px]"
+                        style={{
+                          backgroundColor: v.colorHex,
+                          outline: `2px solid ${
+                            selectedVariant.id === v.id
+                              ? "var(--color-accent-amber)"
+                              : "transparent"
+                          }`,
+                        }}
+                        aria-label={v.color}
+                      />
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content
+                        sideOffset={6}
+                        className="z-50 rounded-md bg-[var(--color-text-primary)] px-2.5 py-1.5 text-xs font-medium text-white shadow-md"
+                      >
+                        {v.color}
+                        <Tooltip.Arrow className="fill-[var(--color-text-primary)]" />
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                ))}
+              </div>
+            </Tooltip.Provider>
           </div>
           <div className="flex flex-col gap-2">
             <span

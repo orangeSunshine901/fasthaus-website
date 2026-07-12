@@ -3,9 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Minus, Plus } from "lucide-react";
+import { useEffect } from "react";
 import ShopLayout from "@/components/layout/ShopLayout";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
+import { capture } from "@/lib/analytics/client";
+import { analyticsEvents } from "@/lib/analytics/events";
 
 export default function CartPage() {
   const {
@@ -21,6 +24,10 @@ export default function CartPage() {
   } = useCartStore();
   const itemCount = items.reduce((s, i) => s + i.quantity, 0);
   const itemWord = itemCount === 1 ? "item" : "items";
+
+  useEffect(() => {
+    capture(analyticsEvents.cartViewed, { item_count: itemCount, cart_value: total(), currency: "AED" });
+  }, [itemCount, total]);
 
   if (items.length === 0) {
     return (
@@ -242,7 +249,7 @@ export default function CartPage() {
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Link href="/checkout" className="btn btn-primary flex h-[52px] w-full items-center justify-center gap-1">
+              <Link href="/checkout" onClick={() => capture(analyticsEvents.checkoutStarted, { item_count: itemCount, cart_value: total(), currency: "AED" })} className="btn btn-primary flex h-[52px] w-full items-center justify-center gap-1">
                 <span>Checkout -</span>
                 <DirhamPrice amount={total()} variant="white" />
               </Link>

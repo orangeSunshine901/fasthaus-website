@@ -3,10 +3,12 @@ import ProductCard from "@/components/product/ProductCard";
 import { PRODUCTS } from "@/lib/data/products";
 import Link from "next/link";
 import CollectionHero from "@/components/collection/CollectionHero";
+import CollectionViewed from "@/components/analytics/CollectionViewed";
 
 export default function CollectionsPage() {
   return (
     <ShopLayout>
+      <CollectionViewed collection="all" productCount={PRODUCTS.length} />
       {/* Hero */}
       <CollectionHero />
 

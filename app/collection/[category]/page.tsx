@@ -2,6 +2,7 @@ import ShopLayout from "@/components/layout/ShopLayout";
 import ProductCard from "@/components/product/ProductCard";
 import { PRODUCTS } from "@/lib/data/products";
 import Link from "next/link";
+import CollectionViewed from "@/components/analytics/CollectionViewed";
 
 const categoryLabels: Record<string, string> = {
   "desk-lamps": "Desk Lamps",
@@ -20,6 +21,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
   return (
     <ShopLayout>
+      <CollectionViewed collection={category} productCount={products.length} />
       <div className="container-page py-8 md:py-12">
         {/* Breadcrumb */}
         <nav className="text-sm mb-2" style={{ color: "var(--color-text-secondary)" }}>

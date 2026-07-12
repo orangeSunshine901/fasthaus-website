@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Mail, MessageCircle, AtSign, MapPin, Clock } from "lucide-react";
 import ShopLayout from "@/components/layout/ShopLayout";
+import { capture, captureException } from "@/lib/analytics/client";
+import { analyticsEvents } from "@/lib/analytics/events";
 
 type State = "idle" | "loading" | "success" | "error";
 
@@ -23,6 +25,7 @@ export default function ContactPage() {
     e.preventDefault();
     setState("loading");
     setErrorMsg("");
+    capture(analyticsEvents.enquiryStarted);
 
     try {
       const res = await fetch("/api/contact", {
@@ -37,7 +40,9 @@ export default function ContactPage() {
         return;
       }
       setState("success");
-    } catch {
+      capture(analyticsEvents.enquirySubmitted);
+    } catch (error) {
+      captureException(error, { operation: "contact_submission" });
       setErrorMsg("Something went wrong. Please try again.");
       setState("error");
     }

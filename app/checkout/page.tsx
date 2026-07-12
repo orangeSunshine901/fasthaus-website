@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,6 +9,8 @@ import { isValidPhoneNumber } from "libphonenumber-js";
 import { z } from "zod";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
+import { capture } from "@/lib/analytics/client";
+import { analyticsEvents } from "@/lib/analytics/events";
 
 const EMIRATES = [
   "Dubai",
@@ -173,6 +175,10 @@ export default function CheckoutPage() {
   const discountAmount = hasDiscount ? subtotalValue * 0.1 : 0;
   const totalValue = subtotalValue - discountAmount;
 
+  useEffect(() => {
+    if (items.length > 0) capture(analyticsEvents.checkoutStarted, { item_count: items.reduce((sum, item) => sum + item.quantity, 0), cart_value: totalValue, currency: "AED" });
+  }, [items, totalValue]);
+
   function toggleNewsletter() {
     setNewsletter((prev) => {
       const next = !prev;
@@ -247,6 +253,8 @@ export default function CheckoutPage() {
     };
 
     localStorage.setItem("fasthaus-last-order", JSON.stringify(order));
+    capture(analyticsEvents.purchaseCompleted, { order_id: orderId, revenue: totalValue, currency: "AED", item_count: items.reduce((sum, item) => sum + item.quantity, 0), first_purchase: localStorage.getItem("fasthaus-has-purchased") !== "true" });
+    localStorage.setItem("fasthaus-has-purchased", "true");
     clearCart();
     router.push(`/order/${orderId}`);
   }

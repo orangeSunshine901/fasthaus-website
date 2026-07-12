@@ -1,11 +1,13 @@
 "use client";
 
-import { type MouseEvent, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
+import { capture } from "@/lib/analytics/client";
+import { analyticsEvents } from "@/lib/analytics/events";
 
 type Props = {
   product: Product;
@@ -26,6 +28,10 @@ export default function ProductCard({ product, showRating = false }: Props) {
   const [hovered, setHovered] = useState(false);
   const defaultVariant = product.variants[0];
   const badge = product.badge ? badgeStyles[product.badge] : null;
+
+  useEffect(() => {
+    capture(analyticsEvents.productImpression, { product_id: product.id, product_name: product.name, category: product.category, price: defaultVariant.price, currency: "AED" });
+  }, [defaultVariant.price, product.category, product.id, product.name]);
 
   return (
     <Link href={`/product/${product.slug}`} className="group block">
