@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ChevronDown, ShieldCheck } from "lucide-react";
@@ -28,10 +27,6 @@ const inputStyle = {
   borderColor: "var(--color-border)",
   backgroundColor: "var(--color-surface)",
 };
-
-function generateOrderId(): string {
-  return "FH-" + Math.floor(10000 + Math.random() * 90000);
-}
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -105,37 +100,13 @@ const cardCvcSchema = z
   .trim()
   .regex(/^\d{3,4}$/, "Enter a valid 3 or 4 digit code.");
 
-const cardPaymentSchema = z.object({
-  cardNumber: cardNumberSchema,
-  cardExpiry: cardExpirySchema,
-  cardCvc: cardCvcSchema,
-});
-
 function firstIssueMessage(result: z.ZodSafeParseResult<unknown>): string | null {
   if (result.success) return null;
   return result.error.issues[0]?.message ?? "Invalid value.";
 }
 
-function formatDeliveryWindow(): string {
-  const now = new Date();
-  const start = new Date(now);
-  start.setDate(now.getDate() + 5);
-  const end = new Date(now);
-  end.setDate(now.getDate() + 10);
-
-  const startMonth = start.toLocaleDateString("en-US", { month: "long" });
-  const endMonth = end.toLocaleDateString("en-US", { month: "long" });
-  const year = end.getFullYear();
-
-  if (startMonth === endMonth) {
-    return `${startMonth} ${start.getDate()}–${end.getDate()}, ${year}`;
-  }
-  return `${startMonth} ${start.getDate()} – ${endMonth} ${end.getDate()}, ${year}`;
-}
-
 export default function CheckoutPage() {
-  const router = useRouter();
-  const { items, addOns, subtotal, clearCart } = useCartStore();
+  const { items, addOns, subtotal } = useCartStore();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -169,6 +140,8 @@ export default function CheckoutPage() {
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
+  const [purchasing, setPurchasing] = useState(false);
+  const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
   const subtotalValue = subtotal();
   const hasDiscount = newsletter || discountApplied;
@@ -194,69 +167,33 @@ export default function CheckoutPage() {
     }
   }
 
-  function handlePurchase(e: React.FormEvent) {
+  async function handlePurchase(e: React.FormEvent) {
     e.preventDefault();
 
     setEmailTouched(true);
     setPhoneTouched(true);
 
-    let valid = isValidEmail(email) && isValidAePhone(phone);
-
-    if (paymentMethod === "card") {
-      setCardNumberTouched(true);
-      setCardExpiryTouched(true);
-      setCardCvcTouched(true);
-      const cardResult = cardPaymentSchema.safeParse({ cardNumber, cardExpiry, cardCvc });
-      valid = valid && cardResult.success;
+    if (!isValidEmail(email) || !isValidAePhone(phone) || !fullName.trim() || !address.trim()) return;
+    const [firstName, ...lastNameParts] = fullName.trim().split(/\s+/);
+    setPurchasing(true);
+    setPurchaseError(null);
+    try {
+      const response = await fetch("/api/checkout/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contact: { email, phone },
+          shippingAddress: { firstName, lastName: lastNameParts.join(" ") || firstName, line1: address, emirate, postalCode: poBox || undefined },
+          discountCode: hasDiscount ? "WELCOME10" : undefined,
+        }),
+      });
+      const body = await response.json();
+      if (!response.ok || !body.paymentUrl) throw new Error(body?.error?.message ?? "Checkout could not be started.");
+      window.location.assign(body.paymentUrl);
+    } catch (error) {
+      setPurchaseError(error instanceof Error ? error.message : "Checkout could not be started.");
+      setPurchasing(false);
     }
-
-    if (!valid) {
-      return;
-    }
-
-    const flattenedAddOns = [
-      ...items.flatMap((item) =>
-        (item.addOns ?? []).map((ao) => ({
-          name: ao.name,
-          price: ao.price,
-          quantity: ao.quantity,
-          productName: item.productName,
-        }))
-      ),
-      ...addOns.map((ao) => ({
-        name: ao.name,
-        price: ao.price,
-        quantity: ao.quantity ?? 1,
-      })),
-    ];
-
-    const orderId = generateOrderId();
-    const cardLast4 =
-      paymentMethod === "card" ? cardNumber.replace(/\s/g, "").slice(-4) : undefined;
-
-    const order = {
-      id: orderId,
-      items,
-      addOns: flattenedAddOns,
-      subtotal: subtotalValue,
-      discountCode: hasDiscount
-        ? newsletter
-          ? "Newsletter discount (10%)"
-          : `Discount code (10%)`
-        : undefined,
-      discount: discountAmount,
-      total: totalValue,
-      shipping: { fullName, email, phone, address, emirate, poBox },
-      payment: { method: paymentMethod, cardLast4 },
-      deliveryWindow: formatDeliveryWindow(),
-      createdAt: new Date().toISOString(),
-    };
-
-    localStorage.setItem("fasthaus-last-order", JSON.stringify(order));
-    capture(analyticsEvents.purchaseCompleted, { order_id: orderId, revenue: totalValue, currency: "AED", item_count: items.reduce((sum, item) => sum + item.quantity, 0), first_purchase: localStorage.getItem("fasthaus-has-purchased") !== "true" });
-    localStorage.setItem("fasthaus-has-purchased", "true");
-    clearCart();
-    router.push(`/order/${orderId}`);
   }
 
   if (items.length === 0) {
@@ -284,7 +221,7 @@ export default function CheckoutPage() {
       <div className="container-page py-10 md:py-14">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[520px_1fr] lg:gap-16 xl:gap-[88px]">
           {/* LEFT: form */}
-          <form onSubmit={handlePurchase} className="flex flex-col gap-7">
+          <form onSubmit={handlePurchase} noValidate className="flex flex-col gap-7">
             <div className="flex flex-col gap-2">
               <Link href="/cart" className="btn-text inline-flex w-fit items-center gap-1.5">
                 <ArrowLeft size={14} />
@@ -460,8 +397,11 @@ export default function CheckoutPage() {
                   icon={<TabbyIcon />}
                 /> */}
               </div>
+              <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
+                Card details are entered securely on Geidea after your cart and delivery details are validated.
+              </p>
 
-              {paymentMethod === "card" && (
+              {false && paymentMethod === "card" && (
                 <div className="flex flex-col gap-3.5">
                   <Field
                     label="Card number"
@@ -551,8 +491,9 @@ export default function CheckoutPage() {
             </section>
 
             <div className="flex flex-col gap-3 pt-1">
-              <button type="submit" className="btn btn-primary h-[54px] w-full gap-1.5">
-                <span>Purchase —</span>
+              {purchaseError && <p role="alert" className="type-body-sm" style={{ color: "var(--color-error)" }}>{purchaseError}</p>}
+              <button type="submit" disabled={purchasing} className="btn btn-primary h-[54px] w-full gap-1.5 disabled:opacity-60">
+                <span>{purchasing ? "Starting secure checkout…" : "Continue to payment —"}</span>
                 <DirhamPrice amount={totalValue} variant="white" />
               </button>
               <p

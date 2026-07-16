@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     // Idempotency: only update if still pending
     const { data: order } = await supabase
       .from("orders")
-      .select("id, status, guest_email, total, shipping_address")
+      .select("id, status, guest_email, total, shipping_address, cart_id")
       .eq("id", orderId)
       .single();
 
@@ -57,10 +57,15 @@ export async function POST(request: Request) {
       .update({ status: "confirmed", geidea_order_id: geideaOrderId })
       .eq("id", orderId);
 
+    await supabase
+      .from("carts")
+      .update({ status: "CONVERTED", converted_order_id: orderId, updated_at: new Date().toISOString() })
+      .eq("id", order.cart_id);
+
     // Fetch order items for the confirmation email
     const { data: items } = await supabase
       .from("order_items")
-      .select("quantity, unit_price, product_variants(products(name), color)")
+      .select("quantity, unit_price, product_name, variant_name")
       .eq("order_id", orderId);
 
     await captureServerEvent(orderId, analyticsEvents.purchaseCompleted, {
@@ -73,8 +78,8 @@ export async function POST(request: Request) {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const emailItems = (items ?? []).map((i: any) => ({
-      name: i.product_variants?.products?.[0]?.name ?? i.product_variants?.products?.name ?? "Product",
-      variantColor: i.product_variants?.color ?? "",
+      name: i.product_name ?? "Product",
+      variantColor: i.variant_name ?? "",
       quantity: i.quantity as number,
       unitPrice: i.unit_price as number,
     }));

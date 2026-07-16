@@ -20,6 +20,10 @@ export default function PDPClient({ product }: { product: Product }) {
   const tabsRef = useRef<HTMLDivElement>(null);
 
   const addItem = useCartStore((s) => s.addItem);
+  const openDrawer = useCartStore((s) => s.openDrawer);
+  const closeDrawer = useCartStore((s) => s.closeDrawer);
+  const cartError = useCartStore((s) => s.error);
+  const adding = useCartStore((s) => s.pending.includes(selectedVariant.id));
   const router = useRouter();
 
   useEffect(() => {
@@ -30,7 +34,7 @@ export default function PDPClient({ product }: { product: Product }) {
     });
   }, [product]);
 
-  function handleAddToCart() {
+  async function addSelectedItem() {
     const addOns = (product.addOns ?? [])
       .filter((ao) => selectedAddOns.has(ao.id))
       .map((ao) => ({
@@ -41,7 +45,7 @@ export default function PDPClient({ product }: { product: Product }) {
         quantity,
       }));
 
-    addItem(
+    const added = await addItem(
       {
         id: selectedVariant.id,
         productId: product.id,
@@ -54,16 +58,23 @@ export default function PDPClient({ product }: { product: Product }) {
       },
       addOns
     );
-    capture(analyticsEvents.productAddedToCart, {
+    if (added) capture(analyticsEvents.productAddedToCart, {
       product_id: product.id, product_name: product.name, category: product.category,
       price: selectedVariant.price, currency: "AED", quantity,
       cart_value: (selectedVariant.price + addOns.reduce((sum, item) => sum + item.price, 0)) * quantity,
     });
+    return added;
   }
 
-  function handleBuyNow() {
-    handleAddToCart();
-    router.push("/cart");
+  async function handleAddToCart() {
+    if (await addSelectedItem()) openDrawer();
+  }
+
+  async function handleBuyNow() {
+    if (await addSelectedItem()) {
+      closeDrawer();
+      router.push("/checkout");
+    }
   }
 
   function toggleAddOnSelection(id: string) {
@@ -127,6 +138,8 @@ export default function PDPClient({ product }: { product: Product }) {
             quantity={quantity}
             onQuantityChange={setQuantity}
             addOnsTotal={addOnsTotal}
+            busy={adding}
+            error={cartError}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}
           />

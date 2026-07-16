@@ -13,8 +13,10 @@ type Props = {
   quantity: number;
   onQuantityChange: (quantity: number) => void;
   addOnsTotal?: number;
-  onAddToCart: () => void;
-  onBuyNow: () => void;
+  busy?: boolean;
+  error?: string | null;
+  onAddToCart: () => unknown | Promise<unknown>;
+  onBuyNow: () => unknown | Promise<unknown>;
 };
 
 export default function PurchaseRow({
@@ -24,6 +26,8 @@ export default function PurchaseRow({
   quantity,
   onQuantityChange,
   addOnsTotal = 0,
+  busy = false,
+  error,
   onAddToCart,
   onBuyNow,
 }: Props) {
@@ -127,6 +131,7 @@ export default function PurchaseRow({
                   <Tooltip.Root key={v.id}>
                     <Tooltip.Trigger asChild>
                       <button
+                        type="button"
                         onClick={() => onVariantChange(v)}
                         className="h-9 w-9 rounded-full border-2 border-white transition-all md:h-[30px] md:w-[30px]"
                         style={{
@@ -166,6 +171,7 @@ export default function PurchaseRow({
               style={{ borderColor: "var(--color-border)" }}
             >
               <button
+                type="button"
                 onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
                 disabled={quantity <= 1}
                 className="grid h-11 w-11 place-items-center transition-colors hover:bg-[var(--color-surface)] disabled:opacity-40 md:h-[34px] md:w-[34px]"
@@ -181,6 +187,7 @@ export default function PurchaseRow({
                 {quantity}
               </span>
               <button
+                type="button"
                 onClick={() => onQuantityChange(Math.min(selectedVariant.stock, quantity + 1))}
                 className="grid h-11 w-11 place-items-center transition-colors hover:bg-[var(--color-surface)] md:h-[34px] md:w-[34px]"
                 style={{ color: "var(--color-text-secondary)" }}
@@ -194,11 +201,13 @@ export default function PurchaseRow({
 
         <div className="flex flex-col gap-2.5">
           <button
+            type="button"
             onClick={onBuyNow}
-            className="flex h-[50px] items-center justify-center rounded-[12px] text-[16px] font-bold text-white transition-[filter] hover:brightness-95"
+            disabled={busy}
+            className="flex h-[50px] items-center justify-center rounded-[12px] text-[16px] font-bold text-white transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
             style={{ backgroundColor: "var(--color-accent-amber)" }}
           >
-            Buy now –&nbsp;
+            {busy ? "Preparing…" : "Buy now –"}&nbsp;
             <DirhamPrice
               amount={selectedVariant.price * quantity + addOnsTotal}
               size="sm"
@@ -207,16 +216,19 @@ export default function PurchaseRow({
             />
           </button>
           <button
+            type="button"
             onClick={onAddToCart}
-            className="flex h-[50px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white text-[16px] font-bold transition-colors hover:bg-[var(--color-surface)]"
+            disabled={busy}
+            className="flex h-[50px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white text-[16px] font-bold transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
             style={{
               borderColor: "var(--color-text-primary)",
               color: "var(--color-text-primary)",
             }}
           >
             <ShoppingCart size={16} />
-            Add to cart
+            {busy ? "Adding…" : "Add to cart"}
           </button>
+          {error && <p role="alert" className="text-[13px] font-medium" style={{ color: "var(--color-error)" }}>{error}</p>}
         </div>
 
         <div

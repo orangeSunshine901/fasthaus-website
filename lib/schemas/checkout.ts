@@ -30,20 +30,12 @@ export const ContactSchema = z.object({
 
 export const CheckoutStep1Schema = ContactSchema.merge(ShippingAddressSchema);
 
-export const CartItemSchema = z.object({
-  variantId: z.string().uuid(),
-  quantity: z.number().int().min(1),
-  unitPrice: z.number().positive(),
-});
-
 export const CreateOrderSchema = z.object({
   contact: ContactSchema,
   shippingAddress: ShippingAddressSchema,
-  items: z.array(CartItemSchema).min(1, "Cart is empty"),
-  addOnIds: z.array(z.string()).optional().default([]),
-});
+  discountCode: z.string().trim().max(32).optional(),
+}).strict();
 
 export type ShippingAddress = z.infer<typeof ShippingAddressSchema>;
 export type ContactInfo = z.infer<typeof ContactSchema>;
 export type CreateOrderInput = z.infer<typeof CreateOrderSchema>;
-export type CartItemInput = z.infer<typeof CartItemSchema>;

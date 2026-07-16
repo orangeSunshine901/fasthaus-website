@@ -9,10 +9,7 @@ export async function POST(request: Request) {
   const parsed = ContactFormSchema.safeParse(body);
 
   if (!parsed.success) {
-    return NextResponse.json(
-      { error: parsed.error.issues[0].message },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   }
 
   const { name, email, subject, message } = parsed.data;
@@ -29,13 +26,39 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 
-  await getResend().emails.send({
-    from: "Fasthaus Contact <noreply@fasthaus.ae>",
-    to: process.env.INTERNAL_EMAIL!,
-    replyTo: email,
-    subject: `[Contact] ${subject}`,
-    react: ContactInternal({ name, email, subject, message, submittedAt }),
-  });
+  try {
+    const internalEmail = process.env.INTERNAL_EMAIL;
+    if (!internalEmail) {
+      throw new Error("INTERNAL_EMAIL is not configured");
+    }
+
+    const { data, error } = await getResend().emails.send({
+      from: "Fasthaus Contact <noreply@fasthaus.studio>",
+      to: internalEmail,
+      replyTo: email,
+      subject: `[Contact] ${subject}`,
+      react: ContactInternal({ name, email, subject, message, submittedAt }),
+    });
+
+    if (error) {
+      console.error("Resend contact email error:", error);
+      return NextResponse.json(
+        {
+          error: "Your message was saved, but the email could not be sent",
+          resendError: error.message,
+        },
+        { status: 502 }
+      );
+    }
+
+    console.info("Contact email sent:", data?.id);
+  } catch (error) {
+    console.error("Resend contact email exception:", error);
+    return NextResponse.json(
+      { error: "Your message was saved, but the email could not be sent" },
+      { status: 502 }
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }

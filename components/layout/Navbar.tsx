@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ChevronDown, ShoppingCart, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
@@ -50,23 +50,17 @@ const SHOP_FEATURES = [
   },
 ];
 
-function useCartHydrated() {
-  return useSyncExternalStore(
-    (onStoreChange) => useCartStore.persist.onFinishHydration(onStoreChange),
-    () => useCartStore.persist.hasHydrated(),
-    () => false
-  );
-}
-
 function CartBadge({ size = 20, className = "" }: { size?: number; className?: string }) {
   const itemCount = useCartStore((s) => s.itemCount());
-  const cartHydrated = useCartHydrated();
+  const cartHydrated = useCartStore((s) => s.loaded);
+  const openDrawer = useCartStore((s) => s.openDrawer);
 
   return (
-    <Link
-      href="/cart"
-      className={`relative inline-flex p-2.5 -m-2.5 ${className}`}
-      aria-label="Cart"
+    <button
+      type="button"
+      onClick={openDrawer}
+      className={`relative inline-flex cursor-pointer p-2.5 -m-2.5 ${className}`}
+      aria-label="Open cart"
     >
       <ShoppingCart size={size} className="transition-opacity hover:opacity-70" />
       {cartHydrated && itemCount > 0 && (
@@ -77,7 +71,7 @@ function CartBadge({ size = 20, className = "" }: { size?: number; className?: s
           {itemCount}
         </span>
       )}
-    </Link>
+    </button>
   );
 }
 
@@ -135,6 +129,7 @@ function CollectionMegaMenuContent() {
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const openCartDrawer = useCartStore((s) => s.openDrawer);
   const [hiddenMainNavPath, setHiddenMainNavPath] = useState<string | null>(null);
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
@@ -418,14 +413,17 @@ export default function Navbar() {
                   className="mt-auto px-6"
                   style={{ paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}
                 >
-                  <Link
-                    href="/cart"
+                  <button
+                    type="button"
                     className="btn btn-light w-full gap-2.5"
-                    onClick={() => setMobileOpen(false)}
+                    onClick={() => {
+                      setMobileOpen(false);
+                      openCartDrawer();
+                    }}
                   >
                     <ShoppingCart size={18} />
                     View Cart
-                  </Link>
+                  </button>
                 </div>
               </div>
             </ScrollArea>

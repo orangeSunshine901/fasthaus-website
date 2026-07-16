@@ -71,7 +71,7 @@ export default function ContactPage() {
             </h2>
             {/* Success state */}
             {state === "success" ? (
-              <div className="py-8 text-center">
+              <div className="py-16 text-center">
                 <p className="type-title-sm mb-2" style={{ color: "var(--color-success)" }}>
                   Message sent!
                 </p>

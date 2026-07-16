@@ -1,173 +1,75 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import type { CartDto } from "@/lib/cart/types";
 
-export type CartAddOn = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  quantity?: number;
-};
+export type CartAddOn = { id: string; name: string; price: number; image: string; quantity?: number };
+export type CartLineAddOn = CartAddOn & { quantity: number };
+export type CartItem = { id: string; itemId: string; productId: string; productSlug: string; productName: string; variantColor: string; price: number; quantity: number; image: string; available: boolean; maxQuantity: number | null; addOns?: CartLineAddOn[] };
 
-export type CartLineAddOn = CartAddOn & {
-  quantity: number;
-};
-
-export type CartItem = {
-  id: string; // variantId
-  productId: string;
-  productSlug: string;
-  productName: string;
-  variantColor: string;
-  price: number;
-  quantity: number;
-  image: string;
-  addOns?: CartLineAddOn[];
-};
-
-type CartState = {
-  items: CartItem[];
-  // Legacy global add-ons from older persisted carts. New add-ons are stored on CartItem.addOns.
-  addOns: CartAddOn[];
-  addItem: (item: CartItem, addOns?: CartAddOn[]) => void;
-  removeItem: (variantId: string) => void;
-  updateQuantity: (variantId: string, quantity: number) => void;
-  updateAddOnQuantity: (variantId: string, addOnId: string, quantity: number) => void;
-  removeAddOn: (variantId: string, addOnId: string) => void;
+type AddInput = Omit<CartItem, "itemId" | "available" | "maxQuantity">;
+type State = {
+  items: CartItem[]; addOns: CartAddOn[]; loaded: boolean; pending: string[]; error: string | null;
+  drawerOpen: boolean;
+  openDrawer: () => void;
+  closeDrawer: () => void;
+  hydrate: () => Promise<void>;
+  addItem: (item: AddInput, addOns?: CartAddOn[]) => Promise<boolean>;
+  removeItem: (variantId: string) => Promise<void>;
+  updateQuantity: (variantId: string, quantity: number) => Promise<void>;
+  updateAddOnQuantity: (variantId: string, addOnId: string, quantity: number) => Promise<void>;
+  addAddOn: (variantId: string, addOnId: string) => Promise<void>;
+  removeAddOn: (variantId: string, addOnId: string) => Promise<void>;
   toggleAddOn: (addOn: CartAddOn) => void;
-  clearCart: () => void;
-  itemCount: () => number;
-  subtotal: () => number;
-  total: () => number;
+  clearCart: () => Promise<void>;
+  itemCount: () => number; subtotal: () => number; total: () => number;
 };
 
-export const useCartStore = create<CartState>()(
-  persist(
-    (set, get) => ({
-      items: [],
-      addOns: [],
+function fromDto(cart: CartDto): CartItem[] {
+  return cart.items.map((item) => ({ id: item.variantId, itemId: item.itemId, productId: item.productId, productSlug: item.slug, productName: item.name, variantColor: item.variantName, price: item.unitPrice / 100, quantity: item.quantity, image: item.imageUrl ?? "", available: item.available, maxQuantity: item.maxQuantity, addOns: item.addOns.map((addOn) => ({ id: addOn.id, name: addOn.name, price: addOn.unitPrice / 100, image: addOn.imageUrl ?? "", quantity: addOn.quantity })) }));
+}
 
-      addItem: (item, addOns = []) => {
-        const incomingAddOns = addOns.map((addOn) => ({
-          ...addOn,
-          quantity: addOn.quantity ?? item.quantity,
-        }));
-        const existing = get().items.find((i) => i.id === item.id);
-        if (existing) {
-          set((state) => ({
-            items: state.items.map((i) => {
-              if (i.id !== item.id) return i;
+async function request(url: string, init?: RequestInit) {
+  const response = await fetch(url, { ...init, headers: init?.body ? { "Content-Type": "application/json" } : undefined });
+  if (!response.ok) { const body = await response.json().catch(() => null); throw new Error(body?.error?.message ?? "Cart request failed."); }
+  return response.status === 204 ? null : response.json() as Promise<CartDto>;
+}
 
-              const addOnMap = new Map((i.addOns ?? []).map((ao) => [ao.id, ao]));
-              incomingAddOns.forEach((addOn) => {
-                const current = addOnMap.get(addOn.id);
-                addOnMap.set(addOn.id, {
-                  ...addOn,
-                  quantity: (current?.quantity ?? 0) + addOn.quantity,
-                });
-              });
-
-              return {
-                ...i,
-                quantity: i.quantity + item.quantity,
-                addOns: Array.from(addOnMap.values()),
-              };
-            }),
-          }));
-        } else {
-          set((state) => ({
-            items: [...state.items, { ...item, addOns: incomingAddOns }],
-          }));
-        }
-      },
-
-      removeItem: (variantId) => {
-        set((state) => ({
-          items: state.items.filter((i) => i.id !== variantId),
-        }));
-      },
-
-      updateQuantity: (variantId, quantity) => {
-        if (quantity < 1) return;
-        set((state) => ({
-          items: state.items.map((i) =>
-            i.id === variantId
-              ? {
-                  ...i,
-                  quantity,
-                  addOns: (i.addOns ?? []).map((ao) =>
-                    ao.quantity > quantity ? { ...ao, quantity } : ao
-                  ),
-                }
-              : i
-          ),
-        }));
-      },
-
-      updateAddOnQuantity: (variantId, addOnId, quantity) => {
-        if (quantity < 1) return;
-        set((state) => ({
-          items: state.items.map((i) =>
-            i.id === variantId
-              ? {
-                  ...i,
-                  addOns: (i.addOns ?? []).map((ao) =>
-                    ao.id === addOnId
-                      ? { ...ao, quantity: Math.min(quantity, i.quantity) }
-                      : ao
-                  ),
-                }
-              : i
-          ),
-        }));
-      },
-
-      removeAddOn: (variantId, addOnId) => {
-        set((state) => ({
-          items: state.items.map((i) =>
-            i.id === variantId
-              ? { ...i, addOns: (i.addOns ?? []).filter((ao) => ao.id !== addOnId) }
-              : i
-          ),
-        }));
-      },
-
-      toggleAddOn: (addOn) => {
-        const exists = get().addOns.find((a) => a.id === addOn.id);
-        if (exists) {
-          set((state) => ({
-            addOns: state.addOns.filter((a) => a.id !== addOn.id),
-          }));
-        } else {
-          set((state) => ({ addOns: [...state.addOns, addOn] }));
-        }
-      },
-
-      clearCart: () => set({ items: [], addOns: [] }),
-
-      itemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
-
-      subtotal: () => {
-        const itemsTotal = get().items.reduce(
-          (sum, i) =>
-            sum +
-            i.price * i.quantity +
-            (i.addOns ?? []).reduce((addOnSum, ao) => addOnSum + ao.price * ao.quantity, 0),
-          0
-        );
-        const addOnsTotal = get().addOns.reduce(
-          (sum, a) => sum + a.price * (a.quantity ?? 1),
-          0
-        );
-        return itemsTotal + addOnsTotal;
-      },
-
-      total: () => get().subtotal(),
-    }),
-    {
-      name: "fasthaus-cart",
-    }
-  )
-);
+export const useCartStore = create<State>((set, get) => {
+  const mutate = async (key: string, action: () => Promise<CartDto | null>) => {
+    set((state) => ({ pending: [...state.pending, key], error: null }));
+    try { const cart = await action(); if (cart) set({ items: fromDto(cart) }); return true; }
+    catch (error) { set({ error: error instanceof Error ? error.message : "Cart request failed." }); return false; }
+    finally { set((state) => ({ pending: state.pending.filter((item) => item !== key) })); }
+  };
+  return {
+    items: [], addOns: [], loaded: false, pending: [], error: null,
+    drawerOpen: false,
+    openDrawer: () => set({ drawerOpen: true }),
+    closeDrawer: () => set({ drawerOpen: false }),
+    hydrate: async () => { if (get().loaded) return; const ok = await mutate("hydrate", () => request("/api/cart")); set({ loaded: true, ...(ok ? {} : { items: [] }) }); },
+    addItem: (item, addOns = []) => mutate(item.id, () => request("/api/cart/items", { method: "POST", body: JSON.stringify({ variantId: item.id, quantity: item.quantity, addOns: addOns.map((addOn) => ({ id: addOn.id, quantity: addOn.quantity ?? item.quantity })) }) })),
+    removeItem: async (variantId) => { const item = get().items.find((row) => row.id === variantId); if (item) await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "DELETE" })); },
+    updateQuantity: async (variantId, quantity) => { const item = get().items.find((row) => row.id === variantId); if (item && quantity >= 1) await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity }) })); },
+    updateAddOnQuantity: async (variantId, addOnId, quantity) => {
+      const item = get().items.find((row) => row.id === variantId); if (!item || quantity < 1) return;
+      const addOns = (item.addOns ?? []).map((addOn) => ({ id: addOn.id, quantity: addOn.id === addOnId ? Math.min(quantity, item.quantity) : addOn.quantity }));
+      await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity: item.quantity, addOns }) }));
+    },
+    addAddOn: async (variantId, addOnId) => {
+      const item = get().items.find((row) => row.id === variantId); if (!item || (item.addOns ?? []).some((addOn) => addOn.id === addOnId)) return;
+      const addOns = [...(item.addOns ?? []).map((addOn) => ({ id: addOn.id, quantity: addOn.quantity })), { id: addOnId, quantity: 1 }];
+      await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity: item.quantity, addOns }) }));
+    },
+    removeAddOn: async (variantId, addOnId) => {
+      const item = get().items.find((row) => row.id === variantId); if (!item) return;
+      const addOns = (item.addOns ?? []).filter((addOn) => addOn.id !== addOnId).map((addOn) => ({ id: addOn.id, quantity: addOn.quantity }));
+      await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity: item.quantity, addOns }) }));
+    },
+    toggleAddOn: () => undefined,
+    clearCart: async () => { if (await mutate("clear", () => request("/api/cart", { method: "DELETE" }))) set({ items: [], addOns: [] }); },
+    itemCount: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
+    subtotal: () => get().items.reduce((sum, item) => sum + item.price * item.quantity + (item.addOns ?? []).reduce((n, addOn) => n + addOn.price * addOn.quantity, 0), 0),
+    total: () => get().subtotal(),
+  };
+});

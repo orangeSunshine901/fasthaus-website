@@ -131,32 +131,48 @@ alter table newsletter_subscribers enable row level security;
 alter table contact_submissions enable row level security;
 
 -- Public read access to product catalog
+drop policy if exists "public can view products" on products;
 create policy "public can view products" on products for select using (true);
+drop policy if exists "public can view variants" on product_variants;
 create policy "public can view variants" on product_variants for select using (true);
+drop policy if exists "public can view categories" on categories;
 create policy "public can view categories" on categories for select using (true);
+drop policy if exists "public can view add_ons" on add_ons;
 create policy "public can view add_ons" on add_ons for select using (true);
 
 -- Newsletter + contact: insert-only from anon
+drop policy if exists "anyone can subscribe" on newsletter_subscribers;
 create policy "anyone can subscribe" on newsletter_subscribers
   for insert with check (true);
 
+drop policy if exists "anyone can submit contact" on contact_submissions;
 create policy "anyone can submit contact" on contact_submissions
   for insert with check (true);
 
 -- Orders: service role handles inserts; guests can read their own order by email
+drop policy if exists "guest read own order" on orders;
 create policy "guest read own order" on orders
   for select using (guest_email = current_setting('request.jwt.claims', true)::json->>'email');
 
+drop policy if exists "authenticated read own orders" on orders;
 create policy "authenticated read own orders" on orders
   for select using (customer_id = auth.uid());
 
 -- Customers: own row only
+drop policy if exists "customer read own profile" on customers;
 create policy "customer read own profile" on customers
   for select using (id = auth.uid());
 
+drop policy if exists "customer update own profile" on customers;
 create policy "customer update own profile" on customers
   for update using (id = auth.uid());
 
 -- Addresses: own rows only
+drop policy if exists "customer manage own addresses" on addresses;
 create policy "customer manage own addresses" on addresses
   for all using (customer_id = auth.uid());
+
+-- Explicit Data API exposure (required for new Supabase projects).
+grant select on categories, products, product_variants, add_ons to anon, authenticated;
+grant insert on newsletter_subscribers, contact_submissions to anon, authenticated;
+grant select, insert, update, delete on all tables in schema public to service_role;
