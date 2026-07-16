@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail } from "lucide-react";
 
 type FooterLink = {
   label: string;
@@ -15,26 +14,7 @@ type FooterColumn = {
   links: FooterLink[];
 };
 
-const desktopColumns: FooterColumn[] = [
-  {
-    heading: "Company",
-    links: [
-      { label: "About Us", href: "/about" },
-      { label: "Contact Us", href: "/contact" },
-    ],
-  },
-  {
-    heading: "Social",
-    links: [
-      { label: "Twitter" },
-      { label: "LinkedIn" },
-      { label: "Facebook" },
-      { label: "Instagram" },
-    ],
-  },
-];
-
-const mobileColumns: FooterColumn[] = [
+const linkColumns: FooterColumn[] = [
   {
     heading: "Shop",
     links: [
@@ -55,8 +35,9 @@ const mobileColumns: FooterColumn[] = [
   {
     heading: "Support",
     links: [
-      { label: "Shipping & Returns", href: "/shipping-returns" },
-      { label: "Warranty", href: "/warranty" },
+      { label: "Shipping Policy", href: "/legal/shipping" },
+      { label: "Refund & Returns", href: "/legal/refunds" },
+      { label: "Warranty", href: "/legal/warranty" },
       { label: "Care Guide" },
       { label: "FAQ", href: "/faq" },
     ],
@@ -66,6 +47,14 @@ const mobileColumns: FooterColumn[] = [
     links: [{ label: "WhatsApp" }, { label: "Email", href: "/contact" }, { label: "Instagram" }],
   },
 ];
+
+const legalLinks: { label: string; href: string }[] = [
+  { label: "Privacy", href: "/legal/privacy" },
+  { label: "Terms", href: "/legal/terms" },
+  { label: "Cookies", href: "/legal/cookies" },
+];
+
+const paymentMethods = ["VISA", "MASTERCARD", "AMEX", "G PAY", "APPLE PAY", "TABBY"];
 
 const paymentIcons = [
   { name: "Visa", src: "/payment/visa.png" },
@@ -96,14 +85,6 @@ function FooterNewsletter({ caption }: { caption?: string }) {
     }
   }
 
-  if (state === "success") {
-    return (
-      <p className="text-sm" style={{ color: "var(--color-success)" }}>
-        Thanks for subscribing!
-      </p>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-3">
       {caption && (
@@ -111,32 +92,36 @@ function FooterNewsletter({ caption }: { caption?: string }) {
           {caption}
         </p>
       )}
-      <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <div
-          className="flex min-h-12 min-w-0 flex-1 items-center gap-2 rounded-[var(--radius-sm)] border bg-white px-3 py-2"
-          style={{ borderColor: "var(--color-border)" }}
-        >
-          <Mail size={16} style={{ color: "var(--color-text-disabled)", flexShrink: 0 }} />
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email address"
-            disabled={state === "loading"}
-            className="type-body-sm min-w-0 flex-1 bg-transparent outline-none"
-            style={{ color: "var(--color-text-primary)" }}
-          />
-        </div>
+      <form onSubmit={handleSubmit} className="flex items-center gap-2.5">
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email address"
+          disabled={state === "loading" || state === "success"}
+          className="h-12 min-w-0 flex-1 rounded-xl border bg-white px-4 text-[14.5px] outline-none transition-colors focus:border-[var(--color-accent-amber)]"
+          style={{ borderColor: "#E5DED5", color: "var(--color-text-primary)" }}
+        />
         <button
           type="submit"
-          disabled={state === "loading"}
-          className="btn btn-primary min-h-12 flex-shrink-0 whitespace-nowrap px-4 disabled:opacity-60"
-          style={{ backgroundColor: "var(--color-accent-amber)" }}
+          disabled={state === "loading" || state === "success"}
+          className="h-12 flex-shrink-0 whitespace-nowrap rounded-xl border-none px-[22px] text-[14.5px] font-bold text-white transition-[filter] hover:brightness-[0.94] disabled:hover:brightness-100"
+          style={{
+            backgroundColor:
+              state === "success" ? "var(--color-success)" : "var(--color-accent-amber)",
+            cursor: state === "success" ? "default" : "pointer",
+            opacity: state === "loading" ? 0.6 : 1,
+          }}
         >
-          {state === "loading" ? "…" : "Subscribe"}
+          {state === "loading" ? "…" : state === "success" ? "✓ Subscribed" : "Subscribe"}
         </button>
       </form>
+      {state === "error" && (
+        <p className="text-[12.5px] font-medium" style={{ color: "var(--color-accent-amber)" }}>
+          Something went wrong. Please try again.
+        </p>
+      )}
     </div>
   );
 }
@@ -145,7 +130,7 @@ export default function Footer() {
   return (
     <footer
       className="mt-auto border-t"
-      style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}
+      style={{ backgroundColor: "#FAF7F3", borderColor: "#EEE9E3" }}
     >
       {/* ── MOBILE ── */}
       <div
@@ -161,7 +146,7 @@ export default function Footer() {
 
         {/* 2×2 link grid */}
         <div className="grid grid-cols-2 gap-x-6 gap-y-8">
-          {mobileColumns.map((col) => (
+          {linkColumns.map((col) => (
             <div key={col.heading} className="flex flex-col gap-1">
               <p className="type-title-sm mb-1" style={{ color: "var(--color-text-primary)" }}>
                 {col.heading}
@@ -194,6 +179,18 @@ export default function Footer() {
           className="flex flex-col gap-3 pt-4 border-t"
           style={{ borderColor: "var(--color-border)" }}
         >
+          <div className="flex items-center gap-4">
+            {legalLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="type-body-sm py-1.5 font-semibold"
+                style={{ color: "var(--color-text-secondary)" }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
           <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>
             © 2026 FastHaus. All rights reserved.
           </p>
@@ -212,75 +209,94 @@ export default function Footer() {
       </div>
 
       {/* ── DESKTOP ── */}
-      <div className="container-page hidden pb-8 pt-16 md:block">
-        <div className="mb-16 flex items-start justify-between gap-12">
+      <div className="hidden md:block">
+        <div className="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,400px)_1fr_1fr_1fr_1fr] gap-14 px-8 pb-12 pt-16">
           {/* Branding + newsletter */}
-          <div className="flex flex-col gap-8 flex-shrink-0">
+          <div className="flex flex-col gap-4">
             <Link href="/">
               <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={128} height={34} />
             </Link>
-            <div className="flex flex-col gap-2">
-              <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>
-                Subscribe to Newsletter{" "}
-                <span style={{ color: "var(--color-accent-amber)" }}>*</span>
-              </p>
-              <FooterNewsletter />
-              <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
-                Agree <span style={{ color: "var(--color-text-secondary)" }}>Terms</span> and{" "}
-                <span style={{ color: "var(--color-text-secondary)" }}>Conditions</span>.
-              </p>
-            </div>
+            <p
+              className="text-[14.5px] font-medium leading-[1.6]"
+              style={{ color: "#6E655B", textWrap: "pretty" }}
+            >
+              New lamp releases, studio notes, and early access to limited drops.
+            </p>
+            <FooterNewsletter />
+            <p className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
+              By subscribing you agree to our{" "}
+              <Link href="/legal/terms" className="underline transition-colors hover:text-[var(--color-accent-amber)]">
+                Terms and Conditions
+              </Link>
+              .
+            </p>
           </div>
 
-          {/* Desktop columns */}
-          <div className="flex gap-12 flex-shrink-0">
-            {desktopColumns.map((col) => (
-              <div key={col.heading} className="flex flex-col gap-2">
-                <p className="type-caption mb-1" style={{ color: "var(--color-text-primary)" }}>
-                  {col.heading}
-                </p>
-                {col.links.map((link) =>
-                  link.href ? (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      className="type-body-sm transition-colors hover:text-[var(--color-accent-amber)]"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    >
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <span
-                      key={link.label}
-                      className="type-body-sm cursor-default"
-                      style={{ color: "var(--color-text-disabled)" }}
-                    >
-                      {link.label}
-                    </span>
-                  )
-                )}
-              </div>
-            ))}
-          </div>
+          {/* Link columns */}
+          {linkColumns.map((col) => (
+            <div key={col.heading} className="flex flex-col gap-3.5">
+              <span
+                className="text-[13px] font-bold uppercase tracking-[0.08em]"
+                style={{ color: "#8A8075" }}
+              >
+                {col.heading}
+              </span>
+              {col.links.map((link) =>
+                link.href ? (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className="text-[14.5px] font-medium transition-colors hover:text-[var(--color-accent-amber)]"
+                    style={{ color: "#3A332B" }}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <span
+                    key={link.label}
+                    className="text-[14.5px] font-medium cursor-default"
+                    style={{ color: "var(--color-text-disabled)" }}
+                  >
+                    {link.label}
+                  </span>
+                )
+              )}
+            </div>
+          ))}
         </div>
 
+        {/* Bottom bar */}
         <div
-          className="flex items-center justify-between pt-6 border-t"
-          style={{ borderColor: "var(--color-border)" }}
+          className="mx-auto flex max-w-[1240px] items-center justify-between gap-6 border-t px-8 pb-9 pt-5"
+          style={{ borderColor: "#EEE9E3" }}
         >
-          <p className="type-caption" style={{ color: "var(--color-text-secondary)" }}>
-            Copyright © 2026 Fasthaus Studio
-          </p>
-          <div className="flex items-center gap-1">
-            {paymentIcons.map((icon) => (
-              <div
-                key={icon.name}
-                className="relative w-9 h-6 rounded-sm border overflow-hidden bg-white"
-                style={{ borderColor: "var(--color-border)" }}
-              >
-                <Image src={icon.src} alt={icon.name} fill className="object-contain p-0.5" />
-              </div>
-            ))}
+          <span className="text-[13px] font-medium" style={{ color: "#8A8075" }}>
+            © 2026 Fasthaus Studio. All rights reserved.
+          </span>
+          <div className="flex items-center gap-5">
+            <div className="flex gap-4">
+              {legalLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-[13px] font-semibold transition-colors hover:text-[var(--color-accent-amber)]"
+                  style={{ color: "#8A8075" }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              {paymentMethods.map((method) => (
+                <span
+                  key={method}
+                  className="rounded-md border bg-white px-2 py-1 text-[11px] font-bold tracking-[0.04em]"
+                  style={{ borderColor: "#E5DED5", color: "#6E655B" }}
+                >
+                  {method}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
