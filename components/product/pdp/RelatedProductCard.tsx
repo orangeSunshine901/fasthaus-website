@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Star } from "lucide-react";
-import type { Product } from "@/lib/data/products";
+import { getVariantMainImage, type Product } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 
 export default function RelatedProductCard({ product }: { product: Product }) {
@@ -14,7 +13,7 @@ export default function RelatedProductCard({ product }: { product: Product }) {
         style={{ backgroundColor: "var(--color-surface-muted)" }}
       >
         <Image
-          src={defaultVariant.images[0]}
+          src={getVariantMainImage(defaultVariant)}
           alt={product.name}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
@@ -35,15 +34,6 @@ export default function RelatedProductCard({ product }: { product: Product }) {
             size="sm"
             className="shrink-0 font-bold"
           />
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Star size={12} fill="var(--color-accent-amber)" stroke="var(--color-accent-amber)" />
-          <span
-            className="text-[13px] font-medium"
-            style={{ color: "var(--color-text-secondary)" }}
-          >
-            {product.rating} ({product.reviewCount})
-          </span>
         </div>
         <div className="flex items-center gap-1.5 pt-0.5">
           {product.variants.map((v) => (

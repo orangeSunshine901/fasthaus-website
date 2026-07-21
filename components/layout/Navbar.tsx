@@ -19,35 +19,19 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-const SHOP_LINKS = [
-  { label: "All Products", href: "/collection" },
-  { label: "Desk Lamps", href: "/collection/desk-lamps" },
-  { label: "Table Lamps", href: "/collection/table-lamps" },
-  { label: "Floor Lamps", href: "/collection/floor-lamps" },
-];
-
 const MOBILE_NAV = [
   { label: "Collection", href: "/collection" },
   { label: "About", href: "/about" },
   { label: "Contact us", href: "/contact" },
 ];
 
-const SHOP_FEATURES = [
-  {
-    label: "Desk lamps",
-    href: "/collection/desk-lamps",
-    description: "Focused lighting for workspaces, studios, and reading corners.",
-  },
-  {
-    label: "Table lamps",
-    href: "/collection/table-lamps",
-    description: "Sculptural pieces for sideboards, bedsides, and dining surfaces.",
-  },
-  {
-    label: "Floor lamps",
-    href: "/collection/floor-lamps",
-    description: "Tall ambient lighting for lounges and open-plan rooms.",
-  },
+const PRODUCT_LINKS = [
+  { label: "Flute Lamp", href: "/product/flute-desk-lamp" },
+  { label: "Arc Table Lamp", href: "/product/arc-table-lamp" },
+  { label: "Porta Table Lamp", href: "/product/porta-table-lamp" },
+  { label: "Ribbed Table Lamp", href: "/product/ribbed-table-lamp" },
+  { label: "Dome Table Lamp", href: "/product/dome-table-lamp" },
+  { label: "Canvas Floor Lamp", href: "/product/canvas-tote-lamp" },
 ];
 
 function CartBadge({ size = 20, className = "" }: { size?: number; className?: string }) {
@@ -90,38 +74,23 @@ function CollectionMegaMenuContent() {
             </p>
           </div>
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent-amber)]">
-            Shop all
+            View collection
             <ArrowRight size={15} aria-hidden="true" />
           </span>
         </Link>
       </NavigationMenuLink>
 
-      <div className="grid gap-1">
-        {SHOP_FEATURES.map((item) => (
-          <NavigationMenuLink key={item.href} asChild>
+      <div className="grid grid-cols-2 content-start gap-1">
+        {PRODUCT_LINKS.map((product) => (
+          <NavigationMenuLink key={product.href} asChild>
             <Link
-              href={item.href}
-              className="rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
+              href={product.href}
+              className="rounded-[var(--radius-sm)] p-4 text-base font-semibold leading-6 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
             >
-              <span className="block text-base font-semibold leading-6">{item.label}</span>
-              <span className="mt-1 block text-sm leading-5 text-[var(--color-text-secondary)]">
-                {item.description}
-              </span>
+              {product.label}
             </Link>
           </NavigationMenuLink>
         ))}
-        <div className="mt-2 grid grid-cols-2 gap-1 border-t border-[var(--color-border)] pt-2">
-          {SHOP_LINKS.slice(0, 2).map((item) => (
-            <NavigationMenuLink key={item.href} asChild>
-              <Link
-                href={item.href}
-                className="rounded-[var(--radius-sm)] px-3 py-2 text-sm font-semibold outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
-              >
-                {item.label}
-              </Link>
-            </NavigationMenuLink>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -134,6 +103,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const isAboutPage = pathname === "/about";
+  const isContactPage = pathname === "/contact";
+  const isLegalPage = pathname === "/legal" || pathname.startsWith("/legal/");
   const isProductPage = pathname.startsWith("/product/");
   const aboutMainNavHidden = isAboutPage && hiddenMainNavPath === pathname;
   const usesHeroOverlay =
@@ -199,7 +170,7 @@ export default function Navbar() {
 
   return (
     <>
-      {usesHeroOverlay && (
+      {usesHeroOverlay && !isContactPage && (
         <FloatingNav
           key={pathname}
           navItems={floatingNavItems}
@@ -222,7 +193,7 @@ export default function Navbar() {
         className={cn(
           usesHeroOverlay
             ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
-            : "sticky top-0 z-40 w-full",
+            : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
           aboutMainNavHidden && "md:pointer-events-none md:opacity-0"
         )}
       >
@@ -392,17 +363,16 @@ export default function Navbar() {
                     </Link>
                   ))}
 
-                  {/* Category shortcuts */}
                   <div className="grid grid-cols-2 gap-x-4 pt-5">
-                    {SHOP_LINKS.slice(1).map((link) => (
+                    {PRODUCT_LINKS.map((product) => (
                       <Link
-                        key={link.href}
-                        href={link.href}
+                        key={product.href}
+                        href={product.href}
                         className="type-body-md py-2.5"
                         style={{ color: "var(--color-text-secondary)" }}
                         onClick={() => setMobileOpen(false)}
                       >
-                        {link.label}
+                        {product.label}
                       </Link>
                     ))}
                   </div>

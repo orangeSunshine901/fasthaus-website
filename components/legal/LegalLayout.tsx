@@ -133,7 +133,7 @@ function LegalLayoutInner({ policy }: { policy: Policy }) {
   const related = POLICIES.filter((p) => p.slug !== policy.slug).slice(0, 3);
 
   return (
-    <div style={{ backgroundColor: PAGE_BG }}>
+    <div style={{ backgroundColor: PAGE_BG, paddingTop: "32px" }}>
       {/* ── Hero ── */}
       <div className="border-b bg-white" style={{ borderColor: BORDER }}>
         <div className="mx-auto max-w-[1280px] px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-12">
@@ -446,10 +446,7 @@ function LegalLayoutInner({ policy }: { policy: Policy }) {
               <span className="text-[17px] font-extrabold text-white">
                 Questions about this policy?
               </span>
-              <span
-                className="text-[14px] font-medium"
-                style={{ color: "rgba(255,255,255,0.65)" }}
-              >
+              <span className="text-[14px] font-medium" style={{ color: "rgba(255,255,255,0.65)" }}>
                 {LEGAL_CONTACT.hours}
               </span>
             </div>

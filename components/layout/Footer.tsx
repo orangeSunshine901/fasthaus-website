@@ -17,12 +17,7 @@ type FooterColumn = {
 const linkColumns: FooterColumn[] = [
   {
     heading: "Shop",
-    links: [
-      { label: "All Lamps", href: "/collection" },
-      { label: "Desk Lamps", href: "/collection/desk-lamps" },
-      { label: "Bedside Lamps", href: "/collection/table-lamps" },
-      { label: "Ambient Lamps", href: "/collection/floor-lamps" },
-    ],
+    links: [{ label: "Collection", href: "/collection" }],
   },
   {
     heading: "Studio",

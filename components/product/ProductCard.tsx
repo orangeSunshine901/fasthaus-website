@@ -3,15 +3,13 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star } from "lucide-react";
-import type { Product } from "@/lib/data/products";
+import { getVariantMainImage, type Product } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 
 type Props = {
   product: Product;
-  showRating?: boolean;
 };
 
 const badgeStyles: Record<string, { bg: string; color: string; border?: string }> = {
@@ -24,7 +22,7 @@ const badgeStyles: Record<string, { bg: string; color: string; border?: string }
   },
 };
 
-export default function ProductCard({ product, showRating = false }: Props) {
+export default function ProductCard({ product }: Props) {
   const [hovered, setHovered] = useState(false);
   const defaultVariant = product.variants[0];
   const badge = product.badge ? badgeStyles[product.badge] : null;
@@ -42,7 +40,7 @@ export default function ProductCard({ product, showRating = false }: Props) {
         onMouseLeave={() => setHovered(false)}
       >
         <Image
-          src={defaultVariant.images[0]}
+          src={getVariantMainImage(defaultVariant)}
           alt={product.name}
           fill
           className="object-cover"
@@ -86,25 +84,6 @@ export default function ProductCard({ product, showRating = false }: Props) {
       </div>
 
       <div className="mt-3 space-y-1">
-        {showRating && (
-          <div className="flex items-center gap-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                size={12}
-                fill={i < Math.round(product.rating) ? "var(--color-accent-amber)" : "none"}
-                stroke={
-                  i < Math.round(product.rating)
-                    ? "var(--color-accent-amber)"
-                    : "var(--color-text-disabled)"
-                }
-              />
-            ))}
-            <span className="text-xs ml-1" style={{ color: "var(--color-text-secondary)" }}>
-              ({product.reviewCount})
-            </span>
-          </div>
-        )}
         <div className="flex items-center justify-between">
           <span className="type-title-sm" style={{ color: "var(--color-text-primary)" }}>
             {product.name}

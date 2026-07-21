@@ -1,13 +1,17 @@
 import posthog from "posthog-js";
 import type { AnalyticsEvent, AnalyticsProperties } from "./events";
 
-export const ANALYTICS_CONSENT_KEY = "fasthaus-analytics-consent";
+let analyticsConsentGranted = false;
 
-export function hasAnalyticsConsent() {
-  return typeof window !== "undefined" && localStorage.getItem(ANALYTICS_CONSENT_KEY) === "granted";
+export function setAnalyticsConsent(granted: boolean): void {
+  analyticsConsentGranted = granted;
 }
 
-export function capture(event: AnalyticsEvent, properties: AnalyticsProperties = {}) {
+export function hasAnalyticsConsent(): boolean {
+  return analyticsConsentGranted;
+}
+
+export function capture(event: AnalyticsEvent | "$pageview", properties: AnalyticsProperties = {}) {
   if (!hasAnalyticsConsent()) return;
   posthog.capture(event, properties);
 }

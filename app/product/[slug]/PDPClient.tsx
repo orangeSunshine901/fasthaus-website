@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { Product, ProductVariant } from "@/lib/data/products";
+import {
+  getVariantGalleryImages,
+  getVariantMainImage,
+  type Product,
+  type ProductVariant,
+} from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import ProductGallery from "@/components/product/pdp/ProductGallery";
 import PurchaseRow from "@/components/product/pdp/PurchaseRow";
@@ -11,8 +16,16 @@ import ProductSidebar from "@/components/product/pdp/ProductSidebar";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 
-export default function PDPClient({ product }: { product: Product }) {
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
+export default function PDPClient({
+  product,
+  initialVariantId,
+}: {
+  product: Product;
+  initialVariantId: string;
+}) {
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
+    product.variants.find((variant) => variant.id === initialVariantId) ?? product.variants[0]
+  );
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedAddOns, setSelectedAddOns] = useState<Set<string>>(new Set());
@@ -54,7 +67,7 @@ export default function PDPClient({ product }: { product: Product }) {
         variantColor: selectedVariant.color,
         price: selectedVariant.price,
         quantity,
-        image: selectedVariant.images[0],
+        image: getVariantMainImage(selectedVariant),
       },
       addOns
     );
@@ -113,7 +126,7 @@ export default function PDPClient({ product }: { product: Product }) {
       <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-[minmax(0,1fr)_356px] lg:gap-x-12 lg:gap-y-12">
         <div className="order-1 lg:order-none lg:col-start-1 lg:row-start-1 lg:min-h-0">
           <ProductGallery
-            images={selectedVariant.images}
+            images={getVariantGalleryImages(selectedVariant)}
             name={product.name}
             activeIndex={activeImage}
             onSelect={(index) => {

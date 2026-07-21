@@ -36,8 +36,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           <span style={{ color: "var(--color-text-primary)" }}>{label}</span>
         </nav>
 
-        {/* Page header + sort dropdown */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-between mb-8">
+        {/* Page header */}
+        <div className="mb-8">
           <div>
             <h1 className="type-display-xl" style={{ color: "var(--color-text-primary)" }}>
               {label}
@@ -46,22 +46,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               {products.length} products
             </p>
           </div>
-          <select
-            aria-label="Sort products"
-            className="input-field min-h-12 w-full px-3 sm:min-h-10 sm:w-auto sm:self-auto"
-            style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
-          >
-            <option>Sort: Featured</option>
-            <option>Sort: Newest</option>
-            <option>Sort: Price Low–High</option>
-          </select>
         </div>
 
         {/* Product grid / empty state */}
         {products.length > 0 ? (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} showRating />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (

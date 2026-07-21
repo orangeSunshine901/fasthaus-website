@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ArrowRight, Minus, Plus, X } from "lucide-react";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
-import { ADD_ONS, PRODUCTS } from "@/lib/data/products";
+import { ADD_ONS, getVariantMainImage, PRODUCTS } from "@/lib/data/products";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 
@@ -172,7 +172,7 @@ export default function CartDrawer() {
                       style={{ backgroundColor: "rgba(255,255,255,0.96)" }}
                     >
                       <Image
-                        src={BESTSELLER.variants[0].images[0]}
+                        src={getVariantMainImage(BESTSELLER.variants[0])}
                         alt={BESTSELLER.name}
                         width={56}
                         height={56}

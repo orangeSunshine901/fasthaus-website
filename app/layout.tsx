@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
+import Script from "next/script";
 import PageTransition from "@/components/layout/PageTransition";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
+import SilktideConsentManager from "@/components/consent/SilktideConsentManager";
 import CartProvider from "@/components/cart/CartProvider";
 import { Suspense } from "react";
 import "locomotive-scroll/dist/locomotive-scroll.css";
@@ -32,7 +34,43 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${dmSans.variable} h-full antialiased`}>
+      <head>
+        {/* Silktide ships as a standalone stylesheet rather than an importable CSS module. */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link
+          rel="stylesheet"
+          id="silktide-consent-manager-css"
+          href="/silktide-consent-manager.css"
+        />
+        <style id="silktide-consent-manager-overrides">{`
+          #stcm-wrapper {
+            --boxShadow: -5px 5px 10px 0px #00000012, 0px 0px 50px 0px #0000001a;
+            --fontFamily: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+            --primaryColor: #ff4b1f;
+            --backgroundColor: #f8f6f3;
+            --textColor: #4b494b;
+            --backdropBackgroundColor: #00000033;
+            --backdropBackgroundBlur: 0px;
+            --iconColor: #ff4b1f;
+            --iconBackgroundColor: #f8f6f3;
+          }
+        `}</style>
+        <Script id="google-consent-default" strategy="beforeInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          window.gtag = window.gtag || gtag;
+          window.gtag('consent', 'default', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            functionality_storage: 'granted',
+            security_storage: 'granted'
+          });
+        `}</Script>
+      </head>
       <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', system-ui, sans-serif)" }}>
+        <SilktideConsentManager />
         <Suspense fallback={<PageTransition>{children}</PageTransition>}>
           <AnalyticsProvider><CartProvider><PageTransition>{children}</PageTransition></CartProvider></AnalyticsProvider>
         </Suspense>

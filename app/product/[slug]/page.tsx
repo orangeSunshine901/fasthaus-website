@@ -9,10 +9,21 @@ export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProductPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ variant?: string | string[] }>;
+}) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
   if (!product) notFound();
+
+  const variantParam = (await searchParams).variant;
+  const requestedVariantId = Array.isArray(variantParam) ? variantParam[0] : variantParam;
+  const initialVariant =
+    product.variants.find((variant) => variant.id === requestedVariantId) ?? product.variants[0];
 
   const related = getRelatedProducts(slug, product.category);
 
@@ -43,7 +54,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </span>
           </nav>
 
-          <PDPClient product={product} />
+          <PDPClient
+            key={initialVariant.id}
+            product={product}
+            initialVariantId={initialVariant.id}
+          />
 
           {/* You may also like */}
           {related.length > 0 && (

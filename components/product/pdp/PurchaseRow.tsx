@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Star, ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck } from "lucide-react";
 import { Tooltip } from "radix-ui";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
@@ -52,28 +52,6 @@ export default function PurchaseRow({
           >
             {product.name}
           </h1>
-          {/* <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  size={16}
-                  fill={i < Math.round(product.rating) ? "var(--color-accent-amber)" : "none"}
-                  stroke={
-                    i < Math.round(product.rating)
-                      ? "var(--color-accent-amber)"
-                      : "var(--color-text-disabled)"
-                  }
-                />
-              ))}
-            </div>
-            <span
-              className="text-[14px] font-medium"
-              style={{ color: "var(--color-text-secondary)" }}
-            >
-              {product.rating} · <span className="underline">{product.reviewCount} reviews</span>
-            </span>
-          </div> */}
         </div>
 
         <p

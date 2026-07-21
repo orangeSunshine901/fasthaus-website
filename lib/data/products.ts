@@ -6,6 +6,13 @@ export type ProductVariant = {
   price: number;
   comparePrice?: number;
   stock: number;
+  /** Images used by featured cards for the light-off and light-on states. */
+  featuredImages: {
+    lightOff: string;
+    lightOn: string;
+  };
+  /** Primary image shown when this color is selected on the product page. */
+  mainImage: string;
   images: string[];
 };
 
@@ -64,59 +71,68 @@ export const ADD_ONS: AddOn[] = [
 export const PRODUCTS: Product[] = [
   {
     id: "1",
-    slug: "luna-desk-lamp",
-    name: "Luna Desk Lamp",
-    category: "desk-lamps",
+    slug: "flute-desk-lamp",
+    name: "Flute Lamp",
+    category: "table-lamps",
     description:
-      "A modern desk lamp featuring a textured 3D-printed diffuser, warm integrated LED lighting, and a powder-coated aluminium stem. \n A modern desk lamp featuring a textured 3D-printed diffuser, warm integrated LED lighting, and a powder-coated aluminium stem.",
+      "Inspired by timeless fluted architecture, bringing warmth, texture, and elegance to modern interiors.",
     featured: true,
-    badge: "BESTSELLER",
+    // badge: "BESTSELLER",
     rating: 4.4,
     reviewCount: 32,
     variants: [
       {
-        id: "1-terracotta",
-        color: "Terracotta",
-        colorHex: "#C1694F",
-        sku: "LDL-TRC",
-        price: 220,
+        id: "1-fire-red",
+        color: "Fire Red",
+        colorHex: "#e53b36",
+        sku: "TFL-FR",
+        price: 330,
         stock: 12,
+        featuredImages: {
+          lightOff: "/flute-lamp/flute-fire-red.png",
+          lightOn: "/flute-lamp/flute-fire-red-light.png",
+        },
+        mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
-          "/lamp-feature-1.png",
-          "/lamp-feature-2.png",
-          "/lamp-feature-3.png",
-          "/lamp-feature-4.png",
-          "/collection-image-1.png",
+          "/flute-lamp/flute-fire-red.png",
+          "/flute-lamp/flute-fire-red-light.png",
+          "/flute-lamp/flute-clear-garden.png",
         ],
       },
       {
-        id: "1-beige",
-        color: "Beige",
-        colorHex: "#D9C5A0",
-        sku: "LDL-BGE",
-        price: 220,
+        id: "1-matcha-green",
+        color: "Matcha Green",
+        colorHex: "#c5d371",
+        sku: "TFL-MG",
+        price: 330,
         stock: 8,
+        featuredImages: {
+          lightOff: "/flute-lamp/flute-matcha.png",
+          lightOn: "/flute-lamp/flute-matcha-light.png",
+        },
+        mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
-          "/lamp-feature-2.png",
-          "/lamp-feature-1.png",
-          "/lamp-feature-3.png",
-          "/lamp-feature-4.png",
-          "/collection-image-2.png",
+          "/flute-lamp/flute-matcha.png",
+          "/flute-lamp/flute-matcha-light.png",
+          "/flute-lamp/flute-clear-garden.png",
         ],
       },
       {
-        id: "1-charcoal",
-        color: "Charcoal",
-        colorHex: "#3A3A3A",
-        sku: "LDL-CHR",
-        price: 220,
+        id: "1-graphite-noir",
+        color: "Graphite Noir",
+        colorHex: "#2B2E33",
+        sku: "LDL-GN",
+        price: 350,
         stock: 5,
+        featuredImages: {
+          lightOff: "/flute-lamp/flute-graphite-noir.png",
+          lightOn: "/flute-lamp/flute-graphite-noir-light.png",
+        },
+        mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
-          "/lamp-feature-3.png",
-          "/lamp-feature-1.png",
-          "/lamp-feature-2.png",
-          "/lamp-feature-4.png",
-          "/collection-image-3.png",
+          "/flute-lamp/flute-graphite-noir.png",
+          "/flute-lamp/flute-graphite-noir-light.png",
+          "/flute-lamp/flute-clear-garden.png",
         ],
       },
     ],
@@ -137,7 +153,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible"],
+        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
       },
     ],
     materials: ["PLA", "Stainless Steel"],
@@ -154,13 +170,13 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "2",
-    slug: "arc-table-lamp",
-    name: "Arc Table Lamp",
+    slug: "mushroom-lamp",
+    name: "Mushroom Lamp",
     category: "table-lamps",
     description:
       "A sculptural table lamp with a sweeping arc silhouette and frosted glass diffuser. Pairs effortlessly with modern and mid-century interiors.",
     featured: true,
-    badge: "NEW",
+    // badge: "NEW",
     rating: 4.7,
     reviewCount: 18,
     variants: [
@@ -171,6 +187,11 @@ export const PRODUCTS: Product[] = [
         sku: "ATL-WHT",
         price: 190,
         stock: 10,
+        featuredImages: {
+          lightOff: "/lamp-feature-2.png",
+          lightOn: "/collection-image-2.png",
+        },
+        mainImage: "/mushroom-lamp/lamp-images-main3.jpg",
         images: ["/lamp-feature-2.png", "/collection-image-2.png"],
       },
       {
@@ -180,6 +201,11 @@ export const PRODUCTS: Product[] = [
         sku: "ATL-BLK",
         price: 190,
         stock: 6,
+        featuredImages: {
+          lightOff: "/lamp-feature-4.png",
+          lightOn: "/collection-image-1.png",
+        },
+        mainImage: "/lamp-feature-4.png",
         images: ["/lamp-feature-4.png", "/collection-image-1.png"],
       },
     ],
@@ -200,7 +226,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible"],
+        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
       },
     ],
     materials: ["Frosted Glass", "Powder-Coated Steel"],
@@ -232,6 +258,11 @@ export const PRODUCTS: Product[] = [
         sku: "PTL-SND",
         price: 175,
         stock: 14,
+        featuredImages: {
+          lightOff: "/lamp-feature-3.png",
+          lightOn: "/collection-image-2.png",
+        },
+        mainImage: "/lamp-feature-3.png",
         images: ["/lamp-feature-3.png", "/collection-image-2.png"],
       },
       {
@@ -241,6 +272,11 @@ export const PRODUCTS: Product[] = [
         sku: "PTL-SGE",
         price: 175,
         stock: 7,
+        featuredImages: {
+          lightOff: "/lamp-feature-4.png",
+          lightOn: "/collection-image-2.png",
+        },
+        mainImage: "/lamp-feature-4.png",
         images: ["/lamp-feature-4.png", "/collection-image-2.png"],
       },
     ],
@@ -290,6 +326,11 @@ export const PRODUCTS: Product[] = [
         sku: "RTL-TRC",
         price: 195,
         stock: 9,
+        featuredImages: {
+          lightOff: "/lamp-feature-4.png",
+          lightOn: "/collection-image-3.png",
+        },
+        mainImage: "/lamp-feature-4.png",
         images: ["/lamp-feature-4.png", "/collection-image-3.png"],
       },
       {
@@ -299,6 +340,11 @@ export const PRODUCTS: Product[] = [
         sku: "RTL-CHK",
         price: 195,
         stock: 4,
+        featuredImages: {
+          lightOff: "/lamp-feature-2.png",
+          lightOn: "/collection-image-3.png",
+        },
+        mainImage: "/lamp-feature-2.png",
         images: ["/lamp-feature-2.png", "/collection-image-3.png"],
       },
     ],
@@ -319,7 +365,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible"],
+        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
       },
     ],
     materials: ["Ceramic", "Linen"],
@@ -341,7 +387,7 @@ export const PRODUCTS: Product[] = [
     description:
       "A clean, minimal dome silhouette in spun aluminium. Equally at home in a minimalist apartment or an art director's studio.",
     featured: false,
-    badge: "SALE",
+    // badge: "SALE",
     rating: 4.6,
     reviewCount: 29,
     variants: [
@@ -353,6 +399,11 @@ export const PRODUCTS: Product[] = [
         price: 210,
         comparePrice: 260,
         stock: 6,
+        featuredImages: {
+          lightOff: "/collection-image-4.png",
+          lightOn: "/lamp-feature-4.png",
+        },
+        mainImage: "/collection-image-4.png",
         images: ["/collection-image-4.png", "/lamp-feature-4.png"],
       },
       {
@@ -363,6 +414,11 @@ export const PRODUCTS: Product[] = [
         price: 210,
         comparePrice: 260,
         stock: 3,
+        featuredImages: {
+          lightOff: "/lamp-feature-4.png",
+          lightOn: "/collection-image-4.png",
+        },
+        mainImage: "/lamp-feature-4.png",
         images: ["/lamp-feature-4.png", "/collection-image-4.png"],
       },
     ],
@@ -383,7 +439,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible"],
+        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
       },
     ],
     materials: ["Spun Aluminium"],
@@ -415,6 +471,11 @@ export const PRODUCTS: Product[] = [
         sku: "CFL-NAT",
         price: 310,
         stock: 5,
+        featuredImages: {
+          lightOff: "/collections-hero-img-1.png",
+          lightOn: "/lamp-feature-3.png",
+        },
+        mainImage: "/collections-hero-img-1.png",
         images: ["/collections-hero-img-1.png", "/lamp-feature-3.png"],
       },
     ],
@@ -435,7 +496,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible"],
+        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
       },
     ],
     materials: ["Canvas", "Solid Oak"],
@@ -471,6 +532,15 @@ export function getRelatedProducts(currentSlug: string, category: string): Produ
 
 export function getDefaultVariant(product: Product): ProductVariant {
   return product.variants[0];
+}
+
+export function getVariantMainImage(variant: ProductVariant): string {
+  return variant.mainImage;
+}
+
+export function getVariantGalleryImages(variant: ProductVariant): string[] {
+  const mainImage = getVariantMainImage(variant);
+  return [mainImage, ...variant.images.filter((image) => image !== mainImage)];
 }
 
 export function formatPrice(amount: number): string {

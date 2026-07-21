@@ -23,8 +23,8 @@ export default function CollectionsPage() {
           <span style={{ color: "var(--color-text-primary)" }}>Collection</span>
         </nav>
 
-        {/* Page header + sort dropdown */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-between mb-8">
+        {/* Page header */}
+        <div className="mb-8">
           <div>
             <h1 className="type-display-xl" style={{ color: "var(--color-text-primary)" }}>
               Collection
@@ -34,22 +34,12 @@ export default function CollectionsPage() {
               love.
             </p>
           </div>
-          <select
-            aria-label="Sort products"
-            className="input-field min-h-12 w-full px-3 pr-8 sm:min-h-10 sm:w-auto sm:self-auto"
-            style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-bg)" }}
-          >
-            <option>Sort: Best Sellers</option>
-            <option>Sort: Newest</option>
-            <option>Sort: Price Low–High</option>
-            <option>Sort: Price High–Low</option>
-          </select>
         </div>
 
         {/* Product grid */}
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
           {PRODUCTS.map((product) => (
-            <ProductCard key={product.id} product={product} showRating />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>

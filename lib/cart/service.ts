@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { getVariantMainImage } from "@/lib/data/products";
 import { createServiceClient } from "@/lib/supabase/server";
 import { clearCartId, readCartId, setCartId } from "./cookie";
 import { findAddOn, findVariant, MAX_CART_QUANTITY, toMinorUnits } from "./catalog";
@@ -36,7 +37,7 @@ async function cartDto(cart: CartRow): Promise<CartDto> {
       return addOn ? [{ id: addOn.id, name: addOn.name, imageUrl: addOn.image, unitPrice: toMinorUnits(addOn.price), quantity: Math.min(saved.quantity, row.quantity) }] : [];
     });
     const lineTotal = unitPrice * row.quantity + addOns.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-    return { itemId: row.id, productId: row.product_id, variantId: row.variant_id, slug: catalog?.product.slug ?? "", name: catalog?.product.name ?? "Unavailable product", variantName: catalog?.variant.color ?? "", imageUrl: catalog?.variant.images[0] ?? null, unitPrice, quantity: row.quantity, lineTotal, available, maxQuantity: catalog ? Math.min(catalog.variant.stock, MAX_CART_QUANTITY) : 0, addOns };
+    return { itemId: row.id, productId: row.product_id, variantId: row.variant_id, slug: catalog?.product.slug ?? "", name: catalog?.product.name ?? "Unavailable product", variantName: catalog?.variant.color ?? "", imageUrl: catalog ? getVariantMainImage(catalog.variant) : null, unitPrice, quantity: row.quantity, lineTotal, available, maxQuantity: catalog ? Math.min(catalog.variant.stock, MAX_CART_QUANTITY) : 0, addOns };
   });
   return { id: cart.id, currency: "AED", items, itemCount: items.reduce((sum, item) => sum + item.quantity, 0), subtotal: items.reduce((sum, item) => sum + item.lineTotal, 0), warnings, updatedAt: cart.updated_at };
 }

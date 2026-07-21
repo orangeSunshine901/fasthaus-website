@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Check, Clock, ShoppingBag } from "lucide-react";
 import { notFound } from "next/navigation";
+import PurchaseCompleted from "@/components/analytics/PurchaseCompleted";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { createServiceClient } from "@/lib/supabase/server";
 
@@ -17,6 +18,13 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--color-bg)" }}>
+      {confirmed && (
+        <PurchaseCompleted
+          orderId={order.id}
+          revenue={Number(order.total)}
+          itemCount={(items ?? []).reduce((sum, item) => sum + Number(item.quantity), 0)}
+        />
+      )}
       <div className="mx-auto max-w-[760px] px-5 py-16 md:py-24">
         <div className="mb-12 flex flex-col items-center gap-4 text-center">
           <span className="flex h-14 w-14 items-center justify-center rounded-full border-2" style={{ borderColor: confirmed ? "var(--color-success)" : "var(--color-accent-amber)" }}>

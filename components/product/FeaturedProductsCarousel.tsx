@@ -27,7 +27,6 @@ function ProductCard({
       summary={summary}
       compactMobile={compactMobile}
       activeMobile={activeMobile}
-      hoverImages={{ off: "/luna-lamp-off.png", on: "/luna-lamp-on.png" }}
     />
   );
 }
@@ -37,8 +36,6 @@ export default function FeaturedProductsCarousel({ products, summaries }: Props)
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const [viewportVisibility, setViewportVisibility] = useState(0);
-  const lunaProduct = products.find((product) => product.slug === "luna-desk-lamp") ?? products[0];
-
   const updateCarouselState = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -80,11 +77,11 @@ export default function FeaturedProductsCarousel({ products, summaries }: Props)
                 key={product.id}
                 className="min-w-0 flex-[0_0_88%] pl-4"
                 role="group"
-                aria-label={`Luna desk lamp slide ${index + 1}`}
+                aria-label={`${product.name} slide ${index + 1}`}
               >
                 <ProductCard
-                  product={lunaProduct}
-                  summary={summaries[lunaProduct.slug] ?? lunaProduct.description}
+                  product={product}
+                  summary={summaries[product.slug] ?? product.description}
                   compactMobile
                   activeMobile={
                     selectedIndex === index && viewportVisibility >= (index === 0 ? 0.65 : 0.45)

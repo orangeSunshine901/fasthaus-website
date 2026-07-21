@@ -1,12 +1,12 @@
 # FastHaus analytics
 
-PostHog is initialized in `instrumentation-client.ts` and remains opted out until the visitor accepts analytics. Consent is stored under `fasthaus-analytics-consent`. Declining stops recording, opts out, and resets the anonymous identity.
+PostHog is initialized in `instrumentation-client.ts` and remains opted out, with persistence disabled, until the visitor accepts Analytics cookies in Silktide Consent Manager. Silktide is the only source of truth for consent. Declining stops recording, opts out, disables persistence, and resets the anonymous identity.
 
 All forms, visible text, and element attributes are masked in replay. Autocapture is disabled; only pageviews, exceptions, and the events below are sent. Never add email, phone, address, payment fields, authentication values, or free text to event properties.
 
 ## Environment
 
-Set `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` and `NEXT_PUBLIC_POSTHOG_HOST` (EU default: `https://eu.i.posthog.com`). The same token is used by the server SDK for confirmed Geidea purchases.
+Set `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` and `NEXT_PUBLIC_POSTHOG_HOST` (EU default: `https://eu.i.posthog.com`). Confirmed purchases are captured from the order confirmation page only after Silktide restores granted Analytics consent.
 
 ## Event taxonomy
 
@@ -21,7 +21,7 @@ Set `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` and `NEXT_PUBLIC_POSTHOG_HOST` (EU defau
 | `product_added_to_cart` | Add to cart / buy now | product identity, price, quantity, cart value |
 | `cart_viewed` | Non-empty cart loads/changes | item count, cart value, currency |
 | `checkout_started` | Checkout click/page | item count, cart value, currency |
-| `purchase_completed` | Confirmed payment callback; demo checkout fallback | order ID, revenue, currency, item count |
+| `purchase_completed` | Confirmed order page loads with Analytics consent | order ID, revenue, currency, item count |
 | `enquiry_started` | Contact submit starts | none |
 | `enquiry_submitted` | Contact API succeeds | none |
 

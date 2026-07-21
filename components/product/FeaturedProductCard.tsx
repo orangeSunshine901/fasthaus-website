@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { Tooltip } from "radix-ui";
 import type { Product } from "@/lib/data/products";
 
 type Props = {
   product: Product;
   summary: string;
-  hoverImages?: { off: string; on: string };
   compactMobile?: boolean;
   activeMobile?: boolean;
 };
@@ -15,48 +16,60 @@ type Props = {
 export default function FeaturedProductCard({
   product,
   summary,
-  hoverImages,
   compactMobile = false,
   activeMobile,
 }: Props) {
   const defaultVariant = product.variants[0];
+  const [selectedVariant, setSelectedVariant] = useState(defaultVariant);
+  const displayedImages = {
+    off: selectedVariant.featuredImages.lightOff,
+    on: selectedVariant.featuredImages.lightOn,
+  };
 
   return (
-    <Link
-      href={`/product/${product.slug}`}
-      className={`group flex h-full flex-col rounded-[14px] border transition-transform duration-200 hover:-translate-y-0.5 ${
+    <article
+      className={`group relative flex h-full flex-col rounded-[14px] border border-transparent transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-[#575757] ${
         compactMobile ? "gap-2 p-3 md:gap-3 md:p-4" : "gap-2 p-4 pt-0"
       }`}
       style={{
-        borderColor: "#575757",
         backgroundColor: "transparent",
       }}
     >
       <div
-        className={`media-rounded relative ${hoverImages ? "-mx-4 w-[calc(100%+2rem)]" : "w-full"}`}
+        className={`media-rounded relative ${
+          compactMobile
+            ? "w-full"
+            : displayedImages
+              ? "-mx-4 w-[calc(100%+2rem)]"
+              : "w-full"
+        }`}
         style={{
           // backgroundColor: "#111111",
           aspectRatio: compactMobile
-            ? hoverImages
-              ? "1260 / 1376"
-              : "238 / 260"
-            : hoverImages
+            ? "238 / 260"
+            : displayedImages
               ? "1260 / 1720"
               : "238 / 325",
         }}
       >
         <Image
-          src={hoverImages ? hoverImages.off : defaultVariant.images[0]}
+          src={displayedImages.off}
           alt={product.name}
           fill
-          className={`object-cover ${
-            product.slug === "luna-desk-lamp" ? "scale-80 md:scale-100" : ""
-          }`}
+          className={`object-cover transition-opacity duration-500 ${
+            displayedImages
+              ? activeMobile === undefined
+                ? "opacity-100 group-hover:opacity-0"
+                : activeMobile
+                  ? "opacity-0"
+                  : "opacity-100"
+              : ""
+          } ${product.slug === "flute-desk-lamp" ? "md:scale-[1.2]" : ""}`}
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
         />
-        {hoverImages && (
+        {displayedImages?.on && (
           <Image
-            src={hoverImages.on}
+            src={displayedImages.on}
             alt=""
             fill
             className={`object-cover transition-all duration-500 ${
@@ -65,7 +78,7 @@ export default function FeaturedProductCard({
                 : activeMobile
                   ? "opacity-100"
                   : "opacity-0"
-            } ${product.slug === "luna-desk-lamp" ? "scale-80 md:scale-100" : ""}`}
+            } ${product.slug === "flute-desk-lamp" ? "md:scale-[1.2]" : ""}`}
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
           />
         )}
@@ -74,15 +87,16 @@ export default function FeaturedProductCard({
       <div
         className={`${compactMobile ? "mt-2 md:mt-4" : "mt-4"} flex justify-center transition-all duration-500 ${
           activeMobile === undefined
-            ? "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+            ? "pointer-events-none translate-y-2 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 focus-within:pointer-events-auto focus-within:translate-y-0 focus-within:opacity-100"
             : activeMobile
-              ? "translate-y-0 opacity-100"
-              : "translate-y-2 opacity-0"
+              ? "pointer-events-auto translate-y-0 opacity-100"
+              : "pointer-events-none translate-y-2 opacity-0"
         }`}
         style={{ perspective: "1000px" }}
       >
-        <div
-          className="px-4 py-2 rounded-[10px] outline outline-1 outline-offset-[-1px] inline-flex items-center gap-2 translate-y-[-16px]"
+        <Link
+          href={`/product/${product.slug}?variant=${encodeURIComponent(selectedVariant.id)}`}
+          className="relative z-10 inline-flex translate-y-[-16px] items-center gap-2 rounded-[10px] px-4 py-2 outline outline-1 outline-offset-[-1px]"
           style={{
             outlineColor: "#575757",
             backdropFilter: "blur(10px)",
@@ -98,7 +112,7 @@ export default function FeaturedProductCard({
           <div className="w-5 h-5 relative">
             <Image src="/ArrowRight.svg" alt="" fill className="object-contain" />
           </div>
-        </div>
+        </Link>
       </div>
 
       <div className="flex items-start justify-between gap-4">
@@ -110,7 +124,7 @@ export default function FeaturedProductCard({
           style={{ color: "#FFFFFF" }}
         >
           <Image src="/dirham-icon.svg" alt="AED" width={12} height={12} className="inline-block" />
-          <span>{defaultVariant.price}</span>
+          <span>{selectedVariant.price}</span>
         </span>
       </div>
 
@@ -118,20 +132,40 @@ export default function FeaturedProductCard({
         {summary}
       </p>
 
-      <div className="flex items-center gap-2">
-        {product.variants.map((variant) => (
-          <span
-            key={variant.id}
-            className="h-[13px] w-[13px] rounded-full border"
-            style={{
-              backgroundColor: variant.colorHex,
-              borderColor: "rgba(255,255,255,0.16)",
-            }}
-            aria-label={variant.color}
-            title={variant.color}
-          />
-        ))}
-      </div>
-    </Link>
+      <Tooltip.Provider delayDuration={0}>
+        <div className="flex items-center gap-3">
+          {product.variants.map((variant) => (
+            <Tooltip.Root key={variant.id}>
+              <Tooltip.Trigger asChild>
+                <button
+                  type="button"
+                  onPointerDown={compactMobile ? (event) => event.stopPropagation() : undefined}
+                  onClick={() => setSelectedVariant(variant)}
+                  className={`relative z-10 h-[16px] w-[16px] rounded-full border  transition-transform duration-200 ${
+                    selectedVariant.id === variant.id ? "" : "hover:scale-[1.24]"
+                  }`}
+                  style={{
+                    backgroundColor: variant.colorHex,
+                    outline: selectedVariant.id === variant.id ? "2px solid white" : "none",
+                    outlineOffset: "2px",
+                  }}
+                  aria-label={`Select ${variant.color}`}
+                  aria-pressed={selectedVariant.id === variant.id}
+                />
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  sideOffset={6}
+                  className="z-50 rounded-md bg-[var(--color-text-primary)] px-2.5 py-1.5 text-xs font-medium text-white shadow-md"
+                >
+                  {variant.color}
+                  <Tooltip.Arrow className="fill-[var(--color-text-primary)]" />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          ))}
+        </div>
+      </Tooltip.Provider>
+    </article>
   );
 }
