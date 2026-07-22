@@ -37,19 +37,11 @@ export default function FeaturedProductCard({
     >
       <div
         className={`media-rounded relative ${
-          compactMobile
-            ? "w-full"
-            : displayedImages
-              ? "-mx-4 w-[calc(100%+2rem)]"
-              : "w-full"
+          compactMobile ? "w-full" : displayedImages ? "-mx-4 w-[calc(100%+2rem)]" : "w-full"
         }`}
         style={{
           // backgroundColor: "#111111",
-          aspectRatio: compactMobile
-            ? "238 / 260"
-            : displayedImages
-              ? "1260 / 1720"
-              : "238 / 325",
+          aspectRatio: compactMobile ? "238 / 260" : displayedImages ? "1260 / 1720" : "238 / 325",
         }}
       >
         <Image
@@ -64,7 +56,7 @@ export default function FeaturedProductCard({
                   ? "opacity-0"
                   : "opacity-100"
               : ""
-          } ${product.slug === "flute-desk-lamp" ? "md:scale-[1.2]" : ""}`}
+          } ${product.slug === "flute-desk-lamp" ? "md:scale-[1.4]" : ""}`}
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
         />
         {displayedImages?.on && (
@@ -78,7 +70,7 @@ export default function FeaturedProductCard({
                 : activeMobile
                   ? "opacity-100"
                   : "opacity-0"
-            } ${product.slug === "flute-desk-lamp" ? "md:scale-[1.2]" : ""}`}
+            } ${product.slug === "flute-desk-lamp" ? "md:scale-[1.4]" : ""}`}
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
           />
         )}
