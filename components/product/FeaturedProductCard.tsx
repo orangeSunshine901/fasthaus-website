@@ -48,15 +48,15 @@ export default function FeaturedProductCard({
           src={displayedImages.off}
           alt={product.name}
           fill
-          className={`object-cover transition-opacity duration-500 ${
+          className={`md:scale-[1] object-cover transition-opacity duration-500 ${
             displayedImages
               ? activeMobile === undefined
                 ? "opacity-100 group-hover:opacity-0"
                 : activeMobile
                   ? "opacity-0"
-                  : "opacity-100"
+                  : "opacity-100 "
               : ""
-          } ${product.slug === "flute-desk-lamp" ? "md:scale-[1.4]" : ""}`}
+          }`}
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
         />
         {displayedImages?.on && (
@@ -64,13 +64,13 @@ export default function FeaturedProductCard({
             src={displayedImages.on}
             alt=""
             fill
-            className={`object-cover transition-all duration-500 ${
+            className={`md:scale-[1] object-cover transition-all duration-500  ${
               activeMobile === undefined
                 ? "opacity-0 group-hover:opacity-100"
                 : activeMobile
                   ? "opacity-100"
                   : "opacity-0"
-            } ${product.slug === "flute-desk-lamp" ? "md:scale-[1.4]" : ""}`}
+            }`}
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
           />
         )}
