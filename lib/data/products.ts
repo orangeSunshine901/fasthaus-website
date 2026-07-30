@@ -71,8 +71,8 @@ export const ADD_ONS: AddOn[] = [
 export const PRODUCTS: Product[] = [
   {
     id: "1",
-    slug: "flute-desk-lamp",
-    name: "Flute Lamp",
+    slug: "nujaj-desk-lamp",
+    name: "NUJĀJ",
     category: "table-lamps",
     description:
       "Inspired by timeless fluted architecture, bringing warmth, texture, and elegance to modern interiors.",
@@ -86,7 +86,7 @@ export const PRODUCTS: Product[] = [
         color: "Matcha Green",
         colorHex: "#c5d371",
         sku: "TFL-MG",
-        price: 330,
+        price: 299,
         stock: 8,
         featuredImages: {
           lightOff: "/flute-lamp/flute-matcha-off.png",
@@ -104,7 +104,7 @@ export const PRODUCTS: Product[] = [
         color: "Fire Red",
         colorHex: "#e53b36",
         sku: "TFL-FR",
-        price: 330,
+        price: 299,
         stock: 12,
         featuredImages: {
           lightOff: "/flute-lamp/flute-fire-red-off.png",
@@ -122,7 +122,7 @@ export const PRODUCTS: Product[] = [
         color: "Clear",
         colorHex: "#F5F5F5",
         sku: "LDL-CLR",
-        price: 350,
+        price: 299,
         stock: 5,
         featuredImages: {
           lightOff: "/flute-lamp/flute-clear-off.png",
@@ -170,13 +170,13 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "2",
-    slug: "mushroom-lamp",
-    name: "Mushroom Lamp",
+    slug: "kasane-lamp",
+    name: "KASANE",
     category: "table-lamps",
     description:
-      "A sculptural table lamp with a sweeping arc silhouette and frosted glass diffuser. Pairs effortlessly with modern and mid-century interiors.",
+      "Desert sand ripples, translated into a sculptural lamp that casts a soft, calming glow.",
     featured: true,
-    // badge: "NEW",
+    badge: "BESTSELLER",
     rating: 4.7,
     reviewCount: 18,
     variants: [
@@ -185,7 +185,7 @@ export const PRODUCTS: Product[] = [
         color: "Cobalt Blue",
         colorHex: "#007ffe",
         sku: "ML-CB",
-        price: 190,
+        price: 379,
         stock: 6,
         featuredImages: {
           lightOff: "/mushroom-lamp/mushroom-blue-off.png",
@@ -204,7 +204,7 @@ export const PRODUCTS: Product[] = [
         color: "Burnt Orange",
         colorHex: "#f7633a",
         sku: "ML-BO",
-        price: 190,
+        price: 379,
         stock: 6,
         featuredImages: {
           lightOff: "/mushroom-lamp/mushroom-orange-off.png",
@@ -224,7 +224,7 @@ export const PRODUCTS: Product[] = [
         color: "White",
         colorHex: "#F5F5F5",
         sku: "ML-WHT",
-        price: 190,
+        price: 379,
         stock: 10,
         featuredImages: {
           lightOff: "/mushroom-lamp/mushroom-white-off.png",
@@ -272,11 +272,11 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "3",
-    slug: "stack-lamp",
-    name: "Stack Lamp",
+    slug: "nasaq-lamp",
+    name: "NASAQ",
     category: "table-lamps",
     description:
-      "Compact and portable with a rechargeable base. Move it from desk to dining table to bedside without hunting for an outlet.",
+      "Layered, rounded forms inspired by early-2010s abstraction create a warm, calm presence for slower evenings.",
     featured: true,
     rating: 4.2,
     reviewCount: 24,
@@ -286,7 +286,7 @@ export const PRODUCTS: Product[] = [
         color: "Burnt Orange",
         colorHex: "#F7633A",
         sku: "STL-ORNG",
-        price: 175,
+        price: 329,
         stock: 14,
         featuredImages: {
           lightOff: "/stack-lamp/stack-lamp-orange-off.png",
@@ -300,7 +300,7 @@ export const PRODUCTS: Product[] = [
         color: "Cobalt Blue",
         colorHex: "#007ffe",
         sku: "STL-BLU",
-        price: 175,
+        price: 329,
         stock: 7,
         featuredImages: {
           lightOff: "/stack-lamp/stack-lamp-blue-off.png",
@@ -314,7 +314,7 @@ export const PRODUCTS: Product[] = [
         color: "White",
         colorHex: "#F5F5F5",
         sku: "STL-WHT",
-        price: 175,
+        price: 329,
         stock: 7,
         featuredImages: {
           lightOff: "/stack-lamp/stack-lamp-white-off.png",
@@ -340,7 +340,7 @@ export const PRODUCTS: Product[] = [
         lines: ["Integrated LED 350lm 5W", "Adjustable 2700–4000K"],
       },
     ],
-    materials: ["Ceramic", "Aluminium"],
+    materials: ["PLA", "Aluminium"],
     dimensions: { image: "/lamp-feature-3.png", heightCm: 24, widthCm: 14 },
     perfectFor: [
       { icon: "/workspaces-icon.svg", label: "Workspaces" },
@@ -354,11 +354,11 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "4",
-    slug: "pearl-lamp",
-    name: "Pearl Lamp",
+    slug: "hamrah-lamp",
+    name: "HAMRAH",
     category: "table-lamps",
     description:
-      "A tactile ribbed ceramic body that plays with light and shadow. Each piece is slightly unique — the result of a hand-finishing process.",
+      "A ribbed sculptural lamp inspired by pearl-diving heritage, with a hidden warm glow that feels calm and inviting.",
     featured: true,
     rating: 4.5,
     reviewCount: 11,
@@ -368,7 +368,7 @@ export const PRODUCTS: Product[] = [
         color: "Fire Red",
         colorHex: "#b50e0e",
         sku: "PTL-FRD",
-        price: 195,
+        price: 399,
         stock: 9,
         featuredImages: {
           lightOff: "/pearl-lamp/pearl-lamp-red-off.png",
@@ -382,7 +382,7 @@ export const PRODUCTS: Product[] = [
         color: "Burnt Orange",
         colorHex: "#F7633A",
         sku: "PTL-ORNG",
-        price: 195,
+        price: 399,
         stock: 4,
         featuredImages: {
           lightOff: "/pearl-lamp/pearl-lamp-orange-off.png",
@@ -396,7 +396,7 @@ export const PRODUCTS: Product[] = [
         color: "Cobalt Blue",
         colorHex: "#007ffe",
         sku: "PTL-BLU",
-        price: 195,
+        price: 399,
         stock: 4,
         featuredImages: {
           lightOff: "/pearl-lamp/pearl-lamp-blue-off.png",
@@ -410,7 +410,7 @@ export const PRODUCTS: Product[] = [
         color: "White",
         colorHex: "#F5F5F5",
         sku: "PTL-WHT",
-        price: 195,
+        price: 399,
         stock: 4,
         featuredImages: {
           lightOff: "/pearl-lamp/pearl-lamp-white-off.png",

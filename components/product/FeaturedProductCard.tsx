@@ -125,7 +125,7 @@ export default function FeaturedProductCard({
       </p>
 
       <Tooltip.Provider delayDuration={0}>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mt-1">
           {product.variants.map((variant) => (
             <Tooltip.Root key={variant.id}>
               <Tooltip.Trigger asChild>

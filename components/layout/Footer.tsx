@@ -24,7 +24,6 @@ const linkColumns: FooterColumn[] = [
     links: [
       { label: "About FastHaus", href: "/about" },
       { label: "Custom Projects", href: "/contact" },
-      { label: "Journal" },
     ],
   },
   {
@@ -33,7 +32,7 @@ const linkColumns: FooterColumn[] = [
       { label: "Shipping Policy", href: "/legal/shipping" },
       { label: "Refund & Returns", href: "/legal/refunds" },
       { label: "Warranty", href: "/legal/warranty" },
-      { label: "Care Guide" },
+      // { label: "Care Guide" },
       { label: "FAQ", href: "/faq" },
     ],
   },
@@ -220,7 +219,10 @@ export default function Footer() {
             <FooterNewsletter />
             <p className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
               By subscribing you agree to our{" "}
-              <Link href="/legal/terms" className="underline transition-colors hover:text-[var(--color-accent-amber)]">
+              <Link
+                href="/legal/terms"
+                className="underline transition-colors hover:text-[var(--color-accent-amber)]"
+              >
                 Terms and Conditions
               </Link>
               .
