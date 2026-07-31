@@ -11,7 +11,7 @@ function initializeSilktide() {
     eventName: "stcm_consent_update",
     backdrop: { show: true },
     icon: { position: "bottomLeft" },
-    prompt: { position: "bottomRight" },
+    prompt: { position: "bottomRight", showRejectNonEssentialButton: false },
     consentTypes: [
       {
         id: "essential",
@@ -27,7 +27,7 @@ function initializeSilktide() {
         description:
           "<p>These cookies help us understand how visitors use Fasthaus, which products and pages are most popular, and where we can improve the shopping experience. They may also support privacy-protected session replay and error monitoring.</p>",
         required: false,
-        defaultValue: false,
+        defaultValue: true,
         gtag: "analytics_storage",
         onAccept: dispatchConsentChange,
         onReject: dispatchConsentChange,
@@ -38,7 +38,7 @@ function initializeSilktide() {
         description:
           "<p>These cookies help us measure advertising performance, understand which campaigns lead to visits or purchases, and show more relevant advertising on other websites and platforms.</p>",
         required: false,
-        defaultValue: false,
+        defaultValue: true,
         gtag: ["ad_storage", "ad_user_data", "ad_personalization"],
       },
     ],
@@ -46,10 +46,8 @@ function initializeSilktide() {
       prompt: {
         description:
           "<p>We use essential cookies to run Fasthaus and, with your permission, optional cookies to understand and improve your experience.</p>",
-        acceptAllButtonText: "Accept all",
+        acceptAllButtonText: "Accept all cookies",
         acceptAllButtonAccessibleLabel: "Accept all cookies",
-        rejectNonEssentialButtonText: "Reject non-essential",
-        rejectNonEssentialButtonAccessibleLabel: "Reject all non-essential cookies",
         preferencesButtonText: "Preferences",
         preferencesButtonAccessibleLabel: "Open cookie preferences",
       },

@@ -4,33 +4,29 @@ import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ExpandableGallery } from "@/components/ui/gallery-animation";
 import { Progress } from "@/components/ui/progress";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const heroText =
-  "Design gives it form. Story gives it life. Fasthaus makes objects for spaces that feel personal.";
+  "Before anything becomes a shape, a material, or a glow, it starts with a feeling. A sense of how the space should feel like";
 
 const storyPanels = [
   {
-    image: "/who-we-are-img.png",
-    alt: "Hand hovering over a warm ribbed Fasthaus lamp",
+    image: "/mushroom-lamp/mushroom-lamp-close.jpg",
+    alt: "Close up shot of the ",
     text: heroText,
   },
   {
-    image: "/our-process-img.png",
-    alt: "Fasthaus lamp glowing on a studio shelf",
-    text: "Objects shaped with intention, built for shelves, desks, and the quiet corners people actually use.",
-  },
-  {
-    image: "/collections-hero-img-1.png",
+    image: "/about/lamp-desk-off.jpg",
     alt: "Warm Fasthaus lamp styled in an interior",
-    text: "Every piece starts with a simple form, then earns its place through texture, glow, and restraint.",
+    text: "Desks, shelves, bedsides, and quiet corners are part of everyday life. They deserve objects that feel useful, warm, and not just decorative.",
   },
   {
-    image: "/collections-hero-img-2.png",
+    image: "/about/lamp-desk-on.jpg",
     alt: "Small white Fasthaus lamp glowing on a table",
-    text: "The result is lighting that feels personal without asking the room to work around it.",
+    text: "We at fasthaus create 3D-printed lamps and spatial objects with intention, soft glow, and a little story.",
   },
 ];
 
@@ -58,18 +54,9 @@ const philosophy = [
 ];
 
 const studioImages = [
-  {
-    src: "/our-process-img.png",
-    alt: "Fasthaus lamp glowing in a studio setting",
-  },
-  {
-    src: "/collections-hero-img-1.png",
-    alt: "Fasthaus lamp in a warm interior",
-  },
-  {
-    src: "/collections-hero-img-2.png",
-    alt: "White Fasthaus lamp glowing on a side table",
-  },
+  "/our-process-img.png",
+  "/collections-hero-img-1.png",
+  "/collections-hero-img-2.png",
 ];
 
 function SplitHeroText() {
@@ -399,27 +386,9 @@ export default function AboutScrollStory() {
               <h2 className="type-display-lg text-[var(--color-text-primary)]">
                 Inside the Studio
               </h2>
-              <p className="type-body-md mt-3 text-[var(--color-text-secondary)]">
-                A closer look at the spaces, textures, and warm light that guide each Fasthaus
-                object.
-              </p>
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:flex md:gap-6">
-              {studioImages.map((image) => (
-                <div
-                  key={image.src}
-                  data-studio-reveal
-                  className="media-rounded relative aspect-square overflow-hidden md:w-[min(32vw,380px)] md:flex-none"
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    sizes="(min-width: 1024px) 380px, (min-width: 640px) 33vw, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-              ))}
+            <div data-studio-reveal>
+              <ExpandableGallery images={studioImages} />
             </div>
           </div>
         </div>

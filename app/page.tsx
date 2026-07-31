@@ -81,11 +81,11 @@ export default function HomePage() {
             className="scroll-reveal-up absolute inset-x-5 bottom-2 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
           >
             <h1 className="type-display-xl self-stretch text-white">
-              Modern Lamps, Made to Glow Differently
+              Soft glow, sharp form, better room energy.
             </h1>
             <p className="type-body-md self-stretch text-white/90">
-              Sculptural 3D-printed lamps designed to bring warmth, form, and character into
-              everyday spaces.
+              We make 3D printed objects for spaces that need more feeling, less filler, and a
+              little story in the corner.
             </p>
             <Link href="/collection" className="btn btn-primary w-full self-stretch">
               Shop Collection
@@ -101,13 +101,11 @@ export default function HomePage() {
           <div className="container-page absolute left-1/2 top-[420px] z-10 hidden -translate-x-1/2 md:block">
             <div data-scroll className="scroll-reveal-up flex flex-col items-start gap-6">
               <h1 className="type-display-xl max-w-lg text-white">
-                Modern Lamps,
-                <br />
-                Made to Glow Differently
+                Soft glow, sharp form, better room energy.
               </h1>
               <p className="type-body-md max-w-md text-white/80">
-                Sculptural 3D-printed lamps designed to bring warmth, form, and character into
-                everyday spaces.
+                We make 3D printed objects for spaces that need more feeling, less filler, and a
+                little story in the corner.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link href="/collection" className="btn btn-primary">
@@ -269,7 +267,7 @@ export default function HomePage() {
                   href="/about"
                   className="btn btn-secondary text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.04)] transition-colors hover:bg-neutral-700 mt-4"
                 >
-                  Learn more about fasthaus
+                  Learn more about us
                 </Link>
               </div>
             </div>

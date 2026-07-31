@@ -14,7 +14,10 @@ type SilktideConsentType = {
 type SilktideConsentManagerConfig = {
   backdrop?: { show?: boolean };
   icon?: { position?: string };
-  prompt?: { position?: string };
+  prompt?: {
+    position?: string;
+    showRejectNonEssentialButton?: boolean;
+  };
   eventName?: string;
   consentTypes: SilktideConsentType[];
   text?: {

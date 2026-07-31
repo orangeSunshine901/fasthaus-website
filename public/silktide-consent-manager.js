@@ -876,11 +876,13 @@ class SilktideConsentManager {
     // Reject button
     const rejectNonEssentialButtonText = this.config.text?.prompt?.rejectNonEssentialButtonText || 'Reject non-essential';
     const rejectNonEssentialButtonLabel = this.config.text?.prompt?.rejectNonEssentialButtonAccessibleLabel;
-    const rejectNonEssentialButton = `<button class="stcm-reject-all stcm-button stcm-button-primary"${
-      rejectNonEssentialButtonLabel && rejectNonEssentialButtonLabel !== rejectNonEssentialButtonText
-        ? ` aria-label="${rejectNonEssentialButtonLabel}"`
-        : ''
-    }>${rejectNonEssentialButtonText}</button>`;
+    const rejectNonEssentialButton = this.config.prompt?.showRejectNonEssentialButton === false
+      ? ''
+      : `<button class="stcm-reject-all stcm-button stcm-button-primary"${
+        rejectNonEssentialButtonLabel && rejectNonEssentialButtonLabel !== rejectNonEssentialButtonText
+          ? ` aria-label="${rejectNonEssentialButtonLabel}"`
+          : ''
+      }>${rejectNonEssentialButtonText}</button>`;
 
     // Preferences button
     const preferencesButtonText = this.config.text?.prompt?.preferencesButtonText || 'Preferences';
@@ -1104,12 +1106,14 @@ class SilktideConsentManager {
     if (show) {
       this.showBackdrop();
       this.hideCookieIcon();
-      this.removeBanner();
+      if (this.prompt) {
+        this.prompt.style.display = 'none';
+      }
       this.preventBodyScroll();
 
-      // Focus the close button
-      const modalCloseButton = this.preferences.querySelector('.stcm-modal-close');
-      modalCloseButton.focus();
+      // Focus the primary action when the preferences modal opens.
+      const modalSaveButton = this.preferences.querySelector('.stcm-modal-save');
+      modalSaveButton?.focus();
 
       // Trigger optional onPreferencesOpen callback
       if (typeof this.config.onPreferencesOpen === 'function') {
@@ -1118,10 +1122,19 @@ class SilktideConsentManager {
 
       this.updateCheckboxState(false); // read from storage when opening
     } else {
-      // Close the modal without saving anything - saving is handled by the "Save and Close" and "Reject All" buttons only
-      this.hideBackdrop();
-      this.showCookieIcon();
+      // Closing preferences without an initial choice returns the visitor to the
+      // prompt, so they must explicitly accept or reject optional cookies.
       this.allowBodyScroll();
+
+      if (!this.hasConsented() && this.prompt) {
+        this.prompt.style.display = '';
+        this.showBackdrop();
+        this.hideCookieIcon();
+        this.prompt.querySelector('.stcm-accept-all')?.focus();
+      } else {
+        this.hideBackdrop();
+        this.showCookieIcon();
+      }
 
       // Trigger optional onPreferencesClose callback
       if (typeof this.config.onPreferencesClose === 'function') {
@@ -1296,10 +1309,6 @@ class SilktideConsentManager {
       // Close button - only closes modal, doesn't save or fire events
       closeButton?.addEventListener('click', () => {
         this.toggleModal(false);
-        this.hideBackdrop();
-        
-        // If user hasn't made initial choice, show prompt again next time
-        // Otherwise, just close without doing anything
       });
 
       // Save button - reads checkbox states and batch updates
@@ -1384,8 +1393,6 @@ class SilktideConsentManager {
           this.toggleModal(false);
         }
       });
-
-      closeButton?.focus();
 
       // Note: Checkboxes no longer trigger immediate consent updates
       // Users can toggle them freely, and consent is only updated when clicking "Save and Close"

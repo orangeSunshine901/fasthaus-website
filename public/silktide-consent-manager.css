@@ -456,6 +456,21 @@ Modal - Footer
   text-decoration: underline;
 }
 
+#stcm-modal .stcm-modal-reject-all {
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--primaryColor);
+  padding: 0;
+  text-decoration: underline;
+}
+
+#stcm-modal .stcm-modal-reject-all:hover {
+  background-color: transparent;
+  color: var(--textColor);
+  opacity: 1;
+}
+
 /* Cookie Icon */
 #stcm-icon {
   display: none;

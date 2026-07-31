@@ -2,15 +2,46 @@ import ShopLayout from "@/components/layout/ShopLayout";
 import ProductCard from "@/components/product/ProductCard";
 import { PRODUCTS } from "@/lib/data/products";
 import Link from "next/link";
-import CollectionHero from "@/components/collection/CollectionHero";
+import CollectionHero, { type CollectionHeroSlide } from "@/components/collection/CollectionHero";
 import CollectionViewed from "@/components/analytics/CollectionViewed";
+
+const COLLECTION_HERO_SLIDES = [
+  {
+    id: "stack-blue",
+    lampName: "NASAQ",
+    colorName: "BLUE",
+    image: "/stack-lamp/stack-lamp-blue-off.png",
+    colors: ["#101522", "#155EEF", "#C8DBFF", "#F7F9FF"],
+  },
+  {
+    id: "pearl-red",
+    lampName: "HAMRAH",
+    colorName: "RED",
+    image: "/pearl-lamp/pearl-lamp-red-off.png",
+    colors: ["#171013", "#D62335", "#FFD1CC", "#FFF7F4"],
+  },
+  {
+    id: "mushroom-orange",
+    lampName: "KASANE",
+    colorName: "ORANGE",
+    image: "/mushroom-lamp/mushroom-orange-off.png",
+    colors: ["#141114", "#FF4B1F", "#FFDBD2", "#F8F6F3"],
+  },
+  {
+    id: "flute-matcha",
+    lampName: "NUJĀJ",
+    colorName: "MATCHA",
+    image: "/flute-lamp/flute-matcha-off.png",
+    colors: ["#101711", "#75984D", "#DCE8B9", "#F7F7ED"],
+  },
+] as const satisfies readonly CollectionHeroSlide[];
 
 export default function CollectionsPage() {
   return (
     <ShopLayout>
       <CollectionViewed collection="all" productCount={PRODUCTS.length} />
       {/* Hero */}
-      <CollectionHero />
+      <CollectionHero slides={COLLECTION_HERO_SLIDES} />
 
       {/* Collection Grid */}
       <div className="container-page py-8 md:py-12">
