@@ -7,23 +7,23 @@ import CollectionViewed from "@/components/analytics/CollectionViewed";
 
 const COLLECTION_HERO_SLIDES = [
   {
-    id: "stack-blue",
+    id: "nasaq-blue",
     lampName: "NASAQ",
-    colorName: "BLUE",
-    image: "/stack-lamp/stack-lamp-blue-off.png",
+    colorName: "COBALT BLUE",
+    image: "/stack-lamp/stack-lamp-blue-off-shadow.png",
     colors: ["#101522", "#155EEF", "#C8DBFF", "#F7F9FF"],
   },
   {
     id: "pearl-red",
     lampName: "HAMRAH",
-    colorName: "RED",
-    image: "/pearl-lamp/pearl-lamp-red-off.png",
-    colors: ["#171013", "#D62335", "#FFD1CC", "#FFF7F4"],
+    colorName: "FIRE RED",
+    image: "/pearl-lamp/pearl-lamp-red-off-shadow.png",
+    colors: ["#171013", "#7c1d21", "#FFD1CC", "#FFF7F4"],
   },
   {
     id: "mushroom-orange",
     lampName: "KASANE",
-    colorName: "ORANGE",
+    colorName: "BURNT ORANGE",
     image: "/mushroom-lamp/mushroom-orange-off.png",
     colors: ["#141114", "#FF4B1F", "#FFDBD2", "#F8F6F3"],
   },
@@ -31,8 +31,8 @@ const COLLECTION_HERO_SLIDES = [
     id: "flute-matcha",
     lampName: "NUJĀJ",
     colorName: "MATCHA",
-    image: "/flute-lamp/flute-matcha-off.png",
-    colors: ["#101711", "#75984D", "#DCE8B9", "#F7F7ED"],
+    image: "/flute-lamp/flute-matcha-off-shadow.png",
+    colors: ["#101711", "#cfd5ad", "#e2efb8", "#F7F7ED"],
   },
 ] as const satisfies readonly CollectionHeroSlide[];
 

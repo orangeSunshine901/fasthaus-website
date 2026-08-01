@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import useEmblaCarousel from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
@@ -409,11 +408,6 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const shouldReduceMotion = Boolean(useReducedMotion());
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: "center",
-    skipSnaps: false,
-  });
 
   const palettes = useMemo(() => slides.map((slide) => createColorBuffer(slide.colors)), [slides]);
   const currentPaletteRef = useRef(palettes[0].slice());
@@ -425,45 +419,15 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   const activePalette = palettes[selectedIndex] ?? palettes[0];
   const slideCount = slides.length;
 
-  const handleSelect = useCallback(
-    (api: NonNullable<typeof emblaApi>) => {
-      const previousIndex = api.previousScrollSnap();
-      const nextIndex = api.selectedScrollSnap();
-
-      if (previousIndex === slideCount - 1 && nextIndex === 0) {
-        setDirection(1);
-      } else if (previousIndex === 0 && nextIndex === slideCount - 1) {
-        setDirection(-1);
-      } else {
-        setDirection(nextIndex >= previousIndex ? 1 : -1);
-      }
-
-      setSelectedIndex(nextIndex);
-    },
-    [slideCount]
-  );
-
   const scrollPrevious = useCallback(() => {
     setDirection(-1);
-    emblaApi?.scrollPrev();
-  }, [emblaApi]);
+    setSelectedIndex((index) => (index - 1 + slideCount) % slideCount);
+  }, [slideCount]);
 
   const scrollNext = useCallback(() => {
     setDirection(1);
-    emblaApi?.scrollNext();
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    emblaApi.on("select", handleSelect);
-    emblaApi.on("reInit", handleSelect);
-
-    return () => {
-      emblaApi.off("select", handleSelect);
-      emblaApi.off("reInit", handleSelect);
-    };
-  }, [emblaApi, handleSelect]);
+    setSelectedIndex((index) => (index + 1) % slideCount);
+  }, [slideCount]);
 
   useEffect(() => {
     reducedMotionRef.current = shouldReduceMotion;
@@ -663,29 +627,18 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         aria-hidden="true"
       />
 
-      <div ref={emblaRef} className="absolute inset-0 z-30 overflow-hidden">
-        <div className="flex h-full touch-pan-y cursor-grab active:cursor-grabbing">
-          {slides.map((slide, index) => (
-            <div
-              key={slide.id}
-              className="h-full min-w-0 flex-[0_0_100%]"
-              role="group"
-              aria-roledescription="slide"
-              aria-label={
-                slide.lampName +
-                " lamp, " +
-                slide.colorName +
-                ", slide " +
-                (index + 1) +
-                " of " +
-                slideCount
-              }
-              aria-current={index === selectedIndex ? "true" : undefined}
-              aria-hidden={index !== selectedIndex}
-            />
-          ))}
-        </div>
-      </div>
+      <div
+        className="absolute inset-y-0 left-0 z-30 w-1/2"
+        style={{ cursor: "w-resize" }}
+        onClick={scrollPrevious}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-y-0 right-0 z-30 w-1/2"
+        style={{ cursor: "e-resize" }}
+        onClick={scrollNext}
+        aria-hidden="true"
+      />
 
       <AnimatePresence initial={false} mode="sync" custom={direction}>
         <motion.div
@@ -724,7 +677,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
             </motion.div>
           </div>
 
-          <div className="absolute bottom-[15%] left-1/2 z-30 -translate-x-1/2 md:bottom-[12%]">
+          <div className="absolute bottom-[15%] left-[50.5%] z-30 -translate-x-1/2 md:bottom-[12%]">
             <motion.p
               className="whitespace-nowrap font-semibold uppercase tracking-[0.24em] text-white"
               variants={shouldReduceMotion ? REDUCED_VARIANTS : LABEL_VARIANTS}
