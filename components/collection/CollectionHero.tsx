@@ -417,6 +417,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   const fromPaletteRef = useRef(palettes[0].slice());
   const toPaletteRef = useRef(palettes[0].slice());
   const transitionStartedAtRef = useRef<number | null>(null);
+  const animationTimeRef = useRef(0);
   const reducedMotionRef = useRef(shouldReduceMotion);
   const activeSlide = slides[selectedIndex] ?? slides[0];
   const activePalette = palettes[selectedIndex] ?? palettes[0];
@@ -472,7 +473,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       currentPaletteRef.current.set(activePalette);
       transitionStartedAtRef.current = null;
     } else {
-      transitionStartedAtRef.current = performance.now();
+      transitionStartedAtRef.current = animationTimeRef.current;
     }
   }, [activePalette]);
 
@@ -540,8 +541,9 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
     };
 
     let frame = 0;
-    let visible = !document.hidden;
-    const startedAt = performance.now();
+    let documentVisible = !document.hidden;
+    let sectionVisible = true;
+    let lastFrameAt = performance.now();
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
@@ -558,14 +560,21 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
     };
 
     const draw = (now: number) => {
-      if (!visible) return;
+      frame = 0;
+      if (!documentVisible || !sectionVisible) return;
+
+      animationTimeRef.current += now - lastFrameAt;
+      lastFrameAt = now;
 
       resize();
       gl.useProgram(program);
 
       const transitionStartedAt = transitionStartedAtRef.current;
       if (transitionStartedAt !== null) {
-        const progress = Math.min(1, (now - transitionStartedAt) / COLOR_TRANSITION_DURATION);
+        const progress = Math.min(
+          1,
+          (animationTimeRef.current - transitionStartedAt) / COLOR_TRANSITION_DURATION
+        );
         const easedProgress = smootherstep(progress);
 
         for (let channel = 0; channel < 12; channel += 1) {
@@ -585,7 +594,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         uniforms.scene,
         canvas.width,
         canvas.height,
-        reducedMotionRef.current ? 0 : ((now - startedAt) / 1000) * -0.67,
+        reducedMotionRef.current ? 0 : (animationTimeRef.current / 1000) * -0.67,
         4
       );
       gl.uniform4f(uniforms.shape, 1.32, 0.49, 0.84, 0.01);
@@ -598,23 +607,41 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       frame = window.requestAnimationFrame(draw);
     };
 
-    const handleVisibilityChange = () => {
-      visible = !document.hidden;
-      if (visible && !frame) frame = window.requestAnimationFrame(draw);
-      if (!visible && frame) {
+    const syncAnimation = () => {
+      if (documentVisible && sectionVisible) {
+        if (!frame) {
+          lastFrameAt = performance.now();
+          frame = window.requestAnimationFrame(draw);
+        }
+      } else if (frame) {
         window.cancelAnimationFrame(frame);
         frame = 0;
       }
     };
 
+    const handleVisibilityChange = () => {
+      documentVisible = !document.hidden;
+      syncAnimation();
+    };
+
     const resizeObserver = new ResizeObserver(resize);
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        sectionVisible = entry.intersectionRatio >= 0.5;
+        syncAnimation();
+      },
+      { threshold: [0, 0.5, 1] }
+    );
+
     resizeObserver.observe(canvas);
+    intersectionObserver.observe(sectionRef.current ?? canvas);
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    if (visible) frame = window.requestAnimationFrame(draw);
+    syncAnimation();
 
     return () => {
       window.cancelAnimationFrame(frame);
       resizeObserver.disconnect();
+      intersectionObserver.disconnect();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       gl.deleteBuffer(positions);
       gl.deleteProgram(program);

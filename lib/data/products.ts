@@ -11,6 +11,8 @@ export type ProductVariant = {
     lightOff: string;
     lightOn: string;
   };
+  /** Image displayed on collection and category product cards for this variant. */
+  collectionImage: string;
   /** Primary image shown when this color is selected on the product page. */
   mainImage: string;
   images: string[];
@@ -92,6 +94,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-matcha-off.png",
           lightOn: "/flute-lamp/flute-matcha-on.png",
         },
+        collectionImage: "/flute-lamp/flute-matcha-off-shadow-product.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           "/flute-lamp/flute-matcha-off.png",
@@ -110,6 +113,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-fire-red-off.png",
           lightOn: "/flute-lamp/flute-fire-red-on.png",
         },
+        collectionImage: "/flute-lamp/flute-fire-red-off-shadow-product.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           "/flute-lamp/flute-fire-red-on.png",
@@ -128,6 +132,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-clear-off.png",
           lightOn: "/flute-lamp/flute-clear-on.png",
         },
+        collectionImage: "/flute-lamp/flute-clear-off-shadow-product.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           "/flute-lamp/flute-clear-off.png",
@@ -191,6 +196,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/mushroom-lamp/mushroom-blue-off.png",
           lightOn: "/mushroom-lamp/mushroom-blue-on.png",
         },
+        collectionImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         images: [
           "/mushroom-lamp/mushroom-lamp-top.jpg",
@@ -210,6 +216,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/mushroom-lamp/mushroom-orange-off.png",
           lightOn: "/mushroom-lamp/mushroom-orange-on.png",
         },
+        collectionImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         images: [
           "/mushroom-lamp/mushroom-lamp-top.jpg",
@@ -230,6 +237,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/mushroom-lamp/mushroom-white-off.png",
           lightOn: "/mushroom-lamp/mushroom-white-on.png",
         },
+        collectionImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         images: [
           "/mushroom-lamp/mushroom-lamp-top.jpg",
@@ -292,6 +300,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/stack-lamp/stack-lamp-orange-off.png",
           lightOn: "/stack-lamp/stack-lamp-orange-on.png",
         },
+        collectionImage: "/stack-lamp/stack-lamp-orange-on.png",
         mainImage: "/stack-lamp/stack-lamp-orange-on.png",
         images: ["/stack-lamp/stack-lamp-orange-on.png", "/stack-lamp/stack-lamp-orange-off.png"],
       },
@@ -306,8 +315,9 @@ export const PRODUCTS: Product[] = [
           lightOff: "/stack-lamp/stack-lamp-blue-off.png",
           lightOn: "/stack-lamp/stack-lamp-blue-on.png",
         },
-        mainImage: "/stack-lamp/stack-lamp-blue-main.png",
-        images: ["/stack-lamp/stack-lamp-blue-main.png", "/stack-lamp/stack-lamp-blue-on.png"],
+        collectionImage: "/stack-lamp/stack-lamp-blue-on.png",
+        mainImage: "/stack-lamp/stack-lamp-blue-on.png",
+        images: ["/stack-lamp/stack-lamp-blue-on.png", "/stack-lamp/stack-lamp-blue-off.png"],
       },
       {
         id: "3-white",
@@ -320,6 +330,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/stack-lamp/stack-lamp-white-off.png",
           lightOn: "/stack-lamp/stack-lamp-white-on.png",
         },
+        collectionImage: "/stack-lamp/stack-lamp-white-on.png",
         mainImage: "/stack-lamp/stack-lamp-white-on.png",
         images: ["/stack-lamp/stack-lamp-white-off.png", "/stack-lamp/stack-lamp-white-on.png"],
       },
@@ -374,6 +385,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/pearl-lamp/pearl-lamp-red-off.png",
           lightOn: "/pearl-lamp/pearl-lamp-red-on.png",
         },
+        collectionImage: "/pearl-lamp/pearl-lamp-red-off.png",
         mainImage: "/pearl-lamp/pearl-lamp-red-off.png",
         images: ["/pearl-lamp/pearl-lamp-red-off.png", "/pearl-lamp/pearl-lamp-red-on.png"],
       },
@@ -388,6 +400,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/pearl-lamp/pearl-lamp-orange-off.png",
           lightOn: "/pearl-lamp/pearl-lamp-orange-on.png",
         },
+        collectionImage: "/pearl-lamp/pearl-lamp-orange-off.png",
         mainImage: "/pearl-lamp/pearl-lamp-orange-off.png",
         images: ["/pearl-lamp/pearl-lamp-orange-off.png", "/pearl-lamp/pearl-lamp-orange-on.png"],
       },
@@ -402,6 +415,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/pearl-lamp/pearl-lamp-blue-off.png",
           lightOn: "/pearl-lamp/pearl-lamp-blue-on.png",
         },
+        collectionImage: "/pearl-lamp/pearl-lamp-blue-off.png",
         mainImage: "/pearl-lamp/pearl-lamp-blue-off.png",
         images: ["/pearl-lamp/pearl-lamp-blue-off.png", "/pearl-lamp/pearl-lamp-blue-on.png"],
       },
@@ -416,6 +430,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/pearl-lamp/pearl-lamp-white-off.png",
           lightOn: "/pearl-lamp/pearl-lamp-white-on.png",
         },
+        collectionImage: "/pearl-lamp/pearl-lamp-white-off.png",
         mainImage: "/pearl-lamp/pearl-lamp-white-off.png",
         images: ["/pearl-lamp/pearl-lamp-white-off.png", "/pearl-lamp/pearl-lamp-white-on.png"],
       },

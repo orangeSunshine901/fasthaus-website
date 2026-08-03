@@ -16,7 +16,7 @@ const COLLECTION_HERO_SLIDES = [
   {
     id: "pearl-red",
     lampName: "HAMRAH",
-    colorName: "FIRE RED",
+    colorName: "CHERRY RED",
     image: "/pearl-lamp/pearl-lamp-red-off-shadow.png",
     colors: ["#171013", "#7c1d21", "#FFD1CC", "#FFF7F4"],
   },
