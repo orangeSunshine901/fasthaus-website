@@ -37,7 +37,13 @@ export default function ProductCard({ product }: Props) {
   const adding = useCartStore((s) => s.pending.includes(selectedVariant.id));
 
   useEffect(() => {
-    capture(analyticsEvents.productImpression, { product_id: product.id, product_name: product.name, category: product.category, price: defaultVariant.price, currency: "AED" });
+    capture(analyticsEvents.productImpression, {
+      product_id: product.id,
+      product_name: product.name,
+      category: product.category,
+      price: defaultVariant.price,
+      currency: "AED",
+    });
   }, [defaultVariant.price, product.category, product.id, product.name]);
 
   function handleVariantSelect(variant: ProductVariant) {
@@ -136,48 +142,51 @@ export default function ProductCard({ product }: Props) {
         onClick={handleAddToCart}
         disabled={adding}
         aria-label={`Add ${product.name} to cart`}
-        className="group absolute z-20 h-8 w-8 disabled:cursor-wait disabled:opacity-60"
+        className="group absolute z-20 h-7 w-7 disabled:cursor-wait disabled:opacity-60"
         style={{ top: "16px", right: "16px" }}
       >
         <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
+          width="28"
+          height="28"
+          viewBox="0 0 28 28"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="h-full w-full"
         >
+          <rect
+            x="0.5"
+            y="0.5"
+            width="27"
+            height="27"
+            rx="7.5"
+            fill="none"
+            className="stroke-[var(--color-accent-amber)] transition-colors duration-150 ease-out group-hover:fill-[var(--color-accent-amber)]"
+          />
           <g clipPath={`url(#${clipId})`}>
-            <rect
-              width="32"
-              height="32"
-              rx="8"
-              className="fill-[var(--color-accent-amber)] transition-colors duration-150 ease-out group-hover:fill-[var(--color-accent-amber-hover)]"
+            <path
+              d="M18.548 15.1243C18.347 15.0688 18.1415 15.185 18.086 15.3845L17.9232 15.9695C17.8737 16.1345 17.7252 16.25 17.5625 16.25H11.975C11.8032 16.25 11.651 16.127 11.6135 15.9583L10.6745 11.75H12.125C12.332 11.75 12.5 11.582 12.5 11.375C12.5 11.168 12.332 11 12.125 11H10.5072L10.3692 10.3798C10.2582 9.8705 9.79775 9.5 9.275 9.5H8.375C8.168 9.5 8 9.668 8 9.875C8 10.082 8.168 10.25 8.375 10.25H9.275C9.4475 10.25 9.59975 10.3723 9.6365 10.5418L10.8815 16.1218C10.9947 16.6303 11.4545 17 11.975 17H17.5625C18.053 17 18.497 16.6655 18.6432 16.178L18.8082 15.5855C18.8645 15.386 18.7482 15.179 18.548 15.1243Z"
+              className="fill-[var(--color-accent-amber)] transition-colors duration-150 ease-out group-hover:fill-[var(--color-bg)]"
             />
             <path
-              d="M25.096 18.2485C24.694 18.1375 24.283 18.37 24.172 18.769L23.8465 19.939C23.7475 20.269 23.4505 20.5 23.125 20.5H11.95C11.6065 20.5 11.302 20.254 11.227 19.9165L9.349 11.5H12.25C12.664 11.5 13 11.164 13 10.75C13 10.336 12.664 10 12.25 10H9.0145L8.7385 8.7595C8.5165 7.741 7.5955 7 6.55 7H4.75C4.336 7 4 7.336 4 7.75C4 8.164 4.336 8.5 4.75 8.5H6.55C6.895 8.5 7.1995 8.7445 7.273 9.0835L9.763 20.2435C9.9895 21.2605 10.909 22 11.95 22H23.125C24.106 22 24.994 21.331 25.2865 20.356L25.6165 19.171C25.729 18.772 25.4965 18.358 25.096 18.2485Z"
-              fill="var(--color-surface)"
+              d="M12.875 17.75C12.2547 17.75 11.75 18.2547 11.75 18.875C11.75 19.4953 12.2547 20 12.875 20C13.4953 20 14 19.4953 14 18.875C14 18.2547 13.4953 17.75 12.875 17.75ZM12.875 19.25C12.668 19.25 12.5 19.082 12.5 18.875C12.5 18.668 12.668 18.5 12.875 18.5C13.082 18.5 13.25 18.668 13.25 18.875C13.25 19.082 13.082 19.25 12.875 19.25Z"
+              className="fill-[var(--color-accent-amber)] transition-colors duration-150 ease-out group-hover:fill-[var(--color-bg)]"
             />
             <path
-              d="M13.75 23.5C12.5095 23.5 11.5 24.5095 11.5 25.75C11.5 26.9905 12.5095 28 13.75 28C14.9905 28 16 26.9905 16 25.75C16 24.5095 14.9905 23.5 13.75 23.5ZM13.75 26.5C13.336 26.5 13 26.164 13 25.75C13 25.336 13.336 25 13.75 25C14.164 25 14.5 25.336 14.5 25.75C14.5 26.164 14.164 26.5 13.75 26.5Z"
-              fill="var(--color-surface)"
+              d="M16.625 17.75C16.0047 17.75 15.5 18.2547 15.5 18.875C15.5 19.4953 16.0047 20 16.625 20C17.2453 20 17.75 19.4953 17.75 18.875C17.75 18.2547 17.2453 17.75 16.625 17.75ZM16.625 19.25C16.418 19.25 16.25 19.082 16.25 18.875C16.25 18.668 16.418 18.5 16.625 18.5C16.832 18.5 17 18.668 17 18.875C17 19.082 16.832 19.25 16.625 19.25Z"
+              className="fill-[var(--color-accent-amber)] transition-colors duration-150 ease-out group-hover:fill-[var(--color-bg)]"
             />
             <path
-              d="M21.25 23.5C20.0095 23.5 19 24.5095 19 25.75C19 26.9905 20.0095 28 21.25 28C22.4905 28 23.5 26.9905 23.5 25.75C23.5 24.5095 22.4905 23.5 21.25 23.5ZM21.25 26.5C20.836 26.5 20.5 26.164 20.5 25.75C20.5 25.336 20.836 25 21.25 25C21.664 25 22 25.336 22 25.75C22 26.164 21.664 26.5 21.25 26.5Z"
-              fill="var(--color-surface)"
+              d="M16.625 8C14.7643 8 13.25 9.51425 13.25 11.375C13.25 13.2358 14.7643 14.75 16.625 14.75C18.4857 14.75 20 13.2358 20 11.375C20 9.51425 18.4857 8 16.625 8ZM16.625 14C15.1775 14 14 12.8225 14 11.375C14 9.9275 15.1775 8.75 16.625 8.75C18.0725 8.75 19.25 9.9275 19.25 11.375C19.25 12.8225 18.0725 14 16.625 14Z"
+              className="fill-[var(--color-accent-amber)] transition-colors duration-150 ease-out group-hover:fill-[var(--color-bg)]"
             />
             <path
-              d="M21.25 4C17.5285 4 14.5 7.0285 14.5 10.75C14.5 14.4715 17.5285 17.5 21.25 17.5C24.9715 17.5 28 14.4715 28 10.75C28 7.0285 24.9715 4 21.25 4ZM21.25 16C18.355 16 16 13.645 16 10.75C16 7.855 18.355 5.5 21.25 5.5C24.145 5.5 26.5 7.855 26.5 10.75C26.5 13.645 24.145 16 21.25 16Z"
-              fill="var(--color-surface)"
-            />
-            <path
-              d="M24.25 10H22V7.75C22 7.336 21.664 7 21.25 7C20.836 7 20.5 7.336 20.5 7.75V10H18.25C17.836 10 17.5 10.336 17.5 10.75C17.5 11.164 17.836 11.5 18.25 11.5H20.5V13.75C20.5 14.164 20.836 14.5 21.25 14.5C21.664 14.5 22 14.164 22 13.75V11.5H24.25C24.664 11.5 25 11.164 25 10.75C25 10.336 24.664 10 24.25 10Z"
-              fill="var(--color-surface)"
+              d="M18.125 11H17V9.875C17 9.668 16.832 9.5 16.625 9.5C16.418 9.5 16.25 9.668 16.25 9.875V11H15.125C14.918 11 14.75 11.168 14.75 11.375C14.75 11.582 14.918 11.75 15.125 11.75H16.25V12.875C16.25 13.082 16.418 13.25 16.625 13.25C16.832 13.25 17 13.082 17 12.875V11.75H18.125C18.332 11.75 18.5 11.582 18.5 11.375C18.5 11.168 18.332 11 18.125 11Z"
+              className="fill-[var(--color-accent-amber)] transition-colors duration-150 ease-out group-hover:fill-[var(--color-bg)]"
             />
           </g>
           <defs>
             <clipPath id={clipId}>
-              <rect width="32" height="32" rx="8" fill="white" />
+              <rect width="28" height="28" rx="8" fill="white" />
             </clipPath>
           </defs>
         </svg>
@@ -188,7 +197,10 @@ export default function ProductCard({ product }: Props) {
           <span className="type-title-sm" style={{ color: "var(--color-text-primary)" }}>
             {product.name}
           </span>
-          <DirhamPrice amount={selectedVariant.price} compareAmount={selectedVariant.comparePrice} />
+          <DirhamPrice
+            amount={selectedVariant.price}
+            compareAmount={selectedVariant.comparePrice}
+          />
         </Link>
 
         <Tooltip.Provider delayDuration={0}>
