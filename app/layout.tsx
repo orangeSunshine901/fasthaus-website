@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import PageTransition from "@/components/layout/PageTransition";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
@@ -12,6 +13,12 @@ import "./globals.css";
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const golftenStamp = localFont({
+  src: "../fonts/Golften-Stamp.otf",
+  variable: "--font-golften-stamp-source",
   display: "swap",
 });
 
@@ -33,7 +40,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${dmSans.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${dmSans.variable} ${golftenStamp.variable} h-full antialiased`}
+    >
       <head>
         {/* Silktide ships as a standalone stylesheet rather than an importable CSS module. */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}

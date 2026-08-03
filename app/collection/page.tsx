@@ -23,13 +23,13 @@ const COLLECTION_HERO_SLIDES = [
   {
     id: "mushroom-orange",
     lampName: "KASANE",
-    colorName: "BURNT ORANGE",
+    colorName: "TANGERINE",
     image: "/mushroom-lamp/mushroom-orange-off.png",
     colors: ["#141114", "#FF4B1F", "#FFDBD2", "#F8F6F3"],
   },
   {
     id: "flute-matcha",
-    lampName: "NUJĀJ",
+    lampName: "NUJAJ",
     colorName: "MATCHA",
     image: "/flute-lamp/flute-matcha-off-shadow.png",
     colors: ["#101711", "#cfd5ad", "#e2efb8", "#F7F7ED"],

@@ -16,6 +16,7 @@
 
   --font-heading: 'DM Sans', system-ui, sans-serif;
   --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-golften-stamp: var(--font-golften-stamp-source), sans-serif;
 
   /* --text-xs:   12px;
   --text-xs--line-height: 17px;

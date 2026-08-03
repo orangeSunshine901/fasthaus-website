@@ -404,9 +404,12 @@ function createShader(gl: WebGLRenderingContext, type: number, source: string) {
 }
 
 export default function CollectionHero({ slides }: CollectionHeroProps) {
+  const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isPointerInsideRef = useRef(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
+  const [transitionSequence, setTransitionSequence] = useState(0);
   const shouldReduceMotion = Boolean(useReducedMotion());
 
   const palettes = useMemo(() => slides.map((slide) => createColorBuffer(slide.colors)), [slides]);
@@ -422,12 +425,34 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   const scrollPrevious = useCallback(() => {
     setDirection(-1);
     setSelectedIndex((index) => (index - 1 + slideCount) % slideCount);
+    setTransitionSequence((sequence) => sequence + 1);
   }, [slideCount]);
 
   const scrollNext = useCallback(() => {
     setDirection(1);
     setSelectedIndex((index) => (index + 1) % slideCount);
+    setTransitionSequence((sequence) => sequence + 1);
   }, [slideCount]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const section = sectionRef.current;
+      const hasFocusWithin = section?.contains(document.activeElement) ?? false;
+
+      if (!isPointerInsideRef.current && !hasFocusWithin) return;
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        scrollPrevious();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        scrollNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [scrollNext, scrollPrevious]);
 
   useEffect(() => {
     reducedMotionRef.current = shouldReduceMotion;
@@ -596,16 +621,6 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
     };
   }, []);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      scrollPrevious();
-    } else if (event.key === "ArrowRight") {
-      event.preventDefault();
-      scrollNext();
-    }
-  };
-
   const contentTransition = shouldReduceMotion ? REDUCED_TRANSITION : SLIDE_TRANSITION;
   const labelTransition = shouldReduceMotion
     ? REDUCED_TRANSITION
@@ -613,13 +628,19 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
 
   return (
     <section
+      ref={sectionRef}
       className="relative h-[60svh] min-h-[420px] w-full overflow-hidden outline-none md:h-[840px]"
-      style={{ backgroundColor: activeSlide.colors[0] }}
+      style={{ backgroundColor: activeSlide.colors[0], outline: "none" }}
       role="region"
       aria-roledescription="carousel"
       aria-label="Fasthaus lamp collection"
       tabIndex={0}
-      onKeyDown={handleKeyDown}
+      onPointerEnter={() => {
+        isPointerInsideRef.current = true;
+      }}
+      onPointerLeave={() => {
+        isPointerInsideRef.current = false;
+      }}
     >
       <canvas
         ref={canvasRef}
@@ -642,7 +663,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
 
       <AnimatePresence initial={false} mode="sync" custom={direction}>
         <motion.div
-          key={activeSlide.id}
+          key={activeSlide.id + "-" + transitionSequence}
           className="pointer-events-none absolute inset-0"
           initial="enter"
           animate="center"
@@ -651,9 +672,10 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         >
           <div className="absolute left-1/2 top-[46%] z-10 -translate-x-1/2 -translate-y-1/2">
             <motion.h2
-              className="whitespace-nowrap text-center text-[clamp(44px,11vw,180px)] font-light leading-none tracking-[-0.06em] text-white"
+              className="font-golften-stamp whitespace-nowrap text-center text-[clamp(54.08px,calc(11.44vw+8.32px),195.52px)] font-light leading-none tracking-[0.004em] text-[#F8F6F3]"
               variants={shouldReduceMotion ? REDUCED_TITLE_VARIANTS : TITLE_VARIANTS}
               transition={contentTransition}
+              style={{ textShadow: "2px 2px 16px rgb(184, 185, 186)" }}
             >
               {activeSlide.lampName}
             </motion.h2>
@@ -679,9 +701,12 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
 
           <div className="absolute bottom-[15%] left-[50.5%] z-30 -translate-x-1/2 md:bottom-[12%]">
             <motion.p
-              className="whitespace-nowrap font-semibold uppercase tracking-[0.24em] text-white"
+              className="font-golften-stamp whitespace-nowrap text-[50px] font-semibold uppercase tracking-[0.004em] text-white"
               variants={shouldReduceMotion ? REDUCED_VARIANTS : LABEL_VARIANTS}
               transition={labelTransition}
+              style={{
+                fontSize: "24px",
+              }}
             >
               {activeSlide.colorName}
             </motion.p>
