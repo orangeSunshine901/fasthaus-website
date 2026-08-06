@@ -9,10 +9,7 @@ export async function POST(request: Request) {
   const parsed = NewsletterSchema.safeParse(body);
 
   if (!parsed.success) {
-    return NextResponse.json(
-      { error: parsed.error.issues[0].message },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   }
 
   const { email } = parsed.data;
@@ -34,7 +31,7 @@ export async function POST(request: Request) {
   }
 
   await getResend().emails.send({
-    from: "Fasthaus <hello@fasthaus.ae>",
+    from: "Fasthaus <hello@fasthaus.studio>",
     to: email,
     subject: "Welcome to Fasthaus",
     react: NewsletterWelcome({ email }),

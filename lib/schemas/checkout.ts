@@ -2,6 +2,18 @@ import { z } from "zod";
 
 const UAE_PHONE_REGEX = /^(?:\+971|00971|0)?(?:5[024568]\d{7}|[234679]\d{7})$/;
 
+/**
+ * The checkout field collects the national number while showing `+971` beside
+ * it. Store a consistent, complete number regardless of the input grouping.
+ */
+function normalizeUaePhone(value: string): string {
+  const compact = value.trim().replace(/[\s()-]/g, "");
+
+  if (compact.startsWith("+971") || compact.startsWith("00971")) return compact;
+  if (compact.startsWith("0")) return `+971${compact.slice(1)}`;
+  return `+971${compact}`;
+}
+
 const EMIRATES = [
   "Abu Dhabi",
   "Dubai",
@@ -25,7 +37,8 @@ export const ContactSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   phone: z
     .string()
-    .regex(UAE_PHONE_REGEX, "Please enter a valid UAE phone number (+971…)"),
+    .transform(normalizeUaePhone)
+    .pipe(z.string().regex(UAE_PHONE_REGEX, "Please enter a valid UAE phone number (+971…)")),
 });
 
 export const CheckoutStep1Schema = ContactSchema.merge(ShippingAddressSchema);

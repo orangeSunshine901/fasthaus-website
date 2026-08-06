@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ChevronDown, ShoppingCart, Menu, X } from "lucide-react";
+import { ChevronDown, ShoppingCart, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
+import { PRODUCTS } from "@/lib/data/products";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -30,24 +31,6 @@ const SHOP_LINKS = [
   { label: "Desk Lamps", href: "/collection/desk-lamps" },
   { label: "Table Lamps", href: "/collection/table-lamps" },
   { label: "Floor Lamps", href: "/collection/floor-lamps" },
-];
-
-const SHOP_FEATURES = [
-  {
-    label: "Desk lamps",
-    href: "/collection/desk-lamps",
-    description: "Focused lighting for workspaces, studios, and reading corners.",
-  },
-  {
-    label: "Table lamps",
-    href: "/collection/table-lamps",
-    description: "Sculptural pieces for sideboards, bedsides, and dining surfaces.",
-  },
-  {
-    label: "Floor lamps",
-    href: "/collection/floor-lamps",
-    description: "Tall ambient lighting for lounges and open-plan rooms.",
-  },
 ];
 
 function CartBadge({ size = 20, className = "" }: { size?: number; className?: string }) {
@@ -76,52 +59,51 @@ function CartBadge({ size = 20, className = "" }: { size?: number; className?: s
 }
 
 function CollectionMegaMenuContent() {
-  return (
-    <div className="grid grid-cols-[0.9fr_1.1fr] gap-3">
-      <NavigationMenuLink asChild>
-        <Link
-          href="/collection"
-          className="flex min-h-[220px] flex-col justify-between rounded-[var(--radius-sm)] bg-[var(--color-text-primary)] p-5 text-white outline-none transition-colors hover:bg-[#2a272a] focus:bg-[#2a272a]"
-        >
-          <div>
-            <p className="text-sm font-medium text-white/65">Fasthaus collection</p>
-            <p className="mt-3 text-2xl font-semibold leading-7">
-              Warm, sculptural lighting for modern rooms.
-            </p>
-          </div>
-          <span className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent-amber)]">
-            Shop all
-            <ArrowRight size={15} aria-hidden="true" />
-          </span>
-        </Link>
-      </NavigationMenuLink>
+  const [activeProductId, setActiveProductId] = useState(PRODUCTS[0]?.id);
+  const activeProduct = PRODUCTS.find((product) => product.id === activeProductId) ?? PRODUCTS[0];
+  const previewVariant = activeProduct?.variants[0];
 
-      <div className="grid gap-1">
-        {SHOP_FEATURES.map((item) => (
-          <NavigationMenuLink key={item.href} asChild>
-            <Link
-              href={item.href}
-              className="rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
+  return (
+    <div className="grid h-[360px] grid-cols-[0.9fr_1.1fr] gap-3">
+      <div className="relative h-full overflow-hidden rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)]">
+        {activeProduct && previewVariant && (
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              key={activeProduct.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18, ease: "easeInOut" }}
+              className="absolute inset-0"
             >
-              <span className="block text-base font-semibold leading-6">{item.label}</span>
-              <span className="mt-1 block text-sm leading-5 text-[var(--color-text-secondary)]">
-                {item.description}
+              <Image
+                src={previewVariant.collectionImage}
+                alt={`${activeProduct.name} in ${previewVariant.color}`}
+                fill
+                sizes="360px"
+                className="object-cover"
+              />
+            </motion.div>
+          </AnimatePresence>
+        )}
+      </div>
+
+      <div className="grid min-w-0 grid-rows-4 gap-1">
+        {PRODUCTS.map((product) => (
+          <NavigationMenuLink key={product.id} asChild>
+            <Link
+              href={`/product/${product.slug}`}
+              onMouseEnter={() => setActiveProductId(product.id)}
+              onFocus={() => setActiveProductId(product.id)}
+              className="min-w-0 overflow-hidden rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
+            >
+              <span className="block text-base font-semibold leading-6">{product.name}</span>
+              <span className="mt-1 block truncate text-sm leading-5 text-[var(--color-text-secondary)]">
+                {product.description}
               </span>
             </Link>
           </NavigationMenuLink>
         ))}
-        <div className="mt-2 grid grid-cols-2 gap-1 border-t border-[var(--color-border)] pt-2">
-          {SHOP_LINKS.slice(0, 2).map((item) => (
-            <NavigationMenuLink key={item.href} asChild>
-              <Link
-                href={item.href}
-                className="rounded-[var(--radius-sm)] px-3 py-2 text-sm font-semibold outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
-              >
-                {item.label}
-              </Link>
-            </NavigationMenuLink>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -222,7 +204,9 @@ export default function Navbar() {
 
       <header
         className={cn(
-          usesHeroOverlay
+          isProductPage
+            ? "relative z-40 w-full border-transparent bg-[var(--color-surface)] md:h-24"
+            : usesHeroOverlay
             ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
             : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
           aboutMainNavHidden && "md:pointer-events-none md:opacity-0"
@@ -275,7 +259,7 @@ export default function Navbar() {
                     <Link
                       href="/collection"
                       className={cn(
-                        "group box-content flex h-16 w-[100px] items-center justify-center rounded-none p-2 text-sm font-semibold leading-6 outline-none transition-colors focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]",
+                        "group box-content flex h-16 w-[100px] items-center justify-center rounded-none p-2 text-sm font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:underline focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]",
                         isActive("/collection")
                           ? "text-[var(--color-accent-amber)]"
                           : "text-current"
@@ -288,7 +272,7 @@ export default function Navbar() {
                       />
                     </Link>
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="left-1/2 top-[calc(100%+12px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
+                  <NavigationMenuContent className="collection-menu-content left-1/2 top-[calc(100%+12px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
                     <CollectionMegaMenuContent />
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -298,7 +282,7 @@ export default function Navbar() {
                     <Link
                       href="/about"
                       className={cn(
-                        "flex  w-[100px] h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]",
+                        "flex  w-[100px] h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)]",
                         isActive("/about") ? "text-[var(--color-accent-amber)]" : "text-current"
                       )}
                     >
@@ -312,7 +296,7 @@ export default function Navbar() {
                     <Link
                       href="/contact"
                       className={cn(
-                        "flex w-[100px] h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)]",
+                        "flex w-[100px] h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)]",
                         isActive("/contact") ? "text-[var(--color-accent-amber)]" : "text-current"
                       )}
                     >

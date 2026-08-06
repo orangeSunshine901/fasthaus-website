@@ -219,6 +219,48 @@ input[type="radio"] {
   will-change: transform;
 }
 
+/* Collection mega menu — shared by the main and floating navigation bars. */
+.collection-menu-content {
+  transform-origin: top center;
+  will-change: opacity, scale;
+}
+
+.collection-menu-content[data-state="open"] {
+  animation: collection-menu-in 280ms ease-in-out both;
+}
+
+.collection-menu-content[data-state="closed"] {
+  animation: collection-menu-out 280ms ease-in-out both;
+}
+
+@keyframes collection-menu-in {
+  from {
+    opacity: 0;
+    scale: 0.985;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes collection-menu-out {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.985;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collection-menu-content[data-state] {
+    animation-duration: 1ms;
+  }
+}
+
 .scroll-animations-ready .scroll-reveal,
 .scroll-animations-ready .scroll-reveal-up,
 .scroll-animations-ready .scroll-reveal-soft {

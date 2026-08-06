@@ -4,57 +4,74 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import ShopLayout from "@/components/layout/ShopLayout";
 
-const CATEGORIES = ["All", "Products", "Shipping", "Returns", "Warranty", "Custom Projects"] as const;
+const CATEGORIES = [
+  "All",
+  "Products",
+  "Shipping",
+  "Returns",
+  "Warranty",
+  "Custom Projects",
+] as const;
 
 const FAQS: { category: string; question: string; answer: string }[] = [
   {
     category: "Products",
     question: "What are your lamps made of?",
-    answer: "Our lamps are primarily made from 3D-printed PLA and PETG, combined with powder-coated aluminium bases, acrylic diffusers, and braided textile cables. Each material is chosen for durability, aesthetics, and low environmental impact.",
+    answer:
+      "Our lamps are primarily made from 3D-printed PLA and PETG, combined with powder-coated aluminium bases, acrylic diffusers, and braided textile cables. Each material is chosen for durability, aesthetics, and low environmental impact.",
   },
   {
     category: "Products",
     question: "How long does production take?",
-    answer: "Each lamp is made to order at our Dubai studio. Production takes 2–3 business days. You will get a notification the moment it ships.",
+    answer:
+      "Each lamp is made to order at our Dubai studio. Production takes 2–3 business days. You will get a notification the moment it ships.",
   },
   {
     category: "Shipping",
     question: "Do you ship internationally?",
-    answer: "Currently we ship to all seven UAE emirates. International shipping is coming soon — sign up for our newsletter to be the first to know.",
+    answer:
+      "Currently we ship to all seven UAE emirates. International shipping is coming soon — sign up for our newsletter to be the first to know.",
   },
   {
     category: "Returns",
     question: "What is your return policy?",
-    answer: "We offer 30-day hassle-free returns for any reason. Simply email us at returns@fasthaus.ae with your order number and we will arrange a pickup at no cost to you.",
+    answer:
+      "We offer 30-day hassle-free returns for any reason. Simply email us at hello@fasthaus.studio with your order number and we will arrange a pickup at no cost to you.",
   },
   {
     category: "Custom Projects",
     question: "Can you create a custom lamp for my space?",
-    answer: "Yes! We take custom projects for residential and commercial spaces. Reach out via the contact page with your brief and we will get back to you within one business day.",
+    answer:
+      "Yes! We take custom projects for residential and commercial spaces. Reach out via the contact page with your brief and we will get back to you within one business day.",
   },
   {
     category: "Warranty",
     question: "What does the 1-year warranty cover?",
-    answer: "Our warranty covers manufacturing defects, LED module failure, electrical components, and structural integrity. It does not cover accidental damage, misuse, or normal wear and surface marks.",
+    answer:
+      "Our warranty covers manufacturing defects, LED module failure, electrical components, and structural integrity. It does not cover accidental damage, misuse, or normal wear and surface marks.",
   },
 ];
 
 export default function FAQPage() {
-  const [activeCategory, setActiveCategory] = useState<typeof CATEGORIES[number]>("All");
+  const [activeCategory, setActiveCategory] = useState<(typeof CATEGORIES)[number]>("All");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const filtered = FAQS.filter(
-    (f) => activeCategory === "All" || f.category === activeCategory
-  );
+  const filtered = FAQS.filter((f) => activeCategory === "All" || f.category === activeCategory);
 
   return (
     <ShopLayout>
       <div id="faq" className="scroll-target mx-auto max-w-[720px] px-5 py-10 md:py-14">
         {/* Page header */}
-        <h1 className="type-display-xl mb-2 text-center" style={{ color: "var(--color-text-primary)" }}>
+        <h1
+          className="type-display-xl mb-2 text-center"
+          style={{ color: "var(--color-text-primary)" }}
+        >
           You Ask. We Answer.
         </h1>
-        <p className="type-body-md mb-10 text-center" style={{ color: "var(--color-text-secondary)" }}>
+        <p
+          className="type-body-md mb-10 text-center"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
           Everything you need to know about our lamps, shipping, returns and custom work.
         </p>
 
@@ -66,7 +83,10 @@ export default function FAQPage() {
               onClick={() => setActiveCategory(cat)}
               className="btn btn-pill min-h-0 px-4 py-1.5 transition-all"
               style={{
-                backgroundColor: activeCategory === cat ? "var(--color-accent-amber)" : "var(--color-surface-muted)",
+                backgroundColor:
+                  activeCategory === cat
+                    ? "var(--color-accent-amber)"
+                    : "var(--color-surface-muted)",
                 color: activeCategory === cat ? "#fff" : "var(--color-text-secondary)",
               }}
             >

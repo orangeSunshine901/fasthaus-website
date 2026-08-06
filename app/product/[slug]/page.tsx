@@ -29,10 +29,9 @@ export default async function ProductPage({
 
   return (
     <ShopLayout>
-      <div className="bg-white pb-16 md:mt-28 md:pb-24">
-        <div className="mx-auto max-w-[1240px] px-5 md:px-6 lg:px-8">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2.5 pb-4 pt-4 text-[13.5px] md:pb-6 md:pt-7">
+      <div className="relative bg-white pb-16 md:pb-24">
+        <div className="bg-[var(--color-surface)]">
+          <nav className="mx-auto flex max-w-[1240px] items-center gap-2.5 px-5 py-8 text-[13.5px] md:px-6 lg:px-8">
             <Link
               href="/"
               className="font-medium transition-colors hover:text-[var(--color-accent-amber)]"
@@ -53,7 +52,9 @@ export default async function ProductPage({
               {product.name}
             </span>
           </nav>
+        </div>
 
+        <div className="mx-auto max-w-[1240px] px-5 md:px-6 lg:px-8">
           <PDPClient
             key={initialVariant.id}
             product={product}

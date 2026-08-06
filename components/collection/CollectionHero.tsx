@@ -297,6 +297,7 @@ void main() {
 `;
 
 const COLOR_TRANSITION_DURATION = 900;
+const SHADER_ANIMATION_DURATION = 10_000;
 const SLIDE_TRANSITION = {
   duration: 0.9,
   ease: [0.65, 0, 0.35, 1],
@@ -418,6 +419,8 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   const toPaletteRef = useRef(palettes[0].slice());
   const transitionStartedAtRef = useRef<number | null>(null);
   const animationTimeRef = useRef(0);
+  const shaderTimeRef = useRef(0);
+  const shaderAnimationElapsedRef = useRef(0);
   const reducedMotionRef = useRef(shouldReduceMotion);
   const activeSlide = slides[selectedIndex] ?? slides[0];
   const activePalette = palettes[selectedIndex] ?? palettes[0];
@@ -468,6 +471,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   useEffect(() => {
     fromPaletteRef.current.set(currentPaletteRef.current);
     toPaletteRef.current.set(activePalette);
+    shaderAnimationElapsedRef.current = 0;
 
     if (reducedMotionRef.current) {
       currentPaletteRef.current.set(activePalette);
@@ -563,8 +567,16 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       frame = 0;
       if (!documentVisible || !sectionVisible) return;
 
-      animationTimeRef.current += now - lastFrameAt;
+      const elapsed = now - lastFrameAt;
+      animationTimeRef.current += elapsed;
       lastFrameAt = now;
+
+      const shaderTimeRemaining = SHADER_ANIMATION_DURATION - shaderAnimationElapsedRef.current;
+      if (!reducedMotionRef.current && shaderTimeRemaining > 0) {
+        const shaderElapsed = Math.min(elapsed, shaderTimeRemaining);
+        shaderTimeRef.current += shaderElapsed;
+        shaderAnimationElapsedRef.current += shaderElapsed;
+      }
 
       resize();
       gl.useProgram(program);
@@ -594,7 +606,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         uniforms.scene,
         canvas.width,
         canvas.height,
-        reducedMotionRef.current ? 0 : (animationTimeRef.current / 1000) * -0.67,
+        reducedMotionRef.current ? 0 : (shaderTimeRef.current / 1000) * -0.67,
         4
       );
       gl.uniform4f(uniforms.shape, 1.32, 0.49, 0.84, 0.01);

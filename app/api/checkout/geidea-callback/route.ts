@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { createServiceClient } from "@/lib/supabase/server";
 import { OrderConfirmation } from "@/lib/email/OrderConfirmation";
+import { ProductionOrderNotification } from "@/lib/email/ProductionOrderNotification";
 import { getResend } from "@/lib/email/resend";
 
 function verifyGeideaSignature(payload: Record<string, string>, signature: string): boolean {
@@ -13,10 +14,7 @@ function verifyGeideaSignature(payload: Record<string, string>, signature: strin
     .map((k) => `${k}=${payload[k]}`)
     .join("&");
 
-  const expected = crypto
-    .createHmac("sha256", secret)
-    .update(signatureBase)
-    .digest("hex");
+  const expected = crypto.createHmac("sha256", secret).update(signatureBase).digest("hex");
 
   return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
 }
@@ -57,7 +55,11 @@ export async function POST(request: Request) {
 
     await supabase
       .from("carts")
-      .update({ status: "CONVERTED", converted_order_id: orderId, updated_at: new Date().toISOString() })
+      .update({
+        status: "CONVERTED",
+        converted_order_id: orderId,
+        updated_at: new Date().toISOString(),
+      })
       .eq("id", order.cart_id);
 
     // Fetch order items for the confirmation email
@@ -81,20 +83,39 @@ export async function POST(request: Request) {
       line2?: string;
       emirate: string;
       postalCode?: string;
+      phone?: string;
     };
 
-    await getResend().emails.send({
-      from: "Fasthaus <orders@fasthaus.ae>",
-      to: order.guest_email!,
-      subject: `Your order #${orderId.slice(0, 8).toUpperCase()} is confirmed`,
-      react: OrderConfirmation({
-        orderId: orderId.slice(0, 8).toUpperCase(),
-        customerName: addr.firstName,
-        items: emailItems,
-        shippingAddress: addr,
-        total: order.total,
-      }),
-    });
+    const shortOrderId = orderId.slice(0, 8).toUpperCase();
+    const emails = [
+      {
+        from: "Fasthaus <orders@fasthaus.studio>",
+        to: order.guest_email!,
+        subject: `Your order #${shortOrderId} is confirmed`,
+        react: OrderConfirmation({
+          orderId: shortOrderId,
+          customerName: addr.firstName,
+          items: emailItems,
+          shippingAddress: addr,
+          total: order.total,
+        }),
+      },
+      {
+        from: "Fasthaus <orders@fasthaus.studio>",
+        to: process.env.PRODUCTION_ORDER_EMAIL ?? "hello@fasthaus.studio",
+        subject: `New paid order #${shortOrderId}`,
+        react: ProductionOrderNotification({
+          orderId: shortOrderId,
+          customerEmail: order.guest_email!,
+          customerPhone: addr.phone,
+          items: emailItems,
+          shippingAddress: addr,
+          total: order.total,
+        }),
+      },
+    ];
+
+    await Promise.all(emails.map((email) => getResend().emails.send(email)));
   } else {
     await supabase
       .from("orders")

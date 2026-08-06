@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import Image from "next/image";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 
 type Props = {
@@ -11,8 +12,15 @@ type Props = {
   onSelect: (index: number) => void;
 };
 
-function MobileCarousel({ images, name, activeIndex, onSelect }: Props) {
-  const [emblaRef, emblaApi] = useEmblaCarousel();
+function formatCounter(value: number) {
+  return String(value).padStart(2, "0");
+}
+
+export default function ProductGallery({ images, name, activeIndex, onSelect }: Props) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: images.length > 1 });
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -33,21 +41,20 @@ function MobileCarousel({ images, name, activeIndex, onSelect }: Props) {
   }, [emblaApi, activeIndex]);
 
   return (
-    <div className="relative">
-      <div ref={emblaRef} className="overflow-hidden rounded-[14px]">
-        <div className="flex touch-pan-y">
+    <div
+      className="relative left-1/2 h-[calc(100svh-152px)] w-screen -translate-x-1/2 overflow-hidden md:h-[calc(100svh-188px)]"
+      style={{ backgroundColor: "var(--color-surface)" }}
+    >
+      <div ref={emblaRef} className="h-full overflow-hidden">
+        <div className="flex h-full touch-pan-y">
           {images.map((src, index) => (
-            <div
-              key={src}
-              className="relative aspect-[5/4] min-w-0 flex-[0_0_100%]"
-              style={{ backgroundColor: "var(--color-surface-muted)" }}
-            >
+            <div key={src} className="relative h-full min-w-0 flex-[0_0_100%]">
               <Image
                 src={src}
                 alt={`${name} — image ${index + 1} of ${images.length}`}
                 fill
                 sizes="100vw"
-                className="object-cover"
+                className="object-contain px-4 pb-24 pt-4 sm:px-8 sm:pb-28 sm:pt-8 md:px-12 lg:px-20"
                 priority={index === 0}
               />
             </div>
@@ -56,87 +63,33 @@ function MobileCarousel({ images, name, activeIndex, onSelect }: Props) {
       </div>
 
       {images.length > 1 && (
-        <>
-          <span
-            className="absolute right-3 top-3 rounded-full px-2.5 py-1 text-[12px] font-semibold text-white"
-            style={{ backgroundColor: "rgba(20, 17, 20, 0.55)" }}
-          >
-            {activeIndex + 1}/{images.length}
-          </span>
-          <div className="mt-3 flex justify-center">
-            {images.map((src, index) => (
-              <button
-                key={src}
-                onClick={() => onSelect(index)}
-                aria-label={`Go to image ${index + 1}`}
-                aria-current={index === activeIndex}
-                className="grid h-8 w-8 place-items-center"
-              >
-                <span
-                  className="block h-2 w-2 rounded-full transition-all"
-                  style={{
-                    backgroundColor:
-                      index === activeIndex
-                        ? "var(--color-accent-amber)"
-                        : "var(--color-border)",
-                    transform: index === activeIndex ? "scale(1.25)" : "none",
-                  }}
-                />
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-export default function ProductGallery({ images, name, activeIndex, onSelect }: Props) {
-  // Hero shows the active image; the grid shows up to 4 of the remaining ones.
-  const thumbs = images
-    .map((src, index) => ({ src, index }))
-    .filter(({ index }) => index !== activeIndex)
-    .slice(0, 4);
-
-  return (
-    <div className="lg:h-full lg:min-h-0">
-      {/* Mobile: swipeable carousel */}
-      <div className="md:hidden">
-        <MobileCarousel
-          images={images}
-          name={name}
-          activeIndex={activeIndex}
-          onSelect={onSelect}
-        />
-      </div>
-
-      {/* Desktop: hero + thumbnail grid */}
-      <div className="hidden gap-3 md:grid md:grid-cols-[1fr_1fr_1.2fr] md:grid-rows-2 lg:h-full lg:min-h-0">
-        <div
-          className="relative col-start-3 row-span-2 row-start-1 h-full overflow-hidden rounded-[14px]"
-          style={{ backgroundColor: "var(--color-surface-muted)" }}
-        >
-          <Image
-            src={images[activeIndex] ?? images[0]}
-            alt={name}
-            fill
-            sizes="40vw"
-            className="object-cover"
-            priority
-          />
-        </div>
-        {thumbs.map(({ src, index }) => (
+        <div className="absolute inset-x-0 bottom-7 z-10 flex items-center justify-center gap-5 md:bottom-16 md:gap-7">
           <button
-            key={index}
-            onClick={() => onSelect(index)}
-            className="relative aspect-[5/4] overflow-hidden rounded-[14px] transition-opacity hover:opacity-90 lg:aspect-auto lg:min-h-0"
-            style={{ backgroundColor: "var(--color-surface-muted)" }}
-            aria-label={`View image ${index + 1} of ${name}`}
+            type="button"
+            onClick={scrollPrev}
+            aria-label="Previous image"
+            className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{ color: "var(--color-text-primary)" }}
           >
-            <Image src={src} alt="" fill sizes="25vw" className="object-cover" />
+            <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
           </button>
-        ))}
-      </div>
+          <span
+            className="min-w-[66px] text-center text-sm font-semibold tabular-nums tracking-[0.08em]"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
+          </span>
+          <button
+            type="button"
+            onClick={scrollNext}
+            aria-label="Next image"
+            className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

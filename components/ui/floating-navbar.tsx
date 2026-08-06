@@ -37,7 +37,7 @@ export const FloatingNav = ({
     if (typeof current === "number") {
       const direction = current - scrollYProgress.getPrevious()!;
 
-      if (scrollYProgress.get() < 0.05) {
+      if (scrollYProgress.get() < 0.15) {
         if (!allowVisibleAtTop) {
           setVisible(false);
         }
@@ -100,7 +100,7 @@ export const FloatingNav = ({
                       <NavigationMenuTrigger asChild showChevron={false} unstyled>
                         <Link
                           href={navItem.link}
-                          className="group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold outline-none transition-colors hover:text-[var(--color-accent-amber)] focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]"
+                          className="group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]"
                         >
                           <span className="block sm:hidden">{navItem.icon}</span>
                           <span className="hidden sm:block">{navItem.name}</span>
@@ -110,7 +110,7 @@ export const FloatingNav = ({
                           />
                         </Link>
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent className="left-1/2 top-[calc(100%+16px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
+                      <NavigationMenuContent className="collection-menu-content left-1/2 top-[calc(100%+16px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
                         {navItem.megaMenu}
                       </NavigationMenuContent>
                     </NavigationMenuItem>
@@ -121,7 +121,7 @@ export const FloatingNav = ({
                   key={`link-${idx}`}
                   href={navItem.link}
                   className={cn(
-                    "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors hover:text-[var(--color-accent-amber)]"
+                    "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold underline-offset-4 transition-colors hover:text-[var(--color-accent-amber)] hover:underline"
                   )}
                 >
                   <span className="block sm:hidden">{navItem.icon}</span>

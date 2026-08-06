@@ -1,7 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck } from "lucide-react";
+import {
+  ShoppingCart,
+  Minus,
+  Plus,
+  Truck,
+  CalendarCheck,
+  ShieldCheck,
+  Star,
+} from "lucide-react";
 import { Tooltip } from "radix-ui";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
@@ -41,21 +49,45 @@ export default function PurchaseRow({
     },
   ];
 
+  const filledStars = Math.round(product.rating);
+
   return (
     <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_356px] lg:gap-12">
       {/* Product info column */}
       <div className="flex min-w-0 flex-col gap-5">
-        <div>
+        <div className="flex flex-col gap-3">
           <h1
-            className="mb-2.5 text-[32px] font-extrabold leading-[1.05] tracking-[-0.025em] md:text-[40px]"
+            className="text-[34px] font-extrabold leading-[1.03] tracking-[-0.03em] md:text-[46px]"
             style={{ color: "var(--color-text-primary)" }}
           >
             {product.name}
           </h1>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-0.5">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Star
+                  key={index}
+                  size={16}
+                  strokeWidth={1.5}
+                  fill={index < filledStars ? "var(--color-accent-amber)" : "none"}
+                  style={{
+                    color:
+                      index < filledStars ? "var(--color-accent-amber)" : "var(--color-border)",
+                  }}
+                />
+              ))}
+            </div>
+            <span
+              className="text-[14px] font-medium"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              {product.rating.toFixed(1)} · {product.reviewCount} reviews
+            </span>
+          </div>
         </div>
 
         <p
-          className="text-[16px] leading-[1.65] max-w-[62ch]"
+          className="max-w-[62ch] text-[16.5px] leading-[1.6]"
           style={{ color: "var(--color-text-secondary)" }}
         >
           {product.description}
@@ -78,11 +110,57 @@ export default function PurchaseRow({
             </div>
           ))}
         </div>
+
+        <div
+          className="flex flex-col gap-5 border-t pt-6"
+          style={{ borderColor: "var(--color-border)" }}
+        >
+          <h3
+            className="text-[20px] font-extrabold tracking-[-0.015em]"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            Product details
+          </h3>
+          <div className="grid grid-cols-[140px_1fr] items-start gap-6 sm:grid-cols-[180px_1fr]">
+            <div
+              className="relative aspect-square overflow-hidden rounded-[14px]"
+              style={{ backgroundColor: "var(--color-surface-muted)" }}
+            >
+              <Image
+                src="/outline/hamrah-lamp-outline.png"
+                alt={`${product.name} illustration`}
+                fill
+                sizes="180px"
+                className="object-cover"
+              />
+            </div>
+            <div className="grid grid-cols-[110px_1fr] text-[15px] sm:grid-cols-[130px_1fr]">
+              <span
+                className="border-b py-3 font-medium"
+                style={{ color: "var(--color-text-secondary)", borderColor: "var(--color-border)" }}
+              >
+                Dimensions
+              </span>
+              <span
+                className="border-b py-3 font-semibold"
+                style={{ color: "var(--color-text-primary)", borderColor: "var(--color-border)" }}
+              >
+                W {product.dimensions.widthCm} cm · H {product.dimensions.heightCm} cm
+              </span>
+              <span className="py-3 font-medium" style={{ color: "var(--color-text-secondary)" }}>
+                Material
+              </span>
+              <span className="py-3 font-semibold" style={{ color: "var(--color-text-primary)" }}>
+                {product.materials.join(" · ")}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Buy box */}
       <div
-        className="flex flex-col gap-[18px] rounded-[16px] border bg-white p-5 md:p-6"
+        className="flex flex-col gap-[18px] rounded-[18px] border bg-white p-6 md:p-7"
         style={{ borderColor: "var(--color-border)" }}
       >
         <div className="flex items-baseline gap-2.5">
@@ -102,6 +180,12 @@ export default function PurchaseRow({
               style={{ color: "var(--color-text-secondary)" }}
             >
               Lamp Color
+            </span>
+            <span
+              className="text-[15px] font-bold"
+              style={{ color: "var(--color-text-primary)" }}
+            >
+              {selectedVariant.color}
             </span>
             <Tooltip.Provider delayDuration={0}>
               <div className="flex gap-2.5">
@@ -182,7 +266,7 @@ export default function PurchaseRow({
             type="button"
             onClick={onBuyNow}
             disabled={busy}
-            className="flex h-[50px] items-center justify-center rounded-[12px] text-[16px] font-bold text-white transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
+            className="flex h-[54px] items-center justify-center rounded-[12px] text-[16.5px] font-bold text-white transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
             style={{ backgroundColor: "var(--color-accent-amber)" }}
           >
             {busy ? "Preparing…" : "Buy now –"}&nbsp;
@@ -197,7 +281,7 @@ export default function PurchaseRow({
             type="button"
             onClick={onAddToCart}
             disabled={busy}
-            className="flex h-[50px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white text-[16px] font-bold transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
+            className="flex h-[54px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white text-[16.5px] font-bold transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
             style={{
               borderColor: "var(--color-text-primary)",
               color: "var(--color-text-primary)",
@@ -206,7 +290,11 @@ export default function PurchaseRow({
             <ShoppingCart size={16} />
             {busy ? "Adding…" : "Add to cart"}
           </button>
-          {error && <p role="alert" className="text-[13px] font-medium" style={{ color: "var(--color-error)" }}>{error}</p>}
+          {error && (
+            <p role="alert" className="text-[13px] font-medium" style={{ color: "var(--color-error)" }}>
+              {error}
+            </p>
+          )}
         </div>
 
         <div

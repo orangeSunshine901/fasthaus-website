@@ -9,7 +9,7 @@ import { analyticsEvents } from "@/lib/analytics/events";
 type State = "idle" | "loading" | "success" | "error";
 
 const details = [
-  { icon: Mail, label: "Email", value: "hello@fasthaus.ae" },
+  { icon: Mail, label: "Email", value: "hello@fasthaus.studio" },
   { icon: MessageCircle, label: "WhatsApp", value: "+971 50 123 4567" },
   { icon: AtSign, label: "Instagram", value: "@fasthaus.studio" },
   { icon: MapPin, label: "Location", value: "Al Quoz, Dubai, UAE" },

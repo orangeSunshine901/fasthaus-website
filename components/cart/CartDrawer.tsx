@@ -11,7 +11,7 @@ import { ADD_ONS, getVariantMainImage, PRODUCTS } from "@/lib/data/products";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 
-const BESTSELLER = PRODUCTS.find((p) => p.badge === "BESTSELLER") ?? PRODUCTS[0];
+const BESTSELLER = PRODUCTS.find((p) => p.id === "1") ?? PRODUCTS[0];
 
 export default function CartDrawer() {
   const {
@@ -53,7 +53,11 @@ export default function CartDrawer() {
       return;
     }
 
-    capture(analyticsEvents.cartViewed, { item_count: count, cart_value: total(), currency: "AED" });
+    capture(analyticsEvents.cartViewed, {
+      item_count: count,
+      cart_value: total(),
+      currency: "AED",
+    });
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -131,7 +135,11 @@ export default function CartDrawer() {
             </div>
 
             {error && (
-              <p role="alert" className="border-b px-6 py-3 text-[13px] font-medium" style={{ borderColor: "#EEE9E3", color: "var(--color-error)" }}>
+              <p
+                role="alert"
+                className="border-b px-6 py-3 text-[13px] font-medium"
+                style={{ borderColor: "#EEE9E3", color: "var(--color-error)" }}
+              >
                 {error}
               </p>
             )}
@@ -172,7 +180,7 @@ export default function CartDrawer() {
                       style={{ backgroundColor: "rgba(255,255,255,0.96)" }}
                     >
                       <Image
-                        src={getVariantMainImage(BESTSELLER.variants[0])}
+                        src={BESTSELLER.variants[0].collectionImage}
                         alt={BESTSELLER.name}
                         width={56}
                         height={56}
@@ -266,7 +274,10 @@ export default function CartDrawer() {
                               >
                                 {item.productName}
                               </span>
-                              <span className="text-[13px] font-medium" style={{ color: "#8A8075" }}>
+                              <span
+                                className="text-[13px] font-medium"
+                                style={{ color: "#8A8075" }}
+                              >
                                 {item.variantColor}
                               </span>
                             </div>
@@ -325,44 +336,44 @@ export default function CartDrawer() {
 
                   {/* Add-on upsells */}
                   {addOnRows.map(({ addOn, item, attached }) => (
-                      <label
-                        key={addOn.id}
-                        className="my-4 flex cursor-pointer items-center gap-3.5 rounded-[14px] p-4"
-                        style={{ backgroundColor: "#FAF7F3" }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={attached}
-                          disabled={pending.includes(item.id)}
-                          onChange={() =>
-                            attached ? removeAddOn(item.id, addOn.id) : addAddOn(item.id, addOn.id)
-                          }
-                          className="h-[18px] w-[18px] flex-shrink-0 cursor-pointer accent-[var(--color-accent-amber)]"
-                        />
-                        <Image
-                          src={addOn.image}
-                          alt={addOn.name}
-                          width={48}
-                          height={48}
-                          className="h-12 w-12 flex-shrink-0 rounded-[10px] object-cover"
-                        />
-                        <div className="flex flex-1 flex-col gap-0.5">
-                          <span
-                            className="text-[14px] font-bold"
-                            style={{ color: "var(--color-text-primary)" }}
-                          >
-                            Add the {addOn.name.toLowerCase()}
-                          </span>
-                          <span className="text-[12.5px] font-medium" style={{ color: "#6E655B" }}>
-                            Made for your {item.productName}
-                          </span>
-                        </div>
-                        <DirhamPrice
-                          amount={addOn.price}
-                          size="sm"
-                          className="flex-shrink-0 font-extrabold"
-                        />
-                      </label>
+                    <label
+                      key={addOn.id}
+                      className="my-4 flex cursor-pointer items-center gap-3.5 rounded-[14px] p-4"
+                      style={{ backgroundColor: "#FAF7F3" }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={attached}
+                        disabled={pending.includes(item.id)}
+                        onChange={() =>
+                          attached ? removeAddOn(item.id, addOn.id) : addAddOn(item.id, addOn.id)
+                        }
+                        className="h-[18px] w-[18px] flex-shrink-0 cursor-pointer accent-[var(--color-accent-amber)]"
+                      />
+                      <Image
+                        src={addOn.image}
+                        alt={addOn.name}
+                        width={48}
+                        height={48}
+                        className="h-12 w-12 flex-shrink-0 rounded-[10px] object-cover"
+                      />
+                      <div className="flex flex-1 flex-col gap-0.5">
+                        <span
+                          className="text-[14px] font-bold"
+                          style={{ color: "var(--color-text-primary)" }}
+                        >
+                          Add the {addOn.name.toLowerCase()}
+                        </span>
+                        <span className="text-[12.5px] font-medium" style={{ color: "#6E655B" }}>
+                          Made for your {item.productName}
+                        </span>
+                      </div>
+                      <DirhamPrice
+                        amount={addOn.price}
+                        size="sm"
+                        className="flex-shrink-0 font-extrabold"
+                      />
+                    </label>
                   ))}
                 </div>
 
@@ -394,7 +405,12 @@ export default function CartDrawer() {
                     style={{ backgroundColor: "var(--color-accent-amber)" }}
                   >
                     <span>Checkout —</span>
-                    <DirhamPrice amount={subtotal()} size="sm" variant="white" className="font-bold" />
+                    <DirhamPrice
+                      amount={subtotal()}
+                      size="sm"
+                      variant="white"
+                      className="font-bold"
+                    />
                   </Link>
                   <Link
                     href="/collection"
