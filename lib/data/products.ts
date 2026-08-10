@@ -14,7 +14,7 @@ export type ProductVariant = {
   /** Image displayed on collection and category product cards for this variant. */
   collectionImage: string;
   /** Primary image shown when this color is selected on the product page. */
-  mainImage: string;
+  mainImage?: string;
   images: string[];
 };
 
@@ -475,8 +475,12 @@ export function getDefaultVariant(product: Product): ProductVariant {
   return product.variants[0];
 }
 
+export function getVariantImage(variant: ProductVariant): string {
+  return variant.collectionImage;
+}
+
 export function getVariantMainImage(variant: ProductVariant): string {
-  return variant.mainImage;
+  return variant.mainImage ?? variant.images[0] ?? variant.collectionImage;
 }
 
 export function getVariantGalleryImages(variant: ProductVariant): string[] {

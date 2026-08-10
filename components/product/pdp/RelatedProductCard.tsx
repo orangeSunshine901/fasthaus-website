@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getVariantMainImage, type Product } from "@/lib/data/products";
+import { getVariantImage, type Product } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 
 export default function RelatedProductCard({ product }: { product: Product }) {
@@ -13,7 +13,7 @@ export default function RelatedProductCard({ product }: { product: Product }) {
         style={{ backgroundColor: "var(--color-surface-muted)" }}
       >
         <Image
-          src={getVariantMainImage(defaultVariant)}
+          src={getVariantImage(defaultVariant)}
           alt={product.name}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
@@ -22,10 +22,7 @@ export default function RelatedProductCard({ product }: { product: Product }) {
       </div>
       <div className="flex flex-col gap-1">
         <div className="flex items-baseline justify-between gap-2">
-          <span
-            className="text-[15.5px] font-bold"
-            style={{ color: "var(--color-text-primary)" }}
-          >
+          <span className="text-[15.5px] font-bold" style={{ color: "var(--color-text-primary)" }}>
             {product.name}
           </span>
           <DirhamPrice

@@ -13,6 +13,11 @@ const baseVariant: ProductVariant = {
   sku: "TEST",
   price: 100,
   stock: 1,
+  featuredImages: {
+    lightOff: "/gallery-one.png",
+    lightOn: "/gallery-two.png",
+  },
+  collectionImage: "/gallery-one.png",
   images: ["/gallery-one.png", "/gallery-two.png"],
 };
 

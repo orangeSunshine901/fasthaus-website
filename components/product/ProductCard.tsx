@@ -4,7 +4,7 @@ import { useEffect, useId, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Tooltip } from "radix-ui";
-import { getVariantMainImage, type Product, type ProductVariant } from "@/lib/data/products";
+import { getVariantImage, type Product, type ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
 import { capture } from "@/lib/analytics/client";
@@ -67,7 +67,7 @@ export default function ProductCard({ product }: Props) {
       variantColor: selectedVariant.color,
       price: selectedVariant.price,
       quantity: 1,
-      image: getVariantMainImage(selectedVariant),
+      image: getVariantImage(selectedVariant),
     });
     if (added) {
       capture(analyticsEvents.productAddedToCart, {
