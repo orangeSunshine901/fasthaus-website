@@ -104,8 +104,8 @@ export const PRODUCTS: Product[] = [
       },
       {
         id: "1-fire-red",
-        color: "Fire Red",
-        colorHex: "#e53b36",
+        color: "Cherry Red",
+        colorHex: "#7a0400",
         sku: "TFL-FR",
         price: 299,
         stock: 12,
@@ -376,8 +376,8 @@ export const PRODUCTS: Product[] = [
     variants: [
       {
         id: "4-pearl",
-        color: "Fire Red",
-        colorHex: "#b50e0e",
+        color: "Cherry Red",
+        colorHex: "#7a0400",
         sku: "PTL-FRD",
         price: 399,
         stock: 9,
