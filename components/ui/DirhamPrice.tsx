@@ -34,7 +34,7 @@ export default function DirhamPrice({
       />
       <span>{amount.toFixed(2)}</span>
       {compareAmount && (
-        <span className="line-through ml-1 text-[var(--color-text-disabled)] text-sm">
+        <span className="line-through ml-1 text-[var(--color-text-disabled)] text-[16px]">
           {compareAmount.toFixed(2)}
         </span>
       )}

@@ -33,19 +33,19 @@ export default function CartDrawer() {
 
   // One row per add-on: checked if some cart item already has it, otherwise an
   // upsell targeting the first item whose product offers it.
-  const addOnRows = useMemo(
-    () =>
-      ADD_ONS.flatMap((addOn) => {
-        const attachedTo = items.find((item) => (item.addOns ?? []).some((a) => a.id === addOn.id));
-        const target =
-          attachedTo ??
-          items.find((item) =>
-            PRODUCTS.find((p) => p.id === item.productId)?.addOns?.some((a) => a.id === addOn.id)
-          );
-        return target ? [{ addOn, item: target, attached: Boolean(attachedTo) }] : [];
-      }),
-    [items]
-  );
+  // const addOnRows = useMemo(
+  //   () =>
+  //     ADD_ONS.flatMap((addOn) => {
+  //       const attachedTo = items.find((item) => (item.addOns ?? []).some((a) => a.id === addOn.id));
+  //       const target =
+  //         attachedTo ??
+  //         items.find((item) =>
+  //           PRODUCTS.find((p) => p.id === item.productId)?.addOns?.some((a) => a.id === addOn.id)
+  //         );
+  //       return target ? [{ addOn, item: target, attached: Boolean(attachedTo) }] : [];
+  //     }),
+  //   [items]
+  // );
 
   // Lock body scroll and close on Escape while the drawer is open.
   useEffect(() => {
@@ -335,7 +335,7 @@ export default function CartDrawer() {
                   })}
 
                   {/* Add-on upsells */}
-                  {addOnRows.map(({ addOn, item, attached }) => (
+                  {/* {addOnRows.map(({ addOn, item, attached }) => (
                     <label
                       key={addOn.id}
                       className="my-4 flex cursor-pointer items-center gap-3.5 rounded-[14px] p-4"
@@ -374,7 +374,7 @@ export default function CartDrawer() {
                         className="flex-shrink-0 font-extrabold"
                       />
                     </label>
-                  ))}
+                  ))} */}
                 </div>
 
                 {/* Footer */}
@@ -409,7 +409,7 @@ export default function CartDrawer() {
                       amount={subtotal()}
                       size="sm"
                       variant="white"
-                      className="font-bold"
+                      className="font-bold text-[16px]"
                     />
                   </Link>
                   <Link
