@@ -72,6 +72,91 @@ export const ADD_ONS: AddOn[] = [
 
 export const PRODUCTS: Product[] = [
   {
+    id: "3",
+    slug: "nasaq-lamp",
+    name: "NASAQ",
+    category: "table-lamps",
+    description:
+      "Layered, rounded forms inspired by early-2010s abstraction create a warm, calm presence for slower evenings.",
+    featured: true,
+    rating: 4.2,
+    reviewCount: 24,
+    variants: [
+      {
+        id: "3-orange",
+        color: "Burnt Orange",
+        colorHex: "#F7633A",
+        sku: "STL-ORNG",
+        price: 299,
+        stock: 14,
+        featuredImages: {
+          lightOff: "/stack-lamp/stack-lamp-orange-off.png",
+          lightOn: "/stack-lamp/stack-lamp-orange-on.png",
+        },
+        collectionImage: "/stack-lamp/stack-lamp-orange-off-product-shadow.png",
+        mainImage: "/stack-lamp/stack-lamp-orange-on.png",
+        images: ["/stack-lamp/stack-lamp-orange-on.png", "/stack-lamp/stack-lamp-orange-off.png"],
+      },
+      {
+        id: "3-blue",
+        color: "Cobalt Blue",
+        colorHex: "#007ffe",
+        sku: "STL-BLU",
+        price: 299,
+        stock: 7,
+        featuredImages: {
+          lightOff: "/stack-lamp/stack-lamp-blue-off.png",
+          lightOn: "/stack-lamp/stack-lamp-blue-on.png",
+        },
+        collectionImage: "/stack-lamp/stack-lamp-blue-off-product-shadow.png",
+        mainImage: "/stack-lamp/stack-lamp-blue-on.png",
+        images: ["/stack-lamp/stack-lamp-blue-on.png", "/stack-lamp/stack-lamp-blue-off.png"],
+      },
+      {
+        id: "3-white",
+        color: "White",
+        colorHex: "#F5F5F5",
+        sku: "STL-WHT",
+        price: 299,
+        stock: 7,
+        featuredImages: {
+          lightOff: "/stack-lamp/stack-lamp-white-off.png",
+          lightOn: "/stack-lamp/stack-lamp-white-on.png",
+        },
+        collectionImage: "/stack-lamp/stack-lamp-white-off-product-shadow.png",
+        mainImage: "/stack-lamp/stack-lamp-white-on.png",
+        images: ["/stack-lamp/stack-lamp-white-off.png", "/stack-lamp/stack-lamp-white-on.png"],
+      },
+    ],
+    features: [
+      { icon: "/premium-material-icon.svg", label: "12hr battery life" },
+      { icon: "/warm-led-icon.svg", label: "Adjustable warmth" },
+      { icon: "/premium-material-icon.svg", label: "Ceramic body" },
+      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
+    ],
+    specifications: [
+      {
+        icon: "/spec-plug-icon.svg",
+        lines: ["USB-C Charging 5V/2A", "12-hour battery runtime"],
+      },
+      {
+        icon: "/spec-bulb-icon.svg",
+        lines: ["Integrated LED 350lm 5W", "Adjustable 2700–4000K"],
+      },
+    ],
+    materials: ["PLA", "Aluminium"],
+    dimensions: { image: "/lamp-feature-3.png", heightCm: 24, widthCm: 14 },
+    perfectFor: [
+      { icon: "/workspaces-icon.svg", label: "Workspaces" },
+      { icon: "/living-room-icon.svg", label: "Dining" },
+      { icon: "/bedside-icon.svg", label: "Bedside" },
+      { icon: "/reading-nook-icon.svg", label: "Outdoor" },
+    ],
+    designStory:
+      "The Flute was designed around one constraint: freedom. No cable, no fixed spot. A 12-hour rechargeable base and a magnetic USB-C port mean it goes where you go — from morning work session to evening dinner table.",
+    addOns: [ADD_ONS[0]],
+  },
+  {
     id: "1",
     slug: "nujaj-desk-lamp",
     name: "NUJĀJ",
@@ -88,7 +173,7 @@ export const PRODUCTS: Product[] = [
         color: "Matcha Green",
         colorHex: "#c5d371",
         sku: "TFL-MG",
-        price: 299,
+        price: 329,
         stock: 8,
         featuredImages: {
           lightOff: "/flute-lamp/flute-matcha-off.png",
@@ -107,7 +192,7 @@ export const PRODUCTS: Product[] = [
         color: "Cherry Red",
         colorHex: "#942025",
         sku: "TFL-FR",
-        price: 299,
+        price: 329,
         stock: 12,
         featuredImages: {
           lightOff: "/flute-lamp/flute-fire-red-off.png",
@@ -126,7 +211,7 @@ export const PRODUCTS: Product[] = [
         color: "Clear",
         colorHex: "#F5F5F5",
         sku: "LDL-CLR",
-        price: 299,
+        price: 329,
         stock: 5,
         featuredImages: {
           lightOff: "/flute-lamp/flute-clear-off.png",
@@ -174,6 +259,94 @@ export const PRODUCTS: Product[] = [
     addOns: ADD_ONS,
   },
   {
+    id: "4",
+    slug: "hamrah-lamp",
+    name: "HAMRAH",
+    category: "table-lamps",
+    description:
+      "A ribbed sculptural lamp inspired by pearl-diving heritage, with a hidden warm glow that feels calm and inviting.",
+    featured: true,
+    rating: 4.5,
+    reviewCount: 11,
+    variants: [
+      {
+        id: "4-pearl",
+        color: "Cherry Red",
+        colorHex: "#942025",
+        sku: "PTL-FRD",
+        price: 379,
+        stock: 9,
+        featuredImages: {
+          lightOff: "/pearl-lamp/pearl-lamp-red-off.png",
+          lightOn: "/pearl-lamp/pearl-lamp-red-on.png",
+        },
+        collectionImage: "/pearl-lamp/pearl-lamp-red-off-product-shadow.png",
+        mainImage: "/pearl-lamp/pearl-lamp-red-off.png",
+        images: ["/pearl-lamp/pearl-lamp-red-off.png", "/pearl-lamp/pearl-lamp-red-on.png"],
+      },
+      {
+        id: "4-blue",
+        color: "Cobalt Blue",
+        colorHex: "#007ffe",
+        sku: "PTL-BLU",
+        price: 379,
+        stock: 4,
+        featuredImages: {
+          lightOff: "/pearl-lamp/pearl-lamp-blue-off.png",
+          lightOn: "/pearl-lamp/pearl-lamp-blue-on.png",
+        },
+        collectionImage: "/pearl-lamp/pearl-lamp-blue-off-shadow.png",
+        mainImage: "/pearl-lamp/pearl-lamp-blue-off.png",
+        images: ["/pearl-lamp/pearl-lamp-blue-off.png", "/pearl-lamp/pearl-lamp-blue-on.png"],
+      },
+      {
+        id: "4-white",
+        color: "White",
+        colorHex: "#F5F5F5",
+        sku: "PTL-WHT",
+        price: 379,
+        stock: 4,
+        featuredImages: {
+          lightOff: "/pearl-lamp/pearl-lamp-white-off.png",
+          lightOn: "/pearl-lamp/pearl-lamp-white-on.png",
+        },
+        collectionImage: "/pearl-lamp/pearl-lamp-white-off-product-shadow.png",
+        mainImage: "/pearl-lamp/pearl-lamp-white-off.png",
+        images: ["/pearl-lamp/pearl-lamp-white-off.png", "/pearl-lamp/pearl-lamp-white-on.png"],
+      },
+    ],
+    features: [
+      { icon: "/premium-material-icon.svg", label: "Handfinished ceramic" },
+      { icon: "/warm-led-icon.svg", label: "Warm LED Light" },
+      { icon: "/premium-material-icon.svg", label: "Linen shade" },
+      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
+    ],
+    specifications: [
+      {
+        icon: "/spec-plug-icon.svg",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+      },
+      {
+        icon: "/spec-bulb-icon.svg",
+        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
+      },
+      {
+        icon: "/smart-bulb-icon.svg",
+        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
+      },
+    ],
+    materials: ["Ceramic", "Linen"],
+    dimensions: { image: "/lamp-feature-4.png", heightCm: 32, widthCm: 20 },
+    perfectFor: [
+      { icon: "/living-room-icon.svg", label: "Living Room" },
+      { icon: "/bedside-icon.svg", label: "Bedside" },
+      { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
+    ],
+    designStory:
+      "The ribbed texture was born from a material experiment — pressing linen weave into soft clay to see what light would do with the result. The answer: something that feels alive as the sun moves through the room.",
+    addOns: ADD_ONS,
+  },
+  {
     id: "2",
     slug: "kasane-lamp",
     name: "KASANE",
@@ -181,7 +354,7 @@ export const PRODUCTS: Product[] = [
     description:
       "Desert sand ripples, translated into a sculptural lamp that casts a soft, calming glow.",
     featured: true,
-    badge: "BESTSELLER",
+    // badge: "BESTSELLER",
     rating: 4.7,
     reviewCount: 18,
     variants: [
@@ -190,7 +363,7 @@ export const PRODUCTS: Product[] = [
         color: "Cobalt Blue",
         colorHex: "#007ffe",
         sku: "ML-CB",
-        price: 379,
+        price: 399,
         stock: 6,
         featuredImages: {
           lightOff: "/mushroom-lamp/mushroom-blue-off.png",
@@ -210,7 +383,7 @@ export const PRODUCTS: Product[] = [
         color: "Burnt Orange",
         colorHex: "#f7633a",
         sku: "ML-BO",
-        price: 379,
+        price: 399,
         stock: 6,
         featuredImages: {
           lightOff: "/mushroom-lamp/mushroom-orange-off.png",
@@ -231,7 +404,7 @@ export const PRODUCTS: Product[] = [
         color: "White",
         colorHex: "#F5F5F5",
         sku: "ML-WHT",
-        price: 379,
+        price: 399,
         stock: 10,
         featuredImages: {
           lightOff: "/mushroom-lamp/mushroom-white-off.png",
@@ -276,179 +449,6 @@ export const PRODUCTS: Product[] = [
     ],
     designStory:
       "The Arc Table Lamp draws from the geometry of suspension bridges — tension and balance expressed in a single sweeping form. The frosted glass diffuser softens the LED source into an even, comfortable glow suited for long evenings.",
-    addOns: ADD_ONS,
-  },
-  {
-    id: "3",
-    slug: "nasaq-lamp",
-    name: "NASAQ",
-    category: "table-lamps",
-    description:
-      "Layered, rounded forms inspired by early-2010s abstraction create a warm, calm presence for slower evenings.",
-    featured: true,
-    rating: 4.2,
-    reviewCount: 24,
-    variants: [
-      {
-        id: "3-orange",
-        color: "Burnt Orange",
-        colorHex: "#F7633A",
-        sku: "STL-ORNG",
-        price: 329,
-        stock: 14,
-        featuredImages: {
-          lightOff: "/stack-lamp/stack-lamp-orange-off.png",
-          lightOn: "/stack-lamp/stack-lamp-orange-on.png",
-        },
-        collectionImage: "/stack-lamp/stack-lamp-orange-off-product-shadow.png",
-        mainImage: "/stack-lamp/stack-lamp-orange-on.png",
-        images: ["/stack-lamp/stack-lamp-orange-on.png", "/stack-lamp/stack-lamp-orange-off.png"],
-      },
-      {
-        id: "3-blue",
-        color: "Cobalt Blue",
-        colorHex: "#007ffe",
-        sku: "STL-BLU",
-        price: 329,
-        stock: 7,
-        featuredImages: {
-          lightOff: "/stack-lamp/stack-lamp-blue-off.png",
-          lightOn: "/stack-lamp/stack-lamp-blue-on.png",
-        },
-        collectionImage: "/stack-lamp/stack-lamp-blue-off-product-shadow.png",
-        mainImage: "/stack-lamp/stack-lamp-blue-on.png",
-        images: ["/stack-lamp/stack-lamp-blue-on.png", "/stack-lamp/stack-lamp-blue-off.png"],
-      },
-      {
-        id: "3-white",
-        color: "White",
-        colorHex: "#F5F5F5",
-        sku: "STL-WHT",
-        price: 329,
-        stock: 7,
-        featuredImages: {
-          lightOff: "/stack-lamp/stack-lamp-white-off.png",
-          lightOn: "/stack-lamp/stack-lamp-white-on.png",
-        },
-        collectionImage: "/stack-lamp/stack-lamp-white-off-product-shadow.png",
-        mainImage: "/stack-lamp/stack-lamp-white-on.png",
-        images: ["/stack-lamp/stack-lamp-white-off.png", "/stack-lamp/stack-lamp-white-on.png"],
-      },
-    ],
-    features: [
-      { icon: "/premium-material-icon.svg", label: "12hr battery life" },
-      { icon: "/warm-led-icon.svg", label: "Adjustable warmth" },
-      { icon: "/premium-material-icon.svg", label: "Ceramic body" },
-      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
-    ],
-    specifications: [
-      {
-        icon: "/spec-plug-icon.svg",
-        lines: ["USB-C Charging 5V/2A", "12-hour battery runtime"],
-      },
-      {
-        icon: "/spec-bulb-icon.svg",
-        lines: ["Integrated LED 350lm 5W", "Adjustable 2700–4000K"],
-      },
-    ],
-    materials: ["PLA", "Aluminium"],
-    dimensions: { image: "/lamp-feature-3.png", heightCm: 24, widthCm: 14 },
-    perfectFor: [
-      { icon: "/workspaces-icon.svg", label: "Workspaces" },
-      { icon: "/living-room-icon.svg", label: "Dining" },
-      { icon: "/bedside-icon.svg", label: "Bedside" },
-      { icon: "/reading-nook-icon.svg", label: "Outdoor" },
-    ],
-    designStory:
-      "The Flute was designed around one constraint: freedom. No cable, no fixed spot. A 12-hour rechargeable base and a magnetic USB-C port mean it goes where you go — from morning work session to evening dinner table.",
-    addOns: [ADD_ONS[0]],
-  },
-  {
-    id: "4",
-    slug: "hamrah-lamp",
-    name: "HAMRAH",
-    category: "table-lamps",
-    description:
-      "A ribbed sculptural lamp inspired by pearl-diving heritage, with a hidden warm glow that feels calm and inviting.",
-    featured: true,
-    rating: 4.5,
-    reviewCount: 11,
-    variants: [
-      {
-        id: "4-pearl",
-        color: "Cherry Red",
-        colorHex: "#942025",
-        sku: "PTL-FRD",
-        price: 399,
-        stock: 9,
-        featuredImages: {
-          lightOff: "/pearl-lamp/pearl-lamp-red-off.png",
-          lightOn: "/pearl-lamp/pearl-lamp-red-on.png",
-        },
-        collectionImage: "/pearl-lamp/pearl-lamp-red-off-product-shadow.png",
-        mainImage: "/pearl-lamp/pearl-lamp-red-off.png",
-        images: ["/pearl-lamp/pearl-lamp-red-off.png", "/pearl-lamp/pearl-lamp-red-on.png"],
-      },
-      {
-        id: "4-blue",
-        color: "Cobalt Blue",
-        colorHex: "#007ffe",
-        sku: "PTL-BLU",
-        price: 399,
-        stock: 4,
-        featuredImages: {
-          lightOff: "/pearl-lamp/pearl-lamp-blue-off.png",
-          lightOn: "/pearl-lamp/pearl-lamp-blue-on.png",
-        },
-        collectionImage: "/pearl-lamp/pearl-lamp-blue-off-shadow.png",
-        mainImage: "/pearl-lamp/pearl-lamp-blue-off.png",
-        images: ["/pearl-lamp/pearl-lamp-blue-off.png", "/pearl-lamp/pearl-lamp-blue-on.png"],
-      },
-      {
-        id: "4-white",
-        color: "White",
-        colorHex: "#F5F5F5",
-        sku: "PTL-WHT",
-        price: 399,
-        stock: 4,
-        featuredImages: {
-          lightOff: "/pearl-lamp/pearl-lamp-white-off.png",
-          lightOn: "/pearl-lamp/pearl-lamp-white-on.png",
-        },
-        collectionImage: "/pearl-lamp/pearl-lamp-white-off-product-shadow.png",
-        mainImage: "/pearl-lamp/pearl-lamp-white-off.png",
-        images: ["/pearl-lamp/pearl-lamp-white-off.png", "/pearl-lamp/pearl-lamp-white-on.png"],
-      },
-    ],
-    features: [
-      { icon: "/premium-material-icon.svg", label: "Handfinished ceramic" },
-      { icon: "/warm-led-icon.svg", label: "Warm LED Light" },
-      { icon: "/premium-material-icon.svg", label: "Linen shade" },
-      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
-    ],
-    specifications: [
-      {
-        icon: "/spec-plug-icon.svg",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
-      },
-      {
-        icon: "/spec-bulb-icon.svg",
-        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
-      },
-      {
-        icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
-      },
-    ],
-    materials: ["Ceramic", "Linen"],
-    dimensions: { image: "/lamp-feature-4.png", heightCm: 32, widthCm: 20 },
-    perfectFor: [
-      { icon: "/living-room-icon.svg", label: "Living Room" },
-      { icon: "/bedside-icon.svg", label: "Bedside" },
-      { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
-    ],
-    designStory:
-      "The ribbed texture was born from a material experiment — pressing linen weave into soft clay to see what light would do with the result. The answer: something that feels alive as the sun moves through the room.",
     addOns: ADD_ONS,
   },
 ];
