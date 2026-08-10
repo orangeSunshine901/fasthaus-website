@@ -168,7 +168,7 @@ export default function CartDrawer() {
                       Your cart is empty
                     </span>
                     <span className="text-[14.5px] font-semibold text-white/85">
-                      Nothing here yet — let&apos;s fix that.
+                      Nothing here yet, let&apos;s fix that.
                     </span>
                   </div>
                   <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2.5">
@@ -389,7 +389,7 @@ export default function CartDrawer() {
                     <DirhamPrice amount={subtotal()} size="lg" className="font-extrabold" />
                   </div>
                   <span className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
-                    Shipping calculated at checkout · 30-day returns
+                    {/* Free Shipping always · 7-day return */}
                   </span>
                   <Link
                     href="/checkout"

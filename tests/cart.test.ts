@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { cookiePolicy, lineTotal, toMinorUnits } from "../lib/cart/rules.ts";
+import { cookiePolicy, isEditableCartStatus, lineTotal, toMinorUnits } from "../lib/cart/rules.ts";
 
 test("uses integer minor units for money", () => {
   assert.equal(toMinorUnits(299), 29_900);
@@ -18,4 +18,10 @@ test("uses an HTTP-compatible localhost cookie", () => {
   const development = cookiePolicy(false);
   assert.equal(development.name, "fasthaus_cart");
   assert.equal(development.options.secure, false);
+});
+
+test("allows cart edits while checkout is prepared, but not after conversion", () => {
+  assert.equal(isEditableCartStatus("ACTIVE"), true);
+  assert.equal(isEditableCartStatus("CHECKOUT_STARTED"), true);
+  assert.equal(isEditableCartStatus("CONVERTED"), false);
 });

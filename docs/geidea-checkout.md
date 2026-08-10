@@ -1,0 +1,45 @@
+# Geidea Checkout
+
+Fasthaus uses Geidea Hosted Payment Page for cards and Express Checkout for Apple Pay,
+Google Pay, and Samsung Pay. Prices and order state remain server-authoritative.
+
+## Required configuration
+
+- `GEIDEA_MERCHANT_PUBLIC_KEY` — server-only merchant public key.
+- `GEIDEA_API_PASSWORD` — server-only API password.
+- `GEIDEA_API_BASE_URL` — UAE API host; defaults to `https://api.geidea.ae`.
+- `GEIDEA_HPP_BASE_URL` — UAE hosted checkout host; defaults to `https://payments.geidea.ae`.
+- `GEIDEA_SDK_URL` — synchronous browser SDK URL.
+- `NEXT_PUBLIC_BASE_URL` — public HTTPS Fasthaus origin used for callback and return URLs.
+- `GEIDEA_LOG_CALLBACKS` — set to `true` only during testing to print full callback JSON
+  in the server terminal; leave disabled in production because payloads contain payment metadata.
+
+`GEIDEA_MERCHANT_ID` remains a temporary backwards-compatible alias for the public key.
+There is no separate webhook secret in Geidea's public callback algorithm; callbacks are
+signed with the API password.
+
+## Provider onboarding
+
+1. Confirm that the credentials and configured hosts belong to the UAE sandbox.
+2. Ask Geidea to enable cards, Apple Pay, Google Pay, and Samsung Pay on the merchant.
+3. Obtain the Apple domain association file and publish it as
+   `public/.well-known/apple-developer-merchantid-domain-association` without an extension.
+4. Register the Google Business merchant ID with Geidea.
+5. Confirm the callback timestamp field/casing using a genuine signed sandbox callback.
+
+The callback verifier accepts `timestamp`, `timeStamp`, or the callback order's
+`updatedDate` fallback because Geidea's current guide and sample payload differ. Do not
+switch to live credentials until a signed sandbox callback passes verification.
+
+## Payment lifecycle
+
+1. Checkout validates the anonymous cart and delivery details on the server.
+2. A pending Fasthaus order and one 15-minute Geidea session are created.
+3. The same session powers the card redirect and the supported express wallet buttons.
+4. Browser callbacks only navigate to the order page.
+5. Only a valid server callback with matching merchant, amount, currency, reference, paid
+   status, and success codes confirms the order.
+6. Confirmation emails use stable Resend idempotency keys so callback retries are safe.
+
+Apply `supabase/migrations/20260807091714_geidea_payment_state.sql` before enabling the
+gateway outside local test mode.

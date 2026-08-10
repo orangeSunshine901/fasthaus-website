@@ -24,8 +24,10 @@ type Props = {
   shippingAddress: {
     firstName: string;
     lastName: string;
+    streetAddress: string;
     line1: string;
-    line2?: string;
+    line2: string;
+    landmark?: string;
     emirate: string;
     postalCode?: string;
   };
@@ -53,29 +55,64 @@ export function ProductionOrderNotification({
             Payment has been confirmed. Please begin production.
           </Text>
 
-          <Section style={{ backgroundColor: "#fff", borderRadius: 12, padding: "16px 20px", marginBottom: 16 }}>
-            <Heading as="h2" style={{ fontSize: 16, color: "#141114", margin: "0 0 8px" }}>Customer</Heading>
+          <Section
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: 12,
+              padding: "16px 20px",
+              marginBottom: 16,
+            }}
+          >
+            <Heading as="h2" style={{ fontSize: 16, color: "#141114", margin: "0 0 8px" }}>
+              Customer
+            </Heading>
             <Text style={{ color: "#575757", lineHeight: "22px", margin: 0 }}>
-              {shippingAddress.firstName} {shippingAddress.lastName}<br />
-              {customerEmail}{customerPhone ? ` · ${customerPhone}` : ""}
+              {shippingAddress.firstName} {shippingAddress.lastName}
+              <br />
+              {customerEmail}
+              {customerPhone ? ` · ${customerPhone}` : ""}
             </Text>
           </Section>
 
-          <Section style={{ backgroundColor: "#fff", borderRadius: 12, padding: "16px 20px", marginBottom: 16 }}>
-            <Heading as="h2" style={{ fontSize: 16, color: "#141114", margin: "0 0 8px" }}>Items</Heading>
+          <Section
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: 12,
+              padding: "16px 20px",
+              marginBottom: 16,
+            }}
+          >
+            <Heading as="h2" style={{ fontSize: 16, color: "#141114", margin: "0 0 8px" }}>
+              Items
+            </Heading>
             {items.map((item, index) => (
               <Text key={index} style={{ color: "#141114", lineHeight: "22px", margin: "0 0 8px" }}>
-                {item.name} — {item.variantColor} × {item.quantity} (AED {(item.unitPrice * item.quantity).toFixed(2)})
+                {item.name} — {item.variantColor} × {item.quantity} (AED{" "}
+                {(item.unitPrice * item.quantity).toFixed(2)})
               </Text>
             ))}
-            <Text style={{ color: "#141114", fontWeight: 700, margin: "16px 0 0" }}>Total: AED {total.toFixed(2)}</Text>
+            <Text style={{ color: "#141114", fontWeight: 700, margin: "16px 0 0" }}>
+              Total: AED {total.toFixed(2)}
+            </Text>
           </Section>
 
           <Section style={{ backgroundColor: "#fff", borderRadius: 12, padding: "16px 20px" }}>
-            <Heading as="h2" style={{ fontSize: 16, color: "#141114", margin: "0 0 8px" }}>Delivery address</Heading>
+            <Heading as="h2" style={{ fontSize: 16, color: "#141114", margin: "0 0 8px" }}>
+              Delivery address
+            </Heading>
             <Text style={{ color: "#575757", lineHeight: "22px", margin: 0 }}>
-              {shippingAddress.line1}{shippingAddress.line2 ? `, ${shippingAddress.line2}` : ""}<br />
-              {shippingAddress.emirate}, UAE{shippingAddress.postalCode ? ` ${shippingAddress.postalCode}` : ""}
+              {shippingAddress.streetAddress}
+              <br />
+              {shippingAddress.line1}, {shippingAddress.line2}
+              <br />
+              {shippingAddress.landmark ? (
+                <>
+                  {shippingAddress.landmark}
+                  <br />
+                </>
+              ) : null}
+              {shippingAddress.emirate}, UAE
+              {shippingAddress.postalCode ? ` ${shippingAddress.postalCode}` : ""}
             </Text>
           </Section>
         </Container>

@@ -38,30 +38,38 @@ export default function PDPClient({
 
   useEffect(() => {
     capture(analyticsEvents.productViewed, {
-      product_id: product.id, product_name: product.name, category: product.category,
-      collection: product.category, price: product.variants[0].price, currency: "AED",
-      stock_status: product.variants[0].stock > 0 ? "in_stock" : "out_of_stock", made_to_order: true,
+      product_id: product.id,
+      product_name: product.name,
+      category: product.category,
+      collection: product.category,
+      price: product.variants[0].price,
+      currency: "AED",
+      stock_status: product.variants[0].stock > 0 ? "in_stock" : "out_of_stock",
+      made_to_order: true,
     });
   }, [product]);
 
   async function addSelectedItem() {
-    const added = await addItem(
-      {
-        id: selectedVariant.id,
-        productId: product.id,
-        productSlug: product.slug,
-        productName: product.name,
-        variantColor: selectedVariant.color,
-        price: selectedVariant.price,
-        quantity,
-        image: getVariantMainImage(selectedVariant),
-      }
-    );
-    if (added) capture(analyticsEvents.productAddedToCart, {
-      product_id: product.id, product_name: product.name, category: product.category,
-      price: selectedVariant.price, currency: "AED", quantity,
-      cart_value: selectedVariant.price * quantity,
+    const added = await addItem({
+      id: selectedVariant.id,
+      productId: product.id,
+      productSlug: product.slug,
+      productName: product.name,
+      variantColor: selectedVariant.color,
+      price: selectedVariant.price,
+      quantity,
+      image: getVariantMainImage(selectedVariant),
     });
+    if (added)
+      capture(analyticsEvents.productAddedToCart, {
+        product_id: product.id,
+        product_name: product.name,
+        category: product.category,
+        price: selectedVariant.price,
+        currency: "AED",
+        quantity,
+        cart_value: selectedVariant.price * quantity,
+      });
     return added;
   }
 
@@ -79,7 +87,13 @@ export default function PDPClient({
   function handleVariantChange(variant: ProductVariant) {
     setSelectedVariant(variant);
     setActiveImage(0);
-    capture(analyticsEvents.productOptionSelected, { product_id: product.id, option_type: "color", option_value: variant.color, price: variant.price, currency: "AED" });
+    capture(analyticsEvents.productOptionSelected, {
+      product_id: product.id,
+      option_type: "color",
+      option_value: variant.color,
+      price: variant.price,
+      currency: "AED",
+    });
   }
 
   return (
@@ -95,7 +109,10 @@ export default function PDPClient({
         activeIndex={activeImage}
         onSelect={(index) => {
           setActiveImage(index);
-          capture(analyticsEvents.productImageViewed, { product_id: product.id, image_index: index });
+          capture(analyticsEvents.productImageViewed, {
+            product_id: product.id,
+            image_index: index,
+          });
         }}
       />
       <PurchaseRow

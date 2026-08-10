@@ -27,8 +27,10 @@ type Props = {
   shippingAddress: {
     firstName: string;
     lastName: string;
+    streetAddress: string;
     line1: string;
-    line2?: string;
+    line2: string;
+    landmark?: string;
     emirate: string;
     postalCode?: string;
   };
@@ -44,7 +46,12 @@ export function OrderConfirmation({ orderId, customerName, items, shippingAddres
       <Preview>Your Fasthaus order #{orderId} is confirmed</Preview>
       <Body style={{ backgroundColor: "#F8F6F3", fontFamily: "'DM Sans', sans-serif" }}>
         <Container style={{ maxWidth: 600, margin: "0 auto", padding: "32px 24px" }}>
-          <Img src="https://fasthaus.ae/fasthaus-logo-final.svg" alt="Fasthaus" height={28} style={{ marginBottom: 32 }} />
+          <Img
+            src="https://fasthaus.ae/fasthaus-logo-final.svg"
+            alt="Fasthaus"
+            height={28}
+            style={{ marginBottom: 32 }}
+          />
 
           <Heading style={{ fontSize: 24, fontWeight: 600, color: "#141114", marginBottom: 8 }}>
             Order confirmed
@@ -58,16 +65,24 @@ export function OrderConfirmation({ orderId, customerName, items, shippingAddres
             #{orderId}
           </Text>
 
-          <Section style={{ backgroundColor: "#fff", borderRadius: 12, padding: "16px 20px", marginBottom: 24 }}>
-            <Heading as="h3" style={{ fontSize: 14, fontWeight: 600, color: "#141114", marginBottom: 12 }}>
+          <Section
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: 12,
+              padding: "16px 20px",
+              marginBottom: 24,
+            }}
+          >
+            <Heading
+              as="h3"
+              style={{ fontSize: 14, fontWeight: 600, color: "#141114", marginBottom: 12 }}
+            >
               Items ordered
             </Heading>
             {items.map((item, i) => (
               <Row key={i} style={{ marginBottom: 12 }}>
                 <Column>
-                  <Text style={{ margin: 0, fontSize: 14, color: "#141114" }}>
-                    {item.name}
-                  </Text>
+                  <Text style={{ margin: 0, fontSize: 14, color: "#141114" }}>{item.name}</Text>
                   <Text style={{ margin: 0, fontSize: 12, color: "#575757" }}>
                     {item.variantColor} × {item.quantity}
                   </Text>
@@ -85,12 +100,16 @@ export function OrderConfirmation({ orderId, customerName, items, shippingAddres
                 <Text style={{ margin: 0, fontSize: 14, color: "#575757" }}>Shipping</Text>
               </Column>
               <Column align="right">
-                <Text style={{ margin: 0, fontSize: 14, color: "#2E7D5E", fontWeight: 600 }}>Free</Text>
+                <Text style={{ margin: 0, fontSize: 14, color: "#2E7D5E", fontWeight: 600 }}>
+                  Free
+                </Text>
               </Column>
             </Row>
             <Row style={{ marginTop: 8 }}>
               <Column>
-                <Text style={{ margin: 0, fontSize: 16, fontWeight: 600, color: "#141114" }}>Total</Text>
+                <Text style={{ margin: 0, fontSize: 16, fontWeight: 600, color: "#141114" }}>
+                  Total
+                </Text>
               </Column>
               <Column align="right">
                 <Text style={{ margin: 0, fontSize: 16, fontWeight: 600, color: "#141114" }}>
@@ -100,13 +119,33 @@ export function OrderConfirmation({ orderId, customerName, items, shippingAddres
             </Row>
           </Section>
 
-          <Section style={{ backgroundColor: "#fff", borderRadius: 12, padding: "16px 20px", marginBottom: 32 }}>
-            <Heading as="h3" style={{ fontSize: 14, fontWeight: 600, color: "#141114", marginBottom: 8 }}>
+          <Section
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: 12,
+              padding: "16px 20px",
+              marginBottom: 32,
+            }}
+          >
+            <Heading
+              as="h3"
+              style={{ fontSize: 14, fontWeight: 600, color: "#141114", marginBottom: 8 }}
+            >
               Shipping to
             </Heading>
             <Text style={{ margin: 0, fontSize: 14, color: "#575757", lineHeight: "22px" }}>
-              {addr.firstName} {addr.lastName}<br />
-              {addr.line1}{addr.line2 ? `, ${addr.line2}` : ""}<br />
+              {addr.firstName} {addr.lastName}
+              <br />
+              {addr.streetAddress}
+              <br />
+              {addr.line1}, {addr.line2}
+              <br />
+              {addr.landmark ? (
+                <>
+                  {addr.landmark}
+                  <br />
+                </>
+              ) : null}
               {addr.emirate}, UAE{addr.postalCode ? ` ${addr.postalCode}` : ""}
             </Text>
           </Section>

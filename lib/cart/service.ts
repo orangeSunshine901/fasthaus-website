@@ -3,6 +3,7 @@ import { getVariantMainImage } from "@/lib/data/products";
 import { createServiceClient } from "@/lib/supabase/server";
 import { clearCartId, readCartId, setCartId } from "./cookie";
 import { findAddOn, findVariant, MAX_CART_QUANTITY, toMinorUnits } from "./catalog";
+import { isEditableCartStatus } from "./rules";
 import { CartError, emptyCart, type CartDto } from "./types";
 
 type CartRow = { id: string; status: string; expires_at: string; updated_at: string };
@@ -14,11 +15,45 @@ async function activeCart() {
   const supabase = await createServiceClient();
   const { data } = await supabase.from("carts").select("id,status,expires_at,updated_at").eq("id", id).maybeSingle();
   const cart = data as CartRow | null;
-  if (!cart || cart.status !== "ACTIVE" || new Date(cart.expires_at) <= new Date()) {
+  if (!cart || new Date(cart.expires_at) <= new Date()) {
+    await clearCartId();
+    return null;
+  }
+  if (cart.status !== "ACTIVE") return null;
+  return cart;
+}
+
+async function editableCart() {
+  const id = await readCartId();
+  if (!id) return null;
+  const supabase = await createServiceClient();
+  const { data } = await supabase.from("carts").select("id,status,expires_at,updated_at").eq("id", id).maybeSingle();
+  const cart = data as CartRow | null;
+  if (!cart || !isEditableCartStatus(cart.status) || new Date(cart.expires_at) <= new Date()) {
     await clearCartId();
     return null;
   }
   return cart;
+}
+
+async function cartForEdit(cart: CartRow) {
+  if (cart.status === "ACTIVE") return cart;
+  const supabase = await createServiceClient();
+  const { data: sourceItems, error: sourceError } = await supabase.from("cart_items").select("product_id,variant_id,quantity,add_ons").eq("cart_id", cart.id);
+  if (sourceError) throw sourceError;
+
+  const id = randomUUID();
+  const { data, error } = await supabase.from("carts").insert({ id }).select("id,status,expires_at,updated_at").single();
+  if (error) throw error;
+  if (sourceItems.length) {
+    const { error: copyError } = await supabase.from("cart_items").insert(sourceItems.map((item) => ({ ...item, cart_id: id })));
+    if (copyError) {
+      await supabase.from("carts").delete().eq("id", id);
+      throw copyError;
+    }
+  }
+  await setCartId(id);
+  return data as CartRow;
 }
 
 async function cartDto(cart: CartRow): Promise<CartDto> {
@@ -43,13 +78,13 @@ async function cartDto(cart: CartRow): Promise<CartDto> {
 }
 
 export async function getCart() {
-  const cart = await activeCart();
+  const cart = await editableCart();
   return cart ? cartDto(cart) : emptyCart();
 }
 
 async function getOrCreateCart() {
-  const existing = await activeCart();
-  if (existing) return existing;
+  const existing = await editableCart();
+  if (existing) return cartForEdit(existing);
   const id = randomUUID();
   const supabase = await createServiceClient();
   const { data, error } = await supabase.from("carts").insert({ id }).select("id,status,expires_at,updated_at").single();
@@ -84,15 +119,16 @@ export async function addCartItem(input: { variantId: string; quantity: number; 
 
 export async function updateCartItem(itemId: string, quantity: number, requestedAddOns?: Array<{ id: string; quantity: number }>) {
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > MAX_CART_QUANTITY) throw new CartError("INVALID_REQUEST", `Quantity must be between 1 and ${MAX_CART_QUANTITY}.`);
-  const cart = await activeCart();
-  if (!cart) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
+  const sourceCart = await editableCart();
+  if (!sourceCart) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
   const supabase = await createServiceClient();
-  const { data: item } = await supabase.from("cart_items").select("variant_id,add_ons").eq("id", itemId).eq("cart_id", cart.id).maybeSingle();
+  const { data: item } = await supabase.from("cart_items").select("variant_id,add_ons").eq("id", itemId).eq("cart_id", sourceCart.id).maybeSingle();
   if (!item) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
   const catalog = findVariant(item.variant_id);
   if (!catalog || catalog.variant.stock < quantity) throw new CartError("OUT_OF_STOCK", "The requested quantity is not available.", 409);
-  const addOns = requestedAddOns?.filter((saved) => findAddOn(saved.id)).map((saved) => ({ id: saved.id, quantity: Math.min(quantity, Math.max(1, saved.quantity)) })) ?? item.add_ons;
-  const { error } = await supabase.from("cart_items").update({ quantity, add_ons: addOns, updated_at: new Date().toISOString() }).eq("id", itemId).eq("cart_id", cart.id);
+  const addOns = (requestedAddOns ?? item.add_ons).filter((saved) => findAddOn(saved.id)).map((saved) => ({ id: saved.id, quantity: Math.min(quantity, Math.max(1, saved.quantity)) }));
+  const cart = await cartForEdit(sourceCart);
+  const { error } = await supabase.from("cart_items").update({ quantity, add_ons: addOns, updated_at: new Date().toISOString() }).eq("variant_id", item.variant_id).eq("cart_id", cart.id);
   if (error) throw error;
   await supabase.from("carts").update({ updated_at: new Date().toISOString(), expires_at: new Date(Date.now() + 2_592_000_000).toISOString() }).eq("id", cart.id);
   await setCartId(cart.id);
@@ -100,10 +136,14 @@ export async function updateCartItem(itemId: string, quantity: number, requested
 }
 
 export async function removeCartItem(itemId: string) {
-  const cart = await activeCart();
-  if (!cart) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
+  const sourceCart = await editableCart();
+  if (!sourceCart) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
   const supabase = await createServiceClient();
-  const { data } = await supabase.from("cart_items").delete().eq("id", itemId).eq("cart_id", cart.id).select("id").maybeSingle();
+  const { data: item } = await supabase.from("cart_items").select("variant_id").eq("id", itemId).eq("cart_id", sourceCart.id).maybeSingle();
+  if (!item) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
+  const cart = await cartForEdit(sourceCart);
+  const { data, error } = await supabase.from("cart_items").delete().eq("variant_id", item.variant_id).eq("cart_id", cart.id).select("id").maybeSingle();
+  if (error) throw error;
   if (!data) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
   await setCartId(cart.id);
   return getCart();
@@ -116,7 +156,8 @@ export async function clearCart() {
 }
 
 export async function validateCartForCheckout() {
-  const cart = await getCart();
+  const checkoutCart = await editableCart();
+  const cart = checkoutCart ? await cartDto(checkoutCart) : emptyCart();
   if (!cart.id || !cart.items.length) throw new CartError("CART_EMPTY", "Your cart is empty.", 409);
   if (cart.warnings.length || cart.items.some((item) => !item.available)) throw new CartError("CART_CONFLICT", "Your cart has items that need attention.", 409);
   return cart;

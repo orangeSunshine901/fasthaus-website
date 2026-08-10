@@ -27,8 +27,10 @@ const EMIRATES = [
 export const ShippingAddressSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  line1: z.string().min(1, "Address is required"),
-  line2: z.string().optional(),
+  streetAddress: z.string().trim().min(1, "Address is required"),
+  line1: z.string().trim().min(1, "Apt, floor, or villa number is required"),
+  line2: z.string().trim().min(1, "Building or cluster name is required"),
+  landmark: z.string().trim().max(160).optional(),
   emirate: z.enum(EMIRATES, { error: "Please select an emirate" }),
   postalCode: z.string().optional(),
 });
@@ -43,11 +45,13 @@ export const ContactSchema = z.object({
 
 export const CheckoutStep1Schema = ContactSchema.merge(ShippingAddressSchema);
 
-export const CreateOrderSchema = z.object({
-  contact: ContactSchema,
-  shippingAddress: ShippingAddressSchema,
-  discountCode: z.string().trim().max(32).optional(),
-}).strict();
+export const CreateOrderSchema = z
+  .object({
+    contact: ContactSchema,
+    shippingAddress: ShippingAddressSchema,
+    discountCode: z.string().trim().max(32).optional(),
+  })
+  .strict();
 
 export type ShippingAddress = z.infer<typeof ShippingAddressSchema>;
 export type ContactInfo = z.infer<typeof ContactSchema>;

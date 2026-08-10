@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ChevronDown, ShieldCheck } from "lucide-react";
 import { isValidPhoneNumber } from "libphonenumber-js";
-import { z } from "zod";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
+import { formatPhoneInput } from "@/lib/checkout/phone-input";
+import GeideaExpressWallets from "@/components/checkout/GeideaExpressWallets";
 
 const EMIRATES = [
   "Dubai",
@@ -21,7 +22,14 @@ const EMIRATES = [
   "Umm Al Quwain",
 ];
 
-type PaymentMethod = "card" | "apple" | "tabby";
+type CheckoutSession = {
+  orderId: string;
+  sessionId: string;
+  expiresAt: string;
+  cardRedirectUrl: string;
+};
+
+type PreparedCheckoutSession = CheckoutSession & { detailsKey: string };
 
 const inputStyle = {
   borderColor: "var(--color-border)",
@@ -38,75 +46,6 @@ function isValidAePhone(value: string): boolean {
   return value.trim().length > 0 && isValidPhoneNumber(value, "AE");
 }
 
-function formatPhoneInput(raw: string): string {
-  let digits = raw.replace(/\D/g, "");
-  if (digits.startsWith("00971")) digits = digits.slice(5);
-  else if (digits.startsWith("971")) digits = digits.slice(3);
-  if (digits.startsWith("0")) digits = digits.slice(1);
-  digits = digits.slice(0, 9);
-  return [digits.slice(0, 2), digits.slice(2, 5), digits.slice(5, 9)].filter(Boolean).join(" ");
-}
-
-function formatCardNumberInput(raw: string): string {
-  const digits = raw.replace(/\D/g, "").slice(0, 19);
-  return digits.match(/.{1,4}/g)?.join(" ") ?? digits;
-}
-
-function formatExpiryInput(raw: string): string {
-  const digits = raw.replace(/\D/g, "").slice(0, 4);
-  if (digits.length <= 2) return digits;
-  return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-}
-
-function formatCvcInput(raw: string): string {
-  return raw.replace(/\D/g, "").slice(0, 4);
-}
-
-function luhnCheck(digits: string): boolean {
-  let sum = 0;
-  let shouldDouble = false;
-  for (let i = digits.length - 1; i >= 0; i--) {
-    let digit = Number(digits[i]);
-    if (shouldDouble) {
-      digit *= 2;
-      if (digit > 9) digit -= 9;
-    }
-    sum += digit;
-    shouldDouble = !shouldDouble;
-  }
-  return sum % 10 === 0;
-}
-
-const cardNumberSchema = z
-  .string()
-  .transform((v) => v.replace(/\s+/g, ""))
-  .refine((v) => /^\d{13,19}$/.test(v), "Enter a valid card number.")
-  .refine(luhnCheck, "Enter a valid card number.");
-
-const cardExpirySchema = z
-  .string()
-  .trim()
-  .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Use MM/YY format.")
-  .refine((v) => {
-    const [month, year] = v.split("/").map(Number);
-    const now = new Date();
-    const currentYear = now.getFullYear() % 100;
-    const currentMonth = now.getMonth() + 1;
-    if (year < currentYear) return false;
-    if (year === currentYear && month < currentMonth) return false;
-    return true;
-  }, "Card has expired.");
-
-const cardCvcSchema = z
-  .string()
-  .trim()
-  .regex(/^\d{3,4}$/, "Enter a valid 3 or 4 digit code.");
-
-function firstIssueMessage(result: z.ZodSafeParseResult<unknown>): string | null {
-  if (result.success) return null;
-  return result.error.issues[0]?.message ?? "Invalid value.";
-}
-
 export default function CheckoutPage() {
   const { items, addOns, subtotal } = useCartStore();
 
@@ -115,7 +54,10 @@ export default function CheckoutPage() {
   const [emailTouched, setEmailTouched] = useState(false);
   const [phone, setPhone] = useState("");
   const [phoneTouched, setPhoneTouched] = useState(false);
-  const [address, setAddress] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [unitVilla, setUnitVilla] = useState("");
+  const [buildingCluster, setBuildingCluster] = useState("");
+  const [landmark, setLandmark] = useState("");
   const [emirate, setEmirate] = useState("Dubai");
   const [poBox, setPoBox] = useState("");
 
@@ -124,35 +66,148 @@ export default function CheckoutPage() {
   const phoneError =
     phone.length > 0 && !isValidAePhone(phone) ? "Enter a valid UAE mobile number." : null;
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardNumberTouched, setCardNumberTouched] = useState(false);
-  const [cardExpiry, setCardExpiry] = useState("");
-  const [cardExpiryTouched, setCardExpiryTouched] = useState(false);
-  const [cardCvc, setCardCvc] = useState("");
-  const [cardCvcTouched, setCardCvcTouched] = useState(false);
-
-  const cardNumberError =
-    cardNumber.length > 0 ? firstIssueMessage(cardNumberSchema.safeParse(cardNumber)) : null;
-  const cardExpiryError =
-    cardExpiry.length > 0 ? firstIssueMessage(cardExpirySchema.safeParse(cardExpiry)) : null;
-  const cardCvcError =
-    cardCvc.length > 0 ? firstIssueMessage(cardCvcSchema.safeParse(cardCvc)) : null;
-
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
+  const [walletSession, setWalletSession] = useState<PreparedCheckoutSession | null>(null);
+  const [walletLoading, setWalletLoading] = useState(false);
+  const [walletError, setWalletError] = useState<string | null>(null);
+  const [walletRetry, setWalletRetry] = useState(0);
 
   const subtotalValue = subtotal();
   const hasDiscount = newsletter || discountApplied;
   const discountAmount = hasDiscount ? subtotalValue * 0.1 : 0;
   const totalValue = subtotalValue - discountAmount;
+  const checkoutDetailsReady =
+    isValidEmail(email) &&
+    isValidAePhone(phone) &&
+    !!fullName.trim() &&
+    !!streetAddress.trim() &&
+    !!unitVilla.trim() &&
+    !!buildingCluster.trim();
+  const checkoutDetailsKey = JSON.stringify([
+    fullName,
+    email,
+    phone,
+    streetAddress,
+    unitVilla,
+    buildingCluster,
+    landmark,
+    emirate,
+    poBox,
+    hasDiscount,
+    totalValue,
+  ]);
+  const activeWalletSession =
+    walletSession?.detailsKey === checkoutDetailsKey ? walletSession : null;
 
   useEffect(() => {
-    if (items.length > 0) capture(analyticsEvents.checkoutStarted, { item_count: items.reduce((sum, item) => sum + item.quantity, 0), cart_value: totalValue, currency: "AED" });
+    if (items.length > 0)
+      capture(analyticsEvents.checkoutStarted, {
+        item_count: items.reduce((sum, item) => sum + item.quantity, 0),
+        cart_value: totalValue,
+        currency: "AED",
+      });
   }, [items, totalValue]);
+
+  const requestCheckoutSession = useCallback(
+    async (signal?: AbortSignal): Promise<CheckoutSession> => {
+      const [firstName, ...lastNameParts] = fullName.trim().split(/\s+/);
+      const response = await fetch("/api/checkout/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal,
+        body: JSON.stringify({
+          contact: { email, phone },
+          shippingAddress: {
+            firstName,
+            lastName: lastNameParts.join(" ") || firstName,
+            streetAddress,
+            line1: unitVilla,
+            line2: buildingCluster,
+            landmark: landmark || undefined,
+            emirate,
+            postalCode: poBox || undefined,
+          },
+          discountCode: hasDiscount ? "WELCOME10" : undefined,
+        }),
+      });
+      const body = (await response.json()) as Partial<CheckoutSession> & {
+        error?: { message?: string };
+      };
+      if (
+        !response.ok ||
+        !body.orderId ||
+        !body.sessionId ||
+        !body.expiresAt ||
+        !body.cardRedirectUrl
+      ) {
+        throw new Error(body.error?.message ?? "Checkout could not be started.");
+      }
+      return {
+        orderId: body.orderId,
+        sessionId: body.sessionId,
+        expiresAt: body.expiresAt,
+        cardRedirectUrl: body.cardRedirectUrl,
+      };
+    },
+    [
+      buildingCluster,
+      email,
+      emirate,
+      fullName,
+      hasDiscount,
+      landmark,
+      phone,
+      poBox,
+      streetAddress,
+      unitVilla,
+    ]
+  );
+
+  useEffect(() => {
+    if (!checkoutDetailsReady || items.length === 0 || activeWalletSession || purchasing) return;
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setWalletLoading(true);
+      setWalletError(null);
+      try {
+        const session = await requestCheckoutSession(controller.signal);
+        setWalletSession({ ...session, detailsKey: checkoutDetailsKey });
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setWalletError(
+            error instanceof Error ? error.message : "Express checkout could not be started."
+          );
+        }
+      } finally {
+        if (!controller.signal.aborted) setWalletLoading(false);
+      }
+    }, 600);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [
+    activeWalletSession,
+    checkoutDetailsKey,
+    checkoutDetailsReady,
+    items.length,
+    purchasing,
+    requestCheckoutSession,
+    walletRetry,
+  ]);
+
+  useEffect(() => {
+    if (!walletSession) return;
+    const remaining = Date.parse(walletSession.expiresAt) - Date.now() - 30_000;
+    const timer = window.setTimeout(() => setWalletSession(null), Math.max(0, remaining));
+    return () => window.clearTimeout(timer);
+  }, [walletSession]);
 
   function toggleNewsletter() {
     setNewsletter((prev) => {
@@ -169,33 +224,25 @@ export default function CheckoutPage() {
     }
   }
 
-  async function handlePurchase(e: React.FormEvent) {
-    e.preventDefault();
-
+  async function startCheckout() {
     setEmailTouched(true);
     setPhoneTouched(true);
 
-    if (!isValidEmail(email) || !isValidAePhone(phone) || !fullName.trim() || !address.trim()) return;
-    const [firstName, ...lastNameParts] = fullName.trim().split(/\s+/);
+    if (!checkoutDetailsReady) return;
     setPurchasing(true);
     setPurchaseError(null);
     try {
-      const response = await fetch("/api/checkout/create-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contact: { email, phone },
-          shippingAddress: { firstName, lastName: lastNameParts.join(" ") || firstName, line1: address, emirate, postalCode: poBox || undefined },
-          discountCode: hasDiscount ? "WELCOME10" : undefined,
-        }),
-      });
-      const body = await response.json();
-      if (!response.ok || !body.paymentUrl) throw new Error(body?.error?.message ?? "Checkout could not be started.");
-      window.location.assign(body.paymentUrl);
+      const session = activeWalletSession ?? (await requestCheckoutSession());
+      window.location.assign(session.cardRedirectUrl);
     } catch (error) {
       setPurchaseError(error instanceof Error ? error.message : "Checkout could not be started.");
       setPurchasing(false);
     }
+  }
+
+  function handlePurchase(e: React.FormEvent) {
+    e.preventDefault();
+    void startCheckout();
   }
 
   if (items.length === 0) {
@@ -237,274 +284,272 @@ export default function CheckoutPage() {
               </p>
             </div>
 
-            {/* Your details */}
-            <section className="flex flex-col gap-4">
-              <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
-                Your details
-              </h2>
-              <Field label="Full name" required>
-                <input
-                  required
-                  autoComplete="name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Ava Smith"
-                  className="input-field"
-                  style={inputStyle}
-                />
-              </Field>
-              <Field label="Email" required error={emailTouched ? emailError : null}>
-                <input
-                  required
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onBlur={() => setEmailTouched(true)}
-                  placeholder="ava@example.com"
-                  className="input-field"
-                  style={{
-                    ...inputStyle,
-                    borderColor:
-                      emailTouched && emailError ? "var(--color-error)" : inputStyle.borderColor,
-                  }}
-                  aria-invalid={emailTouched && !!emailError}
-                />
-              </Field>
-              <Field label="Phone number" required error={phoneTouched ? phoneError : null}>
-                <div className="flex gap-2.5">
-                  <div
-                    className="input-field flex w-[126px] flex-shrink-0 items-center"
-                    style={inputStyle}
-                  >
-                    <span className="type-body-sm" style={{ color: "var(--color-text-primary)" }}>
-                      AE (+971)
-                    </span>
-                  </div>
+            <>
+              {/* Your details */}
+              <section className="flex flex-col gap-4">
+                <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
+                  Your details
+                </h2>
+                <Field label="Full name" required>
                   <input
                     required
-                    type="tel"
-                    inputMode="numeric"
-                    autoComplete="tel-national"
-                    value={phone}
-                    onChange={(e) => setPhone(formatPhoneInput(e.target.value))}
-                    onBlur={() => setPhoneTouched(true)}
-                    placeholder="50 123 4567"
-                    className="input-field flex-1"
-                    style={{
-                      ...inputStyle,
-                      borderColor:
-                        phoneTouched && phoneError ? "var(--color-error)" : inputStyle.borderColor,
-                    }}
-                    aria-invalid={phoneTouched && !!phoneError}
-                  />
-                </div>
-              </Field>
-            </section>
-
-            {/* Shipping details */}
-            <section
-              className="flex flex-col gap-4 border-t pt-6"
-              style={{ borderColor: "var(--color-border)" }}
-            >
-              <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
-                Shipping details
-              </h2>
-              <Field label="Country or region" required>
-                <div
-                  className="input-field flex items-center justify-between gap-3"
-                  style={{ ...inputStyle, backgroundColor: "var(--color-surface-muted)" }}
-                >
-                  <span className="type-body-sm" style={{ color: "var(--color-text-primary)" }}>
-                    United Arab Emirates
-                  </span>
-                  <span
-                    className="type-caption-sm text-right"
-                    style={{ color: "var(--color-text-secondary)" }}
-                  >
-                    We currently ship within the UAE only
-                  </span>
-                </div>
-              </Field>
-              <Field label="Address line" required>
-                <input
-                  required
-                  autoComplete="street-address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Villa 12, Al Wasl Road"
-                  className="input-field"
-                  style={inputStyle}
-                />
-              </Field>
-              <div className="grid grid-cols-[1fr_140px] gap-3.5">
-                <Field label="Emirate" required>
-                  <div className="relative">
-                    <select
-                      required
-                      value={emirate}
-                      onChange={(e) => setEmirate(e.target.value)}
-                      className="input-field w-full appearance-none pr-9"
-                      style={inputStyle}
-                    >
-                      {EMIRATES.map((em) => (
-                        <option key={em}>{em}</option>
-                      ))}
-                    </select>
-                    <ChevronDown
-                      size={14}
-                      className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    />
-                  </div>
-                </Field>
-                <Field label="P.O. Box">
-                  <input
-                    inputMode="numeric"
-                    value={poBox}
-                    onChange={(e) => setPoBox(e.target.value)}
-                    placeholder="00000"
+                    autoComplete="name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Ava Smith"
                     className="input-field"
                     style={inputStyle}
                   />
                 </Field>
-              </div>
-            </section>
-
-            {/* Payment */}
-            <section
-              className="flex flex-col gap-4 border-t pt-6"
-              style={{ borderColor: "var(--color-border)" }}
-            >
-              <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
-                Payment method
-              </h2>
-              <div className="grid grid-cols-3 gap-3">
-                <PaymentOption
-                  label="Card"
-                  active={paymentMethod === "card"}
-                  onClick={() => setPaymentMethod("card")}
-                  icon={<CardIcon active={paymentMethod === "card"} />}
-                />
-                <PaymentOption
-                  label="Apple Pay"
-                  active={paymentMethod === "apple"}
-                  onClick={() => setPaymentMethod("apple")}
-                  icon={<AppleIcon />}
-                />
-                {/* <PaymentOption
-                  label="Tabby"
-                  active={paymentMethod === "tabby"}
-                  onClick={() => setPaymentMethod("tabby")}
-                  icon={<TabbyIcon />}
-                /> */}
-              </div>
-              <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
-                Card details are entered securely on Geidea after your cart and delivery details are validated.
-              </p>
-
-              {false && paymentMethod === "card" && (
-                <div className="flex flex-col gap-3.5">
-                  <Field
-                    label="Card number"
+                <Field label="Email" required error={emailTouched ? emailError : null}>
+                  <input
                     required
-                    error={cardNumberTouched ? cardNumberError : null}
-                  >
-                    <div className="relative">
-                      <input
-                        required
-                        inputMode="numeric"
-                        autoComplete="cc-number"
-                        value={cardNumber}
-                        onChange={(e) => setCardNumber(formatCardNumberInput(e.target.value))}
-                        onBlur={() => setCardNumberTouched(true)}
-                        placeholder="0000 0000 0000 0000"
-                        className="input-field w-full"
-                        style={{
-                          ...inputStyle,
-                          paddingLeft: 60,
-                          borderColor:
-                            cardNumberTouched && cardNumberError
-                              ? "var(--color-error)"
-                              : inputStyle.borderColor,
-                        }}
-                        aria-invalid={cardNumberTouched && !!cardNumberError}
-                      />
-                      <span
-                        className="type-caption-sm absolute left-3.5 top-1/2 -translate-y-1/2 rounded border px-1.5 py-0.5"
-                        style={{
-                          borderColor: "var(--color-border)",
-                          color: "var(--color-text-secondary)",
-                          fontSize: 10,
-                        }}
-                      >
-                        VISA
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onBlur={() => setEmailTouched(true)}
+                    placeholder="ava@example.com"
+                    className="input-field"
+                    style={{
+                      ...inputStyle,
+                      borderColor:
+                        emailTouched && emailError ? "var(--color-error)" : inputStyle.borderColor,
+                    }}
+                    aria-invalid={emailTouched && !!emailError}
+                  />
+                </Field>
+                <Field label="Phone number" required error={phoneTouched ? phoneError : null}>
+                  <div className="flex gap-2.5">
+                    <div
+                      className="input-field flex w-[126px] flex-shrink-0 items-center"
+                      style={inputStyle}
+                    >
+                      <span className="type-body-sm" style={{ color: "var(--color-text-primary)" }}>
+                        AE (+971)
                       </span>
                     </div>
-                  </Field>
-                  <div className="grid grid-cols-2 gap-3.5">
-                    <Field
-                      label="Expiration"
+                    <input
                       required
-                      error={cardExpiryTouched ? cardExpiryError : null}
-                    >
-                      <input
-                        required
-                        inputMode="numeric"
-                        autoComplete="cc-exp"
-                        value={cardExpiry}
-                        onChange={(e) => setCardExpiry(formatExpiryInput(e.target.value))}
-                        onBlur={() => setCardExpiryTouched(true)}
-                        placeholder="MM/YY"
-                        className="input-field"
-                        style={{
-                          ...inputStyle,
-                          borderColor:
-                            cardExpiryTouched && cardExpiryError
-                              ? "var(--color-error)"
-                              : inputStyle.borderColor,
-                        }}
-                        aria-invalid={cardExpiryTouched && !!cardExpiryError}
-                      />
-                    </Field>
-                    <Field label="CVC" required error={cardCvcTouched ? cardCvcError : null}>
-                      <input
-                        required
-                        inputMode="numeric"
-                        autoComplete="cc-csc"
-                        value={cardCvc}
-                        onChange={(e) => setCardCvc(formatCvcInput(e.target.value))}
-                        onBlur={() => setCardCvcTouched(true)}
-                        placeholder="CVC"
-                        className="input-field"
-                        style={{
-                          ...inputStyle,
-                          borderColor:
-                            cardCvcTouched && cardCvcError
-                              ? "var(--color-error)"
-                              : inputStyle.borderColor,
-                        }}
-                        aria-invalid={cardCvcTouched && !!cardCvcError}
-                      />
-                    </Field>
+                      type="tel"
+                      inputMode="numeric"
+                      autoComplete="tel-national"
+                      value={phone}
+                      onChange={(event) => setPhone(event.currentTarget.value)}
+                      onBlur={(event) => {
+                        setPhone(formatPhoneInput(event.currentTarget.value));
+                        setPhoneTouched(true);
+                      }}
+                      placeholder="50 123 4567"
+                      className="input-field flex-1"
+                      style={{
+                        ...inputStyle,
+                        borderColor:
+                          phoneTouched && phoneError
+                            ? "var(--color-error)"
+                            : inputStyle.borderColor,
+                      }}
+                      aria-invalid={phoneTouched && !!phoneError}
+                    />
                   </div>
-                </div>
-              )}
-            </section>
+                </Field>
+              </section>
 
-            <div className="flex flex-col gap-3 pt-1">
-              {purchaseError && <p role="alert" className="type-body-sm" style={{ color: "var(--color-error)" }}>{purchaseError}</p>}
-              <button type="submit" disabled={purchasing} className="btn btn-primary h-[54px] w-full gap-1.5 disabled:opacity-60">
-                <span>{purchasing ? "Starting secure checkout…" : "Continue to payment —"}</span>
-                <DirhamPrice amount={totalValue} variant="white" />
-              </button>
-              <p
-                className="type-caption-sm flex items-center justify-center gap-1.5 text-center"
-                style={{ color: "var(--color-text-secondary)" }}
+              {/* Shipping details */}
+              <section
+                className="flex flex-col gap-4 border-t pt-6"
+                style={{ borderColor: "var(--color-border)" }}
               >
-                <ShieldCheck size={14} /> Secure checkout · Encrypted payment
-              </p>
-            </div>
+                <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
+                  Shipping details
+                </h2>
+                <Field label="Country or region" required>
+                  <div
+                    className="input-field flex items-center justify-between gap-3"
+                    style={{ ...inputStyle, backgroundColor: "var(--color-surface-muted)" }}
+                  >
+                    <span className="type-body-sm" style={{ color: "var(--color-text-primary)" }}>
+                      United Arab Emirates
+                    </span>
+                    <span
+                      className="type-caption-sm text-right"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      We currently ship within the UAE only
+                    </span>
+                  </div>
+                </Field>
+                <Field label="Address" required>
+                  <input
+                    required
+                    autoComplete="address-line1"
+                    value={streetAddress}
+                    onChange={(e) => setStreetAddress(e.target.value)}
+                    placeholder="Street name and Area"
+                    className="input-field"
+                    style={inputStyle}
+                  />
+                </Field>
+                <Field label="Apt & Floor No. / Villa No." required>
+                  <input
+                    required
+                    autoComplete="address-line2"
+                    value={unitVilla}
+                    onChange={(e) => setUnitVilla(e.target.value)}
+                    placeholder="Apt 804, Floor 8 or Villa 12"
+                    className="input-field"
+                    style={inputStyle}
+                  />
+                </Field>
+                <Field label="Building / Cluster name" required>
+                  <input
+                    required
+                    autoComplete="address-line3"
+                    value={buildingCluster}
+                    onChange={(e) => setBuildingCluster(e.target.value)}
+                    placeholder="Marina Heights or Cluster J"
+                    className="input-field"
+                    style={inputStyle}
+                  />
+                </Field>
+                <Field label="Landmark">
+                  <input
+                    value={landmark}
+                    onChange={(e) => setLandmark(e.target.value)}
+                    placeholder="Near the main entrance (optional)"
+                    className="input-field"
+                    style={inputStyle}
+                  />
+                </Field>
+                <div className="grid grid-cols-[1fr_140px] gap-3.5">
+                  <Field label="Emirate" required>
+                    <div className="relative">
+                      <select
+                        required
+                        value={emirate}
+                        onChange={(e) => setEmirate(e.target.value)}
+                        className="input-field w-full appearance-none pr-9"
+                        style={inputStyle}
+                      >
+                        {EMIRATES.map((em) => (
+                          <option key={em}>{em}</option>
+                        ))}
+                      </select>
+                      <ChevronDown
+                        size={14}
+                        className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2"
+                        style={{ color: "var(--color-text-secondary)" }}
+                      />
+                    </div>
+                  </Field>
+                  <Field label="P.O. Box">
+                    <input
+                      inputMode="numeric"
+                      value={poBox}
+                      onChange={(e) => setPoBox(e.target.value)}
+                      placeholder="00000"
+                      className="input-field"
+                      style={inputStyle}
+                    />
+                  </Field>
+                </div>
+              </section>
+
+              <section
+                className="flex flex-col gap-4 border-t pt-6"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
+                  Express checkout
+                </h2>
+                {!checkoutDetailsReady ? (
+                  <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
+                    Complete the required contact and delivery details to enable supported wallets.
+                  </p>
+                ) : activeWalletSession ? (
+                  <>
+                    <GeideaExpressWallets
+                      sessionId={activeWalletSession.sessionId}
+                      orderId={activeWalletSession.orderId}
+                    />
+                    <p
+                      className="type-caption-sm text-center"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      Apple Pay, Google Pay, and Samsung Pay appear automatically on supported
+                      devices and browsers.
+                    </p>
+                  </>
+                ) : walletLoading ? (
+                  <div
+                    className="flex min-h-[60px] items-center justify-center rounded-[var(--radius-md)] border"
+                    style={{ borderColor: "var(--color-border)" }}
+                  >
+                    <span className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
+                      Loading secure wallets…
+                    </span>
+                  </div>
+                ) : walletError ? (
+                  <div className="flex flex-col gap-2.5">
+                    <p
+                      role="alert"
+                      className="type-body-sm"
+                      style={{ color: "var(--color-error)" }}
+                    >
+                      {walletError}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setWalletRetry((value) => value + 1)}
+                      className="btn-text w-fit"
+                    >
+                      Retry express checkout
+                    </button>
+                  </div>
+                ) : null}
+              </section>
+
+              <div className="flex flex-col gap-3 pt-1">
+                {activeWalletSession && (
+                  <div className="flex items-center gap-3" aria-hidden="true">
+                    <span
+                      className="h-px flex-1"
+                      style={{ backgroundColor: "var(--color-border)" }}
+                    />
+                    <span
+                      className="type-caption-sm"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      or pay by card
+                    </span>
+                    <span
+                      className="h-px flex-1"
+                      style={{ backgroundColor: "var(--color-border)" }}
+                    />
+                  </div>
+                )}
+                {purchaseError && (
+                  <p role="alert" className="type-body-sm" style={{ color: "var(--color-error)" }}>
+                    {purchaseError}
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  disabled={purchasing || walletLoading}
+                  className="btn btn-primary h-[54px] w-full gap-1.5 disabled:opacity-60"
+                >
+                  <ShieldCheck size={16} />
+                  <span>{purchasing ? "Redirecting securely…" : "Pay securely by card —"}</span>
+                  {!purchasing && <DirhamPrice amount={totalValue} variant="white" />}
+                </button>
+                <p
+                  className="type-caption-sm flex items-center justify-center gap-1.5 text-center"
+                  style={{ color: "var(--color-text-secondary)" }}
+                >
+                  Secure checkout by Geidea · Encrypted payment
+                </p>
+              </div>
+            </>
           </form>
 
           {/* RIGHT: summary */}
@@ -705,7 +750,7 @@ export default function CheckoutPage() {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-3.5 gap-y-1.5 px-2">
-              {["Free shipping", "30-day returns", "1-year warranty"].map((t, i, arr) => (
+              {["Free shipping", "7-day returns", "1-year warranty"].map((t, i, arr) => (
                 <span key={t} className="flex items-center gap-3.5">
                   <span
                     className="type-caption-sm"
@@ -749,82 +794,3 @@ function Field({
     </label>
   );
 }
-
-function PaymentOption({
-  label,
-  active,
-  onClick,
-  icon,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-  icon: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="relative flex flex-col items-start gap-2.5 rounded-[var(--radius-md)] p-4 text-left transition-colors"
-      style={{
-        border: `1.5px solid ${active ? "var(--color-accent-amber)" : "var(--color-border)"}`,
-        backgroundColor: "var(--color-bg)",
-      }}
-    >
-      {icon}
-      <span className="type-body-sm" style={{ color: "var(--color-text-primary)" }}>
-        {label}
-      </span>
-      <span
-        className="absolute right-3 top-3 flex h-4 w-4 items-center justify-center rounded-full"
-        style={{
-          border: `1.5px solid ${active ? "var(--color-accent-amber)" : "var(--color-border)"}`,
-        }}
-      >
-        {active && (
-          <span
-            className="h-2 w-2 rounded-full"
-            style={{ backgroundColor: "var(--color-accent-amber)" }}
-          />
-        )}
-      </span>
-    </button>
-  );
-}
-
-function CardIcon({ active }: { active: boolean }) {
-  const color = active ? "var(--color-accent-amber)" : "var(--color-text-secondary)";
-  return (
-    <svg width="26" height="20" viewBox="0 0 26 20" fill="none">
-      <rect x="1" y="2" width="24" height="16" rx="3" stroke={color} strokeWidth="1.8" />
-      <path d="M1 7h24" stroke={color} strokeWidth="1.8" />
-      <path d="M5 13h6" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function AppleIcon() {
-  return <Image src="/apple-logo-svgrepo-com.svg" alt="Apple Pay" width={22} height={20} />;
-}
-
-// function TabbyIcon() {
-//   return (
-//     <svg width="22" height="20" viewBox="0 0 22 20" fill="none">
-//       <rect
-//         x="2"
-//         y="4"
-//         width="18"
-//         height="13"
-//         rx="3"
-//         stroke="var(--color-text-primary)"
-//         strokeWidth="1.8"
-//       />
-//       <path
-//         d="M6 9h10M6 12.5h6"
-//         stroke="var(--color-text-primary)"
-//         strokeWidth="1.8"
-//         strokeLinecap="round"
-//       />
-//     </svg>
-//   );
-// }

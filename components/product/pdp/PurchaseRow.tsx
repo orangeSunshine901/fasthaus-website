@@ -1,15 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import {
-  ShoppingCart,
-  Minus,
-  Plus,
-  Truck,
-  CalendarCheck,
-  ShieldCheck,
-  Star,
-} from "lucide-react";
+import { ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck, Star } from "lucide-react";
 import { Tooltip } from "radix-ui";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
@@ -41,7 +33,7 @@ export default function PurchaseRow({
 }: Props) {
   const trustItems = [
     { icon: <Truck size={15} />, label: "Free shipping" },
-    { icon: <CalendarCheck size={15} />, label: "30-day returns" },
+    { icon: <CalendarCheck size={15} />, label: "7-day returns" },
     { icon: <ShieldCheck size={15} />, label: "1-year warranty" },
     {
       icon: <Image src="/uae-flag-icon.svg" alt="" width={15} height={15} />,
@@ -181,10 +173,7 @@ export default function PurchaseRow({
             >
               Lamp Color
             </span>
-            <span
-              className="text-[15px] font-bold"
-              style={{ color: "var(--color-text-primary)" }}
-            >
+            <span className="text-[15px] font-bold" style={{ color: "var(--color-text-primary)" }}>
               {selectedVariant.color}
             </span>
             <Tooltip.Provider delayDuration={0}>
@@ -291,7 +280,11 @@ export default function PurchaseRow({
             {busy ? "Adding…" : "Add to cart"}
           </button>
           {error && (
-            <p role="alert" className="text-[13px] font-medium" style={{ color: "var(--color-error)" }}>
+            <p
+              role="alert"
+              className="text-[13px] font-medium"
+              style={{ color: "var(--color-error)" }}
+            >
               {error}
             </p>
           )}

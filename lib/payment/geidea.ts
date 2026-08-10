@@ -1,0 +1,139 @@
+import "server-only";
+import { generateGeideaSessionSignature, formatGeideaTimestamp } from "./geidea-signature";
+
+const UAE_API_BASE_URL = "https://api.geidea.ae";
+const UAE_HPP_BASE_URL = "https://payments.geidea.ae";
+
+function requiredEnv(primary: string, legacy?: string): string {
+  const value = process.env[primary] ?? (legacy ? process.env[legacy] : undefined);
+  if (!value) throw new Error(`${primary} is not configured.`);
+  return value;
+}
+
+function withoutTrailingSlash(value: string): string {
+  return value.replace(/\/+$/, "");
+}
+
+export function getGeideaConfig() {
+  const hppBaseUrl = withoutTrailingSlash(
+    process.env.GEIDEA_HPP_BASE_URL ?? UAE_HPP_BASE_URL
+  );
+  return {
+    merchantPublicKey: requiredEnv("GEIDEA_MERCHANT_PUBLIC_KEY", "GEIDEA_MERCHANT_ID"),
+    apiPassword: requiredEnv("GEIDEA_API_PASSWORD"),
+    apiBaseUrl: withoutTrailingSlash(process.env.GEIDEA_API_BASE_URL ?? UAE_API_BASE_URL),
+    hppBaseUrl,
+    sdkUrl: getGeideaSdkUrl(),
+  };
+}
+
+export function getGeideaSdkUrl(): string {
+  const hppBaseUrl = withoutTrailingSlash(
+    process.env.GEIDEA_HPP_BASE_URL ?? UAE_HPP_BASE_URL
+  );
+  return process.env.GEIDEA_SDK_URL ?? `${hppBaseUrl}/hpp/geideaCheckout.min.js`;
+}
+
+type CreateCheckoutSessionInput = {
+  amount: number;
+  merchantReferenceId: string;
+  callbackUrl: string;
+  returnUrl: string;
+  customer: {
+    email: string;
+    phoneNumber: string;
+    firstName: string;
+    lastName: string;
+  };
+};
+
+type GeideaSessionResponse = {
+  session?: { id?: string; expiryDate?: string };
+  responseCode?: string;
+  responseMessage?: string;
+  detailedResponseCode?: string;
+  detailedResponseMessage?: string;
+};
+
+export type GeideaCheckoutSession = {
+  sessionId: string;
+  expiresAt: string;
+  cardRedirectUrl: string;
+};
+
+export async function createGeideaCheckoutSession(
+  input: CreateCheckoutSessionInput
+): Promise<GeideaCheckoutSession> {
+  const config = getGeideaConfig();
+  const timestamp = formatGeideaTimestamp();
+  const signature = generateGeideaSessionSignature({
+    merchantPublicKey: config.merchantPublicKey,
+    apiPassword: config.apiPassword,
+    amount: input.amount,
+    currency: "AED",
+    merchantReferenceId: input.merchantReferenceId,
+    timestamp,
+  });
+
+  const response = await fetch(
+    `${config.apiBaseUrl}/payment-intent/api/v2/direct/session`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${Buffer.from(
+          `${config.merchantPublicKey}:${config.apiPassword}`
+        ).toString("base64")}`,
+      },
+      body: JSON.stringify({
+        amount: input.amount.toFixed(2),
+        currency: "AED",
+        timestamp,
+        merchantReferenceId: input.merchantReferenceId,
+        signature,
+        callbackUrl: input.callbackUrl,
+        returnUrl: input.returnUrl,
+        paymentOperation: "Pay",
+        language: "en",
+        cardOnFile: false,
+        customer: input.customer,
+        expressCheckouts: [
+          { wallet: "apple-pay", label: "Apple Pay" },
+          { wallet: "google-pay", label: "Google Pay" },
+          { wallet: "samsung-pay", label: "Samsung Pay" },
+        ],
+      }),
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    }
+  );
+
+  let body: GeideaSessionResponse;
+  try {
+    body = (await response.json()) as GeideaSessionResponse;
+  } catch {
+    throw new Error(`Geidea returned an unreadable response (${response.status}).`);
+  }
+
+  if (
+    !response.ok ||
+    body.responseCode !== "000" ||
+    body.detailedResponseCode !== "000"
+  ) {
+    const message =
+      body.detailedResponseMessage ?? body.responseMessage ?? `HTTP ${response.status}`;
+    throw new Error(`Geidea session creation failed: ${message}`);
+  }
+
+  const sessionId = body.session?.id;
+  const expiresAt = body.session?.expiryDate;
+  if (!sessionId || !expiresAt || Number.isNaN(Date.parse(expiresAt))) {
+    throw new Error("Geidea did not return a valid session ID and expiry date.");
+  }
+
+  return {
+    sessionId,
+    expiresAt,
+    cardRedirectUrl: `${config.hppBaseUrl}/hpp/checkout/?${encodeURIComponent(sessionId)}`,
+  };
+}
