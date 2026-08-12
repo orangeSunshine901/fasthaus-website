@@ -11,6 +11,8 @@ Google Pay, and Samsung Pay. Prices and order state remain server-authoritative.
 - `GEIDEA_HPP_BASE_URL` — UAE hosted checkout host; defaults to `https://payments.geidea.ae`.
 - `GEIDEA_SDK_URL` — synchronous browser SDK URL.
 - `NEXT_PUBLIC_BASE_URL` — public HTTPS Fasthaus origin used for callback and return URLs.
+- `CHECKOUT_PILOT_UNIT_PRICE_AED` — optional reversible pilot override applied server-side
+  to every cart product and add-on unit. Remove it to restore catalog pricing.
 - `GEIDEA_LOG_CALLBACKS` — set to `true` only during testing to print full callback JSON
   in the server terminal; leave disabled in production because payloads contain payment metadata.
 
