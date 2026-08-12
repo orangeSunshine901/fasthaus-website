@@ -121,7 +121,8 @@ export async function updateCartItem(itemId: string, quantity: number, requested
   const sourceCart = await editableCart();
   if (!sourceCart) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
   const supabase = await createServiceClient();
-  const { data: item } = await supabase.from("cart_items").select("variant_id,add_ons").eq("id", itemId).eq("cart_id", sourceCart.id).maybeSingle();
+  const { data } = await supabase.from("cart_items").select("variant_id,add_ons").eq("id", itemId).eq("cart_id", sourceCart.id).maybeSingle();
+  const item = data as Pick<ItemRow, "variant_id" | "add_ons"> | null;
   if (!item) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
   const catalog = findVariant(item.variant_id);
   if (!catalog || catalog.variant.stock < quantity) throw new CartError("OUT_OF_STOCK", "The requested quantity is not available.", 409);
