@@ -22,7 +22,7 @@ const linkColumns: FooterColumn[] = [
   {
     heading: "Studio",
     links: [
-      { label: "About FastHaus", href: "/about" },
+      { label: "About Fasthaus", href: "/about" },
       { label: "Custom Projects", href: "/contact" },
     ],
   },
