@@ -270,7 +270,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 11,
     variants: [
       {
-        id: "4-pearl",
+        id: "4-red",
         color: "Cherry Red",
         colorHex: "#942025",
         sku: "PTL-FRD",

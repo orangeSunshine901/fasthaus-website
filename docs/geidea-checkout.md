@@ -13,8 +13,9 @@ Google Pay, and Samsung Pay. Prices and order state remain server-authoritative.
 - `NEXT_PUBLIC_BASE_URL` — public HTTPS Fasthaus origin used for callback and return URLs.
 - `CHECKOUT_PILOT_UNIT_PRICE_AED` — optional reversible pilot override applied server-side
   to every cart product and add-on unit. Remove it to restore catalog pricing.
-- `GEIDEA_LOG_CALLBACKS` — set to `true` to log a verified callback summary containing
-  only the internal order reference and payment result statuses/codes. Raw payloads are never logged.
+- `GEIDEA_LOG_CALLBACKS` — set to `true` temporarily during provider testing to log the
+  complete raw callback JSON before verification. Disable it immediately after capturing
+  the test callback because the payload can contain sensitive payment and customer metadata.
 
 `GEIDEA_MERCHANT_ID` remains a temporary backwards-compatible alias for the public key.
 There is no separate webhook secret in Geidea's public callback algorithm; callbacks are

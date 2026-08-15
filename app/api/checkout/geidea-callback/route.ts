@@ -28,6 +28,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON payload." }, { status: 400 });
   }
 
+  if (process.env.GEIDEA_LOG_CALLBACKS === "true") {
+    console.info("[Geidea callback received]\n" + JSON.stringify(rawBody, null, 2));
+  }
+
   let callback;
   try {
     const config = getGeideaConfig();
@@ -38,17 +42,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.warn("Rejected Geidea callback", error instanceof Error ? error.message : error);
     return NextResponse.json({ error: "Invalid callback." }, { status: 401 });
-  }
-
-  if (process.env.GEIDEA_LOG_CALLBACKS === "true") {
-    console.info("Geidea callback verified", {
-      merchantReferenceId: callback.merchantReferenceId,
-      status: callback.status,
-      detailedStatus: callback.detailedStatus,
-      responseCode: callback.responseCode,
-      detailedResponseCode: callback.detailedResponseCode,
-      isPaid: callback.isPaid,
-    });
   }
 
   const supabase = await createServiceClient();
