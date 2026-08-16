@@ -23,24 +23,20 @@ export async function generateMetadata({
 
   const url = `${SITE_URL}/legal/${policy.slug}`;
   return {
-    title: `${policy.title} — FastHaus`,
+    title: `${policy.title} — Fasthaus`,
     description: policy.metaDescription,
     alternates: { canonical: url },
     openGraph: {
-      title: `${policy.title} — FastHaus`,
+      title: `${policy.title} — Fasthaus`,
       description: policy.metaDescription,
       url,
-      siteName: "FastHaus",
+      siteName: "Fasthaus",
       type: "website",
     },
   };
 }
 
-export default async function LegalPolicyPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function LegalPolicyPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const policy = getPolicy(slug);
   if (!policy) notFound();
@@ -52,7 +48,7 @@ export default async function LegalPolicyPage({
     description: policy.metaDescription,
     url: `${SITE_URL}/legal/${policy.slug}`,
     dateModified: policy.updated,
-    isPartOf: { "@type": "WebSite", name: "FastHaus", url: SITE_URL },
+    isPartOf: { "@type": "WebSite", name: "Fasthaus", url: SITE_URL },
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [

@@ -30,8 +30,8 @@ export default async function ProductPage({
   return (
     <ShopLayout>
       <div className="relative bg-white pb-16 md:pb-24">
-        <div className="bg-[var(--color-surface)]">
-          <nav className="mx-auto flex max-w-[1240px] items-center gap-2.5 px-5 py-8 text-[13.5px] md:px-6 lg:px-8">
+        <div className="absolute inset-x-0 top-14 z-30 bg-transparent md:top-28">
+          <nav className="mx-auto flex max-w-[1240px] items-center gap-2.5 px-5 py-4 text-[13.5px] md:px-6 lg:px-8">
             <Link
               href="/"
               className="font-medium transition-colors hover:text-[var(--color-accent-amber)]"

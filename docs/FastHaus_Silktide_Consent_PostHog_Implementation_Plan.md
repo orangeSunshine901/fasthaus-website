@@ -1,7 +1,7 @@
-# FastHaus Silktide Consent and PostHog Implementation Plan
+# Fasthaus Silktide Consent and PostHog Implementation Plan
 
 **Document purpose:** Implementation plan for Codex  
-**Application:** FastHaus website  
+**Application:** Fasthaus website  
 **Framework:** Next.js App Router with TypeScript  
 **Consent manager:** Silktide Consent Manager  
 **Analytics platform:** PostHog  
@@ -69,7 +69,7 @@ The existing consent state is separate from Silktide.
 This can create two competing consent systems:
 
 1. Silktide consent
-2. FastHaus custom `localStorage` consent
+2. Fasthaus custom `localStorage` consent
 
 The custom banner and custom consent key must be removed.
 
@@ -78,7 +78,7 @@ The custom banner and custom consent key must be removed.
 ## 3. Target Architecture
 
 ```text
-Visitor opens FastHaus
+Visitor opens Fasthaus
         |
         v
 Silktide Consent Manager loads
@@ -104,14 +104,14 @@ send events
 
 ### Responsibilities
 
-| Component | Responsibility |
-|---|---|
-| Silktide | Banner, preference modal, stored consent and Google Consent Mode signals |
-| `AnalyticsProvider` | Read Silktide Analytics consent and control PostHog |
-| Analytics client | Provide consent-safe `capture()` and `captureException()` functions |
-| `CollectionViewed` | Describe the business event only |
-| GTM or Google tag | Respect Silktide-generated Consent Mode signals |
-| Anonymous cart | Remain strictly necessary and independent from Analytics consent |
+| Component           | Responsibility                                                           |
+| ------------------- | ------------------------------------------------------------------------ |
+| Silktide            | Banner, preference modal, stored consent and Google Consent Mode signals |
+| `AnalyticsProvider` | Read Silktide Analytics consent and control PostHog                      |
+| Analytics client    | Provide consent-safe `capture()` and `captureException()` functions      |
+| `CollectionViewed`  | Describe the business event only                                         |
+| GTM or Google tag   | Respect Silktide-generated Consent Mode signals                          |
+| Anonymous cart      | Remain strictly necessary and independent from Analytics consent         |
 
 ---
 
@@ -134,7 +134,7 @@ Essential cookies
 **Description**
 
 ```text
-These cookies are required for FastHaus to work correctly. They support essential features such as maintaining your shopping cart, processing checkout securely, remembering your cookie preferences and protecting the website from misuse. They cannot be disabled.
+These cookies are required for Fasthaus to work correctly. They support essential features such as maintaining your shopping cart, processing checkout securely, remembering your cookie preferences and protecting the website from misuse. They cannot be disabled.
 ```
 
 **Google Consent Mode signals**
@@ -169,7 +169,7 @@ Analytics cookies
 **Description**
 
 ```text
-These cookies help us understand how visitors use FastHaus, which products and pages are most popular, and where we can improve the shopping experience. They may also support privacy-protected session replay and error monitoring.
+These cookies help us understand how visitors use Fasthaus, which products and pages are most popular, and where we can improve the shopping experience. They may also support privacy-protected session replay and error monitoring.
 ```
 
 **Google Consent Mode signal**
@@ -273,11 +273,9 @@ Remove the custom `<aside>` banner from `AnalyticsProvider.tsx`.
 Delete the following behaviour:
 
 ```tsx
-{consent === null && (
-  <aside>
-    ...
-  </aside>
-)}
+{
+  consent === null && <aside>...</aside>;
+}
 ```
 
 Silktide will render the cookie banner and preferences interface.
@@ -289,24 +287,24 @@ Silktide will render the cookie banner and preferences interface.
 Remove the dependency on:
 
 ```ts
-ANALYTICS_CONSENT_KEY
+ANALYTICS_CONSENT_KEY;
 ```
 
 Remove:
 
 ```ts
-localStorage.getItem(ANALYTICS_CONSENT_KEY)
+localStorage.getItem(ANALYTICS_CONSENT_KEY);
 ```
 
 Remove:
 
 ```ts
-localStorage.setItem(ANALYTICS_CONSENT_KEY, next)
+localStorage.setItem(ANALYTICS_CONSENT_KEY, next);
 ```
 
 Silktide must own consent persistence.
 
-Do not create a second FastHaus-specific consent cookie or local-storage item.
+Do not create a second Fasthaus-specific consent cookie or local-storage item.
 
 ---
 
@@ -315,10 +313,7 @@ Do not create a second FastHaus-specific consent cookie or local-storage item.
 Use a three-state model:
 
 ```ts
-export type AnalyticsConsentState =
-  | "unknown"
-  | "granted"
-  | "denied";
+export type AnalyticsConsentState = "unknown" | "granted" | "denied";
 ```
 
 Meaning:
@@ -383,13 +378,9 @@ Suggested interface:
 
 import { createContext, useContext } from "react";
 
-export type AnalyticsConsentState =
-  | "unknown"
-  | "granted"
-  | "denied";
+export type AnalyticsConsentState = "unknown" | "granted" | "denied";
 
-const AnalyticsConsentContext =
-  createContext<AnalyticsConsentState>("unknown");
+const AnalyticsConsentContext = createContext<AnalyticsConsentState>("unknown");
 
 export function useAnalyticsConsent(): AnalyticsConsentState {
   return useContext(AnalyticsConsentContext);
@@ -420,37 +411,24 @@ Suggested structure:
 ```tsx
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
-import {
-  usePathname,
-  useSearchParams
-} from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 
-import {
-  captureException,
-  setAnalyticsConsent
-} from "@/lib/analytics/client";
+import { captureException, setAnalyticsConsent } from "@/lib/analytics/client";
 import {
   AnalyticsConsentContext,
-  type AnalyticsConsentState
+  type AnalyticsConsentState,
 } from "@/providers/AnalyticsConsentContext";
 
 function readSilktideAnalyticsConsent(): AnalyticsConsentState {
-  const manager =
-    window.silktideConsentManager?.getInstance();
+  const manager = window.silktideConsentManager?.getInstance();
 
   if (!manager) {
     return "unknown";
   }
 
-  const choice =
-    manager.getConsentChoice("analytics");
+  const choice = manager.getConsentChoice("analytics");
 
   if (choice === true) {
     return "granted";
@@ -463,46 +441,37 @@ function readSilktideAnalyticsConsent(): AnalyticsConsentState {
   return "unknown";
 }
 
-export default function AnalyticsProvider({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export default function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [consent, setConsent] =
-    useState<AnalyticsConsentState>("unknown");
+  const [consent, setConsent] = useState<AnalyticsConsentState>("unknown");
 
-  const previousConsent =
-    useRef<AnalyticsConsentState>("unknown");
+  const previousConsent = useRef<AnalyticsConsentState>("unknown");
 
-  const applyConsent = useCallback(
-    (nextConsent: AnalyticsConsentState) => {
-      if (previousConsent.current === nextConsent) {
-        return;
-      }
+  const applyConsent = useCallback((nextConsent: AnalyticsConsentState) => {
+    if (previousConsent.current === nextConsent) {
+      return;
+    }
 
-      previousConsent.current = nextConsent;
-      setConsent(nextConsent);
+    previousConsent.current = nextConsent;
+    setConsent(nextConsent);
 
-      const granted = nextConsent === "granted";
-      setAnalyticsConsent(granted);
+    const granted = nextConsent === "granted";
+    setAnalyticsConsent(granted);
 
-      if (nextConsent === "granted") {
-        posthog.opt_in_capturing();
-        posthog.startSessionRecording();
-        return;
-      }
+    if (nextConsent === "granted") {
+      posthog.opt_in_capturing();
+      posthog.startSessionRecording();
+      return;
+    }
 
-      if (nextConsent === "denied") {
-        posthog.stopSessionRecording();
-        posthog.opt_out_capturing();
-        posthog.reset();
-      }
-    },
-    []
-  );
+    if (nextConsent === "denied") {
+      posthog.stopSessionRecording();
+      posthog.opt_out_capturing();
+      posthog.reset();
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -514,13 +483,9 @@ export default function AnalyticsProvider({
         return;
       }
 
-      const nextConsent =
-        readSilktideAnalyticsConsent();
+      const nextConsent = readSilktideAnalyticsConsent();
 
-      if (
-        nextConsent !== "unknown" ||
-        attempts >= maximumAttempts
-      ) {
+      if (nextConsent !== "unknown" || attempts >= maximumAttempts) {
         applyConsent(nextConsent);
         return;
       }
@@ -538,21 +503,13 @@ export default function AnalyticsProvider({
 
   useEffect(() => {
     function onConsentUpdate() {
-      applyConsent(
-        readSilktideAnalyticsConsent()
-      );
+      applyConsent(readSilktideAnalyticsConsent());
     }
 
-    window.addEventListener(
-      "stcm_consent_update",
-      onConsentUpdate
-    );
+    window.addEventListener("stcm_consent_update", onConsentUpdate);
 
     return () => {
-      window.removeEventListener(
-        "stcm_consent_update",
-        onConsentUpdate
-      );
+      window.removeEventListener("stcm_consent_update", onConsentUpdate);
     };
   }, [applyConsent]);
 
@@ -562,7 +519,7 @@ export default function AnalyticsProvider({
     }
 
     posthog.capture("$pageview", {
-      $current_url: window.location.href
+      $current_url: window.location.href,
     });
   }, [pathname, searchParams, consent]);
 
@@ -572,44 +529,26 @@ export default function AnalyticsProvider({
     }
 
     const onError = (event: ErrorEvent) => {
-      captureException(
-        event.error ?? event.message,
-        { source: "window_error" }
-      );
+      captureException(event.error ?? event.message, { source: "window_error" });
     };
 
-    const onRejection = (
-      event: PromiseRejectionEvent
-    ) => {
+    const onRejection = (event: PromiseRejectionEvent) => {
       captureException(event.reason, {
-        source: "unhandled_rejection"
+        source: "unhandled_rejection",
       });
     };
 
     window.addEventListener("error", onError);
-    window.addEventListener(
-      "unhandledrejection",
-      onRejection
-    );
+    window.addEventListener("unhandledrejection", onRejection);
 
     return () => {
-      window.removeEventListener(
-        "error",
-        onError
-      );
-      window.removeEventListener(
-        "unhandledrejection",
-        onRejection
-      );
+      window.removeEventListener("error", onError);
+      window.removeEventListener("unhandledrejection", onRejection);
     };
   }, [consent]);
 
   return (
-    <AnalyticsConsentContext.Provider
-      value={consent}
-    >
-      {children}
-    </AnalyticsConsentContext.Provider>
+    <AnalyticsConsentContext.Provider value={consent}>{children}</AnalyticsConsentContext.Provider>
   );
 }
 ```
@@ -624,12 +563,10 @@ If it does not, use one of these supported approaches:
 
 #### Preferred approach
 
-Use Silktide category callbacks such as `onAccept` and `onReject` to dispatch a FastHaus browser event:
+Use Silktide category callbacks such as `onAccept` and `onReject` to dispatch a Fasthaus browser event:
 
 ```js
-window.dispatchEvent(
-  new CustomEvent("fasthaus:consent-change")
-);
+window.dispatchEvent(new CustomEvent("fasthaus:consent-change"));
 ```
 
 Then listen for:
@@ -659,9 +596,7 @@ Add or preserve a module-level consent gate:
 ```ts
 let analyticsConsentGranted = false;
 
-export function setAnalyticsConsent(
-  granted: boolean
-): void {
+export function setAnalyticsConsent(granted: boolean): void {
   analyticsConsentGranted = granted;
 }
 ```
@@ -669,10 +604,7 @@ export function setAnalyticsConsent(
 Update every analytics method so it exits before calling PostHog when consent is absent:
 
 ```ts
-export function capture(
-  event: string,
-  properties?: Record<string, unknown>
-): void {
+export function capture(event: string, properties?: Record<string, unknown>): void {
   if (!analyticsConsentGranted) {
     return;
   }
@@ -700,15 +632,11 @@ Locate the existing `posthog.init()` call.
 Ensure it includes:
 
 ```ts
-posthog.init(
-  process.env.NEXT_PUBLIC_POSTHOG_KEY!,
-  {
-    api_host:
-      process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    capture_pageview: false,
-    opt_out_capturing_by_default: true
-  }
-);
+posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+  api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+  capture_pageview: false,
+  opt_out_capturing_by_default: true,
+});
 ```
 
 Requirements:
@@ -734,58 +662,40 @@ Suggested implementation:
 ```tsx
 "use client";
 
-import {
-  useEffect,
-  useRef
-} from "react";
+import { useEffect, useRef } from "react";
 
-import {
-  capture
-} from "@/lib/analytics/client";
-import {
-  analyticsEvents
-} from "@/lib/analytics/events";
-import {
-  useAnalyticsConsent
-} from "@/providers/AnalyticsConsentContext";
+import { capture } from "@/lib/analytics/client";
+import { analyticsEvents } from "@/lib/analytics/events";
+import { useAnalyticsConsent } from "@/providers/AnalyticsConsentContext";
 
 export default function CollectionViewed({
   collection,
-  productCount
+  productCount,
 }: {
   collection: string;
   productCount: number;
 }) {
   const consent = useAnalyticsConsent();
-  const capturedKey =
-    useRef<string | null>(null);
+  const capturedKey = useRef<string | null>(null);
 
   useEffect(() => {
     if (consent !== "granted") {
       return;
     }
 
-    const eventKey =
-      `${collection}:${productCount}`;
+    const eventKey = `${collection}:${productCount}`;
 
     if (capturedKey.current === eventKey) {
       return;
     }
 
-    capture(
-      analyticsEvents.collectionViewed,
-      {
-        collection,
-        product_count: productCount
-      }
-    );
+    capture(analyticsEvents.collectionViewed, {
+      collection,
+      product_count: productCount,
+    });
 
     capturedKey.current = eventKey;
-  }, [
-    collection,
-    productCount,
-    consent
-  ]);
+  }, [collection, productCount, consent]);
 
   return null;
 }
@@ -824,9 +734,9 @@ Do not add this change if the required values are unavailable without wider refa
 The current provider tracks page views on:
 
 ```ts
-pathname
-searchParams
-consent
+pathname;
+searchParams;
+consent;
 ```
 
 Preserve route-based tracking.
@@ -986,7 +896,7 @@ Codex must first inspect:
 - Add Google Consent Mode mappings.
 - Keep Analytics and Marketing disabled by default.
 - Keep Essential required.
-- Preserve FastHaus visual styling.
+- Preserve Fasthaus visual styling.
 
 ### Phase 3: Refactor consent handling
 
@@ -1153,7 +1063,7 @@ After consent withdrawal:
 The implementation is complete when all criteria below are met.
 
 - [ ] Silktide is the only cookie consent interface.
-- [ ] The custom FastHaus analytics banner has been removed.
+- [ ] The custom Fasthaus analytics banner has been removed.
 - [ ] `ANALYTICS_CONSENT_KEY` is no longer used.
 - [ ] Essential, Analytics and Marketing categories are configured.
 - [ ] Essential cookies are always active.
@@ -1179,7 +1089,7 @@ The implementation is complete when all criteria below are met.
 ## 16. Codex Execution Prompt
 
 ```text
-Implement Silktide-based consent control for the FastHaus analytics architecture.
+Implement Silktide-based consent control for the Fasthaus analytics architecture.
 
 Start by inspecting the existing repository, especially:
 

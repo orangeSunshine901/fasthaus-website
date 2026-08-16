@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck, Star } from "lucide-react";
 import { Tooltip } from "radix-ui";
 import type { Product, ProductVariant } from "@/lib/data/products";
@@ -33,7 +34,7 @@ export default function PurchaseRow({
 }: Props) {
   const trustItems = [
     { icon: <Truck size={15} />, label: "Free shipping" },
-    { icon: <CalendarCheck size={15} />, label: "7-day returns" },
+    { icon: <CalendarCheck size={15} />, label: "14-day eligible returns" },
     { icon: <ShieldCheck size={15} />, label: "1-year warranty" },
     {
       icon: <Image src="/uae-flag-icon.svg" alt="" width={15} height={15} />,
@@ -42,6 +43,16 @@ export default function PurchaseRow({
   ];
 
   const filledStars = Math.round(product.rating);
+  const lighting =
+    product.features.find((feature) => /light|warmth/i.test(feature.label))?.label ??
+    "Integrated lighting";
+  const productDetails = [
+    ["Dimensions", `Ø ${product.dimensions.widthCm} cm × H ${product.dimensions.heightCm} cm`],
+    ["Lighting", lighting],
+    ["Light source", product.specifications[1]?.lines.join(" · ") ?? "Included"],
+    ["Power", product.specifications[0]?.lines.join(" · ") ?? "—"],
+    ["Material", product.materials.join(" · ")],
+  ];
 
   return (
     <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_356px] lg:gap-12">
@@ -55,7 +66,7 @@ export default function PurchaseRow({
             {product.name}
           </h1>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-0.5">
+            {/* <div className="flex items-center gap-0.5">
               {Array.from({ length: 5 }).map((_, index) => (
                 <Star
                   key={index}
@@ -68,13 +79,13 @@ export default function PurchaseRow({
                   }}
                 />
               ))}
-            </div>
-            <span
+            </div> */}
+            {/* <span
               className="text-[14px] font-medium"
               style={{ color: "var(--color-text-secondary)" }}
             >
               {product.rating.toFixed(1)} · {product.reviewCount} reviews
-            </span>
+            </span> */}
           </div>
         </div>
 
@@ -85,7 +96,7 @@ export default function PurchaseRow({
           {product.description}
         </p>
 
-        <div className="mt-1 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+        {/* <div className="mt-1 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
           {product.features.map((feature) => (
             <div
               key={feature.label}
@@ -101,7 +112,7 @@ export default function PurchaseRow({
               </span>
             </div>
           ))}
-        </div>
+        </div> */}
 
         <div
           className="flex flex-col gap-5 border-t pt-6"
@@ -113,7 +124,7 @@ export default function PurchaseRow({
           >
             Product details
           </h3>
-          <div className="grid grid-cols-[140px_1fr] items-start gap-6 sm:grid-cols-[180px_1fr]">
+          <div className="grid items-stretch gap-6 sm:grid-cols-[minmax(220px,0.9fr)_minmax(0,1.15fr)] sm:gap-9">
             <div
               className="relative aspect-square overflow-hidden rounded-[14px]"
               style={{ backgroundColor: "var(--color-surface-muted)" }}
@@ -122,29 +133,36 @@ export default function PurchaseRow({
                 src="/outline/hamrah-lamp-outline.png"
                 alt={`${product.name} illustration`}
                 fill
-                sizes="180px"
+                sizes="(max-width: 639px) 100vw, 360px"
                 className="object-cover"
               />
             </div>
-            <div className="grid grid-cols-[110px_1fr] text-[15px] sm:grid-cols-[130px_1fr]">
-              <span
-                className="border-b py-3 font-medium"
-                style={{ color: "var(--color-text-secondary)", borderColor: "var(--color-border)" }}
-              >
-                Dimensions
-              </span>
-              <span
-                className="border-b py-3 font-semibold"
-                style={{ color: "var(--color-text-primary)", borderColor: "var(--color-border)" }}
-              >
-                W {product.dimensions.widthCm} cm · H {product.dimensions.heightCm} cm
-              </span>
-              <span className="py-3 font-medium" style={{ color: "var(--color-text-secondary)" }}>
-                Material
-              </span>
-              <span className="py-3 font-semibold" style={{ color: "var(--color-text-primary)" }}>
-                {product.materials.join(" · ")}
-              </span>
+            <div className="grid content-center grid-cols-[105px_minmax(0,1fr)] text-[14px] md:grid-cols-[125px_minmax(0,1fr)] md:text-[15px]">
+              {productDetails.map(([label, value], index) => {
+                const border = index < productDetails.length - 1 ? "border-b" : "";
+                return (
+                  <div key={label} className="contents">
+                    <span
+                      className={`${border} py-3 font-medium`}
+                      style={{
+                        color: "var(--color-text-secondary)",
+                        borderColor: "var(--color-border)",
+                      }}
+                    >
+                      {label}
+                    </span>
+                    <span
+                      className={`${border} py-3 font-semibold leading-[1.45]`}
+                      style={{
+                        color: "var(--color-text-primary)",
+                        borderColor: "var(--color-border)",
+                      }}
+                    >
+                      {value}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -304,6 +322,34 @@ export default function PurchaseRow({
               <span className="text-[13px] font-medium">{label}</span>
             </div>
           ))}
+        </div>
+
+        <div
+          className="flex flex-col gap-1 rounded-[14px] p-5"
+          style={{ backgroundColor: "var(--color-surface)" }}
+        >
+          <span className="text-[14px] font-bold" style={{ color: "var(--color-text-primary)" }}>
+            Estimated arrival
+          </span>
+          <strong
+            className="text-[22px] leading-[1.35] tracking-[-0.02em]"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            3–5 business days
+          </strong>
+          <span
+            className="text-[13px] font-medium"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
+            Made to order · Delivery included
+          </span>
+          <Link
+            href="/shipping-returns"
+            className="mt-2 self-start text-[13px] font-bold hover:underline"
+            style={{ color: "var(--color-accent-amber)" }}
+          >
+            Shipping details →
+          </Link>
         </div>
       </div>
     </div>

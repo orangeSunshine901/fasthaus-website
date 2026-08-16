@@ -1,9 +1,8 @@
-import { Truck, RotateCcw, Leaf, Shield } from "lucide-react";
+import { Truck, Leaf, Shield } from "lucide-react";
 import AnnouncementRibbon from "@/components/animata/container/announcement-ribbon";
 
 const items = [
   { icon: Truck, label: "Free shipping" },
-  // { icon: RotateCcw, label: "7-day hassle-free returns" },
   { icon: Leaf, label: "Eco-friendly materials" },
   { icon: Shield, label: "1-year warranty" },
 ];
@@ -32,8 +31,8 @@ export default function AnnouncementBar() {
       />
 
       {/* Desktop: icon strip */}
-      <div className="hidden w-full bg-[#ff7a1a] px-4 py-3 md:block">
-        <div className="mx-auto flex max-w-[1280px] items-center justify-center gap-32">
+      <div className="hidden h-11 w-full bg-[#ff7a1a] px-4 md:block">
+        <div className="mx-auto flex h-full max-w-[1280px] items-center justify-center gap-32">
           {items.map(({ icon: Icon, label }) => (
             <div key={label} className="flex items-center gap-1.5">
               <Icon size={14} style={{ color: "var(--color-text-primary)" }} />

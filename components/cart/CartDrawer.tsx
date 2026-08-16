@@ -388,9 +388,12 @@ export default function CartDrawer() {
                     </span>
                     <DirhamPrice amount={subtotal()} size="lg" className="font-extrabold" />
                   </div>
-                  <span className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
-                    {/* Free Shipping always · 7-day return */}
-                  </span>
+                  <div className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
+                    Free shipping ·{" "}
+                    <Link href="/legal/refunds" onClick={closeDrawer} className="hover:underline">
+                      14-day eligible returns
+                    </Link>
+                  </div>
                   <Link
                     href="/checkout"
                     onClick={() => {

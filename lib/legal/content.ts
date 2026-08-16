@@ -51,10 +51,10 @@ export const POLICIES: Policy[] = [
     slug: "terms",
     title: "Terms & Conditions",
     icon: Scale,
-    desc: "The agreement between you and FastHaus when you browse the site or place an order.",
+    desc: "The agreement between you and Fasthaus when you browse the site or place an order.",
     updated: "July 17, 2026",
     metaDescription:
-      "The terms that apply when you browse the FastHaus website or place an order — products, made-to-order production, payment, shipping and governing law.",
+      "The terms that apply when you browse the Fasthaus website or place an order — products, made-to-order production, payment, shipping and governing law.",
     cards: [
       {
         icon: Hammer,
@@ -78,15 +78,15 @@ export const POLICIES: Policy[] = [
         icon: BookOpen,
         title: "Introduction",
         paras: [
-          "Welcome to FastHaus. By using this website or placing an order you agree to these Terms & Conditions.",
+          "Welcome to Fasthaus. By using this website or placing an order you agree to these Terms & Conditions.",
         ],
       },
       {
         id: "about",
         icon: House,
-        title: "About FastHaus",
+        title: "About Fasthaus",
         paras: [
-          "FastHaus is a UAE-based design-led fabrication studio producing lighting, décor, signage and custom objects using modern manufacturing methods including 3D printing.",
+          "Fasthaus is a UAE-based design-led fabrication studio producing lighting, décor, signage and custom objects using modern manufacturing methods including 3D printing.",
         ],
       },
       {
@@ -132,7 +132,7 @@ export const POLICIES: Policy[] = [
         icon: Truck,
         title: "Shipping",
         paras: [
-          "Delivery estimates are not guaranteed. Delays caused by couriers, customs or force majeure are outside FastHaus's control.",
+          "Delivery estimates are not guaranteed. Delays caused by couriers, customs or force majeure are outside Fasthaus's control.",
         ],
       },
       {
@@ -148,7 +148,7 @@ export const POLICIES: Policy[] = [
         icon: Copyright,
         title: "Intellectual Property",
         paras: [
-          "All product designs, renders, logos, photographs and website content remain the intellectual property of FastHaus.",
+          "All product designs, renders, logos, photographs and website content remain the intellectual property of Fasthaus.",
         ],
       },
       {
@@ -156,7 +156,7 @@ export const POLICIES: Policy[] = [
         icon: ShieldCheck,
         title: "Limitation of Liability",
         paras: [
-          "FastHaus is not liable for indirect or consequential damages arising from misuse or circumstances outside its reasonable control.",
+          "Fasthaus is not liable for indirect or consequential damages arising from misuse or circumstances outside its reasonable control.",
         ],
       },
       {
@@ -174,7 +174,7 @@ export const POLICIES: Policy[] = [
     desc: "What information we collect, how we use it, and the rights you have over it.",
     updated: "July 17, 2026",
     metaDescription:
-      "How FastHaus collects, uses and protects your information — analytics and cookies, third parties, security safeguards and your rights.",
+      "How Fasthaus collects, uses and protects your information — analytics and cookies, third parties, security safeguards and your rights.",
     cards: [
       {
         icon: Lock,
@@ -223,7 +223,7 @@ export const POLICIES: Policy[] = [
         id: "analytics",
         icon: ChartColumn,
         title: "Analytics & Cookies",
-        paras: ["FastHaus uses Google Analytics, PostHog and Google Consent Mode."],
+        paras: ["Fasthaus uses Google Analytics, PostHog and Google Consent Mode."],
         callout: {
           variant: "success",
           text: "Analytics cookies are only enabled after consent where required.",
@@ -257,85 +257,199 @@ export const POLICIES: Policy[] = [
   },
   {
     slug: "refunds",
-    title: "Refund & Returns Policy",
+    title: "Refund & Return Policy",
     icon: RotateCcw,
-    desc: "When returns are accepted, what can't be returned, and how refunds are processed.",
-    updated: "July 17, 2026",
+    desc: "When products may be returned, exchanged or refunded, and how to start a return.",
+    updated: "August 2026",
     metaDescription:
-      "FastHaus returns and refunds — 14-day returns on standard products, non-returnable items, damage claims and refund processing.",
+      "Fasthaus returns and refunds — 14-day change-of-mind returns, damaged or faulty products, exchanges, cancellations and refund processing.",
     cards: [
       {
         icon: RotateCcw,
         title: "14-day returns",
-        text: "Unused standard products, in original packaging.",
+        text: "Open and inspect eligible products, then return them in original condition.",
       },
       {
         icon: Package,
         title: "Report damage fast",
-        text: "Within 48 hours of delivery, with photographs.",
+        text: "Contact us promptly, ideally within 48 hours for visible delivery damage.",
       },
       {
         icon: CreditCard,
-        title: "Original method",
-        text: "Approved refunds go back to the original payment method.",
+        title: "5–10 business days",
+        text: "Approved refunds return to the original payment method after inspection.",
       },
     ],
     sections: [
       {
-        id: "standard",
+        id: "change-of-mind",
         icon: RotateCcw,
-        title: "Standard Returns",
+        title: "1. Change of Mind Returns",
         paras: [
-          "Unused standard products may be returned within 14 days of delivery in original packaging.",
+          "We want you to be happy with the objects you bring into your space. If something isn't quite right, we're here to help.",
+          "This Refund & Return Policy explains when products purchased from Fasthaus may be returned, exchanged or refunded.",
+          "Changed your mind? Eligible products may be returned within 14 days of delivery.",
+          "To qualify for a return, the product must:",
+        ],
+        bullets: [
+          "Be unused and in its original condition",
+          "Be free from damage, marks, scratches or signs of prolonged use",
+          "Include all original components, accessories and documentation",
+          "Be returned in its original packaging wherever reasonably possible",
+        ],
+        callout: {
+          variant: "warning",
+          text: "You may open the packaging and inspect the product to make sure it is suitable for you. For lamps, briefly assembling or powering on the product for the purpose of inspection will not by itself make the product ineligible for return, provided it is returned in its original condition. Fasthaus reserves the right to refuse a change-of-mind return where a product has been used beyond what is reasonably necessary to inspect it or has been damaged after delivery.",
+        },
+      },
+      {
+        id: "starting-a-return",
+        icon: BookOpen,
+        title: "2. Starting a Return",
+        paras: [
+          "To request a return, contact us within 14 days of receiving your order and provide:",
+        ],
+        bullets: [
+          "Your order number",
+          "The product you wish to return",
+          "The reason for the return",
+        ],
+        callout: {
+          variant: "info",
+          text: "We will provide the next steps and return instructions. Please do not send a product back without first contacting Fasthaus.",
+        },
+      },
+      {
+        id: "return-shipping",
+        icon: Truck,
+        title: "3. Return Shipping",
+        paras: [
+          "For change-of-mind returns, the cost of returning the product is the customer's responsibility.",
+          "Original delivery charges are non-refundable unless the return is due to an error by Fasthaus or the product is faulty, damaged or otherwise does not conform to the order.",
+          "Customers are responsible for ensuring returned products are securely packaged. We recommend using a trackable delivery service.",
+        ],
+      },
+      {
+        id: "damaged-faulty-incorrect",
+        icon: ShieldCheck,
+        title: "4. Damaged, Faulty or Incorrect Products",
+        paras: [
+          "If your product arrives damaged, faulty, with missing components, different from the product ordered or materially different from its description, please contact us as soon as reasonably possible.",
+          "For visible delivery damage, we recommend contacting us within 48 hours of delivery so we can investigate the issue with the delivery provider quickly.",
+          "Where possible, please include photographs of the product and the issue, the external and internal packaging, and the shipping label.",
+          "The 48-hour notification period helps us investigate delivery damage and does not limit any rights you may have under applicable UAE consumer protection law.",
+          "Once the issue has been assessed, Fasthaus may offer an appropriate repair, replacement or refund, depending on the circumstances and your applicable legal rights.",
+          "Where the issue is attributable to Fasthaus, we will cover reasonable return or replacement delivery costs.",
+        ],
+      },
+      {
+        id: "custom-made-to-order",
+        icon: Palette,
+        title: "5. Customised & Made-to-Order Products",
+        paras: [
+          "Some Fasthaus pieces may be customised, personalised or produced specifically for your order.",
+          "Unless faulty, damaged, incorrect or otherwise required by applicable law, customised or personalised products cannot be returned simply because you have changed your mind.",
+          "Where a product is described as made-to-order but has not been personalised or customised specifically for you, any return eligibility stated on the relevant product page will apply.",
+          "We recommend checking all dimensions, colours, specifications and customisation selections carefully before placing your order.",
         ],
       },
       {
         id: "non-returnable",
         icon: Package,
-        title: "Non-Returnable Items",
-        paras: ["The following cannot be returned:"],
-        accordion: [
-          {
-            q: "Personalised products",
-            a: "Items customised with names, dates or bespoke colours are produced uniquely for you and cannot be restocked.",
-          },
-          {
-            q: "Custom commissions",
-            a: "One-off commissioned pieces are made to your approved specification and are non-returnable once production starts.",
-          },
-          {
-            q: "Gift cards & digital products",
-            a: "Gift cards and digital products are delivered instantly and cannot be returned or exchanged.",
-          },
-        ],
-      },
-      {
-        id: "damaged",
-        icon: ShieldCheck,
-        title: "Damaged Items",
-        paras: ["Report damage within 48 hours with photographs."],
-        callout: {
-          variant: "important",
-          text: "Claims made after 48 hours of delivery may not be eligible for replacement.",
-        },
-      },
-      {
-        id: "variations",
-        icon: Lightbulb,
-        title: "Manufacturing Variations",
-        paras: [
-          "Visible print layers, slight texture changes and colour variation are expected characteristics of 3D printing and are not defects.",
+        title: "6. Products That Cannot Be Returned",
+        paras: ["Change-of-mind returns may not be accepted for:"],
+        bullets: [
+          "Customised or personalised products",
+          "Products damaged after delivery",
+          "Products showing clear signs of prolonged use",
+          "Products returned with missing essential components or accessories",
+          "Products otherwise identified as non-returnable before purchase, where permitted by law",
         ],
         callout: {
           variant: "info",
-          text: "These characteristics are part of the additive manufacturing process and do not qualify as damage.",
+          text: "Nothing in this section limits your rights where a product is defective, damaged, incorrectly supplied or otherwise does not conform to your order.",
         },
       },
       {
-        id: "processing",
+        id: "refunds",
         icon: CreditCard,
-        title: "Refund Processing",
-        paras: ["Approved refunds are returned to the original payment method."],
+        title: "7. Refunds",
+        paras: [
+          "Once we receive your return, we will inspect the product and notify you of the outcome.",
+          "If approved, your refund will be issued to the original payment method.",
+          "We aim to process approved refunds within 5 to 10 business days after the returned product has been received and inspected.",
+          "Your bank, card issuer or payment provider may require additional time before the refund appears in your account.",
+          "Any differences caused by bank charges, foreign exchange rates or payment-provider processing are outside Fasthaus's control.",
+        ],
+      },
+      {
+        id: "exchanges",
+        icon: RotateCcw,
+        title: "8. Exchanges",
+        paras: [
+          "If you would prefer another colour, variant or eligible product, contact us and we will let you know whether an exchange is available.",
+          "Exchanges are subject to product availability.",
+          "Where an exchange is requested simply because you changed your mind, you may be responsible for the associated return and redelivery costs.",
+          "If the exchange is required because Fasthaus supplied an incorrect, faulty or damaged product, Fasthaus will cover the reasonable associated delivery costs.",
+        ],
+      },
+      {
+        id: "cancelled-orders",
+        icon: Hammer,
+        title: "9. Refunds for Cancelled Orders",
+        paras: [
+          "If you contact us before your order has entered production, preparation or dispatch, we will do our best to cancel it.",
+          "Orders that have already been dispatched will generally need to follow the normal returns process.",
+          "Custom or personalised orders may not be cancellable once production has started.",
+        ],
+      },
+      {
+        id: "production-variations",
+        icon: Lightbulb,
+        title: "10. Colour, Texture & Production Variations",
+        paras: [
+          "Fasthaus products are design-led objects, and some products may have minor variations in colour, texture, surface finish or appearance resulting from the materials and production process.",
+          "Small variations that are inherent to the product and do not affect its intended use are not necessarily considered defects.",
+          "However, if you believe the product you received is materially different from its description or product images, contact us and we will review it with you.",
+        ],
+      },
+      {
+        id: "damage-after-delivery",
+        icon: ShieldCheck,
+        title: "11. Products Damaged After Delivery",
+        paras: [
+          "Fasthaus cannot normally provide a refund or replacement for damage resulting from:",
+        ],
+        bullets: [
+          "Misuse or accidental damage",
+          "Incorrect assembly",
+          "Failure to follow care or safety instructions",
+          "Improper storage",
+          "Unauthorised modifications or repairs",
+          "Normal wear and tear",
+        ],
+        callout: {
+          variant: "info",
+          text: "This does not affect any warranty or consumer rights that may otherwise apply.",
+        },
+      },
+      {
+        id: "consumer-rights",
+        icon: Scale,
+        title: "12. Consumer Rights",
+        paras: [
+          "This policy is intended to explain Fasthaus's returns process and does not exclude or limit any rights or remedies available to consumers under applicable laws of the United Arab Emirates.",
+          "Where applicable law provides greater rights than those described in this policy, those legal rights will apply.",
+        ],
+      },
+      {
+        id: "contact",
+        icon: Mail,
+        title: "13. Contact Us",
+        paras: [
+          "If you have a question about a return, refund or product issue, please contact Fasthaus through the contact details provided on our website.",
+          "When contacting us about an existing order, please include your order number so we can assist you more quickly.",
+        ],
       },
     ],
   },
@@ -346,7 +460,7 @@ export const POLICIES: Policy[] = [
     desc: "Production times, delivery regions, tracking and customs.",
     updated: "July 17, 2026",
     metaDescription:
-      "FastHaus shipping — made-to-order production times, delivery regions starting with the UAE, tracking emails and customs responsibilities.",
+      "Fasthaus shipping — made-to-order production times, delivery regions starting with the UAE, tracking emails and customs responsibilities.",
     cards: [
       {
         icon: Hammer,
@@ -402,7 +516,7 @@ export const POLICIES: Policy[] = [
     desc: "What's covered on electrical and printed components, and what isn't.",
     updated: "July 17, 2026",
     metaDescription:
-      "FastHaus warranty — 12 months on supplied electrical components, 30-day workmanship warranty on printed components, and what is excluded.",
+      "Fasthaus warranty — 12 months on supplied electrical components, 30-day workmanship warranty on printed components, and what is excluded.",
     cards: [
       {
         icon: ShieldCheck,
@@ -425,7 +539,7 @@ export const POLICIES: Policy[] = [
         id: "coverage",
         icon: ShieldCheck,
         title: "Coverage",
-        paras: ["Your FastHaus product is covered by:"],
+        paras: ["Your Fasthaus product is covered by:"],
         bullets: [
           "12-month warranty on supplied electrical components",
           "30-day workmanship warranty on printed components",
@@ -468,7 +582,7 @@ export const POLICIES: Policy[] = [
     desc: "Which cookies we use, what they do, and how to manage your preferences.",
     updated: "July 17, 2026",
     metaDescription:
-      "The cookies FastHaus uses — essential cookies for cart and checkout, consent-based analytics via Google Analytics and PostHog, and how to manage preferences.",
+      "The cookies Fasthaus uses — essential cookies for cart and checkout, consent-based analytics via Google Analytics and PostHog, and how to manage preferences.",
     cards: [
       {
         icon: Cookie,
@@ -503,9 +617,7 @@ export const POLICIES: Policy[] = [
         id: "marketing",
         icon: Mail,
         title: "Marketing Cookies",
-        paras: [
-          "Reserved for future advertising integrations and only activated with consent.",
-        ],
+        paras: ["Reserved for future advertising integrations and only activated with consent."],
       },
       {
         id: "managing",

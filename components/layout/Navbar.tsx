@@ -128,15 +128,6 @@ export default function Navbar() {
     pathname.startsWith("/collection/") ||
     isProductPage;
   const desktopTextColor = "#FFFDF5";
-  const desktopNavStyle = {
-    color: desktopTextColor,
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    backgroundColor: "rgba(33, 33, 33, 0.36)",
-    boxShadow:
-      "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
-  };
   const floatingNavItems = [
     { name: "collection", link: "/collection", megaMenu: <CollectionMegaMenuContent /> },
     { name: "about", link: "/about" },
@@ -205,7 +196,7 @@ export default function Navbar() {
       <header
         className={cn(
           isProductPage
-            ? "relative z-40 w-full border-transparent bg-[var(--color-surface)] md:h-24"
+            ? "absolute top-11 z-40 w-full border-transparent bg-transparent md:h-24"
             : usesHeroOverlay
             ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
             : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
@@ -233,8 +224,7 @@ export default function Navbar() {
           {/* Glass background layer — clipped separately so the blur doesn't leak past the rounded corners on hover-triggered repaints */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]"
-            style={desktopNavStyle}
+            className="glass-surface pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]"
           />
           <div
             className="relative flex h-full w-full items-center justify-center px-8"

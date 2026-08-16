@@ -750,7 +750,8 @@ export default function CheckoutPage() {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-3.5 gap-y-1.5 px-2">
-              {["Free shipping", "7-day returns", "1-year warranty"].map((t, i, arr) => (
+              {["Free shipping", "14-day eligible returns", "1-year warranty"].map(
+                (t, i, arr) => (
                 <span key={t} className="flex items-center gap-3.5">
                   <span
                     className="type-caption-sm"
@@ -760,7 +761,8 @@ export default function CheckoutPage() {
                   </span>
                   {i < arr.length - 1 && <span style={{ color: "var(--color-border)" }}>·</span>}
                 </span>
-              ))}
+                )
+              )}
             </div>
           </aside>
         </div>

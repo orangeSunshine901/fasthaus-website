@@ -1,10 +1,21 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  PRODUCTS,
   getVariantGalleryImages,
   getVariantMainImage,
   type ProductVariant,
 } from "../lib/data/products.ts";
+
+test("every product provides material labels and a description", () => {
+  for (const product of PRODUCTS) {
+    assert.ok(product.materials.length > 0, `${product.name} is missing materials`);
+    assert.ok(
+      product.materialsDescription.length > 0,
+      `${product.name} is missing a materials description`
+    );
+  }
+});
 
 const baseVariant: ProductVariant = {
   id: "test",

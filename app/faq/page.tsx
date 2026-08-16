@@ -36,7 +36,7 @@ const FAQS: { category: string; question: string; answer: string }[] = [
     category: "Returns",
     question: "What is your return policy?",
     answer:
-      "We offer 30-day hassle-free returns for any reason. Simply email us at hello@fasthaus.studio with your order number and we will arrange a pickup at no cost to you.",
+      "Eligible products may be returned within 14 days of delivery after reasonable inspection, provided they remain in their original condition. Email hello@fasthaus.studio with your order number, the product and your reason for returning it before sending anything back. Change-of-mind return shipping is the customer's responsibility, and customised products are generally excluded unless faulty, damaged or incorrect.",
   },
   {
     category: "Custom Projects",

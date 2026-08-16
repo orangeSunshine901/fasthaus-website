@@ -88,15 +88,7 @@ export default function FeaturedProductCard({
       >
         <Link
           href={`/product/${product.slug}?variant=${encodeURIComponent(selectedVariant.id)}`}
-          className="relative z-10 inline-flex translate-y-[-16px] items-center gap-2 rounded-[10px] px-4 py-2 outline outline-1 outline-offset-[-1px]"
-          style={{
-            outlineColor: "#575757",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
-            backgroundColor: "rgba(33, 33, 33, 0.36)",
-            boxShadow:
-              "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
-          }}
+          className="glass-surface relative z-10 inline-flex -translate-y-4 items-center gap-2 overflow-hidden rounded-full px-4 py-2"
         >
           <span className="text-sm font-medium text-white font-['DM_Sans'] leading-5">
             View Product

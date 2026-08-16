@@ -30,7 +30,7 @@ const linkColumns: FooterColumn[] = [
     heading: "Support",
     links: [
       { label: "Shipping Policy", href: "/legal/shipping" },
-      { label: "Refund & Returns", href: "/legal/refunds" },
+      { label: "Refund & Return Policy", href: "/legal/refunds" },
       { label: "Warranty", href: "/legal/warranty" },
       // { label: "Care Guide" },
       { label: "FAQ", href: "/faq" },

@@ -108,7 +108,7 @@ export default function ProductCard({ product }: Props) {
             </span>
           )}
           <div
-            className="absolute inset-x-0 bottom-4 flex justify-center overflow-hidden"
+            className="absolute inset-x-0 bottom-[26px] flex justify-center"
             style={{
               transform: hovered ? "translateY(0)" : "translateY(150%)",
               opacity: hovered ? 1 : 0,
@@ -116,15 +116,7 @@ export default function ProductCard({ product }: Props) {
             }}
           >
             <div
-              className="px-4 py-2 rounded-[10px] outline outline-1 outline-offset-[-1px] inline-flex justify-center items-center gap-1 bg-transparent"
-              style={{
-                outlineColor: "#575757",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
-                backgroundColor: "rgba(33, 33, 33, 0.36)",
-                boxShadow:
-                  "rgba(255, 255, 255, 0.02) -3.35374px -3.35374px 167.687px 0px inset, rgba(0, 0, 0, 0.08) 0px 4px 22px 0px",
-              }}
+              className="glass-surface glass-cta-surface relative inline-flex items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2"
             >
               <div className="text-center justify-start text-white text-sm font-medium font-['DM_Sans'] leading-5">
                 View Product

@@ -27,7 +27,7 @@ export default function PDPClient({
   );
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<ProductTab>("Product Info");
+  const [activeTab, setActiveTab] = useState<ProductTab>("Materials");
 
   const addItem = useCartStore((s) => s.addItem);
   const openDrawer = useCartStore((s) => s.openDrawer);

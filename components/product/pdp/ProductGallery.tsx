@@ -42,7 +42,7 @@ export default function ProductGallery({ images, name, activeIndex, onSelect }: 
 
   return (
     <div
-      className="relative left-1/2 h-[calc(90svh-136.8px)] w-screen -translate-x-1/2 overflow-hidden md:h-[calc(100svh-188px)]"
+      className="relative left-1/2 h-[calc(100svh-2.75rem)] w-screen -translate-x-1/2 overflow-hidden"
       style={{ backgroundColor: "var(--color-surface)" }}
     >
       <div ref={emblaRef} className="h-full overflow-hidden">
@@ -54,7 +54,7 @@ export default function ProductGallery({ images, name, activeIndex, onSelect }: 
                 alt={`${name} — image ${index + 1} of ${images.length}`}
                 fill
                 sizes="100vw"
-                className="object-cover px-4 pb-24 pt-4 sm:px-8 sm:pb-28 sm:pt-8 md:object-contain md:px-12 lg:px-20"
+                className="object-cover"
                 priority={index === 0}
               />
             </div>

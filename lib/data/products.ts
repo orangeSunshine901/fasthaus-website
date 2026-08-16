@@ -46,6 +46,7 @@ export type Product = {
   features: FeatureItem[];
   specifications: SpecificationItem[];
   materials: string[];
+  materialsDescription: string[];
   dimensions: Dimensions;
   perfectFor: PerfectForItem[];
   designStory: string;
@@ -144,7 +145,10 @@ export const PRODUCTS: Product[] = [
         lines: ["Integrated LED 350lm 5W", "Adjustable 2700–4000K"],
       },
     ],
-    materials: ["PLA", "Aluminium"],
+    materialsDescription: [
+      "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
+    ],
+    materials: ["Plant-based PLA", "UV-printed stainless steel"],
     dimensions: { image: "/lamp-feature-3.png", heightCm: 24, widthCm: 14 },
     perfectFor: [
       { icon: "/workspaces-icon.svg", label: "Workspaces" },
@@ -179,7 +183,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-matcha-off.png",
           lightOn: "/flute-lamp/flute-matcha-on.png",
         },
-        collectionImage: "/flute-lamp/flute-matcha-off-shadow-product.png",
+        collectionImage: "/flute-lamp/flute-matcha-hero.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           "/flute-lamp/flute-matcha-off.png",
@@ -246,7 +250,10 @@ export const PRODUCTS: Product[] = [
         lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
       },
     ],
-    materials: ["PLA", "Stainless Steel"],
+    materialsDescription: [
+      "The lamp base is made from plant-based PLA and paired with a laser-cut, UV-printed stainless-steel base plate. The PETG shade offers excellent translucency and durability and can be recycled where suitable facilities are available.",
+    ],
+    materials: ["Plant-based PLA", "PETG", "UV-printed stainless steel"],
     dimensions: { image: "/dimensions-lamp.png", heightCm: 28, widthCm: 22 },
     perfectFor: [
       { icon: "/workspaces-icon.svg", label: "Workspaces" },
@@ -335,7 +342,10 @@ export const PRODUCTS: Product[] = [
         lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
       },
     ],
-    materials: ["Ceramic", "Linen"],
+    materialsDescription: [
+      "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
+    ],
+    materials: ["Plant-based PLA", "UV-printed stainless steel"],
     dimensions: { image: "/lamp-feature-4.png", heightCm: 32, widthCm: 20 },
     perfectFor: [
       { icon: "/living-room-icon.svg", label: "Living Room" },
@@ -440,7 +450,10 @@ export const PRODUCTS: Product[] = [
         lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
       },
     ],
-    materials: ["Frosted Glass", "Powder-Coated Steel"],
+    materialsDescription: [
+      "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
+    ],
+    materials: ["Plant-based PLA", "UV-printed stainless steel"],
     dimensions: { image: "/lamp-feature-2.png", heightCm: 38, widthCm: 26 },
     perfectFor: [
       { icon: "/living-room-icon.svg", label: "Living Room" },
