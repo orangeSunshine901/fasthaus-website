@@ -63,7 +63,7 @@ export default function ProductGallery({ images, name, activeIndex, onSelect }: 
       </div>
 
       {images.length > 1 && (
-        <div className="absolute inset-x-0 bottom-7 z-10 flex items-center justify-center gap-5 md:bottom-16 md:gap-7">
+        <div className="absolute inset-x-0 bottom-7 z-10 flex items-center justify-center gap-5 md:bottom-4 md:gap-7">
           <button
             type="button"
             onClick={scrollPrev}
