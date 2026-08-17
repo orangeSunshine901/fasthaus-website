@@ -183,7 +183,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-matcha-off.png",
           lightOn: "/flute-lamp/flute-matcha-on.png",
         },
-        collectionImage: "/flute-lamp/flute-matcha-hero.jpg",
+        collectionImage: "/flute-lamp/flute-matcha-hero.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           "/flute-lamp/flute-matcha-off.png",
@@ -202,7 +202,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-fire-red-off.png",
           lightOn: "/flute-lamp/flute-fire-red-on.png",
         },
-        collectionImage: "/flute-lamp/flute-fire-red-off-shadow-product.png",
+        collectionImage: "/flute-lamp/flute-red-hero.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           "/flute-lamp/flute-fire-red-on.png",

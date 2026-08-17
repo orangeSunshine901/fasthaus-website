@@ -3,14 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck, Star } from "lucide-react";
-import { Tooltip } from "radix-ui";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 
 type Props = {
   product: Product;
   selectedVariant: ProductVariant;
-  onVariantChange: (variant: ProductVariant) => void;
   quantity: number;
   onQuantityChange: (quantity: number) => void;
   addOnsTotal?: number;
@@ -23,7 +21,6 @@ type Props = {
 export default function PurchaseRow({
   product,
   selectedVariant,
-  onVariantChange,
   quantity,
   onQuantityChange,
   addOnsTotal = 0,
@@ -173,6 +170,44 @@ export default function PurchaseRow({
         className="flex flex-col gap-[18px] rounded-[18px] border bg-white p-6 md:p-7"
         style={{ borderColor: "var(--color-border)" }}
       >
+        <div className="flex flex-col gap-2">
+          <span
+            className="text-[12.5px] font-bold uppercase tracking-[0.06em]"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
+            Amount
+          </span>
+          <div
+            className="flex items-center overflow-hidden rounded-[10px] border width-fit md:w-fit"
+            style={{ borderColor: "var(--color-border)" }}
+          >
+            <button
+              type="button"
+              onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
+              disabled={quantity <= 1}
+              className="grid h-11 w-11 place-items-center transition-colors hover:bg-[var(--color-surface)] disabled:opacity-40 md:h-[34px] md:w-[34px]"
+              style={{ color: "var(--color-text-secondary)" }}
+              aria-label="Decrease quantity"
+            >
+              <Minus size={14} />
+            </button>
+            <span
+              className="w-9 text-center text-[15px] font-bold md:w-[34px]"
+              style={{ color: "var(--color-text-primary)" }}
+            >
+              {quantity}
+            </span>
+            <button
+              type="button"
+              onClick={() => onQuantityChange(Math.min(selectedVariant.stock, quantity + 1))}
+              className="grid h-11 w-11 place-items-center transition-colors hover:bg-[var(--color-surface)] md:h-[34px] md:w-[34px]"
+              style={{ color: "var(--color-text-secondary)" }}
+              aria-label="Increase quantity"
+            >
+              <Plus size={14} />
+            </button>
+          </div>
+        </div>
         <div className="flex items-baseline gap-2.5">
           <DirhamPrice variant="black" amount={selectedVariant.price} size="xl" />
           <span
@@ -181,91 +216,6 @@ export default function PurchaseRow({
           >
             incl. VAT
           </span>
-        </div>
-
-        <div className="flex flex-wrap items-start justify-between gap-x-7 gap-y-4 sm:justify-start">
-          <div className="flex flex-col gap-2">
-            <span
-              className="text-[12.5px] font-bold uppercase tracking-[0.06em]"
-              style={{ color: "var(--color-text-secondary)" }}
-            >
-              Lamp Color
-            </span>
-            <span className="text-[15px] font-bold" style={{ color: "var(--color-text-primary)" }}>
-              {selectedVariant.color}
-            </span>
-            <Tooltip.Provider delayDuration={0}>
-              <div className="flex gap-2.5">
-                {product.variants.map((v) => (
-                  <Tooltip.Root key={v.id}>
-                    <Tooltip.Trigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => onVariantChange(v)}
-                        className="h-9 w-9 rounded-full border-2 border-white transition-all md:h-[30px] md:w-[30px]"
-                        style={{
-                          backgroundColor: v.colorHex,
-                          outline: `2px solid ${
-                            selectedVariant.id === v.id
-                              ? "var(--color-accent-amber)"
-                              : "transparent"
-                          }`,
-                        }}
-                        aria-label={v.color}
-                      />
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.Content
-                        sideOffset={6}
-                        className="z-50 rounded-md bg-[var(--color-text-primary)] px-2.5 py-1.5 text-xs font-medium text-white shadow-md"
-                      >
-                        {v.color}
-                        <Tooltip.Arrow className="fill-[var(--color-text-primary)]" />
-                      </Tooltip.Content>
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                ))}
-              </div>
-            </Tooltip.Provider>
-          </div>
-          <div className="flex flex-col gap-2">
-            <span
-              className="text-[12.5px] font-bold uppercase tracking-[0.06em]"
-              style={{ color: "var(--color-text-secondary)" }}
-            >
-              Amount
-            </span>
-            <div
-              className="flex items-center overflow-hidden rounded-[10px] border"
-              style={{ borderColor: "var(--color-border)" }}
-            >
-              <button
-                type="button"
-                onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
-                disabled={quantity <= 1}
-                className="grid h-11 w-11 place-items-center transition-colors hover:bg-[var(--color-surface)] disabled:opacity-40 md:h-[34px] md:w-[34px]"
-                style={{ color: "var(--color-text-secondary)" }}
-                aria-label="Decrease quantity"
-              >
-                <Minus size={14} />
-              </button>
-              <span
-                className="w-9 text-center text-[15px] font-bold md:w-[34px]"
-                style={{ color: "var(--color-text-primary)" }}
-              >
-                {quantity}
-              </span>
-              <button
-                type="button"
-                onClick={() => onQuantityChange(Math.min(selectedVariant.stock, quantity + 1))}
-                className="grid h-11 w-11 place-items-center transition-colors hover:bg-[var(--color-surface)] md:h-[34px] md:w-[34px]"
-                style={{ color: "var(--color-text-secondary)" }}
-                aria-label="Increase quantity"
-              >
-                <Plus size={14} />
-              </button>
-            </div>
-          </div>
         </div>
 
         <div className="flex flex-col gap-2.5">

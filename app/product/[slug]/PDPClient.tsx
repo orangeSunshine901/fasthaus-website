@@ -106,7 +106,10 @@ export default function PDPClient({
           ),
         ]}
         name={product.name}
+        variants={product.variants}
+        selectedVariant={selectedVariant}
         activeIndex={activeImage}
+        onVariantChange={handleVariantChange}
         onSelect={(index) => {
           setActiveImage(index);
           capture(analyticsEvents.productImageViewed, {
@@ -118,7 +121,6 @@ export default function PDPClient({
       <PurchaseRow
         product={product}
         selectedVariant={selectedVariant}
-        onVariantChange={handleVariantChange}
         quantity={quantity}
         onQuantityChange={setQuantity}
         addOnsTotal={0}

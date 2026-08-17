@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
 import type { Product } from "@/lib/data/products";
 
@@ -21,6 +22,7 @@ export default function FeaturedProductCard({
 }: Props) {
   const defaultVariant = product.variants[0];
   const [selectedVariant, setSelectedVariant] = useState(defaultVariant);
+  const reducedMotion = useReducedMotion();
   const displayedImages = {
     off: selectedVariant.featuredImages.lightOff,
     on: selectedVariant.featuredImages.lightOn,
@@ -44,36 +46,45 @@ export default function FeaturedProductCard({
           aspectRatio: compactMobile ? "238 / 260" : displayedImages ? "1260 / 1720" : "238 / 325",
         }}
       >
-        <Image
-          src={displayedImages.off}
-          alt={product.name}
-          fill
-          className={`md:scale-[1] object-cover transition-opacity duration-500 ${
-            displayedImages
-              ? activeMobile === undefined
-                ? "opacity-100 group-hover:opacity-0"
-                : activeMobile
-                  ? "opacity-0"
-                  : "opacity-100 "
-              : ""
-          }`}
-          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
-        />
-        {displayedImages?.on && (
-          <Image
-            src={displayedImages.on}
-            alt=""
-            fill
-            className={`md:scale-[1] object-cover transition-all duration-500  ${
-              activeMobile === undefined
-                ? "opacity-0 group-hover:opacity-100"
-                : activeMobile
-                  ? "opacity-100"
-                  : "opacity-0"
-            }`}
-            sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
-          />
-        )}
+        <AnimatePresence initial={false} mode="sync">
+          <motion.div
+            key={selectedVariant.id}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeInOut" }}
+          >
+            <Image
+              src={displayedImages.off}
+              alt={product.name}
+              fill
+              className={`md:scale-[1] object-cover transition-opacity duration-500 ${
+                displayedImages
+                  ? activeMobile === undefined
+                    ? "opacity-100 group-hover:opacity-0"
+                    : activeMobile
+                      ? "opacity-0"
+                      : "opacity-100 "
+                  : ""
+              }`}
+              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+            />
+            <Image
+              src={displayedImages.on}
+              alt=""
+              fill
+              className={`md:scale-[1] object-cover transition-all duration-500  ${
+                activeMobile === undefined
+                  ? "opacity-0 group-hover:opacity-100"
+                  : activeMobile
+                    ? "opacity-100"
+                    : "opacity-0"
+              }`}
+              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <div
