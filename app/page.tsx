@@ -84,8 +84,8 @@ export default function HomePage() {
               Soft glow, sharp form, better room energy.
             </h1>
             <p className="type-body-md self-stretch text-white/90">
-              We make 3D printed objects for spaces that need more feeling, less filler, and a
-              little story in the corner.
+              We make spatial objects for spaces that need more feeling, less filler, and a little
+              story in the corner.
             </p>
             <Link href="/collection" className="btn btn-primary w-full self-stretch">
               Shop Collection
@@ -104,8 +104,8 @@ export default function HomePage() {
                 Soft glow, sharp form, better room energy.
               </h1>
               <p className="type-body-md max-w-md text-white/80">
-                We make 3D printed objects for spaces that need more feeling, less filler, and a
-                little story in the corner.
+                We make spatial objects for spaces that need more feeling, less filler, and a little
+                story in the corner.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link href="/collection" className="btn btn-primary">
