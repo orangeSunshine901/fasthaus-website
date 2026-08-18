@@ -67,13 +67,18 @@ export default function HomePage() {
       <ShopLayout>
         {/* Hero */}
         <section className="relative h-[640px] w-full overflow-hidden md:h-[740px]">
-          <Image
-            src="/hero-img-1.jpg"
-            alt="Modern Lamps"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          <video
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/hero-img-1.jpg"
+            preload="metadata"
+            aria-hidden="true"
+          >
+            <source src="/home-hero.webm" type="video/webm" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-t from-black via-neutral-950/35 to-transparent" />
 
           <div
@@ -81,12 +86,19 @@ export default function HomePage() {
             className="scroll-reveal-up absolute inset-x-5 bottom-2 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
           >
             <h1 className="type-display-xl self-stretch text-white">
-              Soft glow, sharp form, better room energy.
+              The light that makes the whole room feel right.
             </h1>
+            {/* <h1 className="type-display-xl self-stretch text-white">
+              Soft glow, sharp form, better room energy.
+            </h1> */}
             <p className="type-body-md self-stretch text-white/90">
+              Stop settling for mass-produced décor. No more wasteful materials. Each lamp is made
+              to order from plant-based material for a beautiful home with a lighter impact.
+            </p>
+            {/* <p className="type-body-md self-stretch text-white/90">
               We make spatial objects for spaces that need more feeling, less filler, and a little
               story in the corner.
-            </p>
+            </p> */}
             <Link href="/collection" className="btn btn-primary w-full self-stretch">
               Shop Collection
             </Link>
@@ -101,12 +113,19 @@ export default function HomePage() {
           <div className="container-page absolute left-1/2 top-[420px] z-10 hidden -translate-x-1/2 md:block">
             <div data-scroll className="scroll-reveal-up flex flex-col items-start gap-6">
               <h1 className="type-display-xl max-w-lg text-white">
-                Soft glow, sharp form, better room energy.
+                The light that makes the whole room feel right.
               </h1>
+              {/* <h1 className="type-display-xl max-w-lg text-white">
+                Soft glow, sharp form, better room energy.
+              </h1> */}
               <p className="type-body-md max-w-md text-white/80">
+                Stop settling for mass-produced décor. No more wasteful materials. Each lamp is made
+                to order from plant-based material for a beautiful home with a lighter impact.
+              </p>
+              {/* <p className="type-body-md max-w-md text-white/80">
                 We make spatial objects for spaces that need more feeling, less filler, and a little
                 story in the corner.
-              </p>
+              </p> */}
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link href="/collection" className="btn btn-primary">
                   Shop Collection
@@ -125,7 +144,7 @@ export default function HomePage() {
         {/* Featured Products */}
         <section
           id="featured-products"
-          className="scroll-target w-full"
+          className="scroll-target w-full pt-4"
           style={{ backgroundColor: "#060606" }}
         >
           <div className="container-page section-pad flex flex-col gap-12">
