@@ -73,7 +73,7 @@ export default function HomePage() {
             muted
             loop
             playsInline
-            poster="/hero-img-1.jpg"
+            poster="/video-poster-test.png"
             preload="metadata"
             aria-hidden="true"
           >
