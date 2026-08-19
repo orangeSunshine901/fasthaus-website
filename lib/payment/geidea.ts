@@ -1,5 +1,6 @@
 import "server-only";
 import { generateGeideaSessionSignature, formatGeideaTimestamp } from "./geidea-signature";
+import { formatGeideaDiagnostic } from "./geidea-diagnostics";
 
 const UAE_API_BASE_URL = "https://api.geidea.ae";
 const UAE_HPP_BASE_URL = "https://payments.geidea.ae";
@@ -75,44 +76,110 @@ export async function createGeideaCheckoutSession(
     timestamp,
   });
 
-  const response = await fetch(
-    `${config.apiBaseUrl}/payment-intent/api/v2/direct/session`,
-    {
+  const url = `${config.apiBaseUrl}/payment-intent/api/v2/direct/session`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Basic ${Buffer.from(
+      `${config.merchantPublicKey}:${config.apiPassword}`
+    ).toString("base64")}`,
+  };
+  const requestBody = {
+    amount: input.amount.toFixed(2),
+    currency: "AED",
+    timestamp,
+    merchantReferenceId: input.merchantReferenceId,
+    signature,
+    callbackUrl: input.callbackUrl,
+    returnUrl: input.returnUrl,
+    paymentOperation: "Pay",
+    language: "en",
+    cardOnFile: false,
+    customer: input.customer,
+    expressCheckouts: [
+      { wallet: "apple-pay", label: "Apple Pay" },
+      { wallet: "google-pay", label: "Google Pay" },
+      { wallet: "samsung-pay", label: "Samsung Pay" },
+    ],
+  };
+  const logSessionCreation = process.env.GEIDEA_LOG_SESSION_CREATION === "true";
+  const startedAt = Date.now();
+
+  if (logSessionCreation) {
+    console.info(
+      "[Geidea session creation request]\n" +
+        formatGeideaDiagnostic({
+          requestedAt: new Date(startedAt).toISOString(),
+          merchantPublicKey: config.merchantPublicKey,
+          merchantReferenceId: input.merchantReferenceId,
+          method: "POST",
+          url,
+          headers,
+          body: requestBody,
+        })
+    );
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${Buffer.from(
-          `${config.merchantPublicKey}:${config.apiPassword}`
-        ).toString("base64")}`,
-      },
-      body: JSON.stringify({
-        amount: input.amount.toFixed(2),
-        currency: "AED",
-        timestamp,
-        merchantReferenceId: input.merchantReferenceId,
-        signature,
-        callbackUrl: input.callbackUrl,
-        returnUrl: input.returnUrl,
-        paymentOperation: "Pay",
-        language: "en",
-        cardOnFile: false,
-        customer: input.customer,
-        expressCheckouts: [
-          { wallet: "apple-pay", label: "Apple Pay" },
-          { wallet: "google-pay", label: "Google Pay" },
-          { wallet: "samsung-pay", label: "Samsung Pay" },
-        ],
-      }),
+      headers,
+      body: JSON.stringify(requestBody),
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),
+    });
+  } catch (error) {
+    if (logSessionCreation) {
+      console.error(
+        "[Geidea session creation transport error]\n" +
+          formatGeideaDiagnostic({
+            merchantReferenceId: input.merchantReferenceId,
+            durationMs: Date.now() - startedAt,
+            error:
+              error instanceof Error
+                ? { name: error.name, message: error.message }
+                : String(error),
+          })
+      );
     }
-  );
+    throw error;
+  }
 
   let body: GeideaSessionResponse;
+  const responseText = await response.text();
   try {
-    body = (await response.json()) as GeideaSessionResponse;
+    body = JSON.parse(responseText) as GeideaSessionResponse;
   } catch {
+    if (logSessionCreation) {
+      console.info(
+        "[Geidea session creation response]\n" +
+          formatGeideaDiagnostic({
+            receivedAt: new Date().toISOString(),
+            merchantReferenceId: input.merchantReferenceId,
+            durationMs: Date.now() - startedAt,
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers.entries()),
+            body: responseText,
+          })
+      );
+    }
     throw new Error(`Geidea returned an unreadable response (${response.status}).`);
+  }
+
+  if (logSessionCreation) {
+    console.info(
+      "[Geidea session creation response]\n" +
+        formatGeideaDiagnostic({
+          receivedAt: new Date().toISOString(),
+          merchantReferenceId: input.merchantReferenceId,
+          durationMs: Date.now() - startedAt,
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers.entries()),
+          body,
+        })
+    );
   }
 
   if (

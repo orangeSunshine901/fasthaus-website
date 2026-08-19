@@ -8,6 +8,7 @@ import {
   timingSafeSignatureEqual,
 } from "../lib/payment/geidea-signature.ts";
 import { verifyGeideaCallback } from "../lib/payment/geidea-callback.ts";
+import { formatGeideaDiagnostic } from "../lib/payment/geidea-diagnostics.ts";
 
 const merchantPublicKey = "merchant-key";
 const apiPassword = "api-password";
@@ -33,6 +34,16 @@ test("generates the documented Create Session signature", () => {
     timestamp: "2026/08/07 10:30:00",
   });
   assert.equal(signature, "OQz/R5IE5jJ2eBc4j4NNLqLqmNS6dzoHHGy++mf9PGI=");
+});
+
+test("redacts secrets and customer data from Geidea diagnostics", () => {
+  const diagnostic = formatGeideaDiagnostic({
+    headers: { Authorization: "Basic secret", "set-cookie": "session=secret" },
+    signature: "request-specific-signature",
+    customer: { email: "customer@example.com", phoneNumber: "+971500000000" },
+  });
+  assert.doesNotMatch(diagnostic, /Basic secret|session=secret|customer@example|971500000000/);
+  assert.match(diagnostic, /request-specific-signature/);
 });
 
 function validCallback() {

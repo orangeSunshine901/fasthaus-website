@@ -16,6 +16,9 @@ Google Pay, and Samsung Pay. Prices and order state remain server-authoritative.
 - `GEIDEA_LOG_CALLBACKS` — set to `true` temporarily during provider testing to log the
   complete raw callback JSON before verification. Disable it immediately after capturing
   the test callback because the payload can contain sensitive payment and customer metadata.
+- `GEIDEA_LOG_SESSION_CREATION` — set to `true` temporarily to log the Create Session
+  request, response, and headers. Credentials, cookies, customer PII, and payment tokens
+  are redacted. Disable it immediately after capturing the affected request.
 
 `GEIDEA_MERCHANT_ID` remains a temporary backwards-compatible alias for the public key.
 There is no separate webhook secret in Geidea's public callback algorithm; callbacks are
