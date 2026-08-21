@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  getVariantGalleryImages,
   getVariantMainImage,
   type Product,
   type ProductVariant,
@@ -99,12 +98,7 @@ export default function PDPClient({
   return (
     <div className="flex flex-col gap-8 lg:gap-12">
       <ProductGallery
-        images={[
-          selectedVariant.collectionImage,
-          ...getVariantGalleryImages(selectedVariant).filter(
-            (image) => image !== selectedVariant.collectionImage
-          ),
-        ]}
+        images={selectedVariant.images}
         name={product.name}
         variants={product.variants}
         selectedVariant={selectedVariant}

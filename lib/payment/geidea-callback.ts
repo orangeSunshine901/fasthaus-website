@@ -29,6 +29,25 @@ const TransactionSchema = z
   })
   .passthrough();
 
+const GeideaOrderSchema = z
+  .object({
+    orderId: z.string().min(1),
+    amount: z.coerce.number().positive(),
+    totalAmount: z.coerce.number().positive().optional(),
+    currency: z.string().min(1),
+    status: z.string().min(1),
+    detailedStatus: z.string().optional(),
+    merchantPublicKey: z.string().min(1),
+    merchantReferenceId: z.string().uuid(),
+    reference: z.string().nullish(),
+    timestamp: z.string().optional(),
+    timeStamp: z.string().optional(),
+    updatedDate: z.string().optional(),
+    paymentMethod: PaymentMethodSchema.nullish(),
+    transactions: z.array(TransactionSchema).optional(),
+  })
+  .passthrough();
+
 const GeideaCallbackSchema = z
   .object({
     signature: z.string().min(1),
@@ -39,26 +58,15 @@ const GeideaCallbackSchema = z
     responseMessage: z.string().optional(),
     detailedResponseCode: z.string().optional(),
     detailedResponseMessage: z.string().optional(),
-    order: z
-      .object({
-        orderId: z.string().min(1),
-        amount: z.coerce.number().positive(),
-        totalAmount: z.coerce.number().positive().optional(),
-        currency: z.string().min(1),
-        status: z.string().min(1),
-        detailedStatus: z.string().optional(),
-        merchantPublicKey: z.string().min(1),
-        merchantReferenceId: z.string().uuid(),
-        reference: z.string().nullish(),
-        timestamp: z.string().optional(),
-        timeStamp: z.string().optional(),
-        updatedDate: z.string().optional(),
-        paymentMethod: PaymentMethodSchema.nullish(),
-        transactions: z.array(TransactionSchema).optional(),
-      })
-      .passthrough(),
+    order: GeideaOrderSchema,
   })
   .passthrough();
+
+const GeideaEventSchema = z
+  .object({ order: z.object({ id: z.string().uuid() }).passthrough() })
+  .passthrough();
+
+const GeideaOrderResponseSchema = CodesSchema.extend({ order: GeideaOrderSchema });
 
 export type VerifiedGeideaCallback = {
   orderId: string;
@@ -76,6 +84,68 @@ export type VerifiedGeideaCallback = {
   detailedResponseMessage: string | null;
   isPaid: boolean;
 };
+
+function normalizeGeideaOrder(
+  order: z.infer<typeof GeideaOrderSchema>,
+  codesSource: z.infer<typeof CodesSchema>,
+  reference: string | null
+): VerifiedGeideaCallback {
+  const transactions = order.transactions ?? [];
+  const payTransaction =
+    [...transactions].reverse().find((transaction) => transaction.type?.toLowerCase() === "pay") ??
+    transactions.at(-1);
+  const codes = payTransaction?.codes ?? codesSource;
+  const paymentMethod = order.paymentMethod ?? payTransaction?.paymentMethod;
+  const responseCode = codes.responseCode ?? null;
+  const responseMessage = codes.responseMessage ?? null;
+  const detailedResponseCode = codes.detailedResponseCode ?? null;
+  const detailedResponseMessage = codes.detailedResponseMessage ?? null;
+
+  return {
+    orderId: order.orderId,
+    merchantReferenceId: order.merchantReferenceId,
+    amount: order.amount,
+    totalAmount: order.totalAmount ?? order.amount,
+    currency: order.currency,
+    status: order.status,
+    detailedStatus: order.detailedStatus ?? null,
+    reference,
+    paymentMethod: paymentMethod?.wallet ?? paymentMethod?.type ?? null,
+    responseCode,
+    responseMessage,
+    detailedResponseCode,
+    detailedResponseMessage,
+    isPaid:
+      order.status === "Success" &&
+      order.detailedStatus === "Paid" &&
+      responseCode === "000" &&
+      responseMessage === "Success" &&
+      detailedResponseCode === "000" &&
+      detailedResponseMessage === "The operation was successful",
+  };
+}
+
+export function getGeideaEventOrderId(input: unknown): string | null {
+  const parsed = GeideaEventSchema.safeParse(input);
+  return parsed.success ? parsed.data.order.id : null;
+}
+
+export function verifyGeideaOrderResponse(
+  input: unknown,
+  expected: { merchantPublicKey: string; orderId: string }
+): VerifiedGeideaCallback {
+  const parsed = GeideaOrderResponseSchema.parse(input);
+  if (parsed.responseCode !== "000" || parsed.detailedResponseCode !== "000") {
+    throw new Error("Geidea order lookup was not successful.");
+  }
+  if (parsed.order.orderId !== expected.orderId) {
+    throw new Error("Geidea order lookup returned a different order.");
+  }
+  if (parsed.order.merchantPublicKey !== expected.merchantPublicKey) {
+    throw new Error("Geidea order merchant public key does not match.");
+  }
+  return normalizeGeideaOrder(parsed.order, parsed, parsed.order.reference ?? null);
+}
 
 export function verifyGeideaCallback(
   input: unknown,
@@ -108,38 +178,5 @@ export function verifyGeideaCallback(
   if (!timingSafeSignatureEqual(parsed.signature, expectedSignature)) {
     throw new Error("Callback signature is invalid.");
   }
-
-  const transactions = order.transactions ?? [];
-  const payTransaction =
-    [...transactions].reverse().find((transaction) => transaction.type?.toLowerCase() === "pay") ??
-    transactions.at(-1);
-  const codes = payTransaction?.codes ?? parsed;
-  const paymentMethod = order.paymentMethod ?? payTransaction?.paymentMethod;
-  const responseCode = codes.responseCode ?? null;
-  const responseMessage = codes.responseMessage ?? null;
-  const detailedResponseCode = codes.detailedResponseCode ?? null;
-  const detailedResponseMessage = codes.detailedResponseMessage ?? null;
-
-  return {
-    orderId: order.orderId,
-    merchantReferenceId: order.merchantReferenceId,
-    amount: order.amount,
-    totalAmount: order.totalAmount ?? order.amount,
-    currency: order.currency,
-    status: order.status,
-    detailedStatus: order.detailedStatus ?? null,
-    reference: parsed.reference ?? order.reference ?? null,
-    paymentMethod: paymentMethod?.wallet ?? paymentMethod?.type ?? null,
-    responseCode,
-    responseMessage,
-    detailedResponseCode,
-    detailedResponseMessage,
-    isPaid:
-      order.status === "Success" &&
-      order.detailedStatus === "Paid" &&
-      responseCode === "000" &&
-      responseMessage === "Success" &&
-      detailedResponseCode === "000" &&
-      detailedResponseMessage === "The operation was successful",
-  };
+  return normalizeGeideaOrder(order, parsed, parsed.reference ?? order.reference ?? null);
 }

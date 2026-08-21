@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
-import { verifyGeideaCallback } from "@/lib/payment/geidea-callback";
-import { getGeideaConfig } from "@/lib/payment/geidea";
+import {
+  getGeideaEventOrderId,
+  verifyGeideaCallback,
+  type VerifiedGeideaCallback,
+} from "@/lib/payment/geidea-callback";
+import { fetchVerifiedGeideaOrder, getGeideaConfig } from "@/lib/payment/geidea";
+import { formatGeideaDiagnostic } from "@/lib/payment/geidea-diagnostics";
 import { sendPaidOrderEmails } from "@/lib/payment/order-emails";
 import { createServiceClient } from "@/lib/supabase/server";
 
@@ -29,25 +34,40 @@ export async function POST(request: Request) {
   }
 
   if (process.env.GEIDEA_LOG_CALLBACKS === "true") {
-    console.info("[Geidea callback received]\n" + JSON.stringify(rawBody, null, 2));
+    console.info("[Geidea callback received]\n" + formatGeideaDiagnostic(rawBody));
   }
 
-  let callback;
-  try {
-    const config = getGeideaConfig();
-    callback = verifyGeideaCallback(rawBody, {
-      merchantPublicKey: config.merchantPublicKey,
-      apiPassword: config.apiPassword,
-    });
-  } catch (error) {
-    console.warn("Rejected Geidea callback", error instanceof Error ? error.message : error);
-    return NextResponse.json({ error: "Invalid callback." }, { status: 401 });
+  let callback: VerifiedGeideaCallback;
+  const eventOrderId = getGeideaEventOrderId(rawBody);
+  if (eventOrderId) {
+    try {
+      callback = await fetchVerifiedGeideaOrder(eventOrderId);
+    } catch (error) {
+      console.error(
+        "Could not verify Geidea event order",
+        error instanceof Error ? error.message : error
+      );
+      return NextResponse.json({ error: "Payment verification unavailable." }, { status: 502 });
+    }
+  } else {
+    try {
+      const config = getGeideaConfig();
+      callback = verifyGeideaCallback(rawBody, {
+        merchantPublicKey: config.merchantPublicKey,
+        apiPassword: config.apiPassword,
+      });
+    } catch (error) {
+      console.warn("Rejected Geidea callback", error instanceof Error ? error.message : error);
+      return NextResponse.json({ error: "Invalid callback." }, { status: 401 });
+    }
   }
 
   const supabase = await createServiceClient();
   const { data: order, error: orderError } = await supabase
     .from("orders")
-    .select("id,status,guest_email,total,shipping_address,cart_id,payment_confirmed_at")
+    .select(
+      "id,status,guest_email,total,shipping_address,cart_id,payment_confirmed_at,geidea_order_id"
+    )
     .eq("id", callback.merchantReferenceId)
     .maybeSingle();
   if (orderError) {
@@ -74,6 +94,20 @@ export async function POST(request: Request) {
     payment_status: callback.detailedStatus ?? callback.status,
     payment_method: callback.paymentMethod,
   };
+
+  if (
+    callback.isPaid &&
+    order.status === "confirmed" &&
+    order.geidea_order_id &&
+    order.geidea_order_id !== callback.orderId
+  ) {
+    console.error("Received an additional paid Geidea order for a confirmed FastHaus order", {
+      merchantReferenceId: order.id,
+      confirmedGeideaOrderId: order.geidea_order_id,
+      additionalGeideaOrderId: callback.orderId,
+    });
+    return NextResponse.json({ ok: true });
+  }
 
   if (!callback.isPaid) {
     const { error } = await supabase

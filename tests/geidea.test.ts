@@ -7,7 +7,11 @@ import {
   generateGeideaSessionSignature,
   timingSafeSignatureEqual,
 } from "../lib/payment/geidea-signature.ts";
-import { verifyGeideaCallback } from "../lib/payment/geidea-callback.ts";
+import {
+  getGeideaEventOrderId,
+  verifyGeideaCallback,
+  verifyGeideaOrderResponse,
+} from "../lib/payment/geidea-callback.ts";
 import { formatGeideaDiagnostic } from "../lib/payment/geidea-diagnostics.ts";
 
 const merchantPublicKey = "merchant-key";
@@ -41,8 +45,15 @@ test("redacts secrets and customer data from Geidea diagnostics", () => {
     headers: { Authorization: "Basic secret", "set-cookie": "session=secret" },
     signature: "request-specific-signature",
     customer: { email: "customer@example.com", phoneNumber: "+971500000000" },
+    cardholderName: "Customer Name",
+    maskedCardNumber: "411111******1111",
+    authenticationToken: "3ds-secret",
+    ipAddress: "192.0.2.1",
   });
-  assert.doesNotMatch(diagnostic, /Basic secret|session=secret|customer@example|971500000000/);
+  assert.doesNotMatch(
+    diagnostic,
+    /Basic secret|session=secret|customer@example|971500000000|Customer Name|411111|3ds-secret|192\.0\.2\.1/
+  );
   assert.match(diagnostic, /request-specific-signature/);
 });
 
@@ -117,5 +128,32 @@ test("does not treat incomplete success codes as a paid order", () => {
   assert.equal(
     verifyGeideaCallback(callback, { merchantPublicKey, apiPassword }).isPaid,
     false
+  );
+});
+
+test("authenticates the event callback through a fetched Geidea order", () => {
+  const event = {
+    result: "SUCCESS",
+    order: {
+      id: geideaOrderId,
+      reference: merchantReferenceId,
+      status: "CAPTURED",
+    },
+  };
+  assert.equal(getGeideaEventOrderId(event), geideaOrderId);
+
+  const response = {
+    responseCode: "000",
+    detailedResponseCode: "000",
+    order: validCallback().order,
+  };
+  const order = verifyGeideaOrderResponse(response, { merchantPublicKey, orderId: geideaOrderId });
+  assert.equal(order.isPaid, true);
+  assert.equal(order.merchantReferenceId, merchantReferenceId);
+  assert.throws(() =>
+    verifyGeideaOrderResponse(response, {
+      merchantPublicKey,
+      orderId: "33333333-3333-4333-8333-333333333333",
+    })
   );
 });

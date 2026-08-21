@@ -1,6 +1,10 @@
 import "server-only";
 import { generateGeideaSessionSignature, formatGeideaTimestamp } from "./geidea-signature";
 import { formatGeideaDiagnostic } from "./geidea-diagnostics";
+import {
+  verifyGeideaOrderResponse,
+  type VerifiedGeideaCallback,
+} from "./geidea-callback";
 
 const UAE_API_BASE_URL = "https://api.geidea.ae";
 const UAE_HPP_BASE_URL = "https://payments.geidea.ae";
@@ -62,6 +66,38 @@ export type GeideaCheckoutSession = {
   cardRedirectUrl: string;
 };
 
+export async function fetchVerifiedGeideaOrder(
+  orderId: string
+): Promise<VerifiedGeideaCallback> {
+  const config = getGeideaConfig();
+  const response = await fetch(
+    `${config.apiBaseUrl}/pgw/api/v1/direct/order/${encodeURIComponent(orderId)}`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${Buffer.from(
+          `${config.merchantPublicKey}:${config.apiPassword}`
+        ).toString("base64")}`,
+      },
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    }
+  );
+
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    throw new Error(`Geidea returned an unreadable order response (${response.status}).`);
+  }
+  if (!response.ok) throw new Error(`Geidea order lookup failed (${response.status}).`);
+
+  return verifyGeideaOrderResponse(body, {
+    merchantPublicKey: config.merchantPublicKey,
+    orderId,
+  });
+}
+
 export async function createGeideaCheckoutSession(
   input: CreateCheckoutSessionInput
 ): Promise<GeideaCheckoutSession> {
@@ -95,11 +131,6 @@ export async function createGeideaCheckoutSession(
     language: "en",
     cardOnFile: false,
     customer: input.customer,
-    expressCheckouts: [
-      { wallet: "apple-pay", label: "Apple Pay" },
-      { wallet: "google-pay", label: "Google Pay" },
-      { wallet: "samsung-pay", label: "Samsung Pay" },
-    ],
   };
   const logSessionCreation = process.env.GEIDEA_LOG_SESSION_CREATION === "true";
   const startedAt = Date.now();
