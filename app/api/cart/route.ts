@@ -10,5 +10,11 @@ export async function GET() {
 export async function DELETE(request: Request) {
   if (!isSameOrigin(request)) return NextResponse.json({ error: { code: "INVALID_REQUEST", message: "Cross-origin request rejected." } }, { status: 403 });
   if (!allowRequest(request, "cart-mutation", 60)) return NextResponse.json({ error: { code: "INVALID_REQUEST", message: "Too many cart requests." } }, { status: 429 });
-  try { await clearCart(); return new NextResponse(null, { status: 204 }); } catch (error) { return cartErrorResponse(error); }
+  try {
+    const purchasedCartId = new URL(request.url).searchParams.get("purchasedCartId");
+    const cleared = await clearCart(purchasedCartId ?? undefined);
+    return purchasedCartId
+      ? NextResponse.json({ cleared })
+      : new NextResponse(null, { status: 204 });
+  } catch (error) { return cartErrorResponse(error); }
 }

@@ -3,12 +3,12 @@
 import { useEffect } from "react";
 import { useCartStore } from "@/lib/store/cart";
 
-export default function ClearPurchasedCart() {
-  const clearCart = useCartStore((state) => state.clearCart);
+export default function ClearPurchasedCart({ cartId }: { cartId: string }) {
+  const clearPurchasedCart = useCartStore((state) => state.clearPurchasedCart);
 
   useEffect(() => {
-    void clearCart();
-  }, [clearCart]);
+    void clearPurchasedCart(cartId);
+  }, [cartId, clearPurchasedCart]);
 
   return null;
 }

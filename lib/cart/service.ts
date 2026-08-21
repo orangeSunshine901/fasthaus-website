@@ -293,10 +293,16 @@ export async function removeCartItem(itemId: string) {
   return getCart();
 }
 
-export async function clearCart() {
+export async function clearCart(expectedCartId?: string) {
+  if (expectedCartId) {
+    if ((await readCartId()) !== expectedCartId) return false;
+    await clearCartId();
+    return true;
+  }
   const cart = await activeCart();
   if (cart) await (await createServiceClient()).from("carts").delete().eq("id", cart.id);
   await clearCartId();
+  return true;
 }
 
 export async function validateCartForCheckout() {

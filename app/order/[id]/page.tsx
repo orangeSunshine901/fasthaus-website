@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import PurchaseCompleted from "@/components/analytics/PurchaseCompleted";
 import ClearPurchasedCart from "@/components/cart/ClearPurchasedCart";
 import DirhamPrice from "@/components/ui/DirhamPrice";
-import { readCartId } from "@/lib/cart/cookie";
 import { createServiceClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -23,8 +22,6 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
     .select("id,product_name,variant_name,quantity,unit_price")
     .eq("order_id", id);
   const confirmed = order.status === "confirmed";
-  const shouldClearCart =
-    confirmed && !!order.cart_id && (await readCartId()) === order.cart_id;
   const shipping = order.shipping_address as {
     firstName?: string;
     lastName?: string;
@@ -37,7 +34,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--color-bg)" }}>
-      {shouldClearCart && <ClearPurchasedCart />}
+      {confirmed && order.cart_id && <ClearPurchasedCart cartId={order.cart_id} />}
       {confirmed && (
         <PurchaseCompleted
           orderId={order.id}

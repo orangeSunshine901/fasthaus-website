@@ -9,7 +9,7 @@ export type CartItem = { id: string; itemId: string; productId: string; productS
 
 type AddInput = Omit<CartItem, "itemId" | "available" | "maxQuantity">;
 type State = {
-  items: CartItem[]; addOns: CartAddOn[]; loaded: boolean; pending: string[]; error: string | null;
+  cartId: string | null; items: CartItem[]; addOns: CartAddOn[]; loaded: boolean; pending: string[]; error: string | null;
   drawerOpen: boolean;
   openDrawer: () => void;
   closeDrawer: () => void;
@@ -22,6 +22,7 @@ type State = {
   removeAddOn: (variantId: string, addOnId: string) => Promise<void>;
   toggleAddOn: (addOn: CartAddOn) => void;
   clearCart: () => Promise<void>;
+  clearPurchasedCart: (cartId: string) => Promise<void>;
   itemCount: () => number; subtotal: () => number; total: () => number;
 };
 
@@ -38,12 +39,12 @@ async function request(url: string, init?: RequestInit) {
 export const useCartStore = create<State>((set, get) => {
   const mutate = async (key: string, action: () => Promise<CartDto | null>) => {
     set((state) => ({ pending: [...state.pending, key], error: null }));
-    try { const cart = await action(); if (cart) set({ items: fromDto(cart) }); return true; }
+    try { const cart = await action(); if (cart) set({ cartId: cart.id, items: fromDto(cart) }); return true; }
     catch (error) { set({ error: error instanceof Error ? error.message : "Cart request failed." }); return false; }
     finally { set((state) => ({ pending: state.pending.filter((item) => item !== key) })); }
   };
   return {
-    items: [], addOns: [], loaded: false, pending: [], error: null,
+    cartId: null, items: [], addOns: [], loaded: false, pending: [], error: null,
     drawerOpen: false,
     openDrawer: () => set({ drawerOpen: true }),
     closeDrawer: () => set({ drawerOpen: false }),
@@ -67,7 +68,22 @@ export const useCartStore = create<State>((set, get) => {
       await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity: item.quantity, addOns }) }));
     },
     toggleAddOn: () => undefined,
-    clearCart: async () => { if (await mutate("clear", () => request("/api/cart", { method: "DELETE" }))) set({ items: [], addOns: [] }); },
+    clearCart: async () => { if (await mutate("clear", () => request("/api/cart", { method: "DELETE" }))) set({ cartId: null, items: [], addOns: [] }); },
+    clearPurchasedCart: async (cartId) => {
+      if (get().cartId === cartId) set({ cartId: null, items: [], addOns: [] });
+      set((state) => ({ pending: [...state.pending, "complete"], error: null }));
+      try {
+        const response = await fetch(`/api/cart?purchasedCartId=${encodeURIComponent(cartId)}`, { method: "DELETE" });
+        if (!response.ok) throw new Error("Purchased cart could not be cleared.");
+        const { cleared } = await response.json() as { cleared: boolean };
+        if (cleared && (get().cartId === null || get().cartId === cartId))
+          set({ cartId: null, items: [], addOns: [] });
+      } catch (error) {
+        set({ error: error instanceof Error ? error.message : "Purchased cart could not be cleared." });
+      } finally {
+        set((state) => ({ pending: state.pending.filter((item) => item !== "complete") }));
+      }
+    },
     itemCount: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
     subtotal: () => get().items.reduce((sum, item) => sum + item.price * item.quantity + (item.addOns ?? []).reduce((n, addOn) => n + addOn.price * addOn.quantity, 0), 0),
     total: () => get().subtotal(),
