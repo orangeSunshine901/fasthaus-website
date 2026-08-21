@@ -17,7 +17,8 @@ import { formatGeideaDiagnostic } from "../lib/payment/geidea-diagnostics.ts";
 const merchantPublicKey = "merchant-key";
 const apiPassword = "api-password";
 const merchantReferenceId = "11111111-1111-4111-8111-111111111111";
-const geideaOrderId = "22222222-2222-4222-8222-222222222222";
+// Geidea order GUIDs can use non-RFC variant nibbles such as `c`.
+const geideaOrderId = "e4bc51eb-72d0-4663-c565-08def3b74c5d";
 
 test("formats Geidea money and timestamps deterministically", () => {
   assert.equal(formatGeideaAmount(99), "99.00");

@@ -63,7 +63,13 @@ const GeideaCallbackSchema = z
   .passthrough();
 
 const GeideaEventSchema = z
-  .object({ order: z.object({ id: z.string().uuid() }).passthrough() })
+  .object({
+    order: z
+      .object({
+        id: z.string().regex(/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i),
+      })
+      .passthrough(),
+  })
   .passthrough();
 
 const GeideaOrderResponseSchema = CodesSchema.extend({ order: GeideaOrderSchema });
