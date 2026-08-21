@@ -4,7 +4,7 @@ import { clearCartId, readCartId, setCartId } from "./cookie";
 import { findAddOn, findVariant, MAX_CART_QUANTITY, toMinorUnits } from "./catalog";
 import { effectiveUnitPrice } from "./pricing";
 import { isEditableCartStatus } from "./rules";
-import { CartError, emptyCart, type CartDto } from "./types";
+import { CartError, emptyCart, type CartDto, type CartItemMutationDto } from "./types";
 
 type CartRow = { id: string; status: string; expires_at: string; updated_at: string };
 type ItemRow = {
@@ -187,43 +187,30 @@ export async function addCartItem(input: {
     }));
   const cart = await getOrCreateCart();
   const supabase = await createServiceClient();
-  const { data: existing } = await supabase
-    .from("cart_items")
-    .select("quantity")
-    .eq("cart_id", cart.id)
-    .eq("variant_id", input.variantId)
-    .maybeSingle();
-  const combinedQuantity = (existing?.quantity ?? 0) + input.quantity;
-  if (combinedQuantity > MAX_CART_QUANTITY || combinedQuantity > catalog.variant.stock)
-    throw new CartError("OUT_OF_STOCK", "The requested total quantity is not available.", 409);
-
-  const now = new Date().toISOString();
-  const mutation = existing
-    ? supabase
-        .from("cart_items")
-        .update({ quantity: combinedQuantity, add_ons: addOns, updated_at: now })
-        .eq("cart_id", cart.id)
-        .eq("variant_id", input.variantId)
-    : supabase
-        .from("cart_items")
-        .insert({
-          cart_id: cart.id,
-          product_id: catalog.product.id,
-          variant_id: input.variantId,
-          quantity: input.quantity,
-          add_ons: addOns,
-        });
-  const { error } = await mutation;
-  if (error)
+  const { data, error } = await supabase
+    .rpc("add_anonymous_cart_item", {
+      p_cart_id: cart.id,
+      p_product_id: catalog.product.id,
+      p_variant_id: input.variantId,
+      p_quantity: input.quantity,
+      p_add_ons: addOns,
+      p_max_quantity: Math.min(MAX_CART_QUANTITY, catalog.variant.stock),
+    })
+    .single();
+  if (error) {
+    if (error.message.includes("CART_QUANTITY_EXCEEDED"))
+      throw new CartError("OUT_OF_STOCK", "The requested total quantity is not available.", 409);
     throw new CartError("CART_CONFLICT", "The cart could not be updated. Please try again.", 409);
-  const { error: expiryError } = await supabase
-    .from("carts")
-    .update({ updated_at: now, expires_at: new Date(Date.now() + 2_592_000_000).toISOString() })
-    .eq("id", cart.id)
-    .eq("status", "ACTIVE");
-  if (expiryError) throw expiryError;
+  }
   await setCartId(cart.id);
-  return getCart();
+  const saved = data as { item_id: string; quantity: number; updated_at: string };
+  return {
+    cartId: cart.id,
+    itemId: saved.item_id,
+    variantId: input.variantId,
+    quantity: saved.quantity,
+    updatedAt: saved.updated_at,
+  } satisfies CartItemMutationDto;
 }
 
 export async function updateCartItem(

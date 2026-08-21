@@ -73,7 +73,9 @@ export default function PDPClient({
   }
 
   async function handleAddToCart() {
-    if (await addSelectedItem()) openDrawer();
+    const addingItem = addSelectedItem();
+    openDrawer();
+    await addingItem;
   }
 
   async function handleBuyNow() {

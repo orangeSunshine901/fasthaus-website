@@ -1,5 +1,13 @@
 export type CartWarning = { code: string; itemId?: string; message: string };
 
+export type CartItemMutationDto = {
+  cartId: string;
+  itemId: string;
+  variantId: string;
+  quantity: number;
+  updatedAt: string;
+};
+
 export type CartDto = {
   id: string | null;
   currency: "AED";

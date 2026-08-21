@@ -59,7 +59,7 @@ export default function ProductCard({ product }: Props) {
   }
 
   async function handleAddToCart() {
-    const added = await addItem({
+    const addingItem = addItem({
       id: selectedVariant.id,
       productId: product.id,
       productSlug: product.slug,
@@ -69,6 +69,8 @@ export default function ProductCard({ product }: Props) {
       quantity: 1,
       image: getVariantImage(selectedVariant),
     });
+    openDrawer();
+    const added = await addingItem;
     if (added) {
       capture(analyticsEvents.productAddedToCart, {
         product_id: product.id,
@@ -79,7 +81,6 @@ export default function ProductCard({ product }: Props) {
         quantity: 1,
         cart_value: selectedVariant.price,
       });
-      openDrawer();
     }
   }
 
@@ -134,7 +135,7 @@ export default function ProductCard({ product }: Props) {
         onClick={handleAddToCart}
         disabled={adding}
         aria-label={`Add ${product.name} to cart`}
-        className="group absolute z-20 h-7 w-7 disabled:cursor-wait disabled:opacity-60"
+        className="group absolute z-20 h-7 w-7"
         style={{ top: "16px", right: "16px" }}
       >
         <svg
