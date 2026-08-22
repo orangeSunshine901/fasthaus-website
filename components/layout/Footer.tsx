@@ -186,9 +186,9 @@ export default function Footer() {
             ))}
           </div>
           <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>
-            © 2026 FastHaus. All rights reserved.
+            © 2026 Fasthaus Studio is a brand of Fast Advertising FZC. All rights reserved.
           </p>
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             {paymentIcons.slice(0, 4).map((icon) => (
               <div
                 key={icon.name}
@@ -198,7 +198,7 @@ export default function Footer() {
                 <Image src={icon.src} alt={icon.name} fill className="object-contain p-0.5" />
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -268,7 +268,7 @@ export default function Footer() {
           style={{ borderColor: "#EEE9E3" }}
         >
           <span className="text-[13px] font-medium" style={{ color: "#8A8075" }}>
-            © 2026 Fasthaus Studio. All rights reserved.
+            © 2026 Fasthaus Studio is a brand of Fast Advertising FZC. All rights reserved.
           </span>
           <div className="flex items-center gap-5">
             <div className="flex gap-4">
@@ -283,7 +283,7 @@ export default function Footer() {
                 </Link>
               ))}
             </div>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               {paymentMethods.map((method) => (
                 <span
                   key={method}
@@ -293,7 +293,7 @@ export default function Footer() {
                   {method}
                 </span>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

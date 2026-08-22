@@ -65,6 +65,10 @@ export default function RootLayout({
             --iconColor: #ff4b1f;
             --iconBackgroundColor: #f8f6f3;
           }
+
+          #stcm-icon {
+            display: none !important;
+          }
         `}</style>
         <Script id="google-consent-default" strategy="beforeInteractive">{`
           window.dataLayer = window.dataLayer || [];

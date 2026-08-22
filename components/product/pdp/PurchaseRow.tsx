@@ -40,16 +40,10 @@ export default function PurchaseRow({
   ];
 
   const filledStars = Math.round(product.rating);
-  const lighting =
-    product.features.find((feature) => /light|warmth/i.test(feature.label))?.label ??
-    "Integrated lighting";
-  const productDetails = [
-    ["Dimensions", `Ø ${product.dimensions.widthCm} cm × H ${product.dimensions.heightCm} cm`],
-    ["Lighting", lighting],
-    ["Light source", product.specifications[1]?.lines.join(" · ") ?? "Included"],
-    ["Power", product.specifications[0]?.lines.join(" · ") ?? "—"],
-    ["Material", product.materials.join(" · ")],
-  ];
+  const productDetails = product.specifications.map(({ label, lines }) => [
+    label,
+    lines.join(" · "),
+  ]);
 
   return (
     <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_356px] lg:gap-12">
@@ -122,12 +116,9 @@ export default function PurchaseRow({
             Product details
           </h3>
           <div className="grid items-stretch gap-6 sm:grid-cols-[minmax(220px,0.9fr)_minmax(0,1.15fr)] sm:gap-9">
-            <div
-              className="relative aspect-square overflow-hidden rounded-[14px]"
-              style={{ backgroundColor: "var(--color-surface-muted)" }}
-            >
+            <div className="relative aspect-square overflow-hidden rounded-[14px]">
               <Image
-                src="/outline/hamrah-lamp-outline.png"
+                src={product.dimensions.image}
                 alt={`${product.name} illustration`}
                 fill
                 sizes="(max-width: 639px) 100vw, 360px"
