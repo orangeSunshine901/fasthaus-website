@@ -44,7 +44,7 @@ function isValidAePhone(value: string): boolean {
 }
 
 export default function CheckoutPage() {
-  const { items, addOns, subtotal } = useCartStore();
+  const { items, addOns, subtotal, pending } = useCartStore();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -73,6 +73,7 @@ export default function CheckoutPage() {
   const hasDiscount = newsletter || discountApplied;
   const discountAmount = hasDiscount ? subtotalValue * 0.1 : 0;
   const totalValue = subtotalValue - discountAmount;
+  const cartSyncing = pending.length > 0;
   const checkoutDetailsReady =
     isValidEmail(email) &&
     isValidAePhone(phone) &&
@@ -164,7 +165,7 @@ export default function CheckoutPage() {
     setEmailTouched(true);
     setPhoneTouched(true);
 
-    if (!checkoutDetailsReady) return;
+    if (!checkoutDetailsReady || cartSyncing) return;
     setPurchasing(true);
     setPurchaseError(null);
     try {
@@ -399,12 +400,20 @@ export default function CheckoutPage() {
                 )}
                 <button
                   type="submit"
-                  disabled={purchasing}
+                  disabled={purchasing || cartSyncing}
                   className="btn btn-primary h-[54px] w-full gap-1.5 disabled:opacity-60"
                 >
                   <ShieldCheck size={16} />
-                  <span>{purchasing ? "Redirecting securely…" : "Pay securely by card —"}</span>
-                  {!purchasing && <DirhamPrice amount={totalValue} variant="white" />}
+                  <span>
+                    {cartSyncing
+                      ? "Preparing cart…"
+                      : purchasing
+                        ? "Redirecting securely…"
+                        : "Pay securely by card —"}
+                  </span>
+                  {!purchasing && !cartSyncing && (
+                    <DirhamPrice amount={totalValue} variant="white" />
+                  )}
                 </button>
                 <p
                   className="type-caption-sm flex items-center justify-center gap-1.5 text-center"

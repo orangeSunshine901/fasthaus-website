@@ -75,10 +75,10 @@ export default function PDPClient({
   }
 
   async function handleBuyNow() {
-    if (await addSelectedItem()) {
-      closeDrawer();
-      router.push("/checkout");
-    }
+    const addingItem = addSelectedItem();
+    closeDrawer();
+    router.push("/checkout");
+    await addingItem;
   }
 
   function handleVariantChange(variant: ProductVariant) {
