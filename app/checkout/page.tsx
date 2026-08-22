@@ -10,6 +10,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
+import { discountRateFor, WELCOME_DISCOUNT_CODE } from "@/lib/checkout/discount";
 
 const EMIRATES = [
   "Dubai",
@@ -65,13 +66,14 @@ export default function CheckoutPage() {
 
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
+  const [discountError, setDiscountError] = useState<string | null>(null);
   const [newsletter, setNewsletter] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
   const subtotalValue = subtotal();
   const hasDiscount = newsletter || discountApplied;
-  const discountAmount = hasDiscount ? subtotalValue * 0.1 : 0;
+  const discountAmount = hasDiscount ? subtotalValue * discountRateFor(WELCOME_DISCOUNT_CODE) : 0;
   const totalValue = subtotalValue - discountAmount;
   const cartSyncing = pending.length > 0;
   const checkoutDetailsReady =
@@ -110,7 +112,7 @@ export default function CheckoutPage() {
             emirate,
             postalCode: poBox || undefined,
           },
-          discountCode: hasDiscount ? "WELCOME10" : undefined,
+          discountCode: hasDiscount ? WELCOME_DISCOUNT_CODE : undefined,
         }),
       });
       const body = (await response.json()) as Partial<CheckoutSession> & {
@@ -149,16 +151,17 @@ export default function CheckoutPage() {
   function toggleNewsletter() {
     setNewsletter((prev) => {
       const next = !prev;
-      setDiscountCode(next ? "WELCOME10" : "");
+      setDiscountCode(next ? WELCOME_DISCOUNT_CODE : "");
       setDiscountApplied(false);
+      setDiscountError(null);
       return next;
     });
   }
 
   function applyDiscountCode() {
-    if (discountCode.trim().toUpperCase() === "WELCOME10") {
-      setDiscountApplied(true);
-    }
+    const valid = discountRateFor(discountCode) > 0;
+    setDiscountApplied(valid);
+    setDiscountError(valid ? null : "That discount code isn’t valid.");
   }
 
   async function startCheckout() {
@@ -542,6 +545,7 @@ export default function CheckoutPage() {
                     onChange={(e) => {
                       setDiscountCode(e.target.value);
                       setDiscountApplied(false);
+                      setDiscountError(null);
                     }}
                     readOnly={newsletter}
                     className="input-field h-[46px] flex-1"
@@ -565,6 +569,11 @@ export default function CheckoutPage() {
                     {hasDiscount ? "Applied" : "Apply"}
                   </button>
                 </div>
+                {discountError && (
+                  <p className="type-caption-sm" style={{ color: "var(--color-error)" }} role="alert">
+                    {discountError}
+                  </p>
+                )}
                 <label className="flex cursor-pointer items-start gap-3">
                   <input
                     type="checkbox"

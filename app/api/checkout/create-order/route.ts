@@ -8,6 +8,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { allowRequest } from "@/lib/cart/rate-limit";
 import { createGeideaCheckoutSession } from "@/lib/payment/geidea";
 import { sendPaidOrderEmails } from "@/lib/payment/order-emails";
+import { discountRateFor } from "@/lib/checkout/discount";
 
 type ServiceClient = Awaited<ReturnType<typeof createServiceClient>>;
 
@@ -49,7 +50,7 @@ function emailItems(cart: CartDto) {
 
 async function prepareOrder(supabase: ServiceClient, cart: CartDto, input: CreateOrderInput) {
   const subtotal = cart.subtotal / 100;
-  const discount = input.discountCode?.toUpperCase() === "WELCOME10" ? subtotal * 0.1 : 0;
+  const discount = subtotal * discountRateFor(input.discountCode);
   const total = Number((subtotal - discount).toFixed(2));
   const shippingAddress = { ...input.shippingAddress, phone: input.contact.phone };
   const orderItems = cart.items.flatMap((item) => [

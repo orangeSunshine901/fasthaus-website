@@ -3,6 +3,7 @@ import { effectiveUnitPrice } from "../lib/cart/pricing.ts";
 import test from "node:test";
 import { cookiePolicy, isEditableCartStatus, lineTotal, toMinorUnits } from "../lib/cart/rules.ts";
 import { useCartStore } from "../lib/store/cart.ts";
+import { discountRateFor } from "../lib/checkout/discount.ts";
 
 test("uses integer minor units for money", () => {
   assert.equal(toMinorUnits(299), 29_900);
@@ -122,4 +123,97 @@ test("updates quantity immediately and batches rapid changes", async () => {
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+test("removes locally before persistence and rolls back a failed removal", async () => {
+  const originalFetch = globalThis.fetch;
+  let finishRequest: (response: Response) => void = () => undefined;
+  globalThis.fetch = (() => new Promise<Response>((resolve) => { finishRequest = resolve; })) as typeof fetch;
+  const item = {
+    id: "test-variant", itemId: "item-id", productId: "test-product", productSlug: "test-product",
+    productName: "Test product", variantColor: "Orange", price: 299, quantity: 1, image: "/test.png",
+    available: true, maxQuantity: 10, addOns: [],
+  };
+  useCartStore.setState({ cartId: "cart-id", items: [item], addOns: [], loaded: true, pending: [], error: null, drawerOpen: true });
+
+  try {
+    const removing = useCartStore.getState().removeItem(item.id);
+    assert.equal(useCartStore.getState().itemCount(), 0);
+    assert.deepEqual(useCartStore.getState().pending, [item.id]);
+    finishRequest(new Response(JSON.stringify({ error: { message: "Removal failed." } }), {
+      status: 500, headers: { "Content-Type": "application/json" },
+    }));
+    await removing;
+    assert.equal(useCartStore.getState().itemCount(), 1);
+    assert.equal(useCartStore.getState().error, "Removal failed.");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("clears locally before persistence and rolls back a failed clear", async () => {
+  const originalFetch = globalThis.fetch;
+  let finishRequest: (response: Response) => void = () => undefined;
+  globalThis.fetch = (() => new Promise<Response>((resolve) => { finishRequest = resolve; })) as typeof fetch;
+  const item = {
+    id: "test-variant", itemId: "item-id", productId: "test-product", productSlug: "test-product",
+    productName: "Test product", variantColor: "Orange", price: 299, quantity: 1, image: "/test.png",
+    available: true, maxQuantity: 10, addOns: [],
+  };
+  useCartStore.setState({ cartId: "cart-id", items: [item], addOns: [], loaded: true, pending: [], error: null, drawerOpen: true });
+
+  try {
+    const clearing = useCartStore.getState().clearCart();
+    assert.equal(useCartStore.getState().itemCount(), 0);
+    assert.equal(useCartStore.getState().cartId, null);
+    finishRequest(new Response(JSON.stringify({ error: { message: "Clear failed." } }), {
+      status: 500, headers: { "Content-Type": "application/json" },
+    }));
+    await clearing;
+    assert.equal(useCartStore.getState().itemCount(), 1);
+    assert.equal(useCartStore.getState().cartId, "cart-id");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("hydrates immediately from a session snapshot and reconciles with the server", async () => {
+  const originalFetch = globalThis.fetch;
+  const originalWindow = globalThis.window;
+  let finishRequest: (response: Response) => void = () => undefined;
+  const cachedItem = {
+    id: "cached-variant", itemId: "cached-item", productId: "cached-product", productSlug: "cached-product",
+    productName: "Cached product", variantColor: "Orange", price: 299, quantity: 2, image: "/cached.png",
+    available: true, maxQuantity: 10, addOns: [],
+  };
+  const sessionStorage = {
+    getItem: (key: string) => key === "fasthaus_cart_snapshot_v1" ? JSON.stringify({ version: 1, items: [cachedItem] }) : null,
+    setItem: () => undefined,
+    removeItem: () => undefined,
+  };
+  Object.defineProperty(globalThis, "window", { configurable: true, value: { sessionStorage } });
+  globalThis.fetch = (() => new Promise<Response>((resolve) => { finishRequest = resolve; })) as typeof fetch;
+  useCartStore.setState({ cartId: null, items: [], addOns: [], loaded: false, pending: [], error: null, drawerOpen: false });
+
+  try {
+    const hydrating = useCartStore.getState().hydrate();
+    assert.equal(useCartStore.getState().itemCount(), 2);
+    assert.equal(useCartStore.getState().loaded, true);
+    finishRequest(new Response(JSON.stringify({
+      id: null, currency: "AED", items: [], itemCount: 0, subtotal: 0, warnings: [],
+      updatedAt: "2026-08-22T00:00:00.000Z",
+    }), { status: 200, headers: { "Content-Type": "application/json" } }));
+    await hydrating;
+    assert.equal(useCartStore.getState().itemCount(), 0);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (originalWindow === undefined) Reflect.deleteProperty(globalThis, "window");
+    else Object.defineProperty(globalThis, "window", { configurable: true, value: originalWindow });
+  }
+});
+
+test("uses the same normalized discount rule on client and server", () => {
+  assert.equal(discountRateFor(" welcome10 "), 0.1);
+  assert.equal(discountRateFor("not-a-code"), 0);
+  assert.equal(discountRateFor(), 0);
 });

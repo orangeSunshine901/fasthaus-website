@@ -23,5 +23,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ it
 export async function DELETE(request: Request, { params }: { params: Promise<{ itemId: string }> }) {
   if (!isSameOrigin(request)) return NextResponse.json({ error: { code: "INVALID_REQUEST", message: "Cross-origin request rejected." } }, { status: 403 });
   if (!allowRequest(request, "cart-mutation", 60)) return NextResponse.json({ error: { code: "INVALID_REQUEST", message: "Too many cart requests." } }, { status: 429 });
-  try { return NextResponse.json(await removeCartItem((await params).itemId)); } catch (error) { return cartErrorResponse(error); }
+  try {
+    await removeCartItem((await params).itemId);
+    return new NextResponse(null, { status: 204 });
+  } catch (error) { return cartErrorResponse(error); }
 }

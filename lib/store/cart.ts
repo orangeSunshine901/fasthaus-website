@@ -7,6 +7,62 @@ export type CartAddOn = { id: string; name: string; price: number; image: string
 export type CartLineAddOn = CartAddOn & { quantity: number };
 export type CartItem = { id: string; itemId: string; productId: string; productSlug: string; productName: string; variantColor: string; price: number; quantity: number; image: string; available: boolean; maxQuantity: number | null; addOns?: CartLineAddOn[] };
 
+const CART_SNAPSHOT_KEY = "fasthaus_cart_snapshot_v1";
+
+function isCartLineAddOn(value: unknown): value is CartLineAddOn {
+  if (!value || typeof value !== "object") return false;
+  const addOn = value as Partial<CartLineAddOn>;
+  return typeof addOn.id === "string"
+    && typeof addOn.name === "string"
+    && typeof addOn.image === "string"
+    && typeof addOn.price === "number"
+    && Number.isFinite(addOn.price)
+    && typeof addOn.quantity === "number"
+    && Number.isInteger(addOn.quantity)
+    && addOn.quantity > 0;
+}
+
+function isCartItem(value: unknown): value is CartItem {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Partial<CartItem>;
+  return typeof item.id === "string"
+    && typeof item.itemId === "string"
+    && typeof item.productId === "string"
+    && typeof item.productSlug === "string"
+    && typeof item.productName === "string"
+    && typeof item.variantColor === "string"
+    && typeof item.image === "string"
+    && typeof item.available === "boolean"
+    && typeof item.price === "number"
+    && Number.isFinite(item.price)
+    && typeof item.quantity === "number"
+    && Number.isInteger(item.quantity)
+    && item.quantity > 0
+    && (item.maxQuantity === null || (typeof item.maxQuantity === "number" && Number.isInteger(item.maxQuantity)))
+    && (item.addOns === undefined || (Array.isArray(item.addOns) && item.addOns.every(isCartLineAddOn)));
+}
+
+function readCartSnapshot(): CartItem[] | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const snapshot = JSON.parse(window.sessionStorage.getItem(CART_SNAPSHOT_KEY) ?? "null") as { version?: unknown; items?: unknown } | null;
+    return snapshot?.version === 1 && Array.isArray(snapshot.items) && snapshot.items.every(isCartItem)
+      ? snapshot.items
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCartSnapshot(items: CartItem[]) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(CART_SNAPSHOT_KEY, JSON.stringify({ version: 1, items }));
+  } catch {
+    // Cart persistence is a best-effort enhancement; the server remains authoritative.
+  }
+}
+
 type AddInput = Omit<CartItem, "itemId" | "available" | "maxQuantity">;
 type State = {
   cartId: string | null; items: CartItem[]; addOns: CartAddOn[]; loaded: boolean; pending: string[]; error: string | null;
@@ -49,7 +105,13 @@ export const useCartStore = create<State>((set, get) => {
     drawerOpen: false,
     openDrawer: () => set({ drawerOpen: true }),
     closeDrawer: () => set({ drawerOpen: false }),
-    hydrate: async () => { if (get().loaded) return; const ok = await mutate("hydrate", () => request("/api/cart")); set({ loaded: true, ...(ok ? {} : { items: [] }) }); },
+    hydrate: async () => {
+      if (get().loaded || get().pending.includes("hydrate")) return;
+      const cachedItems = readCartSnapshot();
+      if (cachedItems) set({ items: cachedItems, loaded: true });
+      const ok = await mutate("hydrate", () => request("/api/cart"));
+      set({ loaded: true, ...(!ok && !cachedItems ? { items: [] } : {}) });
+    },
     addItem: async (item, addOns = []) => {
       const previous = get().items.find((row) => row.id === item.id);
       const optimistic: CartItem = {
@@ -92,7 +154,30 @@ export const useCartStore = create<State>((set, get) => {
         set((state) => ({ pending: state.pending.filter((key) => key !== item.id) }));
       }
     },
-    removeItem: async (variantId) => { const item = get().items.find((row) => row.id === variantId); if (item) await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "DELETE" })); },
+    removeItem: async (variantId) => {
+      const index = get().items.findIndex((row) => row.id === variantId);
+      const item = get().items[index];
+      if (!item || item.itemId.startsWith("optimistic:") || get().pending.includes(variantId)) return;
+      const cartId = get().cartId;
+      set((state) => ({
+        items: state.items.filter((row) => row.id !== variantId),
+        pending: [...state.pending, variantId],
+        error: null,
+      }));
+      try {
+        await request<unknown>(`/api/cart/items/${item.itemId}`, { method: "DELETE" });
+      } catch (error) {
+        set((state) => {
+          if (state.cartId !== cartId || state.items.some((row) => row.id === variantId))
+            return { error: error instanceof Error ? error.message : "Cart request failed." };
+          const items = [...state.items];
+          items.splice(Math.min(index, items.length), 0, item);
+          return { items, error: error instanceof Error ? error.message : "Cart request failed." };
+        });
+      } finally {
+        set((state) => ({ pending: state.pending.filter((key) => key !== variantId) }));
+      }
+    },
     updateQuantity: async (variantId, quantity) => {
       const item = get().items.find((row) => row.id === variantId);
       if (!item || item.itemId.startsWith("optimistic:") || quantity < 1 || (item.maxQuantity !== null && quantity > item.maxQuantity)) return;
@@ -156,7 +241,18 @@ export const useCartStore = create<State>((set, get) => {
       await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity: item.quantity, addOns }) }));
     },
     toggleAddOn: () => undefined,
-    clearCart: async () => { if (await mutate("clear", () => request("/api/cart", { method: "DELETE" }))) set({ cartId: null, items: [], addOns: [] }); },
+    clearCart: async () => {
+      if (get().pending.length > 0) return;
+      const previous = { cartId: get().cartId, items: get().items, addOns: get().addOns };
+      set({ cartId: null, items: [], addOns: [], pending: ["clear"], error: null });
+      try {
+        await request<unknown>("/api/cart", { method: "DELETE" });
+      } catch (error) {
+        set({ ...previous, error: error instanceof Error ? error.message : "Cart request failed." });
+      } finally {
+        set((state) => ({ pending: state.pending.filter((key) => key !== "clear") }));
+      }
+    },
     clearPurchasedCart: async (cartId) => {
       if (get().cartId === cartId) set({ cartId: null, items: [], addOns: [] });
       set((state) => ({ pending: [...state.pending, "complete"], error: null }));
@@ -177,3 +273,7 @@ export const useCartStore = create<State>((set, get) => {
     total: () => get().subtotal(),
   };
 });
+
+if (typeof window !== "undefined") {
+  useCartStore.subscribe((state) => writeCartSnapshot(state.items));
+}

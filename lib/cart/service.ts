@@ -324,7 +324,6 @@ export async function removeCartItem(itemId: string) {
   if (error) throw error;
   if (!data) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
   await setCartId(cart.id);
-  return getCart();
 }
 
 export async function clearCart(expectedCartId?: string) {
