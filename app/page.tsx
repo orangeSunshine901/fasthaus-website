@@ -273,11 +273,11 @@ export default function HomePage() {
                   </h2>{" "}
                 </div>
                 <div className="flex w-full flex-col gap-4">
-                  <p className="max-w-[704px] text-base font-light leading-5 text-zinc-600">
+                  <p className="max-w-[540px] text-base font-light leading-5 text-zinc-600">
                     Fueled by a love for design and storytelling, we create 3D-printed spatial
                     objects that bring form, function, and character into personal spaces.
                   </p>
-                  <p className="max-w-[704px] text-base font-light leading-5 text-zinc-600">
+                  <p className="max-w-[540px] text-base font-light leading-5 text-zinc-600">
                     Each piece is shaped with intention, built with considered materials, and made
                     to make your room feel a little more like you.
                   </p>

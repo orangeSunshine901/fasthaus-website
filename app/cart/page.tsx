@@ -26,7 +26,11 @@ export default function CartPage() {
   const itemWord = itemCount === 1 ? "item" : "items";
 
   useEffect(() => {
-    capture(analyticsEvents.cartViewed, { item_count: itemCount, cart_value: total(), currency: "AED" });
+    capture(analyticsEvents.cartViewed, {
+      item_count: itemCount,
+      cart_value: total(),
+      currency: "AED",
+    });
   }, [itemCount, total]);
 
   if (items.length === 0) {
@@ -35,10 +39,10 @@ export default function CartPage() {
         {/* Empty state */}
         <div className="container-page py-28 text-center md:py-48">
           <h1 className="type-display-xl mb-4" style={{ color: "var(--color-text-primary)" }}>
-            Your Cart
+            Your Cart is empty.
           </h1>
           <p className="type-body-md mb-8" style={{ color: "var(--color-text-secondary)" }}>
-            Your cart is empty.
+            Nothing here yet, let's fix that.
           </p>
           <Link href="/collection" className="btn btn-primary">
             Continue Shopping
@@ -64,7 +68,11 @@ export default function CartPage() {
             </div>
 
             {items.map((item) => (
-              <div key={item.id} className="border-t" style={{ borderColor: "var(--color-border)" }}>
+              <div
+                key={item.id}
+                className="border-t"
+                style={{ borderColor: "var(--color-border)" }}
+              >
                 <div className="grid grid-cols-[80px_minmax(0,1fr)] gap-4 py-5 md:grid-cols-[96px_minmax(0,1fr)_auto_auto] md:items-center md:gap-5">
                   <Link
                     href={`/product/${item.productSlug}`}
@@ -136,7 +144,10 @@ export default function CartPage() {
                       <p className="type-title-sm" style={{ color: "var(--color-text-primary)" }}>
                         Add-on - {ao.name}
                       </p>
-                      <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>
+                      <p
+                        className="type-caption-sm"
+                        style={{ color: "var(--color-text-secondary)" }}
+                      >
                         For {item.productName}
                       </p>
                       <button
@@ -203,7 +214,10 @@ export default function CartPage() {
                   <span className="type-title-sm" style={{ color: "var(--color-text-primary)" }}>
                     Add-on - {ao.name}
                   </span>
-                  <span className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>
+                  <span
+                    className="type-caption-sm"
+                    style={{ color: "var(--color-text-secondary)" }}
+                  >
                     Added to your order
                   </span>
                 </div>
@@ -211,7 +225,10 @@ export default function CartPage() {
               </label>
             ))}
 
-            <Link href="/collection" className="btn-text mt-6 inline-flex w-fit items-center gap-1.5">
+            <Link
+              href="/collection"
+              className="btn-text mt-6 inline-flex w-fit items-center gap-1.5"
+            >
               <ArrowLeft size={14} />
               Continue shopping
             </Link>
@@ -249,7 +266,17 @@ export default function CartPage() {
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Link href="/checkout" onClick={() => capture(analyticsEvents.checkoutStarted, { item_count: itemCount, cart_value: total(), currency: "AED" })} className="btn btn-primary flex h-[52px] w-full items-center justify-center gap-1">
+              <Link
+                href="/checkout"
+                onClick={() =>
+                  capture(analyticsEvents.checkoutStarted, {
+                    item_count: itemCount,
+                    cart_value: total(),
+                    currency: "AED",
+                  })
+                }
+                className="btn btn-primary flex h-[52px] w-full items-center justify-center gap-1"
+              >
                 <span>Checkout -</span>
                 <DirhamPrice amount={total()} variant="white" />
               </Link>
