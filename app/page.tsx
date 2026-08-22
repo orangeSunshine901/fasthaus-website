@@ -145,7 +145,7 @@ export default function HomePage() {
         <section
           id="featured-products"
           className="scroll-target w-full pt-4"
-          style={{ backgroundColor: "#060606" }}
+          style={{ backgroundColor: "#000104" }}
         >
           <div className="container-page section-pad flex flex-col gap-12">
             <div data-scroll className="scroll-reveal-up flex max-w-[548px] flex-col gap-4">
@@ -297,7 +297,7 @@ export default function HomePage() {
               className="relative aspect-[520/400] w-full overflow-hidden rounded-[20px] lg:h-96 lg:w-[520px] lg:shrink-0"
             >
               <Image
-                src="/who-we-are-img.png"
+                src="/home/fasthaus-baseplate.png"
                 alt="Fasthaus spatial lamp in a warm interior"
                 fill
                 sizes="(min-width: 1024px) 520px, calc(100vw - 40px)"

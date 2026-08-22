@@ -34,7 +34,7 @@ export default function FeaturedProductCard({
         compactMobile ? "gap-2 p-3 md:gap-3 md:p-4" : "gap-2 p-4 pt-0"
       }`}
       style={{
-        backgroundColor: "transparent",
+        backgroundColor: "#000104",
       }}
     >
       <div

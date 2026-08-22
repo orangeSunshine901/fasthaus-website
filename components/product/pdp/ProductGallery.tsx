@@ -56,10 +56,7 @@ export default function ProductGallery({
   }, [emblaApi, activeIndex]);
 
   return (
-    <div
-      className="relative left-1/2 h-[calc(100svh-2.75rem)] w-screen -translate-x-1/2 overflow-hidden"
-      style={{ backgroundColor: "#fdfbd4" }}
-    >
+    <div className="relative left-1/2 h-[calc(100svh-2.75rem)] w-screen -translate-x-1/2 overflow-hidden">
       <div ref={emblaRef} className="relative h-full overflow-hidden">
         <div aria-hidden="true" className="flex h-full touch-pan-y opacity-0">
           {images.map((src, index) => (

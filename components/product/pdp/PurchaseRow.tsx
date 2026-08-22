@@ -40,16 +40,10 @@ export default function PurchaseRow({
   ];
 
   const filledStars = Math.round(product.rating);
-  const lighting =
-    product.features.find((feature) => /light|warmth/i.test(feature.label))?.label ??
-    "Integrated lighting";
-  const productDetails = [
-    ["Dimensions", `Ø ${product.dimensions.widthCm} cm × H ${product.dimensions.heightCm} cm`],
-    ["Lighting", lighting],
-    ["Light source", product.specifications[1]?.lines.join(" · ") ?? "Included"],
-    ["Power", product.specifications[0]?.lines.join(" · ") ?? "—"],
-    ["Material", product.materials.join(" · ")],
-  ];
+  const productDetails = product.specifications.map(({ label, lines }) => [
+    label,
+    lines.join(" · "),
+  ]);
 
   return (
     <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_356px] lg:gap-12">
@@ -116,18 +110,15 @@ export default function PurchaseRow({
           style={{ borderColor: "var(--color-border)" }}
         >
           <h3
-            className="text-[20px] font-extrabold tracking-[-0.015em]"
+            className="text-[20px] font-medium tracking-[-0.015em]"
             style={{ color: "var(--color-text-primary)" }}
           >
             Product details
           </h3>
           <div className="grid items-stretch gap-6 sm:grid-cols-[minmax(220px,0.9fr)_minmax(0,1.15fr)] sm:gap-9">
-            <div
-              className="relative aspect-square overflow-hidden rounded-[14px]"
-              style={{ backgroundColor: "var(--color-surface-muted)" }}
-            >
+            <div className="relative aspect-square overflow-hidden rounded-[14px]">
               <Image
-                src="/outline/hamrah-lamp-outline.png"
+                src={product.dimensions.image}
                 alt={`${product.name} illustration`}
                 fill
                 sizes="(max-width: 639px) 100vw, 360px"
@@ -140,7 +131,7 @@ export default function PurchaseRow({
                 return (
                   <div key={label} className="contents">
                     <span
-                      className={`${border} py-3 font-medium`}
+                      className={`${border} py-3`}
                       style={{
                         color: "var(--color-text-secondary)",
                         borderColor: "var(--color-border)",
@@ -149,7 +140,7 @@ export default function PurchaseRow({
                       {label}
                     </span>
                     <span
-                      className={`${border} py-3 font-semibold leading-[1.45]`}
+                      className={`${border} py-3 font-regular leading-[1.45]`}
                       style={{
                         color: "var(--color-text-primary)",
                         borderColor: "var(--color-border)",
@@ -269,7 +260,7 @@ export default function PurchaseRow({
               style={{ color: "var(--color-text-secondary)" }}
             >
               {icon}
-              <span className="text-[13px] font-medium">{label}</span>
+              <span className="text-[10px] font-medium">{label}</span>
             </div>
           ))}
         </div>
@@ -281,12 +272,12 @@ export default function PurchaseRow({
           <span className="text-[14px] font-bold" style={{ color: "var(--color-text-primary)" }}>
             Estimated arrival
           </span>
-          <strong
-            className="text-[22px] leading-[1.35] tracking-[-0.02em]"
+          <span
+            className="text-[22px] leading-[1.35] tracking-[-0.02em] font-medium"
             style={{ color: "var(--color-text-primary)" }}
           >
             3–5 business days
-          </strong>
+          </span>
           <span
             className="text-[13px] font-medium"
             style={{ color: "var(--color-text-secondary)" }}

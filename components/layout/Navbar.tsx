@@ -198,8 +198,8 @@ export default function Navbar() {
           isProductPage
             ? "absolute top-11 z-40 w-full border-transparent bg-transparent md:h-24"
             : usesHeroOverlay
-            ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
-            : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
+              ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
+              : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
           aboutMainNavHidden && "md:pointer-events-none md:opacity-0"
         )}
       >
@@ -213,7 +213,11 @@ export default function Navbar() {
           >
             <Menu size={22} style={{ color: "var(--color-text-primary)" }} />
           </button>
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 p-2" aria-label="Fasthaus home">
+          <Link
+            href="/"
+            className="absolute left-1/2 -translate-x-1/2 p-2"
+            aria-label="Fasthaus home"
+          >
             <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={100} height={24} priority />
           </Link>
           <CartBadge size={22} className="text-[var(--color-text-primary)]" />
@@ -230,83 +234,83 @@ export default function Navbar() {
             className="relative flex h-full w-full items-center justify-center px-8"
             style={{ color: desktopTextColor }}
           >
-          <div className="flex h-full w-full max-w-[1148px] items-center justify-between">
-            <Link href="/" className="flex flex-1 items-center justify-start">
-              <Image
-                src="/fasthaus-logo-final-ivory.svg"
-                alt="Fasthaus"
-                width={128}
-                height={26}
-                priority
-              />
-            </Link>
+            <div className="flex h-full w-full max-w-[1148px] items-center justify-between">
+              <Link href="/" className="flex flex-1 items-center justify-start">
+                <Image
+                  src="/fasthaus-logo-final-ivory.svg"
+                  alt="Fasthaus"
+                  width={128}
+                  height={26}
+                  priority
+                />
+              </Link>
 
-            {/* Center links */}
-            <NavigationMenu className="h-full w-[453px] flex-none text-current" viewport={false}>
-              <NavigationMenuList className="h-full w-full justify-between gap-0">
-                <NavigationMenuItem className="flex h-full items-center">
-                  <NavigationMenuTrigger asChild showChevron={false} unstyled>
-                    <Link
-                      href="/collection"
-                      className={cn(
-                        "group box-content flex h-16 w-[100px] items-center justify-center rounded-none p-2 text-sm font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:underline focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]",
-                        isActive("/collection")
-                          ? "text-[var(--color-accent-amber)]"
-                          : "text-current"
-                      )}
-                    >
-                      collection
-                      <ChevronDown
-                        className="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
-                        aria-hidden="true"
-                      />
-                    </Link>
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="collection-menu-content left-1/2 top-[calc(100%+12px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
-                    <CollectionMegaMenuContent />
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+              {/* Center links */}
+              <NavigationMenu className="h-full w-[453px] flex-none text-current" viewport={false}>
+                <NavigationMenuList className="h-full w-full justify-between gap-0">
+                  <NavigationMenuItem className="flex h-full items-center">
+                    <NavigationMenuTrigger asChild showChevron={false} unstyled>
+                      <Link
+                        href="/collection"
+                        className={cn(
+                          "group box-content flex h-16 w-[100px] items-center justify-center rounded-none p-2 text-sm font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:underline focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]",
+                          isActive("/collection")
+                            ? "text-[var(--color-accent-amber)]"
+                            : "text-current"
+                        )}
+                      >
+                        collection
+                        <ChevronDown
+                          className="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
+                          aria-hidden="true"
+                        />
+                      </Link>
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent className="collection-menu-content left-1/2 top-[calc(100%+12px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
+                      <CollectionMegaMenuContent />
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
 
-                <NavigationMenuItem className="flex h-full items-center">
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/about"
-                      className={cn(
-                        "flex  w-[100px] h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)]",
-                        isActive("/about") ? "text-[var(--color-accent-amber)]" : "text-current"
-                      )}
-                    >
-                      about
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
+                  <NavigationMenuItem className="flex h-full items-center">
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/about"
+                        className={cn(
+                          "flex  w-[100px] h-16 items-center justify-center rounded-none p-2 text-base font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)]",
+                          isActive("/about") ? "text-[var(--color-accent-amber)]" : "text-current"
+                        )}
+                      >
+                        about
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
 
-                <NavigationMenuItem className="flex h-full items-center">
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/contact"
-                      className={cn(
-                        "flex w-[100px] h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)]",
-                        isActive("/contact") ? "text-[var(--color-accent-amber)]" : "text-current"
-                      )}
-                    >
-                      contact us
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+                  <NavigationMenuItem className="flex h-full items-center">
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/contact"
+                        className={cn(
+                          "flex w-[100px] h-16 min-w-20 items-center justify-center whitespace-nowrap rounded-none p-2 text-base font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)]",
+                          isActive("/contact") ? "text-[var(--color-accent-amber)]" : "text-current"
+                        )}
+                      >
+                        contact us
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
 
-            {/* Right icons */}
-            <div className="flex flex-1 items-center justify-end">
-              <div className="flex w-24 items-center justify-center gap-6">
-                {/* <Link href="/shop" aria-label="Search" className="inline-flex h-6 w-6 items-center justify-center">
+              {/* Right icons */}
+              <div className="flex flex-1 items-center justify-end">
+                <div className="flex w-24 items-center justify-center gap-6">
+                  {/* <Link href="/shop" aria-label="Search" className="inline-flex h-6 w-6 items-center justify-center">
                   <Search size={22} className="transition-opacity hover:opacity-70" />
                 </Link> */}
-                <CartBadge size={22} />
+                  <CartBadge size={22} />
+                </div>
               </div>
             </div>
-          </div>
           </div>
         </div>
       </header>

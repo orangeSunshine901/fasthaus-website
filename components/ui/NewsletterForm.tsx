@@ -41,7 +41,9 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
     return (
       <p
         className="text-sm"
-        style={{ color: variant === "featured" ? "var(--color-text-primary)" : "var(--color-success)" }}
+        style={{
+          color: variant === "featured" ? "var(--color-text-primary)" : "var(--color-success)",
+        }}
       >
         Thanks for subscribing!
       </p>
@@ -96,11 +98,13 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
             disabled={state === "loading"}
             className="btn btn-secondary min-h-14 rounded-[var(--radius-full)] px-7 disabled:opacity-60"
           >
-            {state === "loading" ? "…" : "subscribe"}
+            {state === "loading" ? "…" : "Subscribe"}
           </button>
         </div>
         {errorMsg && (
-          <p className="text-left text-xs" style={{ color: "var(--color-text-primary)" }}>{errorMsg}</p>
+          <p className="text-left text-xs" style={{ color: "var(--color-text-primary)" }}>
+            {errorMsg}
+          </p>
         )}
       </form>
     );
@@ -117,7 +121,10 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
         onChange={(e) => setEmail(e.target.value)}
         disabled={state === "loading"}
         className="input-field min-h-12 flex-1"
-        style={{ borderColor: errorMsg ? "var(--color-error)" : "var(--color-border)", backgroundColor: "var(--color-bg)" }}
+        style={{
+          borderColor: errorMsg ? "var(--color-error)" : "var(--color-border)",
+          backgroundColor: "var(--color-bg)",
+        }}
       />
       <button
         type="submit"
@@ -128,7 +135,9 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
         {state === "loading" ? "…" : "Subscribe"}
       </button>
       {errorMsg && (
-        <p className="text-xs mt-1 absolute" style={{ color: "var(--color-error)" }}>{errorMsg}</p>
+        <p className="text-xs mt-1 absolute" style={{ color: "var(--color-error)" }}>
+          {errorMsg}
+        </p>
       )}
     </form>
   );

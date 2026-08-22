@@ -19,7 +19,7 @@ export type ProductVariant = {
 };
 
 export type FeatureItem = { icon: string; label: string };
-export type SpecificationItem = { icon: string; lines: string[] };
+export type SpecificationItem = { label: string; lines: string[] };
 export type PerfectForItem = { icon: string; label: string };
 export type Dimensions = { image: string; heightCm: number; widthCm: number };
 
@@ -129,27 +129,34 @@ export const PRODUCTS: Product[] = [
         images: ["/stack-lamp/stack-lamp-white-off.png", "/stack-lamp/stack-lamp-white-on.png"],
       },
     ],
-    features: [
-      { icon: "/premium-material-icon.svg", label: "12hr battery life" },
-      { icon: "/warm-led-icon.svg", label: "Adjustable warmth" },
-      { icon: "/premium-material-icon.svg", label: "Ceramic body" },
-      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
-    ],
+    features: [],
     specifications: [
       {
-        icon: "/spec-plug-icon.svg",
-        lines: ["USB-C Charging 5V/2A", "12-hour battery runtime"],
+        label: "Dimensions",
+        lines: ["Ø 22 cm × H 28 cm"],
       },
       {
-        icon: "/spec-bulb-icon.svg",
-        lines: ["Integrated LED 350lm 5W", "Adjustable 2700–4000K"],
+        label: "Lighting",
+        lines: ["Warm LED Bulb"],
+      },
+      {
+        label: "Light source",
+        lines: ["E27 Solhetta Bulb 470lm 4W", "Bulb Included."],
+      },
+      {
+        label: "Power",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
+      },
+      {
+        label: "Material",
+        lines: ["Plant-based PLA", "UV-printed stainless steel"],
       },
     ],
     materialsDescription: [
       "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
     ],
     materials: ["Plant-based PLA", "UV-printed stainless steel"],
-    dimensions: { image: "/lamp-feature-3.png", heightCm: 24, widthCm: 14 },
+    dimensions: { image: "/outline/nasaq-lamp-outline.png", heightCm: 24, widthCm: 14 },
     perfectFor: [
       { icon: "/workspaces-icon.svg", label: "Workspaces" },
       { icon: "/living-room-icon.svg", label: "Dining" },
@@ -231,31 +238,34 @@ export const PRODUCTS: Product[] = [
         ],
       },
     ],
-    features: [
-      { icon: "/3d-printer-icon.svg", label: "3D printed with care" },
-      { icon: "/warm-led-icon.svg", label: "Warm LED Light" },
-      { icon: "/premium-material-icon.svg", label: "Premium Materials" },
-      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
-    ],
+    features: [],
     specifications: [
       {
-        icon: "/e27-switch-icon.svg",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+        label: "Dimensions",
+        lines: ["Ø 22 cm × H 28 cm"],
       },
       {
-        icon: "/e27-bulb-icon-amber.svg",
-        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
+        label: "Lighting",
+        lines: ["Warm LED Bulb"],
       },
       {
-        icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
+        label: "Light source",
+        lines: ["E27 Solhetta Bulb 470lm 4W", "Bulb Included."],
+      },
+      {
+        label: "Power",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
+      },
+      {
+        label: "Material",
+        lines: ["Plant-based PLA", "PETG", "UV-printed stainless steel"],
       },
     ],
     materialsDescription: [
       "The lamp base is made from plant-based PLA and paired with a laser-cut, UV-printed stainless-steel base plate. The PETG shade offers excellent translucency and durability and can be recycled where suitable facilities are available.",
     ],
     materials: ["Plant-based PLA", "PETG", "UV-printed stainless steel"],
-    dimensions: { image: "/dimensions-lamp.png", heightCm: 28, widthCm: 22 },
+    dimensions: { image: "/outline/nujaj-lamp-outline.png", heightCm: 28, widthCm: 22 },
     perfectFor: [
       { icon: "/workspaces-icon.svg", label: "Workspaces" },
       { icon: "/bedside-icon.svg", label: "Bedside" },
@@ -323,31 +333,34 @@ export const PRODUCTS: Product[] = [
         images: ["/pearl-lamp/pearl-lamp-white-off.png", "/pearl-lamp/pearl-lamp-white-on.png"],
       },
     ],
-    features: [
-      { icon: "/premium-material-icon.svg", label: "Handfinished ceramic" },
-      { icon: "/warm-led-icon.svg", label: "Warm LED Light" },
-      { icon: "/premium-material-icon.svg", label: "Linen shade" },
-      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
-    ],
+    features: [],
     specifications: [
       {
-        icon: "/spec-plug-icon.svg",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+        label: "Dimensions",
+        lines: ["Ø 22 cm × H 28 cm"],
       },
       {
-        icon: "/spec-bulb-icon.svg",
-        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
+        label: "Lighting",
+        lines: ["Warm LED Bulb"],
       },
       {
-        icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
+        label: "Light source",
+        lines: ["E27 Solhetta Bulb 470lm 4W", "Bulb Included."],
+      },
+      {
+        label: "Power",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
+      },
+      {
+        label: "Material",
+        lines: ["Plant-based PLA", "UV-printed stainless steel"],
       },
     ],
     materialsDescription: [
       "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
     ],
     materials: ["Plant-based PLA", "UV-printed stainless steel"],
-    dimensions: { image: "/lamp-feature-4.png", heightCm: 32, widthCm: 20 },
+    dimensions: { image: "/outline/hamrah-lamp-outline.png", heightCm: 32, widthCm: 20 },
     perfectFor: [
       { icon: "/living-room-icon.svg", label: "Living Room" },
       { icon: "/bedside-icon.svg", label: "Bedside" },
@@ -431,31 +444,34 @@ export const PRODUCTS: Product[] = [
         ],
       },
     ],
-    features: [
-      { icon: "/premium-material-icon.svg", label: "Frosted glass diffuser" },
-      { icon: "/warm-led-icon.svg", label: "Natural LED Light" },
-      { icon: "/premium-material-icon.svg", label: "Premium Materials" },
-      { icon: "/designed-in-house-icon.svg", label: "Designed in house" },
-    ],
+    features: [],
     specifications: [
       {
-        icon: "/spec-plug-icon.svg",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+        label: "Dimensions",
+        lines: ["Ø 22 cm × H 28 cm"],
       },
       {
-        icon: "/spec-bulb-icon.svg",
-        lines: ["E27 Solhetta Bulb 470lm 40W", "Bulb Included."],
+        label: "Lighting",
+        lines: ["Warm LED Bulb"],
       },
       {
-        icon: "/smart-bulb-icon.svg",
-        lines: ["Smart bulb compatible but not advisable with the dimmer switch."],
+        label: "Light source",
+        lines: ["E27 Solhetta Bulb 470lm 4W", "Bulb Included."],
+      },
+      {
+        label: "Power",
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
+      },
+      {
+        label: "Material",
+        lines: ["Plant-based PLA", "UV-printed stainless steel"],
       },
     ],
     materialsDescription: [
       "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
     ],
     materials: ["Plant-based PLA", "UV-printed stainless steel"],
-    dimensions: { image: "/lamp-feature-2.png", heightCm: 38, widthCm: 26 },
+    dimensions: { image: "/outline/kasane-lamp-outline.png", heightCm: 38, widthCm: 26 },
     perfectFor: [
       { icon: "/living-room-icon.svg", label: "Living Room" },
       { icon: "/bedside-icon.svg", label: "Bedside" },
