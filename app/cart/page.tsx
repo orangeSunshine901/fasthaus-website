@@ -106,7 +106,8 @@ export default function CartPage() {
                       </span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="grid h-10 w-10 place-items-center md:h-[34px] md:w-[34px]"
+                        disabled={item.maxQuantity !== null && item.quantity >= item.maxQuantity}
+                        className="grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
                         style={{ color: "var(--color-text-secondary)" }}
                         aria-label={`Increase ${item.productName} quantity`}
                       >

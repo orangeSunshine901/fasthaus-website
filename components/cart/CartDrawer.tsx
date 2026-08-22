@@ -250,6 +250,8 @@ export default function CartDrawer() {
                 <div className="flex-1 overflow-y-auto px-6 py-1" data-lenis-prevent>
                   {items.map((item) => {
                     const busy = pending.includes(item.id);
+                    const syncingQuantity = pending.includes(`quantity:${item.id}`);
+                    const quantityLocked = busy || item.itemId.startsWith("optimistic:");
                     return (
                       <div
                         key={item.id}
@@ -294,7 +296,7 @@ export default function CartDrawer() {
                             >
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                disabled={busy || item.quantity <= 1}
+                                disabled={quantityLocked || item.quantity <= 1}
                                 className="grid h-[30px] w-[30px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
                                 style={{ color: "#6E655B" }}
                                 aria-label={`Decrease ${item.productName} quantity`}
@@ -310,7 +312,7 @@ export default function CartDrawer() {
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                 disabled={
-                                  busy ||
+                                  quantityLocked ||
                                   (item.maxQuantity !== null && item.quantity >= item.maxQuantity)
                                 }
                                 className="grid h-[30px] w-[30px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
@@ -322,7 +324,7 @@ export default function CartDrawer() {
                             </div>
                             <button
                               onClick={() => removeItem(item.id)}
-                              disabled={busy}
+                              disabled={busy || syncingQuantity}
                               className="text-[13px] font-semibold underline transition-colors hover:text-[var(--color-accent-amber)] disabled:opacity-40"
                               style={{ color: "#8A8075" }}
                             >

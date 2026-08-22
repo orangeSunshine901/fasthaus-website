@@ -216,13 +216,48 @@ export async function addCartItem(input: {
 export async function updateCartItem(
   itemId: string,
   quantity: number,
-  requestedAddOns?: Array<{ id: string; quantity: number }>
+  requestedAddOns?: Array<{ id: string; quantity: number }>,
+  variantId?: string
 ) {
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > MAX_CART_QUANTITY)
     throw new CartError("INVALID_REQUEST", `Quantity must be between 1 and ${MAX_CART_QUANTITY}.`);
   const sourceCart = await editableCart();
   if (!sourceCart) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
   const supabase = await createServiceClient();
+  if (variantId && requestedAddOns && sourceCart.status === "ACTIVE") {
+    const catalog = findVariant(variantId);
+    if (!catalog || catalog.variant.stock < quantity)
+      throw new CartError("OUT_OF_STOCK", "The requested quantity is not available.", 409);
+    const addOns = requestedAddOns
+      .filter((saved) => findAddOn(saved.id))
+      .map((saved) => ({ id: saved.id, quantity: Math.min(quantity, Math.max(1, saved.quantity)) }));
+    const { data, error } = await supabase
+      .rpc("update_anonymous_cart_item_quantity", {
+        p_cart_id: sourceCart.id,
+        p_item_id: itemId,
+        p_variant_id: variantId,
+        p_quantity: quantity,
+        p_add_ons: addOns,
+        p_max_quantity: Math.min(MAX_CART_QUANTITY, catalog.variant.stock),
+      })
+      .single();
+    if (error) {
+      if (error.message.includes("CART_QUANTITY_EXCEEDED"))
+        throw new CartError("OUT_OF_STOCK", "The requested quantity is not available.", 409);
+      if (error.message.includes("CART_ITEM_NOT_FOUND"))
+        throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
+      throw new CartError("CART_CONFLICT", "The cart could not be updated. Please try again.", 409);
+    }
+    await setCartId(sourceCart.id);
+    const saved = data as { item_id: string; quantity: number; updated_at: string };
+    return {
+      cartId: sourceCart.id,
+      itemId: saved.item_id,
+      variantId,
+      quantity: saved.quantity,
+      updatedAt: saved.updated_at,
+    } satisfies CartItemMutationDto;
+  }
   const { data } = await supabase
     .from("cart_items")
     .select("variant_id,add_ons")
@@ -252,7 +287,19 @@ export async function updateCartItem(
     })
     .eq("id", cart.id);
   await setCartId(cart.id);
-  return getCart();
+  const updatedCart = await getCart();
+  if (variantId) {
+    const updatedItem = updatedCart.items.find((row) => row.variantId === variantId);
+    if (!updatedCart.id || !updatedItem) throw new CartError("ITEM_NOT_FOUND", "Cart item not found.", 404);
+    return {
+      cartId: updatedCart.id,
+      itemId: updatedItem.itemId,
+      variantId,
+      quantity: updatedItem.quantity,
+      updatedAt: updatedCart.updatedAt,
+    } satisfies CartItemMutationDto;
+  }
+  return updatedCart;
 }
 
 export async function removeCartItem(itemId: string) {

@@ -5,6 +5,7 @@ import { cartErrorResponse, isSameOrigin } from "@/lib/cart/http";
 import { allowRequest } from "@/lib/cart/rate-limit";
 
 const schema = z.object({
+  variantId: z.string().min(1).optional(),
   quantity: z.number().int().min(1).max(10),
   addOns: z.array(z.object({ id: z.string().min(1), quantity: z.number().int().min(1).max(10) })).optional(),
 }).strict();
@@ -15,7 +16,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ it
   try {
     const parsed = schema.safeParse(await request.json());
     if (!parsed.success) return NextResponse.json({ error: { code: "INVALID_REQUEST", message: parsed.error.issues[0]?.message ?? "Invalid request." } }, { status: 400 });
-    return NextResponse.json(await updateCartItem((await params).itemId, parsed.data.quantity, parsed.data.addOns));
+    return NextResponse.json(await updateCartItem((await params).itemId, parsed.data.quantity, parsed.data.addOns, parsed.data.variantId));
   } catch (error) { return cartErrorResponse(error); }
 }
 

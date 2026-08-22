@@ -73,3 +73,53 @@ test("adds locally before persistence and rolls back a failed repeat add", async
     globalThis.fetch = originalFetch;
   }
 });
+
+test("updates quantity immediately and batches rapid changes", async () => {
+  const originalFetch = globalThis.fetch;
+  const requests: Array<{ body: { quantity: number }; finish: (response: Response) => void }> = [];
+  globalThis.fetch = ((_url: Parameters<typeof fetch>[0], init?: RequestInit) => new Promise<Response>((resolve) => {
+    requests.push({ body: JSON.parse(String(init?.body)), finish: resolve });
+  })) as typeof fetch;
+  useCartStore.setState({
+    cartId: "cart-id", addOns: [], loaded: true, pending: [], error: null, drawerOpen: true,
+    items: [{
+      id: "test-variant", itemId: "item-id", productId: "test-product", productSlug: "test-product",
+      productName: "Test product", variantColor: "Orange", price: 299, quantity: 1, image: "/test.png",
+      available: true, maxQuantity: 10, addOns: [],
+    }],
+  });
+
+  try {
+    const syncing = useCartStore.getState().updateQuantity("test-variant", 2);
+    assert.equal(useCartStore.getState().itemCount(), 2);
+    assert.equal(requests.length, 1);
+    await useCartStore.getState().updateQuantity("test-variant", 3);
+    assert.equal(useCartStore.getState().itemCount(), 3);
+    assert.equal(requests.length, 1);
+
+    requests[0].finish(new Response(JSON.stringify({
+      cartId: "cart-id", itemId: "item-id", variantId: "test-variant", quantity: 2,
+      updatedAt: "2026-08-22T00:00:00.000Z",
+    }), { status: 200, headers: { "Content-Type": "application/json" } }));
+    await new Promise<void>((resolve) => setImmediate(resolve));
+    assert.equal(requests.length, 2);
+    assert.equal(requests[1].body.quantity, 3);
+    requests[1].finish(new Response(JSON.stringify({
+      cartId: "cart-id", itemId: "item-id", variantId: "test-variant", quantity: 3,
+      updatedAt: "2026-08-22T00:00:01.000Z",
+    }), { status: 200, headers: { "Content-Type": "application/json" } }));
+    await syncing;
+    assert.equal(useCartStore.getState().itemCount(), 3);
+    assert.deepEqual(useCartStore.getState().pending, []);
+
+    const failing = useCartStore.getState().updateQuantity("test-variant", 4);
+    assert.equal(useCartStore.getState().itemCount(), 4);
+    requests[2].finish(new Response(JSON.stringify({ error: { message: "Out of stock." } }), {
+      status: 409, headers: { "Content-Type": "application/json" },
+    }));
+    await failing;
+    assert.equal(useCartStore.getState().itemCount(), 3);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});

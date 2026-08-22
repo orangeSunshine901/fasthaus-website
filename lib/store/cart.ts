@@ -37,6 +37,7 @@ async function request<T = CartDto>(url: string, init?: RequestInit) {
 }
 
 export const useCartStore = create<State>((set, get) => {
+  const quantityTargets = new Map<string, number>();
   const mutate = async (key: string, action: () => Promise<CartDto | null>) => {
     set((state) => ({ pending: [...state.pending, key], error: null }));
     try { const cart = await action(); if (cart) set({ cartId: cart.id, items: fromDto(cart) }); return true; }
@@ -92,7 +93,53 @@ export const useCartStore = create<State>((set, get) => {
       }
     },
     removeItem: async (variantId) => { const item = get().items.find((row) => row.id === variantId); if (item) await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "DELETE" })); },
-    updateQuantity: async (variantId, quantity) => { const item = get().items.find((row) => row.id === variantId); if (item && quantity >= 1) await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity }) })); },
+    updateQuantity: async (variantId, quantity) => {
+      const item = get().items.find((row) => row.id === variantId);
+      if (!item || item.itemId.startsWith("optimistic:") || quantity < 1 || (item.maxQuantity !== null && quantity > item.maxQuantity)) return;
+      const pendingKey = `quantity:${variantId}`;
+      const optimisticAddOns = (item.addOns ?? []).map((addOn) => ({ ...addOn, quantity: Math.min(addOn.quantity, quantity) }));
+      set((state) => ({
+        items: state.items.map((row) => row.id === variantId ? { ...row, quantity, addOns: optimisticAddOns } : row),
+        error: null,
+      }));
+      quantityTargets.set(variantId, quantity);
+      if (get().pending.includes(pendingKey)) return;
+
+      let confirmed = item;
+      set((state) => ({ pending: [...state.pending, pendingKey] }));
+      try {
+        while (true) {
+          const target = quantityTargets.get(variantId);
+          const current = get().items.find((row) => row.id === variantId);
+          if (target === undefined || !current) return;
+          const nextAddOns = (current.addOns ?? []).map((addOn) => ({ ...addOn, quantity: Math.min(addOn.quantity, target) }));
+          let saved: CartItemMutationDto | null;
+          try {
+            saved = await request<CartItemMutationDto>(`/api/cart/items/${current.itemId}`, {
+              method: "PATCH",
+              body: JSON.stringify({ variantId, quantity: target, addOns: nextAddOns.map(({ id, quantity: addOnQuantity }) => ({ id, quantity: addOnQuantity })) }),
+            });
+          } catch (error) {
+            if (quantityTargets.get(variantId) !== target) continue;
+            throw error;
+          }
+          if (!saved) throw new Error("Cart request failed.");
+          confirmed = { ...current, itemId: saved.itemId, quantity: saved.quantity, addOns: nextAddOns };
+          if (quantityTargets.get(variantId) === target) {
+            set((state) => ({ items: state.items.map((row) => row.id === variantId ? confirmed : row) }));
+            break;
+          }
+        }
+      } catch (error) {
+        set((state) => ({
+          items: state.items.map((row) => row.id === variantId ? confirmed : row),
+          error: error instanceof Error ? error.message : "Cart request failed.",
+        }));
+      } finally {
+        quantityTargets.delete(variantId);
+        set((state) => ({ pending: state.pending.filter((key) => key !== pendingKey) }));
+      }
+    },
     updateAddOnQuantity: async (variantId, addOnId, quantity) => {
       const item = get().items.find((row) => row.id === variantId); if (!item || quantity < 1) return;
       const addOns = (item.addOns ?? []).map((addOn) => ({ id: addOn.id, quantity: addOn.id === addOnId ? Math.min(quantity, item.quantity) : addOn.quantity }));
