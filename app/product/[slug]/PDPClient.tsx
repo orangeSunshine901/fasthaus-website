@@ -2,11 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  getVariantMainImage,
-  type Product,
-  type ProductVariant,
-} from "@/lib/data/products";
+import { getVariantImage, type Product, type ProductVariant } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import ProductGallery from "@/components/product/pdp/ProductGallery";
 import PurchaseRow from "@/components/product/pdp/PurchaseRow";
@@ -57,7 +53,7 @@ export default function PDPClient({
       variantColor: selectedVariant.color,
       price: selectedVariant.price,
       quantity,
-      image: getVariantMainImage(selectedVariant),
+      image: getVariantImage(selectedVariant),
     });
     if (added)
       capture(analyticsEvents.productAddedToCart, {
