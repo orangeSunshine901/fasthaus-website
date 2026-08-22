@@ -42,7 +42,7 @@ export default function CartPage() {
             Your Cart is empty.
           </h1>
           <p className="type-body-md mb-8" style={{ color: "var(--color-text-secondary)" }}>
-            Nothing here yet, let's fix that.
+            Nothing here yet, let&apos;s fix that.
           </p>
           <Link href="/collection" className="btn btn-primary">
             Continue Shopping

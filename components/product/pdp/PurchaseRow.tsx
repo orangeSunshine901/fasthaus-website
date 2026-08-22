@@ -214,25 +214,26 @@ export default function PurchaseRow({
             type="button"
             onClick={onBuyNow}
             disabled={busy}
-            className="flex h-[54px] items-center justify-center rounded-[12px] text-[16.5px] font-bold text-white transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
-            style={{ backgroundColor: "var(--color-accent-amber)" }}
+            className="flex h-[54px] items-center justify-center rounded-[12px] text-white transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
+            style={{ backgroundColor: "var(--color-accent-amber)", fontWeight: 600 }}
           >
             {busy ? "Preparing…" : "Buy now –"}&nbsp;
             <DirhamPrice
               amount={selectedVariant.price * quantity + addOnsTotal}
               size="sm"
               variant="white"
-              className="font-bold text-white"
+              className="font-bold text-white text-[16px]"
             />
           </button>
           <button
             type="button"
             onClick={onAddToCart}
             disabled={busy}
-            className="flex h-[54px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white text-[16.5px] font-bold transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
+            className="flex h-[54px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white text-[16px] transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
             style={{
               borderColor: "var(--color-text-primary)",
               color: "var(--color-text-primary)",
+              fontWeight: 500,
             }}
           >
             <ShoppingCart size={16} />
@@ -266,27 +267,24 @@ export default function PurchaseRow({
         </div>
 
         <div
-          className="flex flex-col gap-1 rounded-[14px] p-5"
+          className="flex flex-col gap-2 rounded-[14px] p-5"
           style={{ backgroundColor: "var(--color-surface)" }}
         >
-          <span className="text-[14px] font-bold" style={{ color: "var(--color-text-primary)" }}>
+          <span className="text-[14px] font-medium" style={{ color: "var(--color-text-primary)" }}>
             Estimated arrival
           </span>
           <span
-            className="text-[22px] leading-[1.35] tracking-[-0.02em] font-medium"
-            style={{ color: "var(--color-text-primary)" }}
+            className="leading-[1.35] tracking-[-0.02em] font-semibold"
+            style={{ color: "var(--color-text-primary)", fontSize: "16px" }}
           >
-            3–5 business days
+            3 to 5 business days
           </span>
-          <span
-            className="text-[13px] font-medium"
-            style={{ color: "var(--color-text-secondary)" }}
-          >
+          <span className="text-[12px] font-light" style={{ color: "var(--color-text-secondary)" }}>
             Made to order · Delivery included
           </span>
           <Link
             href="/shipping-returns"
-            className="mt-2 self-start text-[13px] font-bold hover:underline"
+            className="self-start text-[14px] font-medium hover:underline"
             style={{ color: "var(--color-accent-amber)" }}
           >
             Shipping details →
