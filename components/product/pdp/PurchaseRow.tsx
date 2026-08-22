@@ -110,7 +110,7 @@ export default function PurchaseRow({
           style={{ borderColor: "var(--color-border)" }}
         >
           <h3
-            className="text-[20px] font-extrabold tracking-[-0.015em]"
+            className="text-[20px] font-medium tracking-[-0.015em]"
             style={{ color: "var(--color-text-primary)" }}
           >
             Product details
@@ -131,7 +131,7 @@ export default function PurchaseRow({
                 return (
                   <div key={label} className="contents">
                     <span
-                      className={`${border} py-3 font-medium`}
+                      className={`${border} py-3`}
                       style={{
                         color: "var(--color-text-secondary)",
                         borderColor: "var(--color-border)",
@@ -140,7 +140,7 @@ export default function PurchaseRow({
                       {label}
                     </span>
                     <span
-                      className={`${border} py-3 font-semibold leading-[1.45]`}
+                      className={`${border} py-3 font-regular leading-[1.45]`}
                       style={{
                         color: "var(--color-text-primary)",
                         borderColor: "var(--color-border)",
@@ -260,7 +260,7 @@ export default function PurchaseRow({
               style={{ color: "var(--color-text-secondary)" }}
             >
               {icon}
-              <span className="text-[13px] font-medium">{label}</span>
+              <span className="text-[10px] font-medium">{label}</span>
             </div>
           ))}
         </div>
@@ -272,12 +272,12 @@ export default function PurchaseRow({
           <span className="text-[14px] font-bold" style={{ color: "var(--color-text-primary)" }}>
             Estimated arrival
           </span>
-          <strong
-            className="text-[22px] leading-[1.35] tracking-[-0.02em]"
+          <span
+            className="text-[22px] leading-[1.35] tracking-[-0.02em] font-medium"
             style={{ color: "var(--color-text-primary)" }}
           >
             3–5 business days
-          </strong>
+          </span>
           <span
             className="text-[13px] font-medium"
             style={{ color: "var(--color-text-secondary)" }}

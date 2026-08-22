@@ -35,19 +35,19 @@ export default async function ProductPage({
             <Link
               href="/"
               className="font-medium transition-colors hover:text-[var(--color-accent-amber)]"
-              style={{ color: "var(--color-text-secondary)" }}
+              style={{ color: "#292629" }}
             >
               Home
             </Link>
-            <span style={{ color: "var(--color-text-disabled)" }}>/</span>
+            <span style={{ color: "#3E3B3E" }}>/</span>
             <Link
               href="/collection"
               className="font-medium transition-colors hover:text-[var(--color-accent-amber)]"
-              style={{ color: "var(--color-text-secondary)" }}
+              style={{ color: "#292629" }}
             >
               Collection
             </Link>
-            <span style={{ color: "var(--color-text-disabled)" }}>/</span>
+            <span style={{ color: "#3E3B3E" }}>/</span>
             <span className="font-semibold" style={{ color: "var(--color-text-primary)" }}>
               {product.name}
             </span>

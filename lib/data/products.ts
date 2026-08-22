@@ -145,7 +145,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Power",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
       },
       {
         label: "Material",
@@ -254,7 +254,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Power",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
       },
       {
         label: "Material",
@@ -349,7 +349,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Power",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
       },
       {
         label: "Material",
@@ -460,7 +460,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Power",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 40W Cord Length 1.8m / 70 in"],
+        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
       },
       {
         label: "Material",
