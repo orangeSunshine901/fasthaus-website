@@ -195,7 +195,7 @@ export const PRODUCTS: Product[] = [
         images: [
           "/flute-lamp/flute-matcha-hero.png",
           "/flute-lamp/flute-matcha-hero-light.png",
-          "/flute-lamp/flute-matcha-on.png",
+          "/flute-lamp/flute-matcha-lifestyle-shot.png",
           "/flute-lamp/flute-clear-garden.png",
         ],
       },
@@ -424,10 +424,10 @@ export const PRODUCTS: Product[] = [
       },
 
       {
-        id: "2-white",
-        color: "White",
-        colorHex: "#F5F5F5",
-        sku: "ML-WHT",
+        id: "2-black",
+        color: "Black",
+        colorHex: "#161515",
+        sku: "ML-BLK",
         price: 399,
         stock: 10,
         featuredImages: {
@@ -437,10 +437,9 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/mushroom-lamp/mushroom-white-off-product-shadow.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         images: [
-          "/mushroom-lamp/mushroom-lamp-top.jpg",
-          "/mushroom-lamp/mushroom-lamp-side.jpg",
-          "/mushroom-lamp/mushroom-lamp-close.jpg",
-          "/mushroom-lamp/mushroom-lamp-close-side.jpg",
+          "/mushroom-lamp/kasane-lamp-black-lifestyle-shot.png",
+          "/mushroom-lamp/kasane-lamp-black-interaction-shot.png",
+          "/mushroom-lamp/kasane-lamp-black-detail-shot.png",
         ],
       },
     ],
