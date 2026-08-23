@@ -208,6 +208,18 @@ input[type="radio"] {
   scroll-margin-top: var(--scroll-offset);
 }
 
+.product-hero {
+  --hero-ui-color: #171717;
+  --hero-ui-muted: rgba(23, 23, 23, 0.65);
+  --hero-ui-subtle: rgba(23, 23, 23, 0.35);
+}
+
+.product-hero[data-ui-theme="light"] {
+  --hero-ui-color: #ffffff;
+  --hero-ui-muted: rgba(255, 255, 255, 0.72);
+  --hero-ui-subtle: rgba(255, 255, 255, 0.45);
+}
+
 /* Horizontal swipe rails (tab bars, carousels) — scrollable but chromeless */
 .scrollbar-hide {
   -ms-overflow-style: none;

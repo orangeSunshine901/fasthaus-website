@@ -3,7 +3,6 @@ import { PRODUCTS, getProductBySlug, getRelatedProducts } from "@/lib/data/produ
 import ShopLayout from "@/components/layout/ShopLayout";
 import RelatedProductCard from "@/components/product/pdp/RelatedProductCard";
 import PDPClient from "./PDPClient";
-import Link from "next/link";
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
@@ -30,30 +29,6 @@ export default async function ProductPage({
   return (
     <ShopLayout>
       <div className="relative bg-white pb-16 md:pb-24">
-        <div className="absolute inset-x-0 top-14 z-30 bg-transparent md:top-28">
-          <nav className="mx-auto flex max-w-[1240px] items-center gap-2.5 px-5 py-4 text-[13.5px] md:px-6 lg:px-8">
-            <Link
-              href="/"
-              className="font-medium transition-colors hover:text-[var(--color-accent-amber)]"
-              style={{ color: "#292629" }}
-            >
-              Home
-            </Link>
-            <span style={{ color: "#3E3B3E" }}>/</span>
-            <Link
-              href="/collection"
-              className="font-medium transition-colors hover:text-[var(--color-accent-amber)]"
-              style={{ color: "#292629" }}
-            >
-              Collection
-            </Link>
-            <span style={{ color: "#3E3B3E" }}>/</span>
-            <span className="font-semibold" style={{ color: "var(--color-text-primary)" }}>
-              {product.name}
-            </span>
-          </nav>
-        </div>
-
         <div className="mx-auto max-w-[1240px] px-5 md:px-6 lg:px-8">
           <PDPClient
             key={initialVariant.id}

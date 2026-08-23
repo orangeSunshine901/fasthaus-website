@@ -1,3 +1,8 @@
+export type ProductCarouselImage = {
+  src: string;
+  uiTheme: "light" | "dark";
+};
+
 export type ProductVariant = {
   id: string;
   color: string;
@@ -15,7 +20,7 @@ export type ProductVariant = {
   collectionImage: string;
   /** Primary image shown when this color is selected on the product page. */
   mainImage?: string;
-  images: string[];
+  images: ProductCarouselImage[];
 };
 
 export type FeatureItem = { icon: string; label: string };
@@ -96,7 +101,10 @@ export const PRODUCTS: Product[] = [
         },
         collectionImage: "/stack-lamp/stack-lamp-orange-off-product-shadow.png",
         mainImage: "/stack-lamp/stack-lamp-orange-on.png",
-        images: ["/stack-lamp/stack-lamp-orange-on.png", "/stack-lamp/stack-lamp-orange-off.png"],
+        images: [
+          { src: "/stack-lamp/stack-lamp-orange-on.png", uiTheme: "light" },
+          { src: "/stack-lamp/stack-lamp-orange-off.png", uiTheme: "dark" },
+        ],
       },
       {
         id: "3-blue",
@@ -111,7 +119,10 @@ export const PRODUCTS: Product[] = [
         },
         collectionImage: "/stack-lamp/stack-lamp-blue-off-product-shadow.png",
         mainImage: "/stack-lamp/stack-lamp-blue-on.png",
-        images: ["/stack-lamp/stack-lamp-blue-on.png", "/stack-lamp/stack-lamp-blue-off.png"],
+        images: [
+          { src: "/stack-lamp/stack-lamp-blue-on.png", uiTheme: "light" },
+          { src: "/stack-lamp/stack-lamp-blue-off.png", uiTheme: "dark" },
+        ],
       },
       {
         id: "3-white",
@@ -126,7 +137,10 @@ export const PRODUCTS: Product[] = [
         },
         collectionImage: "/stack-lamp/stack-lamp-white-off-product-shadow.png",
         mainImage: "/stack-lamp/stack-lamp-white-on.png",
-        images: ["/stack-lamp/stack-lamp-white-off.png", "/stack-lamp/stack-lamp-white-on.png"],
+        images: [
+          { src: "/stack-lamp/stack-lamp-white-off.png", uiTheme: "dark" },
+          { src: "/stack-lamp/stack-lamp-white-on.png", uiTheme: "light" },
+        ],
       },
     ],
     features: [],
@@ -193,10 +207,10 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/flute-lamp/flute-matcha-hero.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
-          "/flute-lamp/flute-matcha-hero.png",
-          "/flute-lamp/flute-matcha-hero-light.png",
-          "/flute-lamp/flute-matcha-lifestyle-shot.png",
-          "/flute-lamp/flute-clear-garden.png",
+          { src: "/flute-lamp/flute-matcha-hero.png", uiTheme: "dark" },
+          { src: "/flute-lamp/flute-matcha-hero-light.png", uiTheme: "dark" },
+          { src: "/flute-lamp/flute-matcha-lifestyle-shot.png", uiTheme: "dark" },
+          { src: "/flute-lamp/flute-matcha-lifestyle-shot-dark.png", uiTheme: "light" },
         ],
       },
       {
@@ -213,9 +227,9 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/flute-lamp/flute-red-hero.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
-          "/flute-lamp/flute-red-hero.png",
-          "/flute-lamp/flute-fire-red-off.png",
-          "/flute-lamp/flute-clear-garden.png",
+          { src: "/flute-lamp/flute-red-hero.png", uiTheme: "light" },
+          { src: "/flute-lamp/flute-fire-red-off.png", uiTheme: "dark" },
+          { src: "/flute-lamp/flute-clear-garden.png", uiTheme: "light" },
         ],
       },
       {
@@ -232,9 +246,9 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/flute-lamp/flute-clear-off-shadow-product.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
-          "/flute-lamp/flute-clear-off.png",
-          "/flute-lamp/flute-clear-on.png",
-          "/flute-lamp/flute-clear-garden.png",
+          { src: "/flute-lamp/flute-clear-interaction-shot-dark.png", uiTheme: "light" },
+          { src: "/flute-lamp/flute-clear-lifestyle-shot-dark.png", uiTheme: "light" },
+          { src: "/flute-lamp/flute-clear-macro-top-shot-dark.png", uiTheme: "light" },
         ],
       },
     ],
@@ -300,7 +314,10 @@ export const PRODUCTS: Product[] = [
         },
         collectionImage: "/pearl-lamp/pearl-lamp-red-off-product-shadow.png",
         mainImage: "/pearl-lamp/pearl-lamp-red-off.png",
-        images: ["/pearl-lamp/pearl-lamp-red-off.png", "/pearl-lamp/pearl-lamp-red-on.png"],
+        images: [
+          { src: "/pearl-lamp/pearl-lamp-red-off.png", uiTheme: "dark" },
+          { src: "/pearl-lamp/pearl-lamp-red-on.png", uiTheme: "light" },
+        ],
       },
       {
         id: "4-blue",
@@ -315,7 +332,10 @@ export const PRODUCTS: Product[] = [
         },
         collectionImage: "/pearl-lamp/pearl-lamp-blue-off-shadow.png",
         mainImage: "/pearl-lamp/pearl-lamp-blue-off.png",
-        images: ["/pearl-lamp/pearl-lamp-blue-off.png", "/pearl-lamp/pearl-lamp-blue-on.png"],
+        images: [
+          { src: "/pearl-lamp/pearl-lamp-blue-off.png", uiTheme: "dark" },
+          { src: "/pearl-lamp/pearl-lamp-blue-on.png", uiTheme: "light" },
+        ],
       },
       {
         id: "4-white",
@@ -330,7 +350,10 @@ export const PRODUCTS: Product[] = [
         },
         collectionImage: "/pearl-lamp/pearl-lamp-white-off-product-shadow.png",
         mainImage: "/pearl-lamp/pearl-lamp-white-off.png",
-        images: ["/pearl-lamp/pearl-lamp-white-off.png", "/pearl-lamp/pearl-lamp-white-on.png"],
+        images: [
+          { src: "/pearl-lamp/pearl-lamp-white-off.png", uiTheme: "dark" },
+          { src: "/pearl-lamp/pearl-lamp-white-on.png", uiTheme: "light" },
+        ],
       },
     ],
     features: [],
@@ -396,10 +419,10 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/mushroom-lamp/mushroom-blue-off-product-shadow.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         images: [
-          "/mushroom-lamp/mushroom-lamp-top.jpg",
-          "/mushroom-lamp/mushroom-lamp-side.jpg",
-          "/mushroom-lamp/mushroom-lamp-close.jpg",
-          "/mushroom-lamp/mushroom-lamp-close-side.jpg",
+          { src: "/mushroom-lamp/mushroom-lamp-top.jpg", uiTheme: "light" },
+          { src: "/mushroom-lamp/mushroom-lamp-side.jpg", uiTheme: "dark" },
+          { src: "/mushroom-lamp/mushroom-lamp-close.jpg", uiTheme: "light" },
+          { src: "/mushroom-lamp/mushroom-lamp-close-side.jpg", uiTheme: "dark" },
         ],
       },
       {
@@ -416,10 +439,10 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/mushroom-lamp/mushroom-orange-off-product-shadow.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         images: [
-          "/mushroom-lamp/mushroom-lamp-top.jpg",
-          "/mushroom-lamp/mushroom-lamp-side.jpg",
-          "/mushroom-lamp/mushroom-lamp-close.jpg",
-          "/mushroom-lamp/mushroom-lamp-close-side.jpg",
+          { src: "/mushroom-lamp/mushroom-lamp-top.jpg", uiTheme: "light" },
+          { src: "/mushroom-lamp/mushroom-lamp-side.jpg", uiTheme: "dark" },
+          { src: "/mushroom-lamp/mushroom-lamp-close.jpg", uiTheme: "light" },
+          { src: "/mushroom-lamp/mushroom-lamp-close-side.jpg", uiTheme: "dark" },
         ],
       },
 
@@ -437,9 +460,9 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/mushroom-lamp/mushroom-white-off-product-shadow.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
         images: [
-          "/mushroom-lamp/kasane-lamp-black-lifestyle-shot.png",
-          "/mushroom-lamp/kasane-lamp-black-interaction-shot.png",
-          "/mushroom-lamp/kasane-lamp-black-detail-shot.png",
+          { src: "/mushroom-lamp/kasane-lamp-black-lifestyle-shot.png", uiTheme: "dark" },
+          { src: "/mushroom-lamp/kasane-lamp-black-interaction-shot.png", uiTheme: "light" },
+          { src: "/mushroom-lamp/kasane-lamp-black-detail-shot.png", uiTheme: "dark" },
         ],
       },
     ],
@@ -509,12 +532,16 @@ export function getVariantImage(variant: ProductVariant): string {
 }
 
 export function getVariantMainImage(variant: ProductVariant): string {
-  return variant.mainImage ?? variant.images[0] ?? variant.collectionImage;
+  return variant.mainImage ?? variant.images[0]?.src ?? variant.collectionImage;
 }
 
-export function getVariantGalleryImages(variant: ProductVariant): string[] {
+export function getVariantGalleryImages(variant: ProductVariant): ProductCarouselImage[] {
   const mainImage = getVariantMainImage(variant);
-  return [mainImage, ...variant.images.filter((image) => image !== mainImage)];
+  const matchingImage = variant.images.find((image) => image.src === mainImage);
+  return [
+    matchingImage ?? { src: mainImage, uiTheme: "dark" },
+    ...variant.images.filter((image) => image.src !== mainImage),
+  ];
 }
 
 export function formatPrice(amount: number): string {

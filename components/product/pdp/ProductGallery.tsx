@@ -2,14 +2,15 @@
 
 import { useCallback, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
 import useEmblaCarousel from "embla-carousel-react";
-import type { ProductVariant } from "@/lib/data/products";
+import type { ProductCarouselImage, ProductVariant } from "@/lib/data/products";
 
 type Props = {
-  images: string[];
+  images: ProductCarouselImage[];
   name: string;
   variants: ProductVariant[];
   selectedVariant: ProductVariant;
@@ -33,6 +34,8 @@ export default function ProductGallery({
 }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: images.length > 1 });
   const reducedMotion = useReducedMotion();
+  const activeImage = images[activeIndex] ?? images[0];
+  const uiTheme = activeImage?.uiTheme ?? "dark";
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -56,35 +59,61 @@ export default function ProductGallery({
   }, [emblaApi, activeIndex]);
 
   return (
-    <div className="relative left-1/2 h-[calc(100svh-2.75rem)] w-screen -translate-x-1/2 overflow-hidden">
+    <div
+      className="product-hero relative left-1/2 h-[calc(100svh-2.75rem)] w-screen -translate-x-1/2 overflow-hidden"
+      data-ui-theme={uiTheme}
+    >
+      <nav
+        aria-label="Breadcrumb"
+        className="absolute inset-x-0 top-14 z-30 mx-auto flex max-w-[1240px] items-center gap-2.5 px-5 py-4 text-[13.5px] md:top-28 md:px-6 lg:px-8"
+      >
+        <Link
+          href="/"
+          className="font-medium text-[var(--hero-ui-muted)] transition-colors hover:text-[var(--color-accent-amber)]"
+        >
+          Home
+        </Link>
+        <span className="text-[var(--hero-ui-subtle)]">/</span>
+        <Link
+          href="/collection"
+          className="font-medium text-[var(--hero-ui-muted)] transition-colors hover:text-[var(--color-accent-amber)]"
+        >
+          Collection
+        </Link>
+        <span className="text-[var(--hero-ui-subtle)]">/</span>
+        <span className="font-semibold text-[var(--hero-ui-color)]">{name}</span>
+      </nav>
+
       <div ref={emblaRef} className="relative h-full overflow-hidden">
         <div aria-hidden="true" className="flex h-full touch-pan-y opacity-0">
-          {images.map((src, index) => (
-            <div key={index} className="relative h-full min-w-0 flex-[0_0_100%]">
-              <Image src={src} alt="" fill sizes="100vw" className="object-cover" />
+          {images.map((image) => (
+            <div key={image.src} className="relative h-full min-w-0 flex-[0_0_100%]">
+              <Image src={image.src} alt="" fill sizes="100vw" className="object-cover" />
             </div>
           ))}
         </div>
 
-        <AnimatePresence initial={false} mode="sync">
-          <motion.div
-            key={images[activeIndex]}
-            className="pointer-events-none absolute inset-0"
-            initial={reducedMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
-          >
-            <Image
-              src={images[activeIndex]}
-              alt={`${name} — image ${activeIndex + 1} of ${images.length}`}
-              fill
-              sizes="100vw"
-              className="object-cover [animation:none]"
-              priority={activeIndex === 0}
-            />
-          </motion.div>
-        </AnimatePresence>
+        {activeImage && (
+          <AnimatePresence initial={false} mode="sync">
+            <motion.div
+              key={activeImage.src}
+              className="pointer-events-none absolute inset-0"
+              initial={reducedMotion ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
+            >
+              <Image
+                src={activeImage.src}
+                alt={`${name} — image ${activeIndex + 1} of ${images.length}`}
+                fill
+                sizes="100vw"
+                className="object-cover [animation:none]"
+                priority={activeIndex === 0}
+              />
+            </motion.div>
+          </AnimatePresence>
+        )}
       </div>
 
       <Tooltip.Provider delayDuration={0}>
@@ -133,13 +162,13 @@ export default function ProductGallery({
             onClick={scrollPrev}
             aria-label="Previous image"
             className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
-            style={{ color: "var(--color-text-primary)" }}
+            style={{ color: "var(--hero-ui-color)" }}
           >
             <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
           </button>
           <span
             className="min-w-[66px] text-center text-sm font-semibold tabular-nums tracking-[0.08em]"
-            style={{ color: "var(--color-text-primary)" }}
+            style={{ color: "var(--hero-ui-color)" }}
           >
             {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
           </span>
@@ -148,7 +177,7 @@ export default function ProductGallery({
             onClick={scrollNext}
             aria-label="Next image"
             className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
-            style={{ color: "var(--color-text-primary)" }}
+            style={{ color: "var(--hero-ui-color)" }}
           >
             <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
           </button>
