@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const CONTAINER_ID = "geidea-express-checkout";
+const CONTAINER_ID = "express-checkout";
 
 export default function GeideaExpressWallets({
   sessionId,

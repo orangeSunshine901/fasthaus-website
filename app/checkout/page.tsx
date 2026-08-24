@@ -11,6 +11,7 @@ import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { discountRateFor, WELCOME_DISCOUNT_CODE } from "@/lib/checkout/discount";
+import GeideaExpressWallets from "@/components/checkout/GeideaExpressWallets";
 
 const EMIRATES = [
   "Dubai",
@@ -28,6 +29,8 @@ type CheckoutSession = {
   expiresAt: string;
   cardRedirectUrl: string;
 };
+
+type PreparedCheckoutSession = CheckoutSession & { detailsKey: string };
 
 const inputStyle = {
   borderColor: "var(--color-border)",
@@ -70,6 +73,10 @@ export default function CheckoutPage() {
   const [newsletter, setNewsletter] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
+  const [walletSession, setWalletSession] = useState<PreparedCheckoutSession | null>(null);
+  const [walletLoading, setWalletLoading] = useState(false);
+  const [walletError, setWalletError] = useState<string | null>(null);
+  const [walletRetry, setWalletRetry] = useState(0);
 
   const subtotalValue = subtotal();
   const hasDiscount = newsletter || discountApplied;
@@ -83,6 +90,21 @@ export default function CheckoutPage() {
     !!streetAddress.trim() &&
     !!unitVilla.trim() &&
     !!buildingCluster.trim();
+  const checkoutDetailsKey = JSON.stringify([
+    fullName,
+    email,
+    phone,
+    streetAddress,
+    unitVilla,
+    buildingCluster,
+    landmark,
+    emirate,
+    poBox,
+    hasDiscount,
+    totalValue,
+  ]);
+  const activeWalletSession =
+    walletSession?.detailsKey === checkoutDetailsKey ? walletSession : null;
 
   useEffect(() => {
     if (items.length > 0)
@@ -148,6 +170,56 @@ export default function CheckoutPage() {
     ]
   );
 
+  useEffect(() => {
+    if (
+      !checkoutDetailsReady ||
+      items.length === 0 ||
+      activeWalletSession ||
+      purchasing ||
+      cartSyncing
+    )
+      return;
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setWalletLoading(true);
+      setWalletError(null);
+      try {
+        const session = await requestCheckoutSession(controller.signal);
+        setWalletSession({ ...session, detailsKey: checkoutDetailsKey });
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setWalletError(
+            error instanceof Error ? error.message : "Express checkout could not be started."
+          );
+        }
+      } finally {
+        if (!controller.signal.aborted) setWalletLoading(false);
+      }
+    }, 600);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [
+    activeWalletSession,
+    cartSyncing,
+    checkoutDetailsKey,
+    checkoutDetailsReady,
+    items.length,
+    purchasing,
+    requestCheckoutSession,
+    walletRetry,
+  ]);
+
+  useEffect(() => {
+    if (!walletSession) return;
+    const remaining = Date.parse(walletSession.expiresAt) - Date.now() - 30_000;
+    const timer = window.setTimeout(() => setWalletSession(null), Math.max(0, remaining));
+    return () => window.clearTimeout(timer);
+  }, [walletSession]);
+
   function toggleNewsletter() {
     setNewsletter((prev) => {
       const next = !prev;
@@ -172,7 +244,7 @@ export default function CheckoutPage() {
     setPurchasing(true);
     setPurchaseError(null);
     try {
-      const session = await requestCheckoutSession();
+      const session = activeWalletSession ?? (await requestCheckoutSession());
       window.location.assign(session.cardRedirectUrl);
     } catch (error) {
       setPurchaseError(error instanceof Error ? error.message : "Checkout could not be started.");
@@ -395,7 +467,79 @@ export default function CheckoutPage() {
                 </div>
               </section>
 
+              <section
+                className="flex flex-col gap-4 border-t pt-6"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
+                  Express checkout
+                </h2>
+                {!checkoutDetailsReady ? (
+                  <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
+                    Complete the required contact and delivery details to enable supported wallets.
+                  </p>
+                ) : activeWalletSession ? (
+                  <>
+                    <GeideaExpressWallets
+                      sessionId={activeWalletSession.sessionId}
+                      orderId={activeWalletSession.orderId}
+                    />
+                    <p
+                      className="type-caption-sm text-center"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      Apple Pay, Google Pay, and Samsung Pay appear automatically on supported
+                      devices and browsers.
+                    </p>
+                  </>
+                ) : walletLoading || cartSyncing ? (
+                  <div
+                    className="flex min-h-[60px] items-center justify-center rounded-[var(--radius-md)] border"
+                    style={{ borderColor: "var(--color-border)" }}
+                  >
+                    <span className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
+                      Loading secure wallets…
+                    </span>
+                  </div>
+                ) : walletError ? (
+                  <div className="flex flex-col gap-2.5">
+                    <p
+                      role="alert"
+                      className="type-body-sm"
+                      style={{ color: "var(--color-error)" }}
+                    >
+                      {walletError}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setWalletRetry((value) => value + 1)}
+                      className="btn-text w-fit"
+                    >
+                      Retry express checkout
+                    </button>
+                  </div>
+                ) : null}
+              </section>
+
               <div className="flex flex-col gap-3 pt-1">
+                {activeWalletSession && (
+                  <div className="flex items-center gap-3" aria-hidden="true">
+                    <span
+                      className="h-px flex-1"
+                      style={{ backgroundColor: "var(--color-border)" }}
+                    />
+                    <span
+                      className="type-caption-sm"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      or pay by card
+                    </span>
+                    <span
+                      className="h-px flex-1"
+                      style={{ backgroundColor: "var(--color-border)" }}
+                    />
+                  </div>
+                )}
                 {purchaseError && (
                   <p role="alert" className="type-body-sm" style={{ color: "var(--color-error)" }}>
                     {purchaseError}

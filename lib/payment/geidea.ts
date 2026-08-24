@@ -131,6 +131,11 @@ export async function createGeideaCheckoutSession(
     language: "en",
     cardOnFile: false,
     customer: input.customer,
+    expressCheckouts: [
+      { wallet: "apple-pay", label: "Apple Pay" },
+      { wallet: "google-pay", label: "Google Pay" },
+      { wallet: "samsung-pay", label: "Samsung Pay" },
+    ],
   };
   const logSessionCreation = process.env.GEIDEA_LOG_SESSION_CREATION === "true";
   const startedAt = Date.now();
