@@ -18,7 +18,7 @@ const FAQS: { category: string; question: string; answer: string }[] = [
     category: "Products",
     question: "What are your lamps made of?",
     answer:
-      "Our lamps are primarily made from 3D-printed PLA and PETG, combined with powder-coated aluminium bases, acrylic diffusers, and braided textile cables. Each material is chosen for durability, aesthetics, and low environmental impact.",
+      "Our lamps are primarily made from 3D-printed PLA and PETG, combined with a stainless steel base. Each material is chosen for durability, aesthetics, and low environmental impact.",
   },
   {
     category: "Products",

@@ -26,7 +26,7 @@ const storyPanels = [
   {
     image: "/about/lamp-desk-on.jpg",
     alt: "Small white Fasthaus lamp glowing on a table",
-    text: "We at fasthaus create 3D-printed lamps and spatial objects with intention, soft glow, and a little story.",
+    text: "We at fasthaus create spatial objects with intention, soft glow, and a little story.",
   },
 ];
 

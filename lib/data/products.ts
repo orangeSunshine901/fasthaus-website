@@ -177,8 +177,7 @@ export const PRODUCTS: Product[] = [
       { icon: "/bedside-icon.svg", label: "Bedside" },
       { icon: "/reading-nook-icon.svg", label: "Outdoor" },
     ],
-    designStory:
-      "The Flute was designed around one constraint: freedom. No cable, no fixed spot. A 12-hour rechargeable base and a magnetic USB-C port mean it goes where you go — from morning work session to evening dinner table.",
+    designStory: "",
     addOns: [ADD_ONS[0]],
   },
   {
@@ -247,6 +246,7 @@ export const PRODUCTS: Product[] = [
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           { src: "/flute-lamp/flute-clear-interaction-shot-dark.png", uiTheme: "light" },
+          { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-1.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-lifestyle-shot-dark.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-macro-top-shot-dark.png", uiTheme: "light" },
         ],
@@ -286,8 +286,7 @@ export const PRODUCTS: Product[] = [
       { icon: "/living-room-icon.svg", label: "Living Room" },
       { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
     ],
-    designStory:
-      "Inspired by architectural forms and soft evening light, the Luna Desk Lamp was designed to create a calm focal point within a workspace. The layered diffuser transforms the visible characteristics of additive manufacturing into a deliberate design feature, producing a warm glow and subtle texture that changes throughout the day.",
+    designStory: "",
     addOns: ADD_ONS,
   },
   {
@@ -295,8 +294,7 @@ export const PRODUCTS: Product[] = [
     slug: "hamrah-lamp",
     name: "HAMRAH",
     category: "table-lamps",
-    description:
-      "A ribbed sculptural lamp inspired by pearl-diving heritage, with a hidden warm glow that feels calm and inviting.",
+    description: "",
     featured: true,
     rating: 4.5,
     reviewCount: 11,
@@ -499,8 +497,7 @@ export const PRODUCTS: Product[] = [
       { icon: "/bedside-icon.svg", label: "Bedside" },
       { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
     ],
-    designStory:
-      "The Arc Table Lamp draws from the geometry of suspension bridges — tension and balance expressed in a single sweeping form. The frosted glass diffuser softens the LED source into an even, comfortable glow suited for long evenings.",
+    designStory: "",
     addOns: ADD_ONS,
   },
 ];
