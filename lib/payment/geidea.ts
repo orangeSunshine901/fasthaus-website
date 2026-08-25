@@ -130,6 +130,7 @@ export async function createGeideaCheckoutSession(
     paymentOperation: "Pay",
     language: "en",
     cardOnFile: false,
+    appearance: { styles: {}, uiMode: "modal" },
     customer: input.customer,
     expressCheckouts: [
       { wallet: "apple-pay", label: "Apple Pay" },
