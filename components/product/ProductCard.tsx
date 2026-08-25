@@ -3,6 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
 import { getVariantImage, type Product, type ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
@@ -29,6 +30,7 @@ export default function ProductCard({ product }: Props) {
   const [hovered, setHovered] = useState(false);
   const defaultVariant = product.variants[0];
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(defaultVariant);
+  const reducedMotion = useReducedMotion();
   const badge = product.badge ? badgeStyles[product.badge] : null;
   const productHref = `/product/${product.slug}?variant=${encodeURIComponent(selectedVariant.id)}`;
 
@@ -93,13 +95,24 @@ export default function ProductCard({ product }: Props) {
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
-          <Image
-            src={selectedVariant.collectionImage}
-            alt={`${product.name} in ${selectedVariant.color}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 50vw, 25vw"
-          />
+          <AnimatePresence initial={false} mode="sync">
+            <motion.div
+              key={selectedVariant.id}
+              className="absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeInOut" }}
+            >
+              <Image
+                src={selectedVariant.collectionImage}
+                alt={`${product.name} in ${selectedVariant.color}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 50vw, 25vw"
+              />
+            </motion.div>
+          </AnimatePresence>
           {badge && (
             <span
               className="type-badge absolute left-3 top-3 rounded-full px-2 py-1"
