@@ -102,8 +102,10 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/stack-lamp/stack-lamp-orange-off-product-shadow.png",
         mainImage: "/stack-lamp/stack-lamp-orange-on.png",
         images: [
-          { src: "/stack-lamp/stack-lamp-orange-on.png", uiTheme: "light" },
-          { src: "/stack-lamp/stack-lamp-orange-off.png", uiTheme: "dark" },
+          { src: "/stack-lamp/stack-lamp-orange-off-product.png", uiTheme: "dark" },
+          { src: "/stack-lamp/stack-lamp-orange-on-product.png", uiTheme: "dark" },
+          { src: "/stack-lamp/stack-lamp-orange-lifestyle-1.png", uiTheme: "dark" },
+          { src: "/stack-lamp/stack-lamp-orange-lifestyle.png", uiTheme: "dark" },
         ],
       },
       {
@@ -120,6 +122,8 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/stack-lamp/stack-lamp-blue-off-product-shadow.png",
         mainImage: "/stack-lamp/stack-lamp-blue-on.png",
         images: [
+          { src: "/stack-lamp/stack-lamp-blue-off-product.png", uiTheme: "dark" },
+          { src: "/stack-lamp/stack-lamp-blue-on-product.png", uiTheme: "dark" },
           { src: "/stack-lamp/stack-lamp-blue-on.png", uiTheme: "light" },
           { src: "/stack-lamp/stack-lamp-blue-off.png", uiTheme: "dark" },
         ],
@@ -138,6 +142,8 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/stack-lamp/stack-lamp-white-off-product-shadow.png",
         mainImage: "/stack-lamp/stack-lamp-white-on.png",
         images: [
+          { src: "/stack-lamp/stack-lamp-white-off-product.png", uiTheme: "dark" },
+          { src: "/stack-lamp/stack-lamp-white-on-product.png", uiTheme: "dark" },
           { src: "/stack-lamp/stack-lamp-white-off.png", uiTheme: "dark" },
           { src: "/stack-lamp/stack-lamp-white-on.png", uiTheme: "light" },
         ],
@@ -209,14 +215,14 @@ export const PRODUCTS: Product[] = [
           { src: "/flute-lamp/flute-matcha-hero.png", uiTheme: "dark" },
           { src: "/flute-lamp/flute-matcha-hero-light.png", uiTheme: "dark" },
           { src: "/flute-lamp/flute-matcha-lifestyle-shot.png", uiTheme: "dark" },
-          { src: "/flute-lamp/flute-matcha-lifestyle-shot-dark.png", uiTheme: "light" },
+          { src: "/flute-lamp/flute-matcha-lifestyle-shot-dark.png", uiTheme: "dark" },
         ],
       },
       {
         id: "1-fire-red",
         color: "Cherry Red",
         colorHex: "#942025",
-        sku: "TFL-FR",
+        sku: "TFL-CR",
         price: 329,
         stock: 12,
         featuredImages: {
@@ -225,11 +231,7 @@ export const PRODUCTS: Product[] = [
         },
         collectionImage: "/flute-lamp/flute-red-hero.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
-        images: [
-          { src: "/flute-lamp/flute-red-hero.png", uiTheme: "light" },
-          { src: "/flute-lamp/flute-fire-red-off.png", uiTheme: "dark" },
-          { src: "/flute-lamp/flute-clear-garden.png", uiTheme: "light" },
-        ],
+        images: [{ src: "/flute-lamp/flute-red-lifestyle-shot.png", uiTheme: "dark" }],
       },
       {
         id: "1-clear",
@@ -243,12 +245,12 @@ export const PRODUCTS: Product[] = [
           lightOn: "/flute-lamp/flute-clear-on.png",
         },
         collectionImage: "/flute-lamp/flute-clear-off-shadow-product.png",
-        mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
+        mainImage: "/flute-lamp/flute-clear-interaction-shot-dark.png",
         images: [
           { src: "/flute-lamp/flute-clear-interaction-shot-dark.png", uiTheme: "light" },
+          { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-2.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-1.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-lifestyle-shot-dark.png", uiTheme: "light" },
-          { src: "/flute-lamp/flute-clear-macro-top-shot-dark.png", uiTheme: "light" },
         ],
       },
     ],
