@@ -66,7 +66,7 @@ export default function HomePage() {
     <LocomotiveScrollProvider>
       <ShopLayout>
         {/* Hero */}
-        <section className="relative h-[640px] w-full overflow-hidden md:h-[740px]">
+        <section className="relative h-[640px] w-full overflow-hidden md:h-[840px]">
           <video
             className="absolute inset-0 h-full w-full object-cover object-center"
             autoPlay
@@ -79,7 +79,8 @@ export default function HomePage() {
           >
             <source src="/home-hero.webm" type="video/webm" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-neutral-950/35 to-transparent" />
+          {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-neutral-100/10 to-transparent" /> */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black from-0% via-neutral-100/10 via-15% to-transparent to-25%" />
 
           <div
             data-scroll
@@ -110,7 +111,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="container-page absolute left-1/2 top-[420px] z-10 hidden -translate-x-1/2 md:block">
+          <div className="container-page absolute left-1/2 top-[520px] z-10 hidden -translate-x-1/2 md:block">
             <div data-scroll className="scroll-reveal-up flex flex-col items-start gap-6">
               <h1 className="type-display-xl max-w-lg text-white">
                 The light that makes the whole room feel right.
