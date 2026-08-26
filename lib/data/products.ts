@@ -89,6 +89,24 @@ export const PRODUCTS: Product[] = [
     reviewCount: 24,
     variants: [
       {
+        id: "3-blue",
+        color: "Cobalt Blue",
+        colorHex: "#007ffe",
+        sku: "STL-BLU",
+        price: 299,
+        stock: 7,
+        featuredImages: {
+          lightOff: "/stack-lamp/stack-lamp-blue-off.png",
+          lightOn: "/stack-lamp/stack-lamp-blue-on.png",
+        },
+        collectionImage: "/stack-lamp/stack-lamp-blue-off-collection.png",
+        mainImage: "/stack-lamp/stack-lamp-blue-on.png",
+        images: [
+          { src: "/stack-lamp/stack-lamp-blue-off-product.png", uiTheme: "dark" },
+          { src: "/stack-lamp/stack-lamp-blue-on-product.png", uiTheme: "dark" },
+        ],
+      },
+      {
         id: "3-orange",
         color: "Burnt Orange",
         colorHex: "#F7633A",
@@ -109,26 +127,6 @@ export const PRODUCTS: Product[] = [
         ],
       },
       {
-        id: "3-blue",
-        color: "Cobalt Blue",
-        colorHex: "#007ffe",
-        sku: "STL-BLU",
-        price: 299,
-        stock: 7,
-        featuredImages: {
-          lightOff: "/stack-lamp/stack-lamp-blue-off.png",
-          lightOn: "/stack-lamp/stack-lamp-blue-on.png",
-        },
-        collectionImage: "/stack-lamp/stack-lamp-blue-off-collection.png",
-        mainImage: "/stack-lamp/stack-lamp-blue-on.png",
-        images: [
-          { src: "/stack-lamp/stack-lamp-blue-off-product.png", uiTheme: "dark" },
-          { src: "/stack-lamp/stack-lamp-blue-on-product.png", uiTheme: "dark" },
-          { src: "/stack-lamp/stack-lamp-blue-on.png", uiTheme: "light" },
-          { src: "/stack-lamp/stack-lamp-blue-off.png", uiTheme: "dark" },
-        ],
-      },
-      {
         id: "3-white",
         color: "White",
         colorHex: "#F5F5F5",
@@ -144,8 +142,6 @@ export const PRODUCTS: Product[] = [
         images: [
           { src: "/stack-lamp/stack-lamp-white-off-product.png", uiTheme: "dark" },
           { src: "/stack-lamp/stack-lamp-white-on-product.png", uiTheme: "dark" },
-          { src: "/stack-lamp/stack-lamp-white-off.png", uiTheme: "dark" },
-          { src: "/stack-lamp/stack-lamp-white-on.png", uiTheme: "light" },
         ],
       },
     ],
@@ -406,26 +402,6 @@ export const PRODUCTS: Product[] = [
     reviewCount: 18,
     variants: [
       {
-        id: "2-cobalt-blue",
-        color: "Cobalt Blue",
-        colorHex: "#007ffe",
-        sku: "ML-CB",
-        price: 399,
-        stock: 6,
-        featuredImages: {
-          lightOff: "/mushroom-lamp/mushroom-blue-off.png",
-          lightOn: "/mushroom-lamp/mushroom-blue-on.png",
-        },
-        collectionImage: "/mushroom-lamp/mushroom-blue-off-product-shadow.png",
-        mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
-        images: [
-          { src: "/mushroom-lamp/mushroom-lamp-top.jpg", uiTheme: "light" },
-          { src: "/mushroom-lamp/mushroom-lamp-side.jpg", uiTheme: "dark" },
-          { src: "/mushroom-lamp/mushroom-lamp-close.jpg", uiTheme: "light" },
-          { src: "/mushroom-lamp/mushroom-lamp-close-side.jpg", uiTheme: "dark" },
-        ],
-      },
-      {
         id: "2-burnt-orange",
         color: "Burnt Orange",
         colorHex: "#f7633a",
@@ -445,7 +421,26 @@ export const PRODUCTS: Product[] = [
           { src: "/mushroom-lamp/mushroom-lamp-close-side.jpg", uiTheme: "dark" },
         ],
       },
-
+      {
+        id: "2-cobalt-blue",
+        color: "Cobalt Blue",
+        colorHex: "#007ffe",
+        sku: "ML-CB",
+        price: 399,
+        stock: 6,
+        featuredImages: {
+          lightOff: "/mushroom-lamp/mushroom-blue-off.png",
+          lightOn: "/mushroom-lamp/mushroom-blue-on.png",
+        },
+        collectionImage: "/mushroom-lamp/mushroom-blue-off-product-shadow.png",
+        mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
+        images: [
+          { src: "/mushroom-lamp/mushroom-lamp-top.jpg", uiTheme: "light" },
+          { src: "/mushroom-lamp/mushroom-lamp-side.jpg", uiTheme: "dark" },
+          { src: "/mushroom-lamp/mushroom-lamp-close.jpg", uiTheme: "light" },
+          { src: "/mushroom-lamp/mushroom-lamp-close-side.jpg", uiTheme: "dark" },
+        ],
+      },
       {
         id: "2-black",
         color: "Black",
