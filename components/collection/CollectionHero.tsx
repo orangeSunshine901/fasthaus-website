@@ -767,7 +767,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
           <div className="absolute inset-0 -translate-y-[10%] md:translate-y-0">
             <div className="absolute left-1/2 top-[46%] z-10 -translate-x-1/2 -translate-y-1/2">
               <motion.h2
-                className="font-golften-stamp whitespace-nowrap text-center text-[122px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:text-[clamp(54.08px,calc(11.44vw+8.32px),195.52px)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
+                className="font-golften-stamp whitespace-nowrap text-center text-[96px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:text-[clamp(54.08px,calc(11.44vw+8.32px),195.52px)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
                 variants={shouldReduceMotion ? REDUCED_TITLE_VARIANTS : TITLE_VARIANTS}
                 transition={contentTransition}
               >
@@ -799,7 +799,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                 className="font-golften-stamp whitespace-nowrap font-semibold uppercase tracking-[0.004em] text-white"
                 variants={shouldReduceMotion ? REDUCED_VARIANTS : LABEL_VARIANTS}
                 transition={labelTransition}
-                style={{ fontSize: "32px" }}
+                style={{ fontSize: "28px" }}
               >
                 {activeSlide.colorName}
               </motion.p>
