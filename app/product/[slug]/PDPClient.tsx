@@ -84,7 +84,11 @@ export default function PDPClient({
   function handleVariantChange(variant: ProductVariant) {
     setSelectedVariant(variant);
     setActiveImage(0);
-    router.replace(`?variant=${encodeURIComponent(variant.id)}`, { scroll: false });
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `?variant=${encodeURIComponent(variant.id)}`
+    );
     capture(analyticsEvents.productOptionSelected, {
       product_id: product.id,
       option_type: "color",
