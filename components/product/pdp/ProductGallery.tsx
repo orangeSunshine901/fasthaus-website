@@ -60,7 +60,7 @@ export default function ProductGallery({
 
   return (
     <div
-      className="product-hero relative left-1/2 aspect-[864/1147] h-auto w-screen -translate-x-1/2 overflow-hidden md:aspect-auto md:h-[calc(100svh-2.75rem)]"
+      className="product-hero relative left-1/2 h-[584px] w-screen -translate-x-1/2 overflow-hidden md:h-[calc(100svh-2.75rem)]"
       data-ui-theme={uiTheme}
     >
       <nav
@@ -134,7 +134,7 @@ export default function ProductGallery({
         <div
           role="group"
           aria-label="Choose lamp color"
-          className="absolute left-5 top-1/2 z-20 flex -translate-y-1/2 flex-col items-center gap-3 rounded-full border border-white/60 px-2.5 py-3.5 shadow-sm backdrop-blur-md md:left-8"
+          className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/60 px-3.5 py-2.5 shadow-sm backdrop-blur-md md:bottom-auto md:left-8 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:flex-col md:px-2.5 md:py-3.5"
         >
           {variants.map((variant) => (
             <Tooltip.Root key={variant.id}>
@@ -170,32 +170,55 @@ export default function ProductGallery({
       </Tooltip.Provider>
 
       {images.length > 1 && (
-        <div className="absolute inset-x-0 bottom-7 z-10 flex items-center justify-center gap-5 md:bottom-4 md:gap-7">
-          <button
-            type="button"
-            onClick={scrollPrev}
-            aria-label="Previous image"
-            className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
-            style={{ color: "var(--hero-ui-color)" }}
-          >
-            <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
-          </button>
-          <span
-            className="min-w-[66px] text-center text-sm font-semibold tabular-nums tracking-[0.08em]"
-            style={{ color: "var(--hero-ui-color)" }}
-          >
-            {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
-          </span>
-          <button
-            type="button"
-            onClick={scrollNext}
-            aria-label="Next image"
-            className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
-            style={{ color: "var(--hero-ui-color)" }}
-          >
-            <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
-          </button>
-        </div>
+        <>
+          <div className="absolute inset-x-0 top-1/2 z-30 flex -translate-y-1/2 justify-between px-4 md:hidden">
+            <button
+              type="button"
+              onClick={scrollPrev}
+              aria-label="Previous image"
+              className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={{ color: "var(--hero-ui-color)" }}
+            >
+              <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={scrollNext}
+              aria-label="Next image"
+              className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={{ color: "var(--hero-ui-color)" }}
+            >
+              <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
+            </button>
+          </div>
+
+          <div className="absolute right-5 bottom-10 z-30 flex items-center md:inset-x-0 md:bottom-4 md:justify-center md:gap-7">
+            <button
+              type="button"
+              onClick={scrollPrev}
+              aria-label="Previous image"
+              className="hidden h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:grid"
+              style={{ color: "var(--hero-ui-color)" }}
+            >
+              <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
+            </button>
+            <span
+              className="min-w-[66px] text-center text-sm font-semibold tabular-nums tracking-[0.08em]"
+              style={{ color: "var(--hero-ui-color)" }}
+            >
+              {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
+            </span>
+            <button
+              type="button"
+              onClick={scrollNext}
+              aria-label="Next image"
+              className="hidden h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:grid"
+              style={{ color: "var(--hero-ui-color)" }}
+            >
+              <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

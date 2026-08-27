@@ -222,6 +222,18 @@ input[type="radio"] {
   --hero-ui-subtle: rgba(255, 255, 255, 0.45);
 }
 
+.collection-hero {
+  --collection-hero-artwork-width: 132vw;
+  --collection-hero-label-size: 48px;
+}
+
+@media (min-width: 768px) {
+  .collection-hero {
+    --collection-hero-artwork-width: min(48vw, 700px);
+    --collection-hero-label-size: 24px;
+  }
+}
+
 /* Horizontal swipe rails (tab bars, carousels) — scrollable but chromeless */
 .scrollbar-hide {
   -ms-overflow-style: none;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -408,6 +408,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isPointerInsideRef = useRef(false);
+  const swipeStartRef = useRef<{ x: number; y: number } | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [transitionSequence, setTransitionSequence] = useState(0);
@@ -437,6 +438,25 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
     setSelectedIndex((index) => (index + 1) % slideCount);
     setTransitionSequence((sequence) => sequence + 1);
   }, [slideCount]);
+
+  function handleTouchStart(event: TouchEvent<HTMLElement>) {
+    const touch = event.touches[0];
+    if (touch) swipeStartRef.current = { x: touch.clientX, y: touch.clientY };
+  }
+
+  function handleTouchEnd(event: TouchEvent<HTMLElement>) {
+    const start = swipeStartRef.current;
+    const touch = event.changedTouches[0];
+    swipeStartRef.current = null;
+    if (!start || !touch) return;
+
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+    if (Math.abs(deltaX) < 50 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+
+    if (deltaX < 0) scrollNext();
+    else scrollPrevious();
+  }
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -668,7 +688,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[60svh] min-h-[420px] w-full overflow-hidden outline-none md:h-[840px]"
+      className="collection-hero relative h-[calc(100svh-100px)] w-full touch-pan-y overflow-hidden outline-none md:h-[840px]"
       style={{ backgroundColor: activeSlide.colors[0], outline: "none" }}
       role="region"
       aria-roledescription="carousel"
@@ -680,17 +700,22 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       onPointerLeave={() => {
         isPointerInsideRef.current = false;
       }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={() => {
+        swipeStartRef.current = null;
+      }}
     >
       <canvas ref={canvasRef} className="absolute inset-0 z-0 h-full w-full" aria-hidden="true" />
 
       <div
-        className="absolute inset-y-0 left-0 z-30 w-1/2"
+        className="absolute inset-y-0 left-0 z-30 hidden w-1/2 md:block"
         style={{ cursor: "w-resize" }}
         onClick={scrollPrevious}
         aria-hidden="true"
       />
       <div
-        className="absolute inset-y-0 right-0 z-30 w-1/2"
+        className="absolute inset-y-0 right-0 z-30 hidden w-1/2 md:block"
         style={{ cursor: "e-resize" }}
         onClick={scrollNext}
         aria-hidden="true"
@@ -708,7 +733,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
           <div className="absolute inset-0 -translate-y-[10%] md:translate-y-0">
             <div className="absolute left-1/2 top-[46%] z-10 -translate-x-1/2 -translate-y-1/2">
               <motion.h2
-                className="font-golften-stamp whitespace-nowrap text-center text-[84px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:text-[clamp(54.08px,calc(11.44vw+8.32px),195.52px)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
+                className="font-golften-stamp whitespace-nowrap text-center text-[122px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:text-[clamp(54.08px,calc(11.44vw+8.32px),195.52px)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
                 variants={shouldReduceMotion ? REDUCED_TITLE_VARIANTS : TITLE_VARIANTS}
                 transition={contentTransition}
               >
@@ -718,15 +743,16 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
 
             <div className="absolute inset-0 z-0 flex items-center translate-x-[-6px] justify-center pb-[3%]">
               <motion.div
-                className="relative aspect-square w-[min(91.2vw,696px)] md:w-[min(48vw,700px)]"
+                className="relative aspect-square shrink-0"
                 variants={shouldReduceMotion ? REDUCED_VARIANTS : LAMP_VARIANTS}
                 transition={contentTransition}
+                style={{ width: "var(--collection-hero-artwork-width)" }}
               >
                 <Image
                   src={activeSlide.image}
                   alt={activeSlide.lampName + " lamp in " + activeSlide.colorName}
                   fill
-                  sizes="(min-width: 768px) 48vw, 91.2vw"
+                  sizes="(min-width: 768px) 48vw, 132vw"
                   className="object-contain"
                   priority={selectedIndex === 0}
                   draggable={false}
@@ -736,12 +762,10 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
 
             <div className="absolute bottom-[15%] left-[50.5%] z-30 -translate-x-1/2 md:bottom-[12%]">
               <motion.p
-                className="font-golften-stamp whitespace-nowrap text-[50px] font-semibold uppercase tracking-[0.004em] text-white"
+                className="font-golften-stamp whitespace-nowrap font-semibold uppercase tracking-[0.004em] text-white"
                 variants={shouldReduceMotion ? REDUCED_VARIANTS : LABEL_VARIANTS}
                 transition={labelTransition}
-                style={{
-                  fontSize: "24px",
-                }}
+                style={{ fontSize: "32px" }}
               >
                 {activeSlide.colorName}
               </motion.p>
@@ -750,26 +774,45 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         </motion.div>
       </AnimatePresence>
 
+      <div className="absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-between px-4 text-white md:hidden">
+        <button
+          type="button"
+          onClick={scrollPrevious}
+          aria-label="Show previous lamp"
+          className="grid h-11 w-11 place-items-center rounded-full outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+        >
+          <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          onClick={scrollNext}
+          aria-label="Show next lamp"
+          className="grid h-11 w-11 place-items-center rounded-full outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+        >
+          <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
+        </button>
+      </div>
+
       <div
-        className="absolute left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 text-white md:left-auto md:right-10 md:translate-x-0 md:gap-3"
+        className="absolute left-1/2 z-40 flex -translate-x-1/2 items-center text-white md:left-auto md:right-10 md:translate-x-0 md:gap-3"
         style={{ bottom: "calc(20px + env(safe-area-inset-bottom))" }}
       >
         <button
           type="button"
           onClick={scrollPrevious}
           aria-label="Show previous lamp"
-          className="order-1 grid h-11 w-11 place-items-center rounded-full text-white outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:order-2"
+          className="order-2 hidden h-11 w-11 place-items-center rounded-full text-white outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:grid"
         >
           <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
         </button>
-        <span className="order-2 min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em] md:order-1 md:mr-2">
+        <span className="order-1 min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em] md:mr-2">
           {formatCounter(selectedIndex + 1)} / {formatCounter(slideCount)}
         </span>
         <button
           type="button"
           onClick={scrollNext}
           aria-label="Show next lamp"
-          className="order-3 grid h-11 w-11 place-items-center rounded-full text-white outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          className="order-3 hidden h-11 w-11 place-items-center rounded-full text-white outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:grid"
         >
           <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
         </button>
