@@ -114,6 +114,8 @@ html {
   background-color: var(--color-bg);
   color: var(--color-text-primary);
   font-family: 'DM Sans', system-ui, sans-serif;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -241,6 +243,53 @@ input[type="radio"] {
   will-change: transform;
 }
 
+/* Home navigation and hero copy share a reversible top-of-page reveal. */
+[data-home-reveal-item] {
+  transition:
+    opacity 700ms ease,
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 800ms;
+  will-change: opacity, transform;
+}
+
+[data-home-reveal="pending"] [data-home-reveal-item] {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+}
+
+[data-home-reveal="revealed"] [data-home-reveal-item] {
+  visibility: visible;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0s;
+}
+
+/* Lenis normally removes the scrollbar while stopped; keep it stable during this reveal. */
+html.lenis.home-reveal-scroll-locked.lenis-stopped {
+  overflow-y: scroll !important;
+}
+
+[data-home-announcement-reveal-item] {
+  transition:
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 800ms;
+  will-change: transform;
+}
+
+[data-home-reveal="pending"] [data-home-announcement-reveal-item] {
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(0, -100%, 0);
+}
+
+[data-home-reveal="revealed"] [data-home-announcement-reveal-item] {
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0s;
+}
+
 /* Collection mega menu — shared by the main and floating navigation bars. */
 .collection-menu-content {
   transform-origin: top center;
@@ -345,6 +394,16 @@ input[type="radio"] {
   .scroll-reveal-soft,
   .scroll-parallax-layer {
     opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  [data-home-reveal-item] {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  [data-home-announcement-reveal-item] {
     transform: none !important;
     transition: none !important;
   }

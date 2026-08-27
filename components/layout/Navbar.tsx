@@ -109,7 +109,7 @@ function CollectionMegaMenuContent() {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstScroll?: boolean }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const openCartDrawer = useCartStore((s) => s.openDrawer);
   const [hiddenMainNavPath, setHiddenMainNavPath] = useState<string | null>(null);
@@ -194,6 +194,7 @@ export default function Navbar() {
       )}
 
       <header
+        data-home-reveal-item={revealOnFirstScroll ? "" : undefined}
         className={cn(
           isProductPage
             ? "absolute top-11 z-40 w-full border-transparent bg-transparent md:h-24"

@@ -64,9 +64,9 @@ export default function HomePage() {
 
   return (
     <LocomotiveScrollProvider>
-      <ShopLayout>
+      <ShopLayout revealOnFirstScroll>
         {/* Hero */}
-        <section className="relative h-[640px] w-full overflow-hidden md:h-[840px]">
+        <section className="relative h-[640px] w-full overflow-hidden bg-[#000104] md:h-[840px]">
           <video
             className="absolute inset-0 h-full w-full object-cover object-center"
             autoPlay
@@ -83,8 +83,8 @@ export default function HomePage() {
           {/* <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,1)_0%,rgba(0,0,0,0.55)_1%,rgba(0,0,0,0.18)_5%,rgba(0,0,0,0.10)_7%)]" /> */}
 
           <div
-            data-scroll
-            className="scroll-reveal-up absolute inset-x-5 bottom-2 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
+            data-home-reveal-item
+            className="absolute inset-x-5 bottom-2 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
           >
             <h1 className="type-display-xl self-stretch text-white">
               The light that makes the whole room feel right.
@@ -112,7 +112,7 @@ export default function HomePage() {
           </div>
 
           <div className="container-page absolute left-1/2 top-[520px] z-10 hidden -translate-x-1/2 md:block">
-            <div data-scroll className="scroll-reveal-up flex flex-col items-start gap-6">
+            <div data-home-reveal-item className="flex flex-col items-start gap-6">
               <h1 className="type-display-xl max-w-lg text-white">
                 The light that makes the whole room feel right.
               </h1>
