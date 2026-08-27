@@ -69,3 +69,13 @@ test("every carousel image has an explicit UI theme", () => {
     }
   }
 });
+
+test("product off and on gallery images provide their mobile versions", () => {
+  for (const product of PRODUCTS) {
+    for (const variant of product.variants) {
+      for (const image of variant.images.slice(0, 2)) {
+        assert.ok(image.mobileSrc, `${image.src} is missing its mobile source`);
+      }
+    }
+  }
+});

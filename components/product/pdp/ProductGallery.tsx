@@ -60,7 +60,7 @@ export default function ProductGallery({
 
   return (
     <div
-      className="product-hero relative left-1/2 h-[calc(100svh-2.75rem)] w-screen -translate-x-1/2 overflow-hidden"
+      className="product-hero relative left-1/2 aspect-[864/1147] h-auto w-screen -translate-x-1/2 overflow-hidden md:aspect-auto md:h-[calc(100svh-2.75rem)]"
       data-ui-theme={uiTheme}
     >
       <nav
@@ -88,7 +88,16 @@ export default function ProductGallery({
         <div aria-hidden="true" className="flex h-full touch-pan-y opacity-0">
           {images.map((image) => (
             <div key={image.src} className="relative h-full min-w-0 flex-[0_0_100%]">
-              <Image src={image.src} alt="" fill sizes="100vw" className="object-cover" />
+              <picture>
+                {image.mobileSrc && <source media="(max-width: 767px)" srcSet={image.mobileSrc} />}
+                <Image
+                  src={image.src}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  className="mx-auto max-w-[440px] object-contain md:max-w-none md:object-cover"
+                />
+              </picture>
             </div>
           ))}
         </div>
@@ -103,14 +112,19 @@ export default function ProductGallery({
               exit={{ opacity: 0 }}
               transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
             >
-              <Image
-                src={activeImage.src}
-                alt={`${name} — image ${activeIndex + 1} of ${images.length}`}
-                fill
-                sizes="100vw"
-                className="object-cover [animation:none]"
-                priority={activeIndex === 0}
-              />
+              <picture>
+                {activeImage.mobileSrc && (
+                  <source media="(max-width: 767px)" srcSet={activeImage.mobileSrc} />
+                )}
+                <Image
+                  src={activeImage.src}
+                  alt={`${name} — image ${activeIndex + 1} of ${images.length}`}
+                  fill
+                  sizes="100vw"
+                  className="mx-auto max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
+                  priority={activeIndex === 0}
+                />
+              </picture>
             </motion.div>
           </AnimatePresence>
         )}

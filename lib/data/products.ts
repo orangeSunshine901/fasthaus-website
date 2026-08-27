@@ -1,5 +1,6 @@
 export type ProductCarouselImage = {
   src: string;
+  mobileSrc?: string;
   uiTheme: "light" | "dark";
 };
 
@@ -82,8 +83,7 @@ export const PRODUCTS: Product[] = [
     slug: "nasaq-lamp",
     name: "NASAQ",
     category: "table-lamps",
-    description:
-      "Layered, rounded forms inspired by early-2010s abstraction create a warm, calm presence for slower evenings.",
+    description: "Layered curves made for slower, calmer evenings.",
     featured: true,
     rating: 4.2,
     reviewCount: 24,
@@ -102,8 +102,16 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/stack-lamp/stack-lamp-blue-off-collection.png",
         mainImage: "/stack-lamp/stack-lamp-blue-on.png",
         images: [
-          { src: "/stack-lamp/stack-lamp-blue-off-product.png", uiTheme: "dark" },
-          { src: "/stack-lamp/stack-lamp-blue-on-product.png", uiTheme: "dark" },
+          {
+            src: "/stack-lamp/stack-lamp-blue-off-product.png",
+            mobileSrc: "/stack-lamp/stack-lamp-blue-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/stack-lamp-blue-on-product.png",
+            mobileSrc: "/stack-lamp/stack-lamp-blue-on-product-mobile.png",
+            uiTheme: "dark",
+          },
         ],
       },
       {
@@ -120,8 +128,16 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/stack-lamp/stack-lamp-orange-off-collection.png",
         mainImage: "/stack-lamp/stack-lamp-orange-on.png",
         images: [
-          { src: "/stack-lamp/stack-lamp-orange-off-product.png", uiTheme: "dark" },
-          { src: "/stack-lamp/stack-lamp-orange-on-product.png", uiTheme: "dark" },
+          {
+            src: "/stack-lamp/stack-lamp-orange-off-product.png",
+            mobileSrc: "/stack-lamp/stack-lamp-orange-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/stack-lamp-orange-on-product.png",
+            mobileSrc: "/stack-lamp/stack-lamp-orange-on-product-mobile.png",
+            uiTheme: "dark",
+          },
           { src: "/stack-lamp/stack-lamp-orange-lifestyle-1.png", uiTheme: "dark" },
           { src: "/stack-lamp/stack-lamp-orange-lifestyle.png", uiTheme: "dark" },
         ],
@@ -140,8 +156,16 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/stack-lamp/stack-lamp-white-off-collection.png",
         mainImage: "/stack-lamp/stack-lamp-white-on.png",
         images: [
-          { src: "/stack-lamp/stack-lamp-white-off-product.png", uiTheme: "dark" },
-          { src: "/stack-lamp/stack-lamp-white-on-product.png", uiTheme: "dark" },
+          {
+            src: "/stack-lamp/stack-lamp-white-off-product.png",
+            mobileSrc: "/stack-lamp/stack-lamp-white-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/stack-lamp-white-on-product.png",
+            mobileSrc: "/stack-lamp/stack-lamp-white-on-product-mobile.png",
+            uiTheme: "dark",
+          },
         ],
       },
     ],
@@ -179,7 +203,8 @@ export const PRODUCTS: Product[] = [
       { icon: "/bedside-icon.svg", label: "Bedside" },
       { icon: "/reading-nook-icon.svg", label: "Outdoor" },
     ],
-    designStory: "",
+    designStory:
+      "Layered, rounded forms inspired by early-2010s abstraction that create a warm, calm presence for slower evenings.",
     addOns: [ADD_ONS[0]],
   },
   {
@@ -187,8 +212,7 @@ export const PRODUCTS: Product[] = [
     slug: "nujaj-desk-lamp",
     name: "NUJĀJ",
     category: "table-lamps",
-    description:
-      "Inspired by timeless fluted architecture, bringing warmth, texture, and elegance to modern interiors.",
+    description: "Timeless fluting with a warm architectural glow.",
     featured: true,
     // badge: "BESTSELLER",
     rating: 4.4,
@@ -205,11 +229,19 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-matcha-off.png",
           lightOn: "/flute-lamp/flute-matcha-on.png",
         },
-        collectionImage: "/flute-lamp/flute-matcha-hero.png",
+        collectionImage: "/flute-lamp/flute-lamp-matcha-off-collection.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
-          { src: "/flute-lamp/flute-matcha-hero.png", uiTheme: "dark" },
-          { src: "/flute-lamp/flute-matcha-hero-light.png", uiTheme: "dark" },
+          {
+            src: "/flute-lamp/flute-lamp-matcha-off-product.png",
+            mobileSrc: "/flute-lamp/flute-lamp-matcha-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/flute-lamp/flute-lamp-matcha-on-product.png",
+            mobileSrc: "/flute-lamp/flute-lamp-matcha-on-product-mobile.png",
+            uiTheme: "dark",
+          },
           { src: "/flute-lamp/flute-matcha-lifestyle-shot.png", uiTheme: "dark" },
           { src: "/flute-lamp/flute-matcha-lifestyle-shot-dark.png", uiTheme: "dark" },
         ],
@@ -225,9 +257,20 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-fire-red-off.png",
           lightOn: "/flute-lamp/flute-fire-red-on.png",
         },
-        collectionImage: "/flute-lamp/flute-red-hero.png",
+        collectionImage: "/flute-lamp/flute-lamp-red-off-collection.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
-        images: [{ src: "/flute-lamp/flute-red-lifestyle-shot.png", uiTheme: "dark" }],
+        images: [
+          {
+            src: "/flute-lamp/flute-lamp-red-off-product.png",
+            mobileSrc: "/flute-lamp/flute-lamp-red-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/flute-lamp/flute-lamp-red-on-product.png",
+            mobileSrc: "/flute-lamp/flute-lamp-red-on-product-mobile.png",
+            uiTheme: "dark",
+          },
+        ],
       },
       {
         id: "1-clear",
@@ -240,9 +283,19 @@ export const PRODUCTS: Product[] = [
           lightOff: "/flute-lamp/flute-clear-off.png",
           lightOn: "/flute-lamp/flute-clear-on.png",
         },
-        collectionImage: "/flute-lamp/flute-clear-off-shadow-product.png",
+        collectionImage: "/flute-lamp/flute-lamp-clear-off-collection.png",
         mainImage: "/flute-lamp/flute-clear-interaction-shot-dark.png",
         images: [
+          {
+            src: "/flute-lamp/flute-lamp-clear-off-product.png",
+            mobileSrc: "/flute-lamp/flute-lamp-clear-off-product-mobile.png",
+            uiTheme: "light",
+          },
+          {
+            src: "/flute-lamp/flute-lamp-clear-on-product.png",
+            mobileSrc: "/flute-lamp/flute-lamp-clear-on-product-mobile.png",
+            uiTheme: "light",
+          },
           { src: "/flute-lamp/flute-clear-interaction-shot-dark.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-2.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-1.png", uiTheme: "light" },
@@ -284,7 +337,8 @@ export const PRODUCTS: Product[] = [
       { icon: "/living-room-icon.svg", label: "Living Room" },
       { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
     ],
-    designStory: "",
+    designStory:
+      "Inspired by timeless fluted architecture, bringing warmth, texture, and elegance to modern interiors.",
     addOns: ADD_ONS,
   },
   {
@@ -292,7 +346,7 @@ export const PRODUCTS: Product[] = [
     slug: "hamrah-lamp",
     name: "HAMRAH",
     category: "table-lamps",
-    description: "",
+    description: "UAE pearl heritage, reimagined in sculptural light.",
     featured: true,
     rating: 4.5,
     reviewCount: 11,
@@ -311,8 +365,16 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/pearl-lamp/pearl-lamp-red-off-collection.png",
         mainImage: "/pearl-lamp/pearl-lamp-red-off.png",
         images: [
-          { src: "/pearl-lamp/pearl-lamp-red-off-product.png", uiTheme: "dark" },
-          { src: "/pearl-lamp/pearl-lamp-red-on-product.png", uiTheme: "dark" },
+          {
+            src: "/pearl-lamp/pearl-lamp-red-off-product.png",
+            mobileSrc: "/pearl-lamp/pearl-lamp-red-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/pearl-lamp/pearl-lamp-red-on-product.png",
+            mobileSrc: "/pearl-lamp/pearl-lamp-red-on-product-mobile.png",
+            uiTheme: "dark",
+          },
         ],
       },
       {
@@ -329,8 +391,16 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/pearl-lamp/pearl-lamp-blue-off-collection.png",
         mainImage: "/pearl-lamp/pearl-lamp-blue-off.png",
         images: [
-          { src: "/pearl-lamp/pearl-lamp-blue-off-product.png", uiTheme: "dark" },
-          { src: "/pearl-lamp/pearl-lamp-blue-on-product.png", uiTheme: "dark" },
+          {
+            src: "/pearl-lamp/pearl-lamp-blue-off-product.png",
+            mobileSrc: "/pearl-lamp/pearl-lamp-blue-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/pearl-lamp/pearl-lamp-blue-on-product.png",
+            mobileSrc: "/pearl-lamp/pearl-lamp-blue-on-product-mobile.png",
+            uiTheme: "dark",
+          },
         ],
       },
       {
@@ -347,8 +417,16 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/pearl-lamp/pearl-lamp-green-off-collection.png",
         mainImage: "/pearl-lamp/pearl-lamp-white-off.png",
         images: [
-          { src: "/pearl-lamp/pearl-lamp-green-off-product.png", uiTheme: "dark" },
-          { src: "/pearl-lamp/pearl-lamp-green-on-product.png", uiTheme: "dark" },
+          {
+            src: "/pearl-lamp/pearl-lamp-green-off-product.png",
+            mobileSrc: "/pearl-lamp/pearl-lamp-green-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/pearl-lamp/pearl-lamp-green-on-product.png",
+            mobileSrc: "/pearl-lamp/pearl-lamp-green-on-product-mobile.png",
+            uiTheme: "dark",
+          },
         ],
       },
     ],
@@ -385,8 +463,7 @@ export const PRODUCTS: Product[] = [
       { icon: "/bedside-icon.svg", label: "Bedside" },
       { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
     ],
-    designStory:
-      "The ribbed texture was born from a material experiment — pressing linen weave into soft clay to see what light would do with the result. The answer: something that feels alive as the sun moves through the room.",
+    designStory: "PEARL is a sculptural table lamp inspired by the UAE’s pearl-diving heritage.",
     addOns: ADD_ONS,
   },
   {
@@ -394,8 +471,7 @@ export const PRODUCTS: Product[] = [
     slug: "kasane-lamp",
     name: "KASANE",
     category: "table-lamps",
-    description:
-      "Desert sand ripples, translated into a sculptural lamp that casts a soft, calming glow.",
+    description: "Desert ripples shaped into a calming glow.",
     featured: true,
     // badge: "BESTSELLER",
     rating: 4.7,
@@ -412,13 +488,19 @@ export const PRODUCTS: Product[] = [
           lightOff: "/mushroom-lamp/mushroom-orange-off.png",
           lightOn: "/mushroom-lamp/mushroom-orange-on.png",
         },
-        collectionImage: "/mushroom-lamp/mushroom-orange-off-product-shadow.png",
-        mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
+        collectionImage: "/mushroom-lamp/mushroom-lamp-orange-off-collection.png",
+        mainImage: "/mushroom-lamp/mushroom-lamp-orange-off-product.png",
         images: [
-          { src: "/mushroom-lamp/mushroom-lamp-top.jpg", uiTheme: "light" },
-          { src: "/mushroom-lamp/mushroom-lamp-side.jpg", uiTheme: "dark" },
-          { src: "/mushroom-lamp/mushroom-lamp-close.jpg", uiTheme: "light" },
-          { src: "/mushroom-lamp/mushroom-lamp-close-side.jpg", uiTheme: "dark" },
+          {
+            src: "/mushroom-lamp/mushroom-lamp-orange-off-product.png",
+            mobileSrc: "/mushroom-lamp/mushroom-lamp-orange-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/mushroom-lamp/mushroom-lamp-orange-on-product.png",
+            mobileSrc: "/mushroom-lamp/mushroom-lamp-orange-on-product-mobile.png",
+            uiTheme: "dark",
+          },
         ],
       },
       {
@@ -432,13 +514,19 @@ export const PRODUCTS: Product[] = [
           lightOff: "/mushroom-lamp/mushroom-blue-off.png",
           lightOn: "/mushroom-lamp/mushroom-blue-on.png",
         },
-        collectionImage: "/mushroom-lamp/mushroom-blue-off-product-shadow.png",
-        mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
+        collectionImage: "/mushroom-lamp/mushroom-lamp-blue-off-collection.png",
+        mainImage: "/mushroom-lamp/mushroom-lamp-blue-off-product.png",
         images: [
-          { src: "/mushroom-lamp/mushroom-lamp-top.jpg", uiTheme: "light" },
-          { src: "/mushroom-lamp/mushroom-lamp-side.jpg", uiTheme: "dark" },
-          { src: "/mushroom-lamp/mushroom-lamp-close.jpg", uiTheme: "light" },
-          { src: "/mushroom-lamp/mushroom-lamp-close-side.jpg", uiTheme: "dark" },
+          {
+            src: "/mushroom-lamp/mushroom-lamp-blue-off-product.png",
+            mobileSrc: "/mushroom-lamp/mushroom-lamp-blue-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/mushroom-lamp/mushroom-lamp-blue-on-product.png",
+            mobileSrc: "/mushroom-lamp/mushroom-lamp-blue-on-product-mobile.png",
+            uiTheme: "dark",
+          },
         ],
       },
       {
@@ -452,9 +540,19 @@ export const PRODUCTS: Product[] = [
           lightOff: "/mushroom-lamp/mushroom-white-off.png",
           lightOn: "/mushroom-lamp/mushroom-white-on.png",
         },
-        collectionImage: "/mushroom-lamp/mushroom-white-off-product-shadow.png",
-        mainImage: "/mushroom-lamp/mushroom-lamp-main-amber.jpg",
+        collectionImage: "/mushroom-lamp/mushroom-lamp-black-off-collection.png",
+        mainImage: "/mushroom-lamp/mushroom-lamp-black-off-product.png",
         images: [
+          {
+            src: "/mushroom-lamp/mushroom-lamp-black-off-product.png",
+            mobileSrc: "/mushroom-lamp/mushroom-lamp-black-off-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/mushroom-lamp/mushroom-lamp-black-on-product.png",
+            mobileSrc: "/mushroom-lamp/mushroom-lamp-black-on-product-mobile.png",
+            uiTheme: "dark",
+          },
           { src: "/mushroom-lamp/kasane-lamp-black-lifestyle-shot.png", uiTheme: "dark" },
           { src: "/mushroom-lamp/kasane-lamp-black-interaction-shot.png", uiTheme: "light" },
           { src: "/mushroom-lamp/kasane-lamp-black-detail-shot.png", uiTheme: "dark" },
@@ -494,7 +592,8 @@ export const PRODUCTS: Product[] = [
       { icon: "/bedside-icon.svg", label: "Bedside" },
       { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
     ],
-    designStory: "",
+    designStory:
+      "Desert sand ripples, translated into a sculptural lamp that casts a soft, calming glow.",
     addOns: ADD_ONS,
   },
 ];

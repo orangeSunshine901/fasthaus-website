@@ -6,6 +6,7 @@ import PageTransition from "@/components/layout/PageTransition";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import SilktideConsentManager from "@/components/consent/SilktideConsentManager";
 import CartProvider from "@/components/cart/CartProvider";
+import HomeNavigationProvider from "@/components/navigation/HomeNavigationProvider";
 import { getGeideaSdkUrl } from "@/lib/payment/geidea";
 import { Suspense } from "react";
 import "locomotive-scroll/dist/locomotive-scroll.css";
@@ -92,9 +93,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', system-ui, sans-serif)" }}>
         <SilktideConsentManager />
-        <Suspense fallback={<PageTransition>{children}</PageTransition>}>
-          <AnalyticsProvider><CartProvider><PageTransition>{children}</PageTransition></CartProvider></AnalyticsProvider>
-        </Suspense>
+        <HomeNavigationProvider>
+          <Suspense fallback={<PageTransition>{children}</PageTransition>}>
+            <AnalyticsProvider><CartProvider><PageTransition>{children}</PageTransition></CartProvider></AnalyticsProvider>
+          </Suspense>
+        </HomeNavigationProvider>
       </body>
     </html>
   );

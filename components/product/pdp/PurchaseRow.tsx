@@ -84,7 +84,7 @@ export default function PurchaseRow({
           className="max-w-[62ch] text-[16.5px] leading-[1.6]"
           style={{ color: "var(--color-text-secondary)" }}
         >
-          {product.description}
+          {product.designStory}
         </p>
 
         {/* <div className="mt-1 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
