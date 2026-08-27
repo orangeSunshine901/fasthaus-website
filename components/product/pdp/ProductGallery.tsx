@@ -60,7 +60,7 @@ export default function ProductGallery({
 
   return (
     <div
-      className="product-hero relative left-1/2 h-[584px] w-screen -translate-x-1/2 overflow-hidden md:h-[calc(100svh-2.75rem)]"
+      className="product-hero relative left-1/2 aspect-[864/1147] h-auto w-screen -translate-x-1/2 overflow-hidden md:aspect-auto md:h-[calc(100svh-2.75rem)]"
       data-ui-theme={uiTheme}
     >
       <nav

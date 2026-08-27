@@ -223,14 +223,17 @@ input[type="radio"] {
 }
 
 .collection-hero {
+  --collection-hero-height: calc(100svh - 100px);
   --collection-hero-artwork-width: 132vw;
   --collection-hero-label-size: 48px;
+  height: var(--collection-hero-height);
 }
 
 @media (min-width: 768px) {
   .collection-hero {
     --collection-hero-artwork-width: min(48vw, 700px);
     --collection-hero-label-size: 24px;
+    height: 840px;
   }
 }
 

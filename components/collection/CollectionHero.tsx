@@ -479,6 +479,40 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   }, [scrollNext, scrollPrevious]);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    let viewportWidth = window.innerWidth;
+    let frame = 0;
+
+    const lockMobileHeight = () => {
+      window.cancelAnimationFrame(frame);
+      section.style.removeProperty("--collection-hero-height");
+      if (window.innerWidth >= 768) return;
+
+      frame = window.requestAnimationFrame(() => {
+        section.style.setProperty(
+          "--collection-hero-height",
+          `${Math.round(section.getBoundingClientRect().height)}px`
+        );
+      });
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth === viewportWidth) return;
+      viewportWidth = window.innerWidth;
+      lockMobileHeight();
+    };
+
+    lockMobileHeight();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     reducedMotionRef.current = shouldReduceMotion;
 
     if (shouldReduceMotion) {
@@ -688,7 +722,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="collection-hero relative h-[calc(100svh-100px)] w-full touch-pan-y overflow-hidden outline-none md:h-[840px]"
+      className="collection-hero relative w-full touch-pan-y overflow-hidden outline-none"
       style={{ backgroundColor: activeSlide.colors[0], outline: "none" }}
       role="region"
       aria-roledescription="carousel"
