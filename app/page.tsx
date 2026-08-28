@@ -66,7 +66,10 @@ export default function HomePage() {
     <LocomotiveScrollProvider>
       <ShopLayout revealOnFirstScroll>
         {/* Hero */}
-        <section className="relative h-[640px] w-full overflow-hidden bg-[#000104] md:h-[840px]">
+        <section
+          data-home-hero
+          className="relative h-[640px] w-full overflow-hidden bg-[#000104] md:h-[840px]"
+        >
           <video
             className="absolute inset-0 h-full w-full object-cover object-center"
             autoPlay
@@ -77,6 +80,11 @@ export default function HomePage() {
             preload="metadata"
             aria-hidden="true"
           >
+            <source
+              src="/home-hero-mobile.webm"
+              type="video/webm"
+              media="(max-width: 767px)"
+            />
             <source src="/home-hero.webm" type="video/webm" />
           </video>
           {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-neutral-100/10 to-transparent" /> */}

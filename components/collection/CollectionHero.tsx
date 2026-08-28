@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
@@ -346,6 +347,7 @@ export type CollectionHeroSlide = {
   id: string;
   lampName: string;
   colorName: string;
+  href: string;
   image: string;
   colors: readonly [string, string, string, string];
 };
@@ -767,7 +769,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
           <div className="absolute inset-0 -translate-y-[10%] md:translate-y-0">
             <div className="absolute left-1/2 top-[46%] z-10 -translate-x-1/2 -translate-y-1/2">
               <motion.h2
-                className="font-golften-stamp whitespace-nowrap text-center text-[96px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:text-[clamp(54.08px,calc(11.44vw+8.32px),195.52px)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
+                className="font-golften-stamp whitespace-nowrap text-center text-[102px] md:text-[124px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
                 variants={shouldReduceMotion ? REDUCED_TITLE_VARIANTS : TITLE_VARIANTS}
                 transition={contentTransition}
               >
@@ -786,7 +788,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                   src={activeSlide.image}
                   alt={activeSlide.lampName + " lamp in " + activeSlide.colorName}
                   fill
-                  sizes="(min-width: 768px) 48vw, 132vw"
+                  sizes="(min-width: 768px) 48vw, 112vw"
                   className="object-contain"
                   priority={selectedIndex === 0}
                   draggable={false}
@@ -794,15 +796,27 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
               </motion.div>
             </div>
 
-            <div className="absolute bottom-[15%] left-[50.5%] z-30 -translate-x-1/2 md:bottom-[12%]">
+            <div className="absolute bottom-[5%] left-[50.5%] z-40 flex -translate-x-1/2 flex-col items-center gap-12 md:bottom-[12%]">
               <motion.p
                 className="font-golften-stamp whitespace-nowrap font-semibold uppercase tracking-[0.004em] text-white"
                 variants={shouldReduceMotion ? REDUCED_VARIANTS : LABEL_VARIANTS}
                 transition={labelTransition}
-                style={{ fontSize: "28px" }}
+                style={{ fontSize: "var(--collection-hero-label-size)" }}
               >
                 {activeSlide.colorName}
               </motion.p>
+              <Link
+                href={activeSlide.href}
+                className="glass-surface glass-cta-surface pointer-events-auto relative inline-flex items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2"
+                aria-label={`View ${activeSlide.lampName} in ${activeSlide.colorName}`}
+              >
+                <span className="text-center text-sm font-medium leading-5 text-white">
+                  View Product
+                </span>
+                <span className="relative h-5 w-5">
+                  <Image src="/ArrowRight.svg" alt="" fill className="object-contain" />
+                </span>
+              </Link>
             </div>
           </div>
         </motion.div>
@@ -813,7 +827,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
           type="button"
           onClick={scrollPrevious}
           aria-label="Show previous lamp"
-          className="grid h-11 w-11 place-items-center rounded-full outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          className="grid h-11 w-11 place-items-center rounded-full outline-none transition-opacity [filter:drop-shadow(2px_2px_8px_rgba(20,17,20,0.9))_drop-shadow(0_0_5px_rgba(248,246,243,0.5))] hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         >
           <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
         </button>
@@ -821,14 +835,14 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
           type="button"
           onClick={scrollNext}
           aria-label="Show next lamp"
-          className="grid h-11 w-11 place-items-center rounded-full outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          className="grid h-11 w-11 place-items-center rounded-full outline-none transition-opacity [filter:drop-shadow(2px_2px_8px_rgba(20,17,20,0.9))_drop-shadow(0_0_5px_rgba(248,246,243,0.5))] hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         >
           <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
         </button>
       </div>
 
       <div
-        className="absolute left-1/2 z-40 flex -translate-x-1/2 items-center text-white md:left-auto md:right-10 md:translate-x-0 md:gap-3"
+        className="absolute right-4 z-40 flex items-center text-white md:right-10 md:gap-3"
         style={{ bottom: "calc(20px + env(safe-area-inset-bottom))" }}
       >
         <button
@@ -839,7 +853,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         >
           <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
         </button>
-        <span className="order-1 min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em] md:mr-2">
+        <span className="order-1 min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:mr-2 md:[text-shadow:none]">
           {formatCounter(selectedIndex + 1)} / {formatCounter(slideCount)}
         </span>
         <button

@@ -10,6 +10,7 @@ const COLLECTION_HERO_SLIDES = [
     id: "nasaq-blue",
     lampName: "NASAQ",
     colorName: "COBALT BLUE",
+    href: "/product/nasaq-lamp?variant=3-blue",
     image: "/stack-lamp/stack-lamp-blue-off-shadow.png",
     colors: ["#101522", "#155EEF", "#C8DBFF", "#F7F9FF"],
   },
@@ -17,6 +18,7 @@ const COLLECTION_HERO_SLIDES = [
     id: "pearl-red",
     lampName: "HAMRAH",
     colorName: "CHERRY RED",
+    href: "/product/hamrah-lamp?variant=4-red",
     image: "/pearl-lamp/pearl-lamp-red-off-shadow.png",
     colors: ["#171013", "#7c1d21", "#FFD1CC", "#FFF7F4"],
   },
@@ -24,6 +26,7 @@ const COLLECTION_HERO_SLIDES = [
     id: "mushroom-orange",
     lampName: "KASANE",
     colorName: "TANGERINE",
+    href: "/product/kasane-lamp?variant=2-burnt-orange",
     image: "/mushroom-lamp/mushroom-orange-off.png",
     colors: ["#141114", "#FF4B1F", "#FFDBD2", "#F8F6F3"],
   },
@@ -31,6 +34,7 @@ const COLLECTION_HERO_SLIDES = [
     id: "flute-matcha",
     lampName: "NUJAJ",
     colorName: "MATCHA",
+    href: "/product/nujaj-desk-lamp?variant=1-matcha-green",
     image: "/flute-lamp/flute-matcha-off-shadow.png",
     colors: ["#101711", "#cfd5ad", "#e2efb8", "#F7F7ED"],
   },
@@ -68,7 +72,7 @@ export default function CollectionsPage() {
         </div>
 
         {/* Product grid */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
           {PRODUCTS.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

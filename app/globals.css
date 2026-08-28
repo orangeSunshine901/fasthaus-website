@@ -225,7 +225,7 @@ input[type="radio"] {
 .collection-hero {
   --collection-hero-height: calc(100svh - 100px);
   --collection-hero-artwork-width: 112vw;
-  --collection-hero-label-size: 48px;
+  --collection-hero-label-size: 24px;
   height: var(--collection-hero-height);
 }
 

@@ -111,9 +111,11 @@ function CollectionMegaMenuContent() {
 
 export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstScroll?: boolean }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [homeHeroPassed, setHomeHeroPassed] = useState(false);
   const openCartDrawer = useCartStore((s) => s.openDrawer);
   const [hiddenMainNavPath, setHiddenMainNavPath] = useState<string | null>(null);
   const pathname = usePathname();
+  const isHomePage = pathname === "/";
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const isAboutPage = pathname === "/about";
   const isContactPage = pathname === "/contact";
@@ -128,6 +130,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
     pathname.startsWith("/collection/") ||
     isProductPage;
   const desktopTextColor = "#FFFDF5";
+  const homeMobileOverlay = isHomePage && !homeHeroPassed;
   const floatingNavItems = [
     { name: "collection", link: "/collection", megaMenu: <CollectionMegaMenuContent /> },
     { name: "about", link: "/about" },
@@ -153,6 +156,21 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [mobileOpen]);
+
+  useEffect(() => {
+    if (!isHomePage) return;
+
+    const hero = document.querySelector<HTMLElement>("[data-home-hero]");
+    if (!hero) return;
+
+    const updateNavbar = () => {
+      setHomeHeroPassed(hero.getBoundingClientRect().bottom <= 0);
+    };
+
+    updateNavbar();
+    window.addEventListener("scroll", updateNavbar, { passive: true });
+    return () => window.removeEventListener("scroll", updateNavbar);
+  }, [isHomePage]);
 
   useEffect(() => {
     if (!isAboutPage) {
@@ -194,10 +212,17 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
       )}
 
       <header
-        data-home-reveal-item={revealOnFirstScroll ? "" : undefined}
         className={cn(
           isProductPage
             ? "absolute top-11 z-40 w-full border-transparent bg-transparent md:h-24"
+            : isHomePage
+              ? cn(
+                  "z-40 w-full transition-[background-color,border-color,box-shadow] duration-200",
+                  homeHeroPassed
+                    ? "fixed top-0 border-b border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm"
+                    : "absolute top-11 border-transparent bg-transparent",
+                  "md:relative md:top-auto md:-mb-16 md:border-transparent md:bg-transparent md:shadow-none"
+                )
             : usesHeroOverlay
               ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
               : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
@@ -212,20 +237,35 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
             aria-expanded={mobileOpen}
             className="grid h-11 w-11 -ml-3 place-items-center"
           >
-            <Menu size={22} style={{ color: "var(--color-text-primary)" }} />
+            <Menu
+              size={22}
+              style={{ color: homeMobileOverlay ? "#FFFDF5" : "var(--color-text-primary)" }}
+            />
           </button>
           <Link
             href="/"
             className="absolute left-1/2 -translate-x-1/2 p-2"
             aria-label="Fasthaus home"
           >
-            <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={100} height={24} priority />
+            <Image
+              src={homeMobileOverlay ? "/fasthaus-logo-final-ivory.svg" : "/fasthaus-logo-final.svg"}
+              alt="Fasthaus"
+              width={100}
+              height={24}
+              priority
+            />
           </Link>
-          <CartBadge size={22} className="text-[var(--color-text-primary)]" />
+          <CartBadge
+            size={22}
+            className={homeMobileOverlay ? "text-[#FFFDF5]" : "text-[var(--color-text-primary)]"}
+          />
         </div>
 
         {/* Desktop nav — logo | links | icons */}
-        <div className="relative mx-auto hidden h-16 w-full max-w-[1240px] md:flex md:translate-y-8">
+        <div
+          data-home-reveal-item={revealOnFirstScroll ? "" : undefined}
+          className="relative mx-auto hidden h-16 w-full max-w-[1240px] md:flex md:translate-y-8"
+        >
           {/* Glass background layer — clipped separately so the blur doesn't leak past the rounded corners on hover-triggered repaints */}
           <div
             aria-hidden="true"

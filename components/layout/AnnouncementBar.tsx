@@ -15,7 +15,6 @@ export default function AnnouncementBar({
   return (
     <>
       <AnnouncementRibbon
-        data-home-announcement-reveal-item={revealOnFirstScroll ? "" : undefined}
         className="md:hidden"
         pauseOnHover={false}
         message={

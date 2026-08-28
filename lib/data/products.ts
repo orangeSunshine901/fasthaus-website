@@ -19,6 +19,8 @@ export type ProductVariant = {
   };
   /** Image displayed on collection and category product cards for this variant. */
   collectionImage: string;
+  /** Mobile-composed image displayed on collection and category product cards. */
+  collectionMobileImage?: string;
   /** Primary image shown when this color is selected on the product page. */
   mainImage?: string;
   images: ProductCarouselImage[];
@@ -89,7 +91,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 24,
     variants: [
       {
-        id: "3-blue",
+        id: "3-cobalt-blue",
         color: "Cobalt Blue",
         colorHex: "#007ffe",
         sku: "STL-BLU",
@@ -100,6 +102,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/stack-lamp/stack-lamp-blue-on.png",
         },
         collectionImage: "/stack-lamp/stack-lamp-blue-off-collection.png",
+        collectionMobileImage: "/stack-lamp/stack-lamp-blue-off-product-mobile.png",
         mainImage: "/stack-lamp/stack-lamp-blue-on.png",
         images: [
           {
@@ -115,10 +118,10 @@ export const PRODUCTS: Product[] = [
         ],
       },
       {
-        id: "3-orange",
-        color: "Burnt Orange",
+        id: "3-tangerine",
+        color: "Tangerine",
         colorHex: "#F7633A",
-        sku: "STL-ORNG",
+        sku: "STL-TG",
         price: 299,
         stock: 14,
         featuredImages: {
@@ -126,6 +129,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/stack-lamp/stack-lamp-orange-on.png",
         },
         collectionImage: "/stack-lamp/stack-lamp-orange-off-collection.png",
+        collectionMobileImage: "/stack-lamp/stack-lamp-orange-off-product-mobile.png",
         mainImage: "/stack-lamp/stack-lamp-orange-on.png",
         images: [
           {
@@ -154,6 +158,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/stack-lamp/stack-lamp-white-on.png",
         },
         collectionImage: "/stack-lamp/stack-lamp-white-off-collection.png",
+        collectionMobileImage: "/stack-lamp/stack-lamp-white-off-product-mobile.png",
         mainImage: "/stack-lamp/stack-lamp-white-on.png",
         images: [
           {
@@ -219,8 +224,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 32,
     variants: [
       {
-        id: "1-matcha-green",
-        color: "Matcha Green",
+        id: "1-matcha",
+        color: "Matcha",
         colorHex: "#c5d371",
         sku: "TFL-MG",
         price: 329,
@@ -230,6 +235,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/flute-lamp/flute-matcha-on.png",
         },
         collectionImage: "/flute-lamp/flute-lamp-matcha-off-collection.png",
+        collectionMobileImage: "/flute-lamp/flute-lamp-matcha-off-product-mobile.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           {
@@ -247,7 +253,7 @@ export const PRODUCTS: Product[] = [
         ],
       },
       {
-        id: "1-fire-red",
+        id: "1-cherry-red",
         color: "Cherry Red",
         colorHex: "#942025",
         sku: "TFL-CR",
@@ -258,6 +264,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/flute-lamp/flute-fire-red-on.png",
         },
         collectionImage: "/flute-lamp/flute-lamp-red-off-collection.png",
+        collectionMobileImage: "/flute-lamp/flute-lamp-red-off-product-mobile.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
           {
@@ -284,6 +291,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/flute-lamp/flute-clear-on.png",
         },
         collectionImage: "/flute-lamp/flute-lamp-clear-off-collection.png",
+        collectionMobileImage: "/flute-lamp/flute-lamp-clear-off-product-mobile.png",
         mainImage: "/flute-lamp/flute-clear-interaction-shot-dark.png",
         images: [
           {
@@ -352,7 +360,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 11,
     variants: [
       {
-        id: "4-red",
+        id: "4-cherry-red",
         color: "Cherry Red",
         colorHex: "#942025",
         sku: "PTL-FRD",
@@ -363,6 +371,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/pearl-lamp/pearl-lamp-red-on.png",
         },
         collectionImage: "/pearl-lamp/pearl-lamp-red-off-collection.png",
+        collectionMobileImage: "/pearl-lamp/pearl-lamp-red-off-product-mobile.png",
         mainImage: "/pearl-lamp/pearl-lamp-red-off.png",
         images: [
           {
@@ -378,7 +387,7 @@ export const PRODUCTS: Product[] = [
         ],
       },
       {
-        id: "4-blue",
+        id: "4-cobalt-blue",
         color: "Cobalt Blue",
         colorHex: "#007ffe",
         sku: "PTL-BLU",
@@ -389,6 +398,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/pearl-lamp/pearl-lamp-blue-on.png",
         },
         collectionImage: "/pearl-lamp/pearl-lamp-blue-off-collection.png",
+        collectionMobileImage: "/pearl-lamp/pearl-lamp-blue-off-product-mobile.png",
         mainImage: "/pearl-lamp/pearl-lamp-blue-off.png",
         images: [
           {
@@ -404,7 +414,7 @@ export const PRODUCTS: Product[] = [
         ],
       },
       {
-        id: "4-green",
+        id: "4-olive-green",
         color: "Olive Green",
         colorHex: "#4b562e",
         sku: "PTL-OG",
@@ -415,6 +425,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/pearl-lamp/pearl-lamp-white-on.png",
         },
         collectionImage: "/pearl-lamp/pearl-lamp-green-off-collection.png",
+        collectionMobileImage: "/pearl-lamp/pearl-lamp-green-off-product-mobile.png",
         mainImage: "/pearl-lamp/pearl-lamp-white-off.png",
         images: [
           {
@@ -478,10 +489,10 @@ export const PRODUCTS: Product[] = [
     reviewCount: 18,
     variants: [
       {
-        id: "2-burnt-orange",
-        color: "Burnt Orange",
+        id: "2-tangerine",
+        color: "Tangerine",
         colorHex: "#f7633a",
-        sku: "ML-BO",
+        sku: "ML-TG",
         price: 399,
         stock: 6,
         featuredImages: {
@@ -489,6 +500,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/mushroom-lamp/mushroom-orange-on.png",
         },
         collectionImage: "/mushroom-lamp/mushroom-lamp-orange-off-collection.png",
+        collectionMobileImage: "/mushroom-lamp/mushroom-lamp-orange-off-product-mobile.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-orange-off-product.png",
         images: [
           {
@@ -515,6 +527,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/mushroom-lamp/mushroom-blue-on.png",
         },
         collectionImage: "/mushroom-lamp/mushroom-lamp-blue-off-collection.png",
+        collectionMobileImage: "/mushroom-lamp/mushroom-lamp-blue-off-product-mobile.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-blue-off-product.png",
         images: [
           {
@@ -541,6 +554,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/mushroom-lamp/mushroom-white-on.png",
         },
         collectionImage: "/mushroom-lamp/mushroom-lamp-black-off-collection.png",
+        collectionMobileImage: "/mushroom-lamp/mushroom-lamp-black-off-product-mobile.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-black-off-product.png",
         images: [
           {

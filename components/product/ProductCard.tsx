@@ -88,7 +88,11 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <div className="relative">
-      <Link href={productHref} className="group block">
+      <Link
+        href={productHref}
+        className="group block"
+        aria-label={`View ${product.name} in ${selectedVariant.color}`}
+      >
         <div
           className="media-rounded relative overflow-hidden"
           style={{ aspectRatio: "4/5", backgroundColor: "var(--color-surface-muted)" }}
@@ -104,13 +108,21 @@ export default function ProductCard({ product }: Props) {
               exit={{ opacity: 0 }}
               transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeInOut" }}
             >
-              <Image
-                src={selectedVariant.collectionImage}
-                alt={`${product.name} in ${selectedVariant.color}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 50vw, 25vw"
-              />
+              <picture>
+                {selectedVariant.collectionMobileImage && (
+                  <source
+                    media="(max-width: 767px)"
+                    srcSet={selectedVariant.collectionMobileImage}
+                  />
+                )}
+                <Image
+                  src={selectedVariant.collectionImage}
+                  alt={`${product.name} in ${selectedVariant.color}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+              </picture>
             </motion.div>
           </AnimatePresence>
           {badge && (
@@ -122,16 +134,11 @@ export default function ProductCard({ product }: Props) {
             </span>
           )}
           <div
-            className="absolute inset-x-0 bottom-[26px] flex justify-center"
-            style={{
-              transform: hovered ? "translateY(0)" : "translateY(150%)",
-              opacity: hovered ? 1 : 0,
-              transition: "transform 0.3s ease, opacity 0.2s ease",
-            }}
+            className={`absolute inset-x-0 bottom-[8px] flex translate-y-0 justify-center opacity-100 transition-[transform,opacity] duration-300 ease-out ${
+              hovered ? "md:translate-y-0 md:opacity-100" : "md:translate-y-[150%] md:opacity-0"
+            }`}
           >
-            <div
-              className="glass-surface glass-cta-surface relative inline-flex items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2"
-            >
+            <div className="glass-surface glass-cta-surface relative inline-flex items-center justify-center gap-1 overflow-hidden rounded-full px-3 py-2">
               <div className="text-center justify-start text-white text-sm font-medium font-['DM_Sans'] leading-5">
                 View Product
               </div>

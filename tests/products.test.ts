@@ -79,3 +79,14 @@ test("product off and on gallery images provide their mobile versions", () => {
     }
   }
 });
+
+test("every product variant provides a mobile collection-card image", () => {
+  for (const product of PRODUCTS) {
+    for (const variant of product.variants) {
+      assert.ok(
+        variant.collectionMobileImage,
+        `${variant.id} is missing its mobile collection image`
+      );
+    }
+  }
+});
