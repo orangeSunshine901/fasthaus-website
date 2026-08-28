@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown, ShoppingCart, Menu, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, ShoppingCart, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
@@ -21,16 +21,8 @@ import {
 } from "@/components/ui/navigation-menu";
 
 const MOBILE_NAV = [
-  { label: "Collection", href: "/collection" },
   { label: "About", href: "/about" },
   { label: "Contact us", href: "/contact" },
-];
-
-const SHOP_LINKS = [
-  { label: "All Products", href: "/collection" },
-  { label: "Desk Lamps", href: "/collection/desk-lamps" },
-  { label: "Table Lamps", href: "/collection/table-lamps" },
-  { label: "Floor Lamps", href: "/collection/floor-lamps" },
 ];
 
 function CartBadge({ size = 20, className = "" }: { size?: number; className?: string }) {
@@ -223,9 +215,9 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                     : "absolute top-11 border-transparent bg-transparent",
                   "md:relative md:top-auto md:-mb-16 md:border-transparent md:bg-transparent md:shadow-none"
                 )
-            : usesHeroOverlay
-              ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
-              : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
+              : usesHeroOverlay
+                ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
+                : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
           aboutMainNavHidden && "md:pointer-events-none md:opacity-0"
         )}
       >
@@ -248,7 +240,9 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
             aria-label="Fasthaus home"
           >
             <Image
-              src={homeMobileOverlay ? "/fasthaus-logo-final-ivory.svg" : "/fasthaus-logo-final.svg"}
+              src={
+                homeMobileOverlay ? "/fasthaus-logo-final-ivory.svg" : "/fasthaus-logo-final.svg"
+              }
               alt="Fasthaus"
               width={100}
               height={24}
@@ -364,62 +358,85 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-50 flex flex-col"
-            style={{ backgroundColor: "var(--color-bg)" }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#ebe8e3] min-[414px]:p-3"
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
           >
-            {/* Overlay header */}
-            <div
-              className="flex items-center justify-between pl-5 pr-2 h-14 border-b flex-shrink-0"
-              style={{ borderColor: "var(--color-border)" }}
-            >
-              <Link href="/" onClick={() => setMobileOpen(false)} aria-label="Fasthaus home">
-                <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={100} height={24} />
-              </Link>
-              <button
-                onClick={() => setMobileOpen(false)}
-                aria-label="Close menu"
-                className="grid h-11 w-11 place-items-center"
-              >
-                <X size={22} style={{ color: "var(--color-text-primary)" }} />
-              </button>
-            </div>
+            <div className="flex h-full max-h-[844px] w-full max-w-[390px] flex-col overflow-hidden bg-white min-[414px]:rounded-[20px]">
+              {/* Overlay header */}
+              <div className="flex h-16 flex-shrink-0 items-center justify-between border-b border-[#e7e1da] pl-5 pr-3">
+                <Link href="/" onClick={() => setMobileOpen(false)} aria-label="Fasthaus home">
+                  <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={86} height={21} />
+                </Link>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  aria-label="Close menu"
+                  className="grid h-11 w-11 place-items-center"
+                >
+                  <X size={24} strokeWidth={1.8} className="text-[var(--color-text-primary)]" />
+                </button>
+              </div>
 
-            <ScrollArea className="min-h-0 flex-1" data-lenis-prevent>
-              <div className="flex min-h-[calc(100vh-56px)] flex-col">
-                {/* Overlay links */}
+              <ScrollArea className="min-h-0 flex-1" data-lenis-prevent>
                 <motion.nav
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.28, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex flex-col px-6 pt-4"
+                  className="px-3 pb-5 pt-5 min-[390px]:px-5"
                 >
-                  {MOBILE_NAV.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className={cn(
-                        "type-display-sm border-b py-5",
-                        isActive(link.href)
-                          ? "text-[var(--color-accent-amber)]"
-                          : "text-[var(--color-text-primary)]"
-                      )}
-                      style={{ borderColor: "var(--color-border)" }}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#8e857c]">
+                    OUR COLLECTION
+                  </p>
 
-                  <div className="grid grid-cols-2 gap-x-4 pt-5">
-                    {SHOP_LINKS.slice(1).map((link) => (
+                  <div className="grid grid-cols-[repeat(2,minmax(0,169px))] justify-center gap-x-3 gap-y-3">
+                    {PRODUCTS.map((product) => {
+                      const variant = product.variants[0];
+
+                      return (
+                        <Link
+                          key={product.id}
+                          href={`/product/${product.slug}`}
+                          className="group min-w-0"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          <div className="relative aspect-square w-full max-w-[169px] overflow-hidden rounded-[14px] bg-[var(--color-surface-muted)]">
+                            <Image
+                              src={variant.collectionImage}
+                              alt={product.name}
+                              fill
+                              sizes="169px"
+                              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                            />
+                          </div>
+                          <span className="mt-2 block text-sm font-semibold leading-5 text-[var(--color-text-primary)]">
+                            {product.name}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  <Link
+                    href="/collection"
+                    className="mt-4 flex h-[50px] items-center justify-center gap-2 rounded-[12px] bg-[#181512] text-[16px] font-regular text-[var(--color-bg)]"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    See all lamps
+                    <ArrowRight size={17} strokeWidth={2} />
+                  </Link>
+
+                  <div className="mt-[18px] border-t border-[#e7e1da]">
+                    {MOBILE_NAV.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
-                        className="type-body-md py-2.5"
-                        style={{ color: "var(--color-text-secondary)" }}
+                        className={cn(
+                          "block border-b border-[#e7e1da] py-[18px] text-lg font-semibold leading-7 last:border-b-0",
+                          isActive(link.href)
+                            ? "text-[var(--color-accent-amber)]"
+                            : "text-[var(--color-text-primary)]"
+                        )}
                         onClick={() => setMobileOpen(false)}
                       >
                         {link.label}
@@ -427,26 +444,26 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                     ))}
                   </div>
                 </motion.nav>
+              </ScrollArea>
 
-                {/* Bottom cart shortcut */}
-                <div
-                  className="mt-auto px-6"
-                  style={{ paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}
+              {/* Bottom cart shortcut */}
+              <div
+                className="flex-shrink-0 border-t border-[#e7e1da] px-3 pt-4 min-[390px]:px-5"
+                style={{ paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}
+              >
+                <button
+                  type="button"
+                  className="flex h-14 w-full items-center justify-center gap-3 rounded-[14px] bg-[var(--color-accent-amber)] font-regular text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    openCartDrawer();
+                  }}
                 >
-                  <button
-                    type="button"
-                    className="btn btn-light w-full gap-2.5"
-                    onClick={() => {
-                      setMobileOpen(false);
-                      openCartDrawer();
-                    }}
-                  >
-                    <ShoppingCart size={18} />
-                    View Cart
-                  </button>
-                </div>
+                  <ShoppingCart size={18} strokeWidth={1.8} />
+                  View Cart
+                </button>
               </div>
-            </ScrollArea>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
