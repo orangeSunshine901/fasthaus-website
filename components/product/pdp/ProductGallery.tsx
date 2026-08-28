@@ -171,7 +171,7 @@ export default function ProductGallery({
 
       {images.length > 1 && (
         <>
-          <div className="absolute inset-x-0 top-1/2 z-30 flex -translate-y-1/2 justify-between px-4 md:hidden">
+          <div className="absolute inset-x-0 top-1/2 z-30 flex -translate-y-1/2 justify-between px-[6px] md:hidden">
             <button
               type="button"
               onClick={scrollPrev}
@@ -179,7 +179,7 @@ export default function ProductGallery({
               className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{ color: "var(--hero-ui-color)" }}
             >
-              <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
+              <ArrowLeft size={24} strokeWidth={1.5} aria-hidden="true" />
             </button>
             <button
               type="button"
@@ -188,7 +188,7 @@ export default function ProductGallery({
               className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{ color: "var(--hero-ui-color)" }}
             >
-              <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
+              <ArrowRight size={24} strokeWidth={1.5} aria-hidden="true" />
             </button>
           </div>
 

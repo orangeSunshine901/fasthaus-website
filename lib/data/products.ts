@@ -297,7 +297,7 @@ export const PRODUCTS: Product[] = [
           {
             src: "/flute-lamp/flute-lamp-clear-off-product.png",
             mobileSrc: "/flute-lamp/flute-lamp-clear-off-product-mobile.png",
-            uiTheme: "light",
+            uiTheme: "dark",
           },
           {
             src: "/flute-lamp/flute-lamp-clear-on-product.png",
