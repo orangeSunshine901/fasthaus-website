@@ -3,6 +3,7 @@
 import { useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
 import useEmblaCarousel from "embla-carousel-react";
@@ -201,17 +202,40 @@ export default function ProductGallery({
       </Tooltip.Provider>
 
       {images.length > 1 && (
-        <div
-          className="absolute right-4 z-40 hidden items-center md:right-10 md:flex"
-          style={{ bottom: "calc(40px + env(safe-area-inset-bottom))" }}
-        >
-          <span
-            className="min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em]"
-            style={{ color: "var(--hero-ui-color)" }}
+        <>
+          <div className="absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-between px-[6px] md:hidden">
+            <button
+              type="button"
+              onClick={scrollPrev}
+              aria-label="Previous image"
+              className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={{ color: "var(--hero-ui-color)" }}
+            >
+              <ArrowLeft size={24} strokeWidth={1.5} aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={scrollNext}
+              aria-label="Next image"
+              className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={{ color: "var(--hero-ui-color)" }}
+            >
+              <ArrowRight size={24} strokeWidth={1.5} aria-hidden="true" />
+            </button>
+          </div>
+
+          <div
+            className="absolute right-4 z-40 hidden items-center md:right-10 md:flex"
+            style={{ bottom: "calc(40px + env(safe-area-inset-bottom))" }}
           >
-            {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
-          </span>
-        </div>
+            <span
+              className="min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em]"
+              style={{ color: "var(--hero-ui-color)" }}
+            >
+              {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
+            </span>
+          </div>
+        </>
       )}
     </div>
   );
