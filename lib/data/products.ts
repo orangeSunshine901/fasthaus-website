@@ -421,12 +421,12 @@ export const PRODUCTS: Product[] = [
         price: 379,
         stock: 4,
         featuredImages: {
-          lightOff: "/pearl-lamp/pearl-lamp-white-off.png",
-          lightOn: "/pearl-lamp/pearl-lamp-white-on.png",
+          lightOff: "/pearl-lamp/pearl-lamp-green-off.png",
+          lightOn: "/pearl-lamp/pearl-lamp-green-on.png",
         },
         collectionImage: "/pearl-lamp/pearl-lamp-green-off-collection.png",
         collectionMobileImage: "/pearl-lamp/pearl-lamp-green-off-product-mobile.png",
-        mainImage: "/pearl-lamp/pearl-lamp-white-off.png",
+        mainImage: "/pearl-lamp/pearl-lamp-green-off-product.png",
         images: [
           {
             src: "/pearl-lamp/pearl-lamp-green-off-product.png",
@@ -550,8 +550,8 @@ export const PRODUCTS: Product[] = [
         price: 399,
         stock: 10,
         featuredImages: {
-          lightOff: "/mushroom-lamp/mushroom-white-off.png",
-          lightOn: "/mushroom-lamp/mushroom-white-on.png",
+          lightOff: "/mushroom-lamp/mushroom-black-off.png",
+          lightOn: "/mushroom-lamp/mushroom-black-on.png",
         },
         collectionImage: "/mushroom-lamp/mushroom-lamp-black-off-collection.png",
         collectionMobileImage: "/mushroom-lamp/mushroom-lamp-black-off-product-mobile.png",
