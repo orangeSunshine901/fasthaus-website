@@ -46,9 +46,9 @@ export default function PurchaseRow({
   ]);
 
   return (
-    <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_356px] lg:gap-12">
+    <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_356px] lg:gap-x-12 lg:gap-y-5">
       {/* Product info column */}
-      <div className="flex min-w-0 flex-col gap-5">
+      <div className="flex min-w-0 flex-col gap-5 lg:col-start-1 lg:row-start-1">
         <div className="flex flex-col gap-3">
           <h1
             className="text-[34px] font-extrabold leading-[1.03] tracking-[-0.03em] md:text-[46px]"
@@ -104,61 +104,11 @@ export default function PurchaseRow({
             </div>
           ))}
         </div> */}
-
-        <div
-          className="flex flex-col gap-5 border-t pt-6"
-          style={{ borderColor: "var(--color-border)" }}
-        >
-          <h3
-            className="text-[20px] font-medium tracking-[-0.015em]"
-            style={{ color: "var(--color-text-primary)" }}
-          >
-            Product details
-          </h3>
-          <div className="grid items-stretch gap-6 sm:grid-cols-[minmax(220px,0.9fr)_minmax(0,1.15fr)] sm:gap-9">
-            <div className="relative aspect-square overflow-hidden rounded-[14px]">
-              <Image
-                src={product.dimensions.image}
-                alt={`${product.name} illustration`}
-                fill
-                sizes="(max-width: 639px) 100vw, 360px"
-                className="object-cover"
-              />
-            </div>
-            <div className="grid content-center grid-cols-[105px_minmax(0,1fr)] text-[14px] md:grid-cols-[125px_minmax(0,1fr)] md:text-[15px]">
-              {productDetails.map(([label, value], index) => {
-                const border = index < productDetails.length - 1 ? "border-b" : "";
-                return (
-                  <div key={label} className="contents">
-                    <span
-                      className={`${border} py-3`}
-                      style={{
-                        color: "var(--color-text-secondary)",
-                        borderColor: "var(--color-border)",
-                      }}
-                    >
-                      {label}
-                    </span>
-                    <span
-                      className={`${border} py-3 font-regular leading-[1.45]`}
-                      style={{
-                        color: "var(--color-text-primary)",
-                        borderColor: "var(--color-border)",
-                      }}
-                    >
-                      {value}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Buy box */}
       <div
-        className="flex flex-col gap-[18px] rounded-[18px] border bg-white p-6 md:p-7"
+        className="flex flex-col gap-[18px] rounded-[18px] border bg-white p-6 md:p-7 lg:col-start-2 lg:row-span-2 lg:row-start-1"
         style={{ borderColor: "var(--color-border)" }}
       >
         <div className="flex flex-col gap-2">
@@ -169,21 +119,21 @@ export default function PurchaseRow({
             Amount
           </span>
           <div
-            className="flex items-center overflow-hidden rounded-[10px] border width-fit md:w-fit"
+            className="flex w-full items-center overflow-hidden rounded-[10px] border md:w-fit"
             style={{ borderColor: "var(--color-border)" }}
           >
             <button
               type="button"
               onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
               disabled={quantity <= 1}
-              className="grid h-11 w-11 place-items-center transition-colors hover:bg-[var(--color-surface)] disabled:opacity-40 md:h-[34px] md:w-[34px]"
+              className="grid h-11 flex-1 place-items-center transition-colors hover:bg-[var(--color-surface)] disabled:opacity-40 md:h-[34px] md:w-[34px] md:flex-none"
               style={{ color: "var(--color-text-secondary)" }}
               aria-label="Decrease quantity"
             >
               <Minus size={14} />
             </button>
             <span
-              className="w-9 text-center text-[15px] font-bold md:w-[34px]"
+              className="flex-1 text-center text-[15px] font-bold md:w-[34px] md:flex-none"
               style={{ color: "var(--color-text-primary)" }}
             >
               {quantity}
@@ -191,7 +141,7 @@ export default function PurchaseRow({
             <button
               type="button"
               onClick={() => onQuantityChange(Math.min(selectedVariant.stock, quantity + 1))}
-              className="grid h-11 w-11 place-items-center transition-colors hover:bg-[var(--color-surface)] md:h-[34px] md:w-[34px]"
+              className="grid h-11 flex-1 place-items-center transition-colors hover:bg-[var(--color-surface)] md:h-[34px] md:w-[34px] md:flex-none"
               style={{ color: "var(--color-text-secondary)" }}
               aria-label="Increase quantity"
             >
@@ -289,6 +239,56 @@ export default function PurchaseRow({
           >
             Shipping details →
           </Link>
+        </div>
+      </div>
+
+      <div
+        className="flex flex-col gap-5 border-t pt-6 lg:col-start-1 lg:row-start-2"
+        style={{ borderColor: "var(--color-border)" }}
+      >
+        <h3
+          className="text-[20px] font-medium tracking-[-0.015em]"
+          style={{ color: "var(--color-text-primary)" }}
+        >
+          Product details
+        </h3>
+        <div className="grid items-stretch gap-6 sm:grid-cols-[minmax(220px,0.9fr)_minmax(0,1.15fr)] sm:gap-9">
+          <div className="relative aspect-square w-[70%] justify-self-center overflow-hidden rounded-[14px] md:w-full">
+            <Image
+              src={product.dimensions.image}
+              alt={`${product.name} illustration`}
+              fill
+              sizes="(max-width: 639px) 70vw, (max-width: 767px) 35vw, 360px"
+              className="object-cover"
+            />
+          </div>
+          <div className="grid content-center grid-cols-[105px_minmax(0,1fr)] text-[14px] md:grid-cols-[125px_minmax(0,1fr)] md:text-[15px]">
+            {productDetails.map(([label, value], index) => {
+              const border = index < productDetails.length - 1 ? "border-b" : "";
+              return (
+                <div key={label} className="contents">
+                  <span
+                    className={`${border} py-3`}
+                    style={{
+                      color: "var(--color-text-secondary)",
+                      borderColor: "var(--color-border)",
+                    }}
+                  >
+                    {label}
+                  </span>
+                  <span
+                    className={`${border} py-3 font-regular leading-[1.45]`}
+                    style={{
+                      color: "var(--color-text-primary)",
+                      borderColor: "var(--color-border)",
+                    }}
+                  >
+                    {value}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

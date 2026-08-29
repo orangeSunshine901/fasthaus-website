@@ -94,14 +94,18 @@ export default function ProductGallery({
       </nav>
 
       <div ref={emblaRef} className="relative h-full overflow-hidden">
-        <div aria-hidden="true" className="flex h-full touch-pan-y opacity-0">
-          {images.map((image) => (
-            <div key={image.src} className="relative h-full min-w-0 flex-[0_0_100%]">
+        <div className="flex h-full touch-pan-y md:opacity-0">
+          {images.map((image, index) => (
+            <div
+              key={image.src}
+              className="relative h-full min-w-0 flex-[0_0_100%]"
+              aria-hidden={index !== activeIndex}
+            >
               <picture>
                 {image.mobileSrc && <source media="(max-width: 767px)" srcSet={image.mobileSrc} />}
                 <Image
                   src={image.src}
-                  alt=""
+                  alt={`${name} — image ${index + 1} of ${images.length}`}
                   fill
                   sizes="100vw"
                   className="mx-auto max-w-[440px] object-contain md:max-w-none md:object-cover"
@@ -115,7 +119,8 @@ export default function ProductGallery({
           <AnimatePresence initial={false} mode="sync">
             <motion.div
               key={activeImage.src}
-              className="pointer-events-none absolute inset-0"
+              className="pointer-events-none absolute inset-0 hidden md:block"
+              aria-hidden="true"
               initial={reducedMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -127,7 +132,7 @@ export default function ProductGallery({
                 )}
                 <Image
                   src={activeImage.src}
-                  alt={`${name} — image ${activeIndex + 1} of ${images.length}`}
+                  alt=""
                   fill
                   sizes="100vw"
                   className="mx-auto max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
