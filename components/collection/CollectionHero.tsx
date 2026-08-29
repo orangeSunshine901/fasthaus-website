@@ -3,10 +3,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const DEFAULT_COLORS = ["#141114", "#FF4B1F", "#FFDBD2", "#F8F6F3"] as const;
+const PREVIOUS_CURSOR =
+  'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22m12 19-7-7 7-7%22/%3E%3Cpath d=%22M19 12H5%22/%3E%3C/svg%3E") 16 16, w-resize';
+const NEXT_CURSOR =
+  'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22m12 5 7 7-7 7%22/%3E%3Cpath d=%22M5 12h14%22/%3E%3C/svg%3E") 16 16, e-resize';
 
 const VERTEX_SHADER = `
 attribute vec2 a_position;
@@ -746,13 +749,13 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
 
       <div
         className="absolute inset-y-0 left-0 z-30 hidden w-1/2 md:block"
-        style={{ cursor: "w-resize" }}
+        style={{ cursor: PREVIOUS_CURSOR }}
         onClick={scrollPrevious}
         aria-hidden="true"
       />
       <div
         className="absolute inset-y-0 right-0 z-30 hidden w-1/2 md:block"
-        style={{ cursor: "e-resize" }}
+        style={{ cursor: NEXT_CURSOR }}
         onClick={scrollNext}
         aria-hidden="true"
       />
@@ -769,7 +772,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
           <div className="absolute inset-0 -translate-y-[10%] md:translate-y-0">
             <div className="absolute left-1/2 top-[46%] z-10 -translate-x-1/2 -translate-y-1/2">
               <motion.h2
-                className="font-golften-stamp whitespace-nowrap text-center text-[102px] md:text-[124px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
+                className="font-golften-stamp whitespace-nowrap text-center text-[102px] md:text-[132px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
                 variants={shouldReduceMotion ? REDUCED_TITLE_VARIANTS : TITLE_VARIANTS}
                 transition={contentTransition}
               >
@@ -807,7 +810,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
               </motion.p>
               <Link
                 href={activeSlide.href}
-                className="glass-surface glass-cta-surface pointer-events-auto relative inline-flex cursor-pointer items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2"
+                className="border border-white pointer-events-auto relative inline-flex translate-y-[26px] cursor-pointer items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2 transition-transform duration-300 ease-in-out hover:scale-[1.03]"
                 aria-label={`View ${activeSlide.lampName} in ${activeSlide.colorName}`}
               >
                 <span className="text-center text-sm font-medium leading-5 text-white">
@@ -822,48 +825,13 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-between px-4 text-white md:hidden">
-        <button
-          type="button"
-          onClick={scrollPrevious}
-          aria-label="Show previous lamp"
-          className="grid h-11 w-11 place-items-center rounded-full outline-none transition-opacity [filter:drop-shadow(2px_2px_8px_rgba(20,17,20,0.9))_drop-shadow(0_0_5px_rgba(248,246,243,0.5))] hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-        >
-          <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          onClick={scrollNext}
-          aria-label="Show next lamp"
-          className="grid h-11 w-11 place-items-center rounded-full outline-none transition-opacity [filter:drop-shadow(2px_2px_8px_rgba(20,17,20,0.9))_drop-shadow(0_0_5px_rgba(248,246,243,0.5))] hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-        >
-          <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
-        </button>
-      </div>
-
       <div
-        className="absolute right-4 z-40 flex items-center text-white md:right-10 md:gap-3"
-        style={{ bottom: "calc(20px + env(safe-area-inset-bottom))" }}
+        className="absolute right-4 z-40 flex items-center text-white md:right-10"
+        style={{ bottom: "calc(40px + env(safe-area-inset-bottom))" }}
       >
-        <button
-          type="button"
-          onClick={scrollPrevious}
-          aria-label="Show previous lamp"
-          className="order-2 hidden h-11 w-11 place-items-center rounded-full text-white outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:grid"
-        >
-          <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
-        </button>
-        <span className="order-1 min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:mr-2 md:[text-shadow:none]">
+        <span className="min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:[text-shadow:none]">
           {formatCounter(selectedIndex + 1)} / {formatCounter(slideCount)}
         </span>
-        <button
-          type="button"
-          onClick={scrollNext}
-          aria-label="Show next lamp"
-          className="order-3 hidden h-11 w-11 place-items-center rounded-full text-white outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-[#141114] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:grid"
-        >
-          <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
-        </button>
       </div>
 
       <p className="sr-only" aria-live="polite" aria-atomic="true">

@@ -3,7 +3,6 @@
 import { useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
 import useEmblaCarousel from "embla-carousel-react";
@@ -23,6 +22,15 @@ function formatCounter(value: number) {
   return String(value).padStart(2, "0");
 }
 
+function createArrowCursor(direction: "left" | "right", color: "black" | "white") {
+  const paths =
+    direction === "left"
+      ? '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>'
+      : '<path d="m12 5 7 7-7 7"/><path d="M5 12h14"/>';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 16 16, ${direction === "left" ? "w-resize" : "e-resize"}`;
+}
+
 export default function ProductGallery({
   images,
   name,
@@ -36,6 +44,7 @@ export default function ProductGallery({
   const reducedMotion = useReducedMotion();
   const activeImage = images[activeIndex] ?? images[0];
   const uiTheme = activeImage?.uiTheme ?? "dark";
+  const cursorColor = uiTheme === "light" ? "white" : "black";
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -60,7 +69,7 @@ export default function ProductGallery({
 
   return (
     <div
-      className="product-hero relative left-1/2 aspect-[864/1147] h-auto w-screen -translate-x-1/2 overflow-hidden md:aspect-auto md:h-[calc(100svh-2.75rem)]"
+      className="product-hero relative left-1/2 aspect-[864/1147] h-auto w-screen -translate-x-1/2 overflow-hidden md:aspect-auto md:h-[840px]"
       data-ui-theme={uiTheme}
     >
       <nav
@@ -128,6 +137,23 @@ export default function ProductGallery({
             </motion.div>
           </AnimatePresence>
         )}
+
+        {images.length > 1 && (
+          <>
+            <div
+              className="absolute inset-y-0 left-0 z-10 hidden w-1/2 md:block"
+              style={{ cursor: createArrowCursor("left", cursorColor) }}
+              onClick={scrollPrev}
+              aria-hidden="true"
+            />
+            <div
+              className="absolute inset-y-0 right-0 z-10 hidden w-1/2 md:block"
+              style={{ cursor: createArrowCursor("right", cursorColor) }}
+              onClick={scrollNext}
+              aria-hidden="true"
+            />
+          </>
+        )}
       </div>
 
       <Tooltip.Provider delayDuration={0}>
@@ -170,55 +196,17 @@ export default function ProductGallery({
       </Tooltip.Provider>
 
       {images.length > 1 && (
-        <>
-          <div className="absolute inset-x-0 top-1/2 z-30 flex -translate-y-1/2 justify-between px-[6px] md:hidden">
-            <button
-              type="button"
-              onClick={scrollPrev}
-              aria-label="Previous image"
-              className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
-              style={{ color: "var(--hero-ui-color)" }}
-            >
-              <ArrowLeft size={24} strokeWidth={1.5} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              onClick={scrollNext}
-              aria-label="Next image"
-              className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
-              style={{ color: "var(--hero-ui-color)" }}
-            >
-              <ArrowRight size={24} strokeWidth={1.5} aria-hidden="true" />
-            </button>
-          </div>
-
-          <div className="absolute right-5 bottom-10 z-30 flex items-center md:inset-x-0 md:bottom-4 md:justify-center md:gap-7">
-            <button
-              type="button"
-              onClick={scrollPrev}
-              aria-label="Previous image"
-              className="hidden h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:grid"
-              style={{ color: "var(--hero-ui-color)" }}
-            >
-              <ArrowLeft size={32} strokeWidth={1.5} aria-hidden="true" />
-            </button>
-            <span
-              className="min-w-[66px] text-center text-sm font-semibold tabular-nums tracking-[0.08em]"
-              style={{ color: "var(--hero-ui-color)" }}
-            >
-              {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
-            </span>
-            <button
-              type="button"
-              onClick={scrollNext}
-              aria-label="Next image"
-              className="hidden h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:grid"
-              style={{ color: "var(--hero-ui-color)" }}
-            >
-              <ArrowRight size={32} strokeWidth={1.5} aria-hidden="true" />
-            </button>
-          </div>
-        </>
+        <div
+          className="absolute right-4 z-40 hidden items-center md:right-10 md:flex"
+          style={{ bottom: "calc(40px + env(safe-area-inset-bottom))" }}
+        >
+          <span
+            className="min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em]"
+            style={{ color: "var(--hero-ui-color)" }}
+          >
+            {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
+          </span>
+        </div>
       )}
     </div>
   );
