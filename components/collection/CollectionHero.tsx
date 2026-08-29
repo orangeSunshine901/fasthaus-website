@@ -760,7 +760,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       <AnimatePresence initial={false} mode="sync" custom={direction}>
         <motion.div
           key={activeSlide.id + "-" + transitionSequence}
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute inset-0 z-40"
           initial="enter"
           animate="center"
           exit="exit"
@@ -807,7 +807,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
               </motion.p>
               <Link
                 href={activeSlide.href}
-                className="glass-surface glass-cta-surface pointer-events-auto relative inline-flex items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2"
+                className="glass-surface glass-cta-surface pointer-events-auto relative inline-flex cursor-pointer items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2"
                 aria-label={`View ${activeSlide.lampName} in ${activeSlide.colorName}`}
               >
                 <span className="text-center text-sm font-medium leading-5 text-white">
