@@ -18,11 +18,7 @@ export default function ShopLayout({
       data-home-reveal={revealOnFirstScroll ? "pending" : undefined}
     >
       {revealOnFirstScroll && <HomeFirstScrollReveal />}
-      {showAnnouncement ? (
-        <AnnouncementBar revealOnFirstScroll={revealOnFirstScroll} />
-      ) : (
-        <div className="h-[32px] flex-none" aria-hidden="true" />
-      )}
+      {showAnnouncement && <AnnouncementBar revealOnFirstScroll={revealOnFirstScroll} />}
       <Navbar revealOnFirstScroll={revealOnFirstScroll} />
       <main className="flex-1">{children}</main>
       <Footer />
