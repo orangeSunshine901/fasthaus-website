@@ -59,19 +59,6 @@ const studioImages = [
   "/collections-hero-img-2.png",
 ];
 
-function SplitHeroText() {
-  return (
-    <>
-      {heroText.split(" ").map((word, index) => (
-        <span key={`${word}-${index}`} data-about-word className="inline-block text-[#d8d8d8]">
-          {word}
-          {index < heroText.split(" ").length - 1 ? "\u00a0" : ""}
-        </span>
-      ))}
-    </>
-  );
-}
-
 export default function AboutScrollStory() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const progressFrameRef = useRef<number | null>(null);
@@ -86,17 +73,14 @@ export default function AboutScrollStory() {
 
     const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
         const storySection = root.querySelector<HTMLElement>("[data-story-section]");
         const storyPin = root.querySelector<HTMLElement>("[data-story-pin]");
-        const textBlock = root.querySelector<HTMLElement>("[data-story-text-block]");
         const heroCopy = root.querySelector<HTMLElement>("[data-hero-copy]");
-        const imageWrap = root.querySelector<HTMLElement>("[data-story-image-wrap]");
-        const words = gsap.utils.toArray<HTMLElement>("[data-about-word]", root);
         const imagePanels = gsap.utils.toArray<HTMLElement>("[data-story-image]", root);
         const copyPanels = gsap.utils.toArray<HTMLElement>("[data-story-copy]", root);
 
-        if (!storySection || !storyPin || !textBlock || !heroCopy || !imageWrap) {
+        if (!storySection || !storyPin || !heroCopy) {
           return;
         }
 
@@ -111,8 +95,6 @@ export default function AboutScrollStory() {
           });
         };
 
-        gsap.set(words, { color: "#d8d8d8" });
-        gsap.set(imageWrap, { autoAlpha: 0, x: -180 });
         gsap.set(imagePanels, { autoAlpha: 0, zIndex: 0 });
         gsap.set(imagePanels[0], { autoAlpha: 1, zIndex: 1 });
         gsap.set(copyPanels, { autoAlpha: 0, y: 22 });
@@ -121,7 +103,7 @@ export default function AboutScrollStory() {
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: storySection,
-            start: "top 32px",
+            start: "top top",
             end: () => `+=${Math.round(window.innerHeight * 2.64)}`,
             scrub: true,
             pin: storyPin,
@@ -135,32 +117,7 @@ export default function AboutScrollStory() {
           },
         });
 
-        storyTimeline
-          .to(words, {
-            color: "#575757",
-            duration: 0.175,
-            stagger: {
-              each: 0.005625,
-              ease: "none",
-            },
-          })
-          .to(
-            textBlock,
-            {
-              x: () => Math.min(window.innerWidth * 0.18, 270),
-              duration: 1,
-            },
-            ">+=0.2"
-          )
-          .to(
-            imageWrap,
-            {
-              autoAlpha: 1,
-              x: 0,
-              duration: 1,
-            },
-            "<"
-          );
+        storyTimeline.to({}, { duration: 0.3 });
 
         const transitionHoldDuration = 0.35;
 
@@ -241,19 +198,7 @@ export default function AboutScrollStory() {
           );
         }
 
-        const refreshTimers = [
-          window.setTimeout(() => ScrollTrigger.refresh(), 360),
-          window.setTimeout(() => ScrollTrigger.refresh(), 700),
-        ];
-        const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
-        const refreshOnLoad = () => ScrollTrigger.refresh();
-
-        window.addEventListener("load", refreshOnLoad, { once: true });
-
         return () => {
-          window.cancelAnimationFrame(refreshFrame);
-          refreshTimers.forEach((timer) => window.clearTimeout(timer));
-          window.removeEventListener("load", refreshOnLoad);
           if (progressFrameRef.current !== null) {
             window.cancelAnimationFrame(progressFrameRef.current);
             progressFrameRef.current = null;
@@ -269,7 +214,7 @@ export default function AboutScrollStory() {
   }, []);
 
   return (
-    <div ref={rootRef} className="bg-white">
+    <div ref={rootRef} className="bg-[#000104] text-[#F8F6F3]">
       <div
         className={`fixed right-8 top-1/2 z-30 hidden h-[220px] -translate-y-1/2 items-center transition-opacity duration-300 md:flex ${
           storyProgress.isVisible ? "opacity-100" : "pointer-events-none opacity-0"
@@ -279,76 +224,76 @@ export default function AboutScrollStory() {
         <Progress
           value={storyProgress.value}
           orientation="vertical"
-          className="h-full w-1.5 bg-[rgba(20,17,20,0.12)]"
+          className="h-full w-1.5 bg-white/25"
         />
       </div>
-      <section data-story-section className="relative overflow-hidden bg-white">
+      <section data-story-section className="relative overflow-hidden bg-[#000104]">
         <div
           data-story-pin
-          className="relative hidden h-[calc(100vh-104px)] min-h-[620px] overflow-hidden md:block"
+          className="relative h-[calc(100svh-104px)] min-h-[560px] overflow-hidden motion-reduce:hidden md:h-[calc(100vh-104px)] md:min-h-[620px]"
         >
-          <div className="relative mx-auto h-full w-full max-w-[1240px] pt-[60px]">
+          {storyPanels.map((panel, index) => (
             <div
-              data-story-image-wrap
-              className="invisible absolute top-1/2 aspect-square w-[min(34vw,579px)] -translate-y-1/2 overflow-hidden rounded-[8px] opacity-0 h-[640px]"
+              key={panel.image}
+              data-story-image
+              className={`absolute inset-0 ${index === 0 ? "opacity-100" : "opacity-0"}`}
             >
-              {storyPanels.map((panel) => (
-                <div key={panel.image} data-story-image className="absolute inset-0">
-                  <Image
-                    src={panel.image}
-                    alt={panel.alt}
-                    fill
-                    priority={panel.image === "/who-we-are-img.png"}
-                    sizes="(min-width: 1024px) 360px, 34vw"
-                    className="object-cover"
-                  />
-                </div>
-              ))}
+              <Image
+                src={panel.image}
+                alt={panel.alt}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                className="object-cover"
+              />
             </div>
+          ))}
+          <div className="absolute inset-0 z-10 bg-black/40" aria-hidden="true" />
 
-            <div
-              data-story-text-block
-              className="absolute right-[-110px] top-1/2 w-[min(58vw,680px)] -translate-x-1/2 -translate-y-1/2"
+          <div className="absolute left-1/2 top-1/2 z-20 w-[min(88vw,780px)] -translate-x-1/2 -translate-y-1/2 text-center">
+            <h1
+              data-hero-copy
+              className="text-[34px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] md:text-[40px] md:leading-[1.25] lg:text-[44px]"
             >
-              <h1
-                data-hero-copy
-                className="text-[40px] font-normal leading-[1.25] tracking-normal text-[#575757] lg:text-[44px]"
+              {heroText}
+            </h1>
+            {storyPanels.slice(1).map((panel) => (
+              <h2
+                key={panel.text}
+                data-story-copy
+                className="absolute inset-0 text-[30px] font-normal leading-[1.2] tracking-normal text-white opacity-0 drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] md:text-[40px] md:leading-[1.25] lg:text-[44px]"
               >
-                <SplitHeroText />
-              </h1>
-              {storyPanels.slice(1).map((panel) => (
-                <h2
-                  key={panel.text}
-                  data-story-copy
-                  className="absolute inset-0 text-[40px] font-normal leading-[1.25] tracking-normal text-[#575757] opacity-0 lg:text-[44px]"
-                >
-                  {panel.text}
-                </h2>
-              ))}
-            </div>
+                {panel.text}
+              </h2>
+            ))}
           </div>
         </div>
 
-        <div className="px-5 py-16 md:hidden">
-          <h1 className="text-[34px] font-normal leading-[1.18] tracking-normal text-[#575757]">
-            {heroText}
-          </h1>
-          <div className="mt-10 grid gap-6">
-            {storyPanels.map((panel) => (
-              <article key={panel.image} className="grid gap-4">
-                <div className="relative aspect-square overflow-hidden rounded-[8px]">
-                  <Image
-                    src={panel.image}
-                    alt={panel.alt}
-                    fill
-                    sizes="100vw"
-                    className="object-cover"
-                  />
-                </div>
-                <p className="text-xl font-normal leading-[1.25] text-[#575757]">{panel.text}</p>
-              </article>
-            ))}
-          </div>
+        <div className="hidden motion-reduce:grid">
+          {storyPanels.map((panel, index) => (
+            <article
+              key={panel.image}
+              className="relative flex min-h-[70svh] items-center justify-center overflow-hidden px-5 py-16 text-center"
+            >
+              <Image
+                src={panel.image}
+                alt={panel.alt}
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
+              {index === 0 ? (
+                <h1 className="relative text-[34px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
+                  {panel.text}
+                </h1>
+              ) : (
+                <p className="relative text-[28px] font-normal leading-[1.2] text-[#F8F6F3] drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
+                  {panel.text}
+                </p>
+              )}
+            </article>
+          ))}
         </div>
       </section>
 
@@ -356,10 +301,7 @@ export default function AboutScrollStory() {
         data-philosophy-section
         className="container-page overflow-hidden pt-14 pb-8 md:pt-16 md:pb-8"
       >
-        <h2
-          data-philosophy-reveal
-          className="type-display-lg mb-8 text-[var(--color-text-primary)]"
-        >
+        <h2 data-philosophy-reveal className="type-display-lg mb-8 text-white">
           Design Philosophy
         </h2>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2 md:gap-6">
@@ -367,25 +309,23 @@ export default function AboutScrollStory() {
             <article
               key={item.label}
               data-philosophy-reveal
-              className="rounded-[8px] border border-[var(--color-border)] bg-white p-5"
+              className="rounded-[8px] border border-white/15 bg-[#000104] p-5"
             >
               <span className="mb-3 block text-[24px] text-[var(--color-accent-amber)]">
                 {item.icon}
               </span>
-              <h3 className="type-title-md mb-1 text-[var(--color-text-primary)]">{item.label}</h3>
-              <p className="type-body-sm text-[var(--color-text-secondary)]">{item.desc}</p>
+              <h3 className="type-title-md mb-1 text-white">{item.label}</h3>
+              <p className="type-body-sm text-[#F8F6F3]">{item.desc}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section data-studio-section className="overflow-hidden bg-white">
+      <section data-studio-section className="overflow-hidden bg-[#000104] pb-12">
         <div className="container-page pt-12 pb-14 md:pt-12 md:pb-16">
           <div className="flex flex-col gap-8 md:gap-10">
             <div data-studio-reveal className="max-w-[640px]">
-              <h2 className="type-display-lg text-[var(--color-text-primary)]">
-                Inside the Studio
-              </h2>
+              <h2 className="type-display-lg text-white">Inside the Studio</h2>
             </div>
             <div data-studio-reveal>
               <ExpandableGallery images={studioImages} />
