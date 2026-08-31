@@ -218,15 +218,15 @@ export default function AboutScrollStory() {
   return (
     <div ref={rootRef} className="bg-[#000104] text-[#F8F6F3]">
       <div
-        className={`fixed right-8 top-1/2 z-30 hidden h-[220px] -translate-y-1/2 items-center transition-opacity duration-300 md:flex ${
+        className={`fixed inset-x-0 top-0 z-50 h-1.5 transition-opacity duration-300 ${
           storyProgress.isVisible ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         aria-label="About story scroll progress"
       >
         <Progress
           value={storyProgress.value}
-          orientation="vertical"
-          className="h-full w-1.5 bg-white/25"
+          orientation="horizontal"
+          className="h-full w-full rounded-none bg-white/25 [&_[data-slot=progress-indicator]]:rounded-none"
         />
       </div>
       <section data-story-section className="relative overflow-hidden bg-[#000104]">
