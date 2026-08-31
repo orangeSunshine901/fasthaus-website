@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,24 +10,23 @@ gsap.registerPlugin(ScrollTrigger);
 
 const heroText =
   "Before anything becomes a shape, a material, or a glow, it starts with a feeling. A sense of how the space should feel like";
+const storyFrameRate = 30;
+const storySequenceFrames = 47;
+const storyVideo = "/about/story-panel-1-scrub.mp4";
+const storySequenceDuration = storySequenceFrames / storyFrameRate;
 
 const storyPanels = [
   {
-    image: "/mushroom-lamp/mushroom-lamp-close.jpg",
-    alt: "Close up shot of the ",
     text: heroText,
   },
   {
-    image: "/about/lamp-desk-off.jpg",
-    alt: "Warm Fasthaus lamp styled in an interior",
     text: "Desks, shelves, bedsides, and quiet corners are part of everyday life. They deserve objects that feel useful, warm, and not just decorative.",
   },
   {
-    image: "/about/lamp-desk-on.jpg",
-    alt: "Small white Fasthaus lamp glowing on a table",
     text: "We at fasthaus create spatial objects with intention, soft glow, and a little story.",
   },
 ];
+const storyDuration = storySequenceDuration * storyPanels.length;
 
 const philosophy = [
   {
@@ -76,11 +74,11 @@ export default function AboutScrollStory() {
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const storySection = root.querySelector<HTMLElement>("[data-story-section]");
         const storyPin = root.querySelector<HTMLElement>("[data-story-pin]");
+        const video = root.querySelector<HTMLVideoElement>("[data-story-video]");
         const heroCopy = root.querySelector<HTMLElement>("[data-hero-copy]");
-        const imagePanels = gsap.utils.toArray<HTMLElement>("[data-story-image]", root);
         const copyPanels = gsap.utils.toArray<HTMLElement>("[data-story-copy]", root);
 
-        if (!storySection || !storyPin || !heroCopy) {
+        if (!storySection || !storyPin || !video || !heroCopy) {
           return;
         }
 
@@ -95,9 +93,23 @@ export default function AboutScrollStory() {
           });
         };
 
-        gsap.set(imagePanels, { autoAlpha: 0, zIndex: 0 });
-        gsap.set(imagePanels[0], { autoAlpha: 1, zIndex: 1 });
         gsap.set(copyPanels, { autoAlpha: 0, y: 22 });
+
+        const scrubVideo = (progress: number) => {
+          if (video.readyState < 1 || !Number.isFinite(video.duration)) {
+            return;
+          }
+
+          const frame = Math.min(
+            storyPanels.length * storySequenceFrames - 1,
+            Math.round(storyDuration * progress * storyFrameRate)
+          );
+          const nextTime = frame / storyFrameRate;
+
+          if (Math.abs(video.currentTime - nextTime) > 0.001) {
+            video.currentTime = nextTime;
+          }
+        };
 
         const storyTimeline = gsap.timeline({
           defaults: { ease: "none" },
@@ -109,7 +121,10 @@ export default function AboutScrollStory() {
             pin: storyPin,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onUpdate: (self) => updateStoryProgress(self.progress, self.progress < 1),
+            onUpdate: (self) => {
+              scrubVideo(self.progress);
+              updateStoryProgress(self.progress, self.progress < 1);
+            },
             onEnter: () => updateStoryProgress(0, true),
             onEnterBack: (self) => updateStoryProgress(self.progress, true),
             onLeave: () => updateStoryProgress(1, false),
@@ -117,33 +132,19 @@ export default function AboutScrollStory() {
           },
         });
 
-        storyTimeline.to({}, { duration: 0.3 });
-
-        const transitionHoldDuration = 0.35;
+        storyTimeline.to({}, { duration: storyDuration });
 
         copyPanels.forEach((copy, index) => {
-          const previousCopy = copyPanels[index - 1];
-          const previousImage = imagePanels[index];
-          const nextImage = imagePanels[index + 1];
-
-          if (!nextImage) {
-            return;
-          }
-
-          if (index === 0) {
-            storyTimeline.to(heroCopy, { autoAlpha: 0, y: -20, duration: 0.1375 }, ">+=0.1125");
-          } else if (previousCopy) {
-            storyTimeline.to(previousCopy, { autoAlpha: 0, y: -20, duration: 0.1375 }, ">+=0.1125");
-          }
+          const previousCopy = index === 0 ? heroCopy : copyPanels[index - 1];
+          const changeAt = storySequenceDuration * (index + 1);
 
           storyTimeline
-            .to(copy, { autoAlpha: 1, y: 0, duration: 0.1375 }, "<")
-            .set(previousImage, { autoAlpha: 1, zIndex: 1 }, "<")
-            .set(nextImage, { zIndex: 2 }, "<")
-            .to(nextImage, { autoAlpha: 1, duration: 0.18 }, "<")
-            .set(previousImage, { autoAlpha: 0, zIndex: 0 })
-            .to({}, { duration: transitionHoldDuration });
+            .set(previousCopy, { autoAlpha: 0, y: -20 }, changeAt)
+            .set(copy, { autoAlpha: 1, y: 0 }, changeAt);
         });
+
+        const syncVideo = () => scrubVideo(storyTimeline.scrollTrigger?.progress ?? 0);
+        video.addEventListener("loadedmetadata", syncVideo);
 
         const revealViewport = {
           start: "top 64%",
@@ -199,6 +200,7 @@ export default function AboutScrollStory() {
         }
 
         return () => {
+          video.removeEventListener("loadedmetadata", syncVideo);
           if (progressFrameRef.current !== null) {
             window.cancelAnimationFrame(progressFrameRef.current);
             progressFrameRef.current = null;
@@ -232,22 +234,15 @@ export default function AboutScrollStory() {
           data-story-pin
           className="relative h-[calc(100svh-104px)] min-h-[560px] overflow-hidden motion-reduce:hidden md:h-[calc(100vh-104px)] md:min-h-[620px]"
         >
-          {storyPanels.map((panel, index) => (
-            <div
-              key={panel.image}
-              data-story-image
-              className={`absolute inset-0 ${index === 0 ? "opacity-100" : "opacity-0"}`}
-            >
-              <Image
-                src={panel.image}
-                alt={panel.alt}
-                fill
-                priority={index === 0}
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-          ))}
+          <video
+            data-story-video
+            src={storyVideo}
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
           <div className="absolute inset-0 z-10 bg-black/40" aria-hidden="true" />
 
           <div className="absolute left-1/2 top-1/2 z-20 w-[min(88vw,780px)] -translate-x-1/2 -translate-y-1/2 text-center">
@@ -272,15 +267,16 @@ export default function AboutScrollStory() {
         <div className="hidden motion-reduce:grid">
           {storyPanels.map((panel, index) => (
             <article
-              key={panel.image}
+              key={panel.text}
               className="relative flex min-h-[70svh] items-center justify-center overflow-hidden px-5 py-16 text-center"
             >
-              <Image
-                src={panel.image}
-                alt={panel.alt}
-                fill
-                sizes="100vw"
-                className="object-cover"
+              <video
+                src={storyVideo}
+                muted
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
               {index === 0 ? (
