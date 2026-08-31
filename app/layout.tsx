@@ -33,7 +33,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Fasthaus — Modern Lamps, Made to Glow Differently",
-  description: "Minimal lighting & home goods. Fast to browse, clean to look at, effortless to buy.",
+  description:
+    "Minimal lighting & home goods. Fast to browse, clean to look at, effortless to buy.",
 };
 
 export default function RootLayout({
@@ -85,17 +86,24 @@ export default function RootLayout({
             security_storage: 'granted'
           });
         `}</Script>
-        <Script
-          id="geidea-checkout-sdk"
-          src={getGeideaSdkUrl()}
-          strategy="beforeInteractive"
+        <Script id="geidea-checkout-sdk" src={getGeideaSdkUrl()} strategy="beforeInteractive" />
+        <meta
+          name="google-site-verification"
+          content="6oZVZ4_UZrObrRTiXbYTEg09M59D1JglTLxwXzB89Hg"
         />
       </head>
-      <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', system-ui, sans-serif)" }}>
+      <body
+        className="min-h-full flex flex-col"
+        style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', system-ui, sans-serif)" }}
+      >
         <SilktideConsentManager />
         <HomeNavigationProvider>
           <Suspense fallback={<PageTransition>{children}</PageTransition>}>
-            <AnalyticsProvider><CartProvider><PageTransition>{children}</PageTransition></CartProvider></AnalyticsProvider>
+            <AnalyticsProvider>
+              <CartProvider>
+                <PageTransition>{children}</PageTransition>
+              </CartProvider>
+            </AnalyticsProvider>
           </Suspense>
         </HomeNavigationProvider>
       </body>
