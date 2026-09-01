@@ -1,7 +1,7 @@
 # Geidea Checkout
 
-Fasthaus uses Geidea Hosted Payment Page for cards and Express Checkout for Apple Pay,
-Google Pay, and Samsung Pay. Prices and order state remain server-authoritative.
+Fasthaus uses the Geidea Checkout modal for card payments. Express wallet checkout is
+disabled. Prices and order state remain server-authoritative.
 
 ## Required configuration
 
@@ -27,11 +27,7 @@ signed with the API password.
 ## Provider onboarding
 
 1. Confirm that the credentials and configured hosts belong to the UAE sandbox.
-2. Ask Geidea to enable cards, Apple Pay, Google Pay, and Samsung Pay on the merchant.
-3. Obtain the Apple domain association file and publish it as
-   `public/.well-known/apple-developer-merchantid-domain-association` without an extension.
-4. Register the Google Business merchant ID with Geidea.
-5. Confirm the callback timestamp field/casing using a genuine signed sandbox callback.
+2. Confirm the callback timestamp field/casing using a genuine signed sandbox callback.
 
 The callback verifier accepts `timestamp`, `timeStamp`, or the callback order's
 `updatedDate` fallback because Geidea's current guide and sample payload differ. Do not
@@ -41,8 +37,9 @@ switch to live credentials until a signed sandbox callback passes verification.
 
 1. Checkout validates the anonymous cart and delivery details on the server.
 2. A pending Fasthaus order and one 15-minute Geidea session are created.
-3. The same session powers the card redirect and the supported express wallet buttons.
-4. Browser callbacks only navigate to the order page.
+3. The session opens in Geidea's card-payment modal.
+4. Success navigates to the order page. The Geidea return URL verifies payment status and sends
+   cancelled or unpaid attempts back to checkout, where tab-scoped form details are restored.
 5. Only a valid server callback with matching merchant, amount, currency, reference, paid
    status, and success codes confirms the order.
 6. Confirmation emails use stable Resend idempotency keys so callback retries are safe.

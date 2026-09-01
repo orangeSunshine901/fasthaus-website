@@ -11,6 +11,7 @@ import {
   getGeideaEventOrderId,
   verifyGeideaCallback,
   verifyGeideaOrderResponse,
+  verifyGeideaOrdersResponse,
 } from "../lib/payment/geidea-callback.ts";
 import { formatGeideaDiagnostic } from "../lib/payment/geidea-diagnostics.ts";
 
@@ -156,5 +157,28 @@ test("authenticates the event callback through a fetched Geidea order", () => {
       merchantPublicKey,
       orderId: "33333333-3333-4333-8333-333333333333",
     })
+  );
+});
+
+test("selects a paid Geidea order when checking a merchant return", () => {
+  const cancelled = validCallback().order;
+  cancelled.status = "Failed";
+  cancelled.detailedStatus = "OrderFailed";
+  const paid = validCallback().order;
+  const order = verifyGeideaOrdersResponse(
+    {
+      responseCode: "000",
+      detailedResponseCode: "000",
+      orders: [cancelled, paid],
+    },
+    { merchantPublicKey, merchantReferenceId }
+  );
+  assert.equal(order?.isPaid, true);
+  assert.equal(
+    verifyGeideaOrdersResponse(
+      { responseCode: "000", detailedResponseCode: "000", orders: [] },
+      { merchantPublicKey, merchantReferenceId }
+    ),
+    null
   );
 });

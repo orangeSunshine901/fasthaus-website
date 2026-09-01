@@ -7,17 +7,12 @@ type GeideaCheckoutCallbackData = {
   reference?: string;
 };
 
-type GeideaExpressCheckoutInstance = {
-  mount(selector: string): void;
-};
-
 interface Window {
-  GeideaExpressCheckout?: new () => {
-    create(config: {
-      sessionId: string;
-      onSuccess(data: GeideaCheckoutCallbackData): void;
-      onError(data: GeideaCheckoutCallbackData): void;
-      onCancel(data?: GeideaCheckoutCallbackData): void;
-    }): Promise<GeideaExpressCheckoutInstance>;
+  GeideaCheckout?: new (
+    onSuccess: (data: GeideaCheckoutCallbackData) => void,
+    onError: (data: GeideaCheckoutCallbackData) => void,
+    onCancel: (data?: GeideaCheckoutCallbackData) => void
+  ) => {
+    startPayment(sessionId: string): void;
   };
 }

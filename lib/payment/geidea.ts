@@ -3,6 +3,7 @@ import { generateGeideaSessionSignature, formatGeideaTimestamp } from "./geidea-
 import { formatGeideaDiagnostic } from "./geidea-diagnostics";
 import {
   verifyGeideaOrderResponse,
+  verifyGeideaOrdersResponse,
   type VerifiedGeideaCallback,
 } from "./geidea-callback";
 
@@ -98,6 +99,38 @@ export async function fetchVerifiedGeideaOrder(
   });
 }
 
+export async function fetchVerifiedGeideaOrderByMerchantReference(
+  merchantReferenceId: string
+): Promise<VerifiedGeideaCallback | null> {
+  const config = getGeideaConfig();
+  const response = await fetch(
+    `${config.apiBaseUrl}/pgw/api/v1/direct/order?MerchantReferenceId=${encodeURIComponent(merchantReferenceId)}`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${Buffer.from(
+          `${config.merchantPublicKey}:${config.apiPassword}`
+        ).toString("base64")}`,
+      },
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    }
+  );
+
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    throw new Error(`Geidea returned an unreadable order response (${response.status}).`);
+  }
+  if (!response.ok) throw new Error(`Geidea order lookup failed (${response.status}).`);
+
+  return verifyGeideaOrdersResponse(body, {
+    merchantPublicKey: config.merchantPublicKey,
+    merchantReferenceId,
+  });
+}
+
 export async function createGeideaCheckoutSession(
   input: CreateCheckoutSessionInput
 ): Promise<GeideaCheckoutSession> {
@@ -130,13 +163,8 @@ export async function createGeideaCheckoutSession(
     paymentOperation: "Pay",
     language: "en",
     cardOnFile: false,
-    appearance: { styles: {}, uiMode: "modal" },
+    appearance: { receiptPage: true, styles: {}, uiMode: "modal" },
     customer: input.customer,
-    expressCheckouts: [
-      { wallet: "apple-pay", label: "Apple Pay" },
-      { wallet: "google-pay", label: "Google Pay" },
-      { wallet: "samsung-pay", label: "Samsung Pay" },
-    ],
   };
   const logSessionCreation = process.env.GEIDEA_LOG_SESSION_CREATION === "true";
   const startedAt = Date.now();
