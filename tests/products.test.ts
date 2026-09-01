@@ -29,6 +29,7 @@ const baseVariant: ProductVariant = {
     lightOn: "/gallery-two.png",
   },
   collectionImage: "/gallery-one.png",
+  cartDrawerImage: "",
   images: [
     { src: "/gallery-one.png", uiTheme: "dark" },
     { src: "/gallery-two.png", uiTheme: "light" },
