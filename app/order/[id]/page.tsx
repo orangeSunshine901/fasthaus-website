@@ -14,7 +14,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
   const supabase = await createServiceClient();
   const { data: order } = await supabase
     .from("orders")
-    .select("id,status,total,shipping_address,created_at,cart_id")
+    .select("id,status,total,shipping_address,created_at,cart_id,geidea_session_expires_at")
     .eq("id", id)
     .maybeSingle();
   if (!order) notFound();
@@ -45,28 +45,27 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
       )}
       <div className="mx-auto max-w-[760px] px-5 py-16 md:py-24">
         <div className="mb-12 flex flex-col items-center gap-4 text-center">
-          <span
-            className="flex h-14 w-14 items-center justify-center rounded-full border-2"
-            style={{
-              borderColor: confirmed ? "var(--color-success)" : "var(--color-accent-amber)",
-            }}
-          >
-            {confirmed ? (
-              <Check size={26} style={{ color: "var(--color-success)" }} />
-            ) : (
-              <PaymentConfirmationPoller />
-            )}
-          </span>
-          <p className="type-caption-sm">Order #{order.id.slice(0, 8).toUpperCase()}</p>
-          <h1 className="type-display-xl">
-            {confirmed ? "Thank you for your order!" : "Payment is being confirmed"}
-          </h1>
-          <p className="type-body-md" style={{ color: "var(--color-text-secondary)" }}>
-            {confirmed
-              ? "Your payment is confirmed and we’re preparing your order."
-              : "We’ll confirm this order only after the payment provider verifies the payment."}
-          </p>
-          <Link href="/collection" className="btn btn-primary gap-2">
+          {confirmed ? (
+            <>
+              <span
+                className="flex h-14 w-14 items-center justify-center rounded-full border-2"
+                style={{ borderColor: "var(--color-success)" }}
+              >
+                <Check size={26} style={{ color: "var(--color-success)" }} />
+              </span>
+              <p className="type-caption-sm">Order #{order.id.slice(0, 8).toUpperCase()}</p>
+              <h1 className="type-display-xl">Thank you for your order!</h1>
+              <p className="type-body-md" style={{ color: "var(--color-text-secondary)" }}>
+                Your payment is confirmed and we’re preparing your order.
+              </p>
+            </>
+          ) : (
+            <PaymentConfirmationPoller
+              orderNumber={order.id.slice(0, 8).toUpperCase()}
+              sessionExpiresAt={order.geidea_session_expires_at}
+            />
+          )}
+          <Link href="/collection" prefetch={false} className="btn btn-primary gap-2">
             <ShoppingBag size={16} />
             Continue shopping
           </Link>
