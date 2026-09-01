@@ -80,11 +80,7 @@ export default function HomePage() {
             preload="metadata"
             aria-hidden="true"
           >
-            <source
-              src="/home-hero-mobile.webm"
-              type="video/webm"
-              media="(max-width: 767px)"
-            />
+            <source src="/home-hero-mobile.webm" type="video/webm" media="(max-width: 767px)" />
             <source src="/home-hero.webm" type="video/webm" />
           </video>
           {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-neutral-100/10 to-transparent" /> */}
@@ -269,15 +265,15 @@ export default function HomePage() {
                   <p className="eyebrow" style={{ color: "var(--color-accent-amber)" }}>
                     ABOUT US
                   </p>
-                  <h2 className="flex flex-wrap items-end gap-x-3 gap-y-2 text-3xl font-semibold leading-[1.15] text-zinc-900 md:gap-x-4 md:text-4xl">
-                    <span>What is</span>
+                  <h2 className="flex flex-wrap items-end gap-x-3 gap-y-2 type-display-lg max-w-[400px] font-bold text-[var(--color-text-primary)] md:text-6xl md:leading-[68px] pb-4 md:pb-0">
+                    What is
                     <Image
                       src="/fasthaus-logo-final.svg"
                       alt="fasthaus"
                       width={208}
                       height={42}
-                      className="h-auto w-[168px] md:w-[208px]"
-                      style={{ height: "59px", position: "relative", top: "2px" }}
+                      className="h-auto w-[168px] md:w-[208px] relative top-2 md:top-0.5"
+                      style={{ height: "59px" }}
                     />
                   </h2>{" "}
                 </div>

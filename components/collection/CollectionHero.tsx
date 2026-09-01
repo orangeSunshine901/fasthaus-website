@@ -728,7 +728,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="collection-hero relative w-full touch-pan-y overflow-hidden outline-none"
+      className="collection-hero relative isolate w-full touch-pan-y overflow-hidden outline-none"
       style={{ backgroundColor: activeSlide.colors[0], outline: "none" }}
       role="region"
       aria-roledescription="carousel"

@@ -19,6 +19,8 @@ export type ProductVariant = {
   };
   /** Image displayed on collection and category product cards for this variant. */
   collectionImage: string;
+  /** Background image used when this variant is featured in the empty cart drawer. */
+  cartDrawerImage: string;
   /** Mobile-composed image displayed on collection and category product cards. */
   collectionMobileImage?: string;
   /** Primary image shown when this color is selected on the product page. */
@@ -102,6 +104,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/stack-lamp/stack-lamp-blue-on.png",
         },
         collectionImage: "/stack-lamp/stack-lamp-blue-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/stack-lamp/stack-lamp-blue-off-product-mobile.png",
         mainImage: "/stack-lamp/stack-lamp-blue-on.png",
         images: [
@@ -114,6 +117,11 @@ export const PRODUCTS: Product[] = [
             src: "/stack-lamp/stack-lamp-blue-on-product.png",
             mobileSrc: "/stack-lamp/stack-lamp-blue-on-product-mobile.png",
             uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/stack-lamp-blue-lifestyle.png",
+            mobileSrc: "/stack-lamp/stack-lamp-blue-lifestyle.png",
+            uiTheme: "light",
           },
         ],
       },
@@ -129,6 +137,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/stack-lamp/stack-lamp-orange-on.png",
         },
         collectionImage: "/stack-lamp/stack-lamp-orange-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/stack-lamp/stack-lamp-orange-off-product-mobile.png",
         mainImage: "/stack-lamp/stack-lamp-orange-on.png",
         images: [
@@ -158,6 +167,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/stack-lamp/stack-lamp-white-on.png",
         },
         collectionImage: "/stack-lamp/stack-lamp-white-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/stack-lamp/stack-lamp-white-off-product-mobile.png",
         mainImage: "/stack-lamp/stack-lamp-white-on.png",
         images: [
@@ -235,6 +245,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/flute-lamp/flute-matcha-on.png",
         },
         collectionImage: "/flute-lamp/flute-lamp-matcha-off-collection.png",
+        cartDrawerImage: "/cart/portrait-image-1.png",
         collectionMobileImage: "/flute-lamp/flute-lamp-matcha-off-product-mobile.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
@@ -264,6 +275,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/flute-lamp/flute-fire-red-on.png",
         },
         collectionImage: "/flute-lamp/flute-lamp-red-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/flute-lamp/flute-lamp-red-off-product-mobile.png",
         mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
         images: [
@@ -275,6 +287,16 @@ export const PRODUCTS: Product[] = [
           {
             src: "/flute-lamp/flute-lamp-red-on-product.png",
             mobileSrc: "/flute-lamp/flute-lamp-red-on-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/flute-lamp/flute-red-lifestyle.png",
+            mobileSrc: "/flute-lamp/flute-red-lifestyle.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/flute-lamp/flute-red-close-up.png",
+            mobileSrc: "/flute-lamp/flute-red-close-up.png",
             uiTheme: "dark",
           },
         ],
@@ -291,6 +313,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/flute-lamp/flute-clear-on.png",
         },
         collectionImage: "/flute-lamp/flute-lamp-clear-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/flute-lamp/flute-lamp-clear-off-product-mobile.png",
         mainImage: "/flute-lamp/flute-clear-interaction-shot-dark.png",
         images: [
@@ -304,6 +327,8 @@ export const PRODUCTS: Product[] = [
             mobileSrc: "/flute-lamp/flute-lamp-clear-on-product-mobile.png",
             uiTheme: "dark",
           },
+          { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-3.png", uiTheme: "light" },
+          { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-4.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-interaction-shot-dark.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-2.png", uiTheme: "light" },
           { src: "/flute-lamp/flute-clear-lifestyle-shot-dark-1.png", uiTheme: "light" },
@@ -371,6 +396,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/pearl-lamp/pearl-lamp-red-on.png",
         },
         collectionImage: "/pearl-lamp/pearl-lamp-red-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/pearl-lamp/pearl-lamp-red-off-product-mobile.png",
         mainImage: "/pearl-lamp/pearl-lamp-red-off.png",
         images: [
@@ -382,6 +408,11 @@ export const PRODUCTS: Product[] = [
           {
             src: "/pearl-lamp/pearl-lamp-red-on-product.png",
             mobileSrc: "/pearl-lamp/pearl-lamp-red-on-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/pearl-lamp/pearl-lamp-red-lifestyle.png",
+            mobileSrc: "/pearl-lamp/pearl-lamp-red-lifestyle.png",
             uiTheme: "dark",
           },
         ],
@@ -398,6 +429,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/pearl-lamp/pearl-lamp-blue-on.png",
         },
         collectionImage: "/pearl-lamp/pearl-lamp-blue-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/pearl-lamp/pearl-lamp-blue-off-product-mobile.png",
         mainImage: "/pearl-lamp/pearl-lamp-blue-off.png",
         images: [
@@ -425,6 +457,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/pearl-lamp/pearl-lamp-green-on.png",
         },
         collectionImage: "/pearl-lamp/pearl-lamp-green-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/pearl-lamp/pearl-lamp-green-off-product-mobile.png",
         mainImage: "/pearl-lamp/pearl-lamp-green-off-product.png",
         images: [
@@ -436,6 +469,11 @@ export const PRODUCTS: Product[] = [
           {
             src: "/pearl-lamp/pearl-lamp-green-on-product.png",
             mobileSrc: "/pearl-lamp/pearl-lamp-green-on-product-mobile.png",
+            uiTheme: "dark",
+          },
+          {
+            src: "/pearl-lamp/pearl-lamp-green-lifestyle.png",
+            mobileSrc: "/pearl-lamp/pearl-lamp-green-lifestyle.png",
             uiTheme: "dark",
           },
         ],
@@ -500,6 +538,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/mushroom-lamp/mushroom-orange-on.png",
         },
         collectionImage: "/mushroom-lamp/mushroom-lamp-orange-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/mushroom-lamp/mushroom-lamp-orange-off-product-mobile.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-orange-off-product.png",
         images: [
@@ -527,6 +566,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/mushroom-lamp/mushroom-blue-on.png",
         },
         collectionImage: "/mushroom-lamp/mushroom-lamp-blue-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/mushroom-lamp/mushroom-lamp-blue-off-product-mobile.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-blue-off-product.png",
         images: [
@@ -554,6 +594,7 @@ export const PRODUCTS: Product[] = [
           lightOn: "/mushroom-lamp/mushroom-black-on.png",
         },
         collectionImage: "/mushroom-lamp/mushroom-lamp-black-off-collection.png",
+        cartDrawerImage: "",
         collectionMobileImage: "/mushroom-lamp/mushroom-lamp-black-off-product-mobile.png",
         mainImage: "/mushroom-lamp/mushroom-lamp-black-off-product.png",
         images: [

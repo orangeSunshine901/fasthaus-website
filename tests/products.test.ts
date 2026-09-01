@@ -56,9 +56,14 @@ test("puts a configured main image first without duplicating it", () => {
   ]);
 });
 
-test("every carousel image has an explicit UI theme", () => {
+test("every carousel image has a unique source and explicit UI theme", () => {
   for (const product of PRODUCTS) {
     for (const variant of product.variants) {
+      assert.equal(
+        new Set(variant.images.map((image) => image.src)).size,
+        variant.images.length,
+        `${variant.id} has duplicate carousel images`
+      );
       for (const image of variant.images) {
         assert.ok(image.src, `${variant.id} has an image without a source`);
         assert.ok(

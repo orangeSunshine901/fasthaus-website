@@ -2,26 +2,28 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useMemo } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { ArrowRight, Minus, Plus, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { ArrowLeft, ArrowRight, Minus, Plus, X } from "lucide-react";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
-import { ADD_ONS, getVariantMainImage, PRODUCTS } from "@/lib/data/products";
+import { PRODUCTS } from "@/lib/data/products";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 
-const BESTSELLER = PRODUCTS.find((p) => p.id === "1") ?? PRODUCTS[0];
+const CART_DRAWER_SLIDES = PRODUCTS.flatMap((product) =>
+  product.variants.map((variant) => ({ product, variant }))
+).filter(({ variant }) => variant.cartDrawerImage);
 
 export default function CartDrawer() {
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const reducedMotion = useReducedMotion();
   const {
     items,
     drawerOpen,
     closeDrawer,
     removeItem,
     updateQuantity,
-    addAddOn,
-    removeAddOn,
     pending,
     error,
     subtotal,
@@ -30,6 +32,24 @@ export default function CartDrawer() {
   } = useCartStore();
   const count = itemCount();
   const isEmpty = items.length === 0;
+  const activeSlide = CART_DRAWER_SLIDES[activeSlideIndex % CART_DRAWER_SLIDES.length];
+
+  useEffect(() => {
+    if (!drawerOpen || !isEmpty || reducedMotion || CART_DRAWER_SLIDES.length < 2) return;
+
+    const interval = window.setInterval(() => {
+      setActiveSlideIndex((index) => (index + 1) % CART_DRAWER_SLIDES.length);
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, [drawerOpen, isEmpty, reducedMotion]);
+
+  const showPreviousSlide = () =>
+    setActiveSlideIndex(
+      (index) => (index - 1 + CART_DRAWER_SLIDES.length) % CART_DRAWER_SLIDES.length
+    );
+  const showNextSlide = () =>
+    setActiveSlideIndex((index) => (index + 1) % CART_DRAWER_SLIDES.length);
 
   // One row per add-on: checked if some cart item already has it, otherwise an
   // upsell targeting the first item whose product offers it.
@@ -148,14 +168,24 @@ export default function CartDrawer() {
               <>
                 {/* Empty state */}
                 <div className="relative flex-1 overflow-hidden">
-                  <Image
-                    src="/cart-empty-bg.png"
-                    alt="Fasthaus lamp held in hands"
-                    fill
-                    sizes="440px"
-                    className="object-cover"
-                    style={{ objectPosition: "62% center" }}
-                  />
+                  <AnimatePresence initial={false} mode="popLayout">
+                    <motion.div
+                      key={activeSlide.variant.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: reducedMotion ? 0 : 0.65 }}
+                      className="absolute inset-0"
+                    >
+                      <Image
+                        src={activeSlide.variant.cartDrawerImage}
+                        alt={`${activeSlide.product.name} in ${activeSlide.variant.color}`}
+                        fill
+                        sizes="440px"
+                        className="object-cover"
+                      />
+                    </motion.div>
+                  </AnimatePresence>
                   <div
                     className="absolute inset-0"
                     style={{
@@ -172,16 +202,42 @@ export default function CartDrawer() {
                     </span>
                   </div>
                   <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2.5">
-                    <span className="text-[13px] font-bold uppercase tracking-[0.08em] text-white/75">
-                      Start with our bestseller
-                    </span>
-                    <div
+                    <div className="flex items-center justify-between">
+                      <span className="text-[13px] font-bold uppercase tracking-[0.08em] text-white/75">
+                        Start with a favorite
+                      </span>
+                      {CART_DRAWER_SLIDES.length > 1 && (
+                        <div className="flex items-center gap-1.5" aria-label="Cart recommendations">
+                          <button
+                            type="button"
+                            onClick={showPreviousSlide}
+                            aria-label="Previous recommendation"
+                            className="grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1D1A17] transition-colors hover:bg-white"
+                          >
+                            <ArrowLeft size={14} strokeWidth={2} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={showNextSlide}
+                            aria-label="Next recommendation"
+                            className="grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1D1A17] transition-colors hover:bg-white"
+                          >
+                            <ArrowRight size={14} strokeWidth={2} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <motion.div
+                      key={activeSlide.variant.id}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: reducedMotion ? 0 : 0.3 }}
                       className="flex items-center gap-3.5 rounded-[14px] p-3"
                       style={{ backgroundColor: "rgba(255,255,255,0.96)" }}
                     >
                       <Image
-                        src={BESTSELLER.variants[0].collectionImage}
-                        alt={BESTSELLER.name}
+                        src={activeSlide.variant.collectionImage}
+                        alt={`${activeSlide.product.name} in ${activeSlide.variant.color}`}
                         width={56}
                         height={56}
                         className="h-14 w-14 rounded-[10px] object-cover"
@@ -191,24 +247,27 @@ export default function CartDrawer() {
                           className="text-[15px] font-bold"
                           style={{ color: "var(--color-text-primary)" }}
                         >
-                          {BESTSELLER.name}
+                          {activeSlide.product.name}
+                        </span>
+                        <span className="text-[12px] font-medium text-[#8A8075]">
+                          {activeSlide.variant.color}
                         </span>
                         <DirhamPrice
-                          amount={BESTSELLER.variants[0].price}
+                          amount={activeSlide.variant.price}
                           size="sm"
                           className="font-semibold"
                         />
                       </div>
                       <Link
-                        href={`/product/${BESTSELLER.slug}`}
+                        href={`/product/${activeSlide.product.slug}?variant=${encodeURIComponent(activeSlide.variant.id)}`}
                         onClick={closeDrawer}
-                        aria-label={`View ${BESTSELLER.name}`}
+                        aria-label={`View ${activeSlide.product.name} in ${activeSlide.variant.color}`}
                         className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full transition-[filter] hover:brightness-95"
                         style={{ backgroundColor: "var(--color-accent-amber)" }}
                       >
                         <ArrowRight size={16} strokeWidth={2} className="text-white" />
                       </Link>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
                 <div className="border-t px-6 py-5" style={{ borderColor: "#EEE9E3" }}>

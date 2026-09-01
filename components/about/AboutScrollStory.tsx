@@ -12,7 +12,8 @@ const heroText =
   "Before anything becomes a shape, a material, or a glow, it starts with a feeling. A sense of how the space should feel like";
 const storyFrameRate = 30;
 const storySequenceFrames = 47;
-const storyVideo = "/about/story-panel-1-scrub.mp4";
+const desktopStoryVideo = "/about/story-panel-1-scrub.mp4";
+const mobileStoryVideo = "/about/story-panel-mobile-scrub.mp4";
 const storySequenceDuration = storySequenceFrames / storyFrameRate;
 
 const storyPanels = [
@@ -51,10 +52,9 @@ const philosophy = [
   },
 ];
 
-const studioImages = [
-  "/our-process-img.png",
-  "/collections-hero-img-1.png",
-  "/collections-hero-img-2.png",
+const studioVideos = [
+  "/about/Inside-the-studio-1.webm",
+  "/about/Inside-the-studio-2.webm",
 ];
 
 export default function AboutScrollStory() {
@@ -115,7 +115,8 @@ export default function AboutScrollStory() {
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: storySection,
-            start: "top top",
+            start: () =>
+              window.matchMedia("(max-width: 767px)").matches ? "top 56px" : "top top",
             end: () => `+=${Math.round(window.innerHeight * 2.64)}`,
             scrub: true,
             pin: storyPin,
@@ -236,13 +237,15 @@ export default function AboutScrollStory() {
         >
           <video
             data-story-video
-            src={storyVideo}
             muted
             playsInline
             preload="auto"
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover"
-          />
+          >
+            <source src={mobileStoryVideo} type="video/mp4" media="(max-width: 767px)" />
+            <source src={desktopStoryVideo} type="video/mp4" />
+          </video>
           <div className="absolute inset-0 z-10 bg-black/40" aria-hidden="true" />
 
           <div className="absolute left-1/2 top-1/2 z-20 w-[min(88vw,780px)] -translate-x-1/2 -translate-y-1/2 text-center">
@@ -271,13 +274,15 @@ export default function AboutScrollStory() {
               className="relative flex min-h-[70svh] items-center justify-center overflow-hidden px-5 py-16 text-center"
             >
               <video
-                src={storyVideo}
                 muted
                 playsInline
                 preload="metadata"
                 aria-hidden="true"
                 className="absolute inset-0 h-full w-full object-cover"
-              />
+              >
+                <source src={mobileStoryVideo} type="video/mp4" media="(max-width: 767px)" />
+                <source src={desktopStoryVideo} type="video/mp4" />
+              </video>
               <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
               {index === 0 ? (
                 <h1 className="relative text-[34px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
@@ -324,7 +329,7 @@ export default function AboutScrollStory() {
               <h2 className="type-display-lg text-white">Inside the Studio</h2>
             </div>
             <div data-studio-reveal>
-              <ExpandableGallery images={studioImages} />
+              <ExpandableGallery videos={studioVideos} />
             </div>
           </div>
         </div>

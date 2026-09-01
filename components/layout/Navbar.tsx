@@ -216,7 +216,10 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                   "md:relative md:top-auto md:-mb-16 md:border-transparent md:bg-transparent md:shadow-none"
                 )
               : usesHeroOverlay
-                ? "relative z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent"
+                ? cn(
+                    "z-40 w-full border-[var(--color-border)] bg-[var(--color-surface)] md:-mb-16 md:border-transparent md:bg-transparent",
+                    isAboutPage ? "sticky top-0 md:relative" : "relative"
+                  )
                 : cn("z-40 w-full", isLegalPage ? "relative" : "sticky top-0"),
           aboutMainNavHidden && "md:pointer-events-none md:opacity-0"
         )}
