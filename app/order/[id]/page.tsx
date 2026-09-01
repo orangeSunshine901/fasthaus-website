@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { Check, Clock, ShoppingBag } from "lucide-react";
+import { Check, ShoppingBag } from "lucide-react";
 import { notFound } from "next/navigation";
 import PurchaseCompleted from "@/components/analytics/PurchaseCompleted";
 import ClearPurchasedCart from "@/components/cart/ClearPurchasedCart";
 import DirhamPrice from "@/components/ui/DirhamPrice";
+import PaymentConfirmationPoller from "@/components/order/PaymentConfirmationPoller";
 import { createServiceClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +54,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
             {confirmed ? (
               <Check size={26} style={{ color: "var(--color-success)" }} />
             ) : (
-              <Clock size={25} style={{ color: "var(--color-accent-amber)" }} />
+              <PaymentConfirmationPoller />
             )}
           </span>
           <p className="type-caption-sm">Order #{order.id.slice(0, 8).toUpperCase()}</p>

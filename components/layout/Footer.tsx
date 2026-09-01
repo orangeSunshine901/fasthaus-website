@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Spinner } from "@/components/ui/spinner";
 
 type FooterLink = {
   label: string;
@@ -108,7 +109,7 @@ function FooterNewsletter({ caption }: { caption?: string }) {
             opacity: state === "loading" ? 0.6 : 1,
           }}
         >
-          {state === "loading" ? "…" : state === "success" ? "✓ Subscribed" : "Subscribe"}
+          {state === "loading" ? <Spinner /> : state === "success" ? "✓ Subscribed" : "Subscribe"}
         </button>
       </form>
       {state === "error" && (

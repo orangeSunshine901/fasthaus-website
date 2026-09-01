@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 type State = "idle" | "loading" | "success" | "error";
 
@@ -98,7 +99,7 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
             disabled={state === "loading"}
             className="btn btn-secondary min-h-14 rounded-[var(--radius-full)] px-7 disabled:opacity-60"
           >
-            {state === "loading" ? "…" : "Subscribe"}
+            {state === "loading" ? <Spinner /> : "Subscribe"}
           </button>
         </div>
         {errorMsg && (
@@ -132,7 +133,7 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
         className="btn btn-secondary min-h-12 px-5 disabled:opacity-60"
         style={{ backgroundColor: "var(--color-text-primary)" }}
       >
-        {state === "loading" ? "…" : "Subscribe"}
+        {state === "loading" ? <Spinner /> : "Subscribe"}
       </button>
       {errorMsg && (
         <p className="text-xs mt-1 absolute" style={{ color: "var(--color-error)" }}>

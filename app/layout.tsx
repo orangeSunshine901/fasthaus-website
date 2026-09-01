@@ -86,6 +86,14 @@ export default function RootLayout({
             security_storage: 'granted'
           });
         `}</Script>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=GT-WPFL2V2P"
+          strategy="beforeInteractive"
+        />
+        <Script id="google-tag" strategy="beforeInteractive">{`
+          window.gtag('js', new Date());
+          window.gtag('config', 'GT-WPFL2V2P');
+        `}</Script>
         <Script id="geidea-checkout-sdk" src={getGeideaSdkUrl()} strategy="beforeInteractive" />
         <meta
           name="google-site-verification"

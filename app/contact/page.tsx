@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Mail, MessageCircle, AtSign, MapPin, Clock } from "lucide-react";
 import ShopLayout from "@/components/layout/ShopLayout";
+import { Spinner } from "@/components/ui/spinner";
 import { capture, captureException } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 
@@ -171,7 +172,13 @@ export default function ContactPage() {
                   disabled={state === "loading"}
                   className="btn btn-primary w-full disabled:opacity-60"
                 >
-                  {state === "loading" ? "Sending…" : "Send message"}
+                  {state === "loading" ? (
+                    <span className="inline-flex items-center gap-2">
+                      <Spinner /> Sending…
+                    </span>
+                  ) : (
+                    "Send message"
+                  )}
                 </button>
               </form>
             )}

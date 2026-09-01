@@ -43,6 +43,7 @@ type CreateCheckoutSessionInput = {
   amount: number;
   merchantReferenceId: string;
   callbackUrl: string;
+  returnUrl: string;
   customer: {
     email: string;
     phoneNumber: string;
@@ -125,11 +126,17 @@ export async function createGeideaCheckoutSession(
     merchantReferenceId: input.merchantReferenceId,
     signature,
     callbackUrl: input.callbackUrl,
+    returnUrl: input.returnUrl,
     paymentOperation: "Pay",
     language: "en",
     cardOnFile: false,
     appearance: { receiptPage: true, styles: {}, uiMode: "modal" },
     customer: input.customer,
+    expressCheckouts: [
+      { wallet: "apple-pay", label: "Apple Pay" },
+      { wallet: "google-pay", label: "Google Pay" },
+      { wallet: "samsung-pay", label: "Samsung Pay" },
+    ],
   };
   const logSessionCreation = process.env.GEIDEA_LOG_SESSION_CREATION === "true";
   const startedAt = Date.now();

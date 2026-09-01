@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowRight, Minus, Plus, X } from "lucide-react";
 import DirhamPrice from "@/components/ui/DirhamPrice";
+import { Spinner } from "@/components/ui/spinner";
 import { useCartStore } from "@/lib/store/cart";
 import { PRODUCTS } from "@/lib/data/products";
 import { capture } from "@/lib/analytics/client";
@@ -207,7 +208,10 @@ export default function CartDrawer() {
                         Start with a favorite
                       </span>
                       {CART_DRAWER_SLIDES.length > 1 && (
-                        <div className="flex items-center gap-1.5" aria-label="Cart recommendations">
+                        <div
+                          className="flex items-center gap-1.5"
+                          aria-label="Cart recommendations"
+                        >
                           <button
                             type="button"
                             onClick={showPreviousSlide}
@@ -366,7 +370,11 @@ export default function CartDrawer() {
                                 className="w-7 text-center text-[14px] font-bold"
                                 style={{ color: "var(--color-text-primary)" }}
                               >
-                                {item.quantity}
+                                {syncingQuantity ? (
+                                  <Spinner className="mx-auto size-3" />
+                                ) : (
+                                  item.quantity
+                                )}
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
@@ -387,7 +395,7 @@ export default function CartDrawer() {
                               className="text-[13px] font-semibold underline transition-colors hover:text-[var(--color-accent-amber)] disabled:opacity-40"
                               style={{ color: "#8A8075" }}
                             >
-                              Remove
+                              {busy ? <Spinner className="mx-auto size-3" /> : "Remove"}
                             </button>
                           </div>
                         </div>

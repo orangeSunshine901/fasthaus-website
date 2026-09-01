@@ -1,18 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, CalendarCheck, ChevronDown, Shield, ShieldCheck, Truck } from "lucide-react";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import { Tooltip } from "radix-ui";
 import DirhamPrice from "@/components/ui/DirhamPrice";
+import { Spinner } from "@/components/ui/spinner";
 import { useCartStore } from "@/lib/store/cart";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { discountRateFor, WELCOME_DISCOUNT_CODE } from "@/lib/checkout/discount";
 import { startGeideaCardCheckout } from "@/lib/payment/geidea-client";
+import GeideaExpressWallets from "@/components/checkout/GeideaExpressWallets";
 
 const EMIRATES = [
   "Dubai",
@@ -36,6 +38,8 @@ type CheckoutSession = {
   expiresAt: string;
   cardRedirectUrl: string;
 };
+
+type PreparedCheckoutSession = CheckoutSession & { detailsKey: string };
 
 const inputStyle = {
   borderColor: "var(--color-border)",
@@ -93,6 +97,10 @@ export default function CheckoutPage() {
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
+  const [walletSession, setWalletSession] = useState<PreparedCheckoutSession | null>(null);
+  const [walletLoading, setWalletLoading] = useState(false);
+  const [walletError, setWalletError] = useState<string | null>(null);
+  const [walletRetry, setWalletRetry] = useState(0);
 
   const subtotalValue = subtotal();
   const hasDiscount = newsletter || discountApplied;
@@ -106,6 +114,21 @@ export default function CheckoutPage() {
     !streetAddressError &&
     !unitVillaError &&
     !buildingClusterError;
+  const checkoutDetailsKey = JSON.stringify([
+    fullName,
+    email,
+    phone,
+    streetAddress,
+    unitVilla,
+    buildingCluster,
+    landmark,
+    emirate,
+    poBox,
+    hasDiscount,
+    totalValue,
+  ]);
+  const activeWalletSession =
+    walletSession?.detailsKey === checkoutDetailsKey ? walletSession : null;
   const checkoutDisabled = !checkoutDetailsReady || purchasing || cartSyncing;
 
   useEffect(() => {
@@ -117,40 +140,105 @@ export default function CheckoutPage() {
       });
   }, [items, totalValue]);
 
-  async function requestCheckoutSession(): Promise<CheckoutSession> {
-    const [firstName, ...lastNameParts] = fullName.trim().split(/\s+/);
-    const response = await fetch("/api/checkout/create-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contact: { email, phone },
-        shippingAddress: {
-          firstName,
-          lastName: lastNameParts.join(" ") || firstName,
-          streetAddress,
-          line1: unitVilla,
-          line2: buildingCluster,
-          landmark: landmark || undefined,
-          emirate,
-          postalCode: poBox || undefined,
-        },
-        discountCode: hasDiscount ? WELCOME_DISCOUNT_CODE : undefined,
-      }),
-    });
-    const body = (await response.json()) as Partial<CheckoutSession> & {
-      error?: { message?: string };
-    };
+  const requestCheckoutSession = useCallback(
+    async (signal?: AbortSignal): Promise<CheckoutSession> => {
+      const [firstName, ...lastNameParts] = fullName.trim().split(/\s+/);
+      const response = await fetch("/api/checkout/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal,
+        body: JSON.stringify({
+          contact: { email, phone },
+          shippingAddress: {
+            firstName,
+            lastName: lastNameParts.join(" ") || firstName,
+            streetAddress,
+            line1: unitVilla,
+            line2: buildingCluster,
+            landmark: landmark || undefined,
+            emirate,
+            postalCode: poBox || undefined,
+          },
+          discountCode: hasDiscount ? WELCOME_DISCOUNT_CODE : undefined,
+        }),
+      });
+      const body = (await response.json()) as Partial<CheckoutSession> & {
+        error?: { message?: string };
+      };
+      if (
+        !response.ok ||
+        !body.orderId ||
+        !body.sessionId ||
+        !body.expiresAt ||
+        !body.cardRedirectUrl
+      ) {
+        throw new Error(body.error?.message ?? "Checkout could not be started.");
+      }
+      return body as CheckoutSession;
+    },
+    [
+      buildingCluster,
+      email,
+      emirate,
+      fullName,
+      hasDiscount,
+      landmark,
+      phone,
+      poBox,
+      streetAddress,
+      unitVilla,
+    ]
+  );
+
+  useEffect(() => {
     if (
-      !response.ok ||
-      !body.orderId ||
-      !body.sessionId ||
-      !body.expiresAt ||
-      !body.cardRedirectUrl
-    ) {
-      throw new Error(body.error?.message ?? "Checkout could not be started.");
-    }
-    return body as CheckoutSession;
-  }
+      !checkoutDetailsReady ||
+      items.length === 0 ||
+      activeWalletSession ||
+      purchasing ||
+      cartSyncing
+    )
+      return;
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setWalletLoading(true);
+      setWalletError(null);
+      try {
+        const session = await requestCheckoutSession(controller.signal);
+        setWalletSession({ ...session, detailsKey: checkoutDetailsKey });
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setWalletError(
+            error instanceof Error ? error.message : "Express checkout could not be started."
+          );
+        }
+      } finally {
+        if (!controller.signal.aborted) setWalletLoading(false);
+      }
+    }, 600);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [
+    activeWalletSession,
+    cartSyncing,
+    checkoutDetailsKey,
+    checkoutDetailsReady,
+    items.length,
+    purchasing,
+    requestCheckoutSession,
+    walletRetry,
+  ]);
+
+  useEffect(() => {
+    if (!walletSession) return;
+    const remaining = Date.parse(walletSession.expiresAt) - Date.now() - 30_000;
+    const timer = window.setTimeout(() => setWalletSession(null), Math.max(0, remaining));
+    return () => window.clearTimeout(timer);
+  }, [walletSession]);
 
   function toggleNewsletter() {
     setNewsletter((prev) => {
@@ -187,7 +275,7 @@ export default function CheckoutPage() {
     if (cartSyncing) return;
     setPurchasing(true);
     try {
-      const session = await requestCheckoutSession();
+      const session = activeWalletSession ?? (await requestCheckoutSession());
       if (session.sessionId.startsWith("test-geidea-session-")) {
         window.location.assign(session.cardRedirectUrl);
         return;
@@ -516,6 +604,64 @@ export default function CheckoutPage() {
                 </div>
               </section>
 
+              <section
+                className="flex flex-col gap-4 border-t pt-6"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
+                  Express checkout
+                </h2>
+                {!checkoutDetailsReady ? (
+                  <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
+                    Complete the required contact and delivery details to enable supported wallets.
+                  </p>
+                ) : activeWalletSession ? (
+                  <>
+                    <GeideaExpressWallets
+                      sessionId={activeWalletSession.sessionId}
+                      orderId={activeWalletSession.orderId}
+                    />
+                    <p
+                      className="type-caption-sm text-center"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      Apple Pay, Google Pay, and Samsung Pay appear automatically on supported
+                      devices and browsers.
+                    </p>
+                  </>
+                ) : walletLoading || cartSyncing ? (
+                  <div
+                    className="flex min-h-[60px] items-center justify-center rounded-[var(--radius-md)] border"
+                    style={{ borderColor: "var(--color-border)" }}
+                  >
+                    <Spinner />
+                    <span
+                      className="type-body-sm ml-2"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      Loading secure wallets…
+                    </span>
+                  </div>
+                ) : walletError ? (
+                  <div className="flex flex-col gap-2.5">
+                    <p
+                      role="alert"
+                      className="type-body-sm"
+                      style={{ color: "var(--color-error)" }}
+                    >
+                      {walletError}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setWalletRetry((value) => value + 1)}
+                      className="btn-text w-fit"
+                    >
+                      Retry express checkout
+                    </button>
+                  </div>
+                ) : null}
+              </section>
+
               <div className="flex flex-col gap-3 pt-1">
                 {purchaseError && (
                   <p role="alert" className="type-body-sm" style={{ color: "var(--color-error)" }}>
@@ -534,11 +680,17 @@ export default function CheckoutPage() {
                 <Tooltip.Provider delayDuration={200}>
                   <Tooltip.Root>
                     <Tooltip.Trigger asChild>
-                      <span className="block" tabIndex={!checkoutDetailsReady ? 0 : -1}>
+                      <span className="block">
                         <button
                           type="submit"
-                          disabled={checkoutDisabled}
-                          className="btn btn-primary h-[54px] w-full gap-1.5 enabled:cursor-pointer disabled:opacity-60"
+                          disabled={purchasing || cartSyncing}
+                          aria-disabled={checkoutDisabled}
+                          aria-describedby={
+                            !checkoutDetailsReady ? "checkout-required-tooltip" : undefined
+                          }
+                          className={`btn btn-primary h-[54px] w-full gap-1.5 ${
+                            checkoutDisabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+                          }`}
                           style={
                             checkoutDisabled
                               ? {
@@ -548,7 +700,7 @@ export default function CheckoutPage() {
                               : undefined
                           }
                         >
-                          <ShieldCheck size={16} />
+                          {purchasing || cartSyncing ? <Spinner /> : <ShieldCheck size={16} />}
                           <span>
                             {cartSyncing
                               ? "Preparing cart…"
@@ -565,6 +717,7 @@ export default function CheckoutPage() {
                     {!checkoutDetailsReady && (
                       <Tooltip.Portal>
                         <Tooltip.Content
+                          id="checkout-required-tooltip"
                           side="top"
                           sideOffset={10}
                           className="z-50 max-w-72 rounded-md bg-[var(--color-text-primary)] px-3 py-2 text-center text-xs font-medium text-white shadow-md"

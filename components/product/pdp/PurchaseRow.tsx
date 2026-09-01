@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck, Star } from "lucide-react";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
+import { Spinner } from "@/components/ui/spinner";
 
 type Props = {
   product: Product;
@@ -167,13 +168,21 @@ export default function PurchaseRow({
             className="flex h-[54px] items-center justify-center rounded-[12px] text-white transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
             style={{ backgroundColor: "var(--color-accent-amber)", fontWeight: 600 }}
           >
-            {busy ? "Preparing…" : "Buy now –"}&nbsp;
-            <DirhamPrice
-              amount={selectedVariant.price * quantity + addOnsTotal}
-              size="sm"
-              variant="white"
-              className="font-bold text-white text-[16px]"
-            />
+            {busy ? (
+              <span className="inline-flex items-center gap-2">
+                <Spinner /> Preparing…
+              </span>
+            ) : (
+              <>
+                Buy now –&nbsp;
+                <DirhamPrice
+                  amount={selectedVariant.price * quantity + addOnsTotal}
+                  size="sm"
+                  variant="white"
+                  className="font-bold text-white text-[16px]"
+                />
+              </>
+            )}
           </button>
           <button
             type="button"
@@ -186,7 +195,7 @@ export default function PurchaseRow({
               fontWeight: 500,
             }}
           >
-            <ShoppingCart size={16} />
+            {busy ? <Spinner /> : <ShoppingCart size={16} />}
             {busy ? "Adding…" : "Add to cart"}
           </button>
           {error && (
