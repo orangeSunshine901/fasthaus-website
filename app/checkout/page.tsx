@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ChevronDown, ShieldCheck } from "lucide-react";
+import { ArrowLeft, CalendarCheck, ChevronDown, Shield, ShieldCheck, Truck } from "lucide-react";
 import { isValidPhoneNumber } from "libphonenumber-js";
+import { Tooltip } from "radix-ui";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { useCartStore } from "@/lib/store/cart";
 import { capture } from "@/lib/analytics/client";
@@ -23,6 +24,12 @@ const EMIRATES = [
   "Umm Al Quwain",
 ];
 
+const CHECKOUT_BENEFITS = [
+  { icon: Truck, label: "Free shipping" },
+  { icon: CalendarCheck, label: "14-day eligible returns" },
+  { icon: Shield, label: "1-year warranty" },
+];
+
 type CheckoutSession = {
   orderId: string;
   sessionId: string;
@@ -36,23 +43,6 @@ const inputStyle = {
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CHECKOUT_DETAILS_KEY = "fasthaus_checkout_details_v1";
-
-type CheckoutDetails = {
-  version: 1;
-  fullName: string;
-  email: string;
-  phone: string;
-  streetAddress: string;
-  unitVilla: string;
-  buildingCluster: string;
-  landmark: string;
-  emirate: string;
-  poBox: string;
-  discountCode: string;
-  discountApplied: boolean;
-  newsletter: boolean;
-};
 
 function isValidEmail(value: string): boolean {
   return EMAIL_PATTERN.test(value.trim());
@@ -76,11 +66,25 @@ export default function CheckoutPage() {
   const [landmark, setLandmark] = useState("");
   const [emirate, setEmirate] = useState("Dubai");
   const [poBox, setPoBox] = useState("");
+  const [validationAttempted, setValidationAttempted] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const emailError =
-    email.length > 0 && !isValidEmail(email) ? "Enter a valid email address." : null;
-  const phoneError =
-    phone.length > 0 && !isValidAePhone(phone) ? "Enter a valid UAE mobile number." : null;
+  const fullNameError = fullName.trim() ? null : "Enter your full name.";
+  const emailError = !email.trim()
+    ? "Enter your email address."
+    : !isValidEmail(email)
+      ? "Enter a valid email address."
+      : null;
+  const phoneError = !phone.trim()
+    ? "Enter your phone number."
+    : !isValidAePhone(phone)
+      ? "Enter a valid UAE mobile number."
+      : null;
+  const streetAddressError = streetAddress.trim() ? null : "Enter your street and area.";
+  const unitVillaError = unitVilla.trim() ? null : "Enter your apartment, floor, or villa number.";
+  const buildingClusterError = buildingCluster.trim()
+    ? null
+    : "Enter your building or cluster name.";
 
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
@@ -90,69 +94,19 @@ export default function CheckoutPage() {
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("payment") !== "cancelled") return;
-    const timer = window.setTimeout(() => {
-      try {
-        const saved = JSON.parse(
-          window.sessionStorage.getItem(CHECKOUT_DETAILS_KEY) ?? "null"
-        ) as CheckoutDetails | null;
-        const values = saved
-          ? [
-              saved.fullName,
-              saved.email,
-              saved.phone,
-              saved.streetAddress,
-              saved.unitVilla,
-              saved.buildingCluster,
-              saved.landmark,
-              saved.emirate,
-              saved.poBox,
-              saved.discountCode,
-            ]
-          : [];
-        if (
-          saved?.version === 1 &&
-          values.every((value) => typeof value === "string") &&
-          typeof saved.discountApplied === "boolean" &&
-          typeof saved.newsletter === "boolean"
-        ) {
-          setFullName(saved.fullName);
-          setEmail(saved.email);
-          setPhone(saved.phone);
-          setStreetAddress(saved.streetAddress);
-          setUnitVilla(saved.unitVilla);
-          setBuildingCluster(saved.buildingCluster);
-          setLandmark(saved.landmark);
-          setEmirate(EMIRATES.includes(saved.emirate) ? saved.emirate : "Dubai");
-          setPoBox(saved.poBox);
-          setDiscountCode(saved.discountCode);
-          setDiscountApplied(saved.discountApplied);
-          setNewsletter(saved.newsletter);
-        }
-      } catch {
-        // Checkout details are best-effort; the server still validates every submitted value.
-      }
-      setPurchaseNotice(
-        "Payment cancelled. No charge was made and your details have been restored."
-      );
-      window.history.replaceState(null, "", "/checkout");
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, []);
-
   const subtotalValue = subtotal();
   const hasDiscount = newsletter || discountApplied;
   const discountAmount = hasDiscount ? subtotalValue * discountRateFor(WELCOME_DISCOUNT_CODE) : 0;
   const totalValue = subtotalValue - discountAmount;
   const cartSyncing = pending.length > 0;
   const checkoutDetailsReady =
-    isValidEmail(email) &&
-    isValidAePhone(phone) &&
-    !!fullName.trim() &&
-    !!streetAddress.trim() &&
-    !!unitVilla.trim() &&
-    !!buildingCluster.trim();
+    !fullNameError &&
+    !emailError &&
+    !phoneError &&
+    !streetAddressError &&
+    !unitVillaError &&
+    !buildingClusterError;
+  const checkoutDisabled = !checkoutDetailsReady || purchasing || cartSyncing;
 
   useEffect(() => {
     if (items.length > 0)
@@ -215,30 +169,24 @@ export default function CheckoutPage() {
   }
 
   async function startCheckout() {
+    setValidationAttempted(true);
     setEmailTouched(true);
     setPhoneTouched(true);
-
-    if (!checkoutDetailsReady || cartSyncing) return;
-    setPurchasing(true);
     setPurchaseError(null);
     setPurchaseNotice(null);
+
+    if (!checkoutDetailsReady) {
+      window.requestAnimationFrame(() => {
+        const firstInvalidField =
+          formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
+        firstInvalidField?.focus({ preventScroll: true });
+        firstInvalidField?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      return;
+    }
+    if (cartSyncing) return;
+    setPurchasing(true);
     try {
-      const details: CheckoutDetails = {
-        version: 1,
-        fullName,
-        email,
-        phone,
-        streetAddress,
-        unitVilla,
-        buildingCluster,
-        landmark,
-        emirate,
-        poBox,
-        discountCode,
-        discountApplied,
-        newsletter,
-      };
-      window.sessionStorage.setItem(CHECKOUT_DETAILS_KEY, JSON.stringify(details));
       const session = await requestCheckoutSession();
       if (session.sessionId.startsWith("test-geidea-session-")) {
         window.location.assign(session.cardRedirectUrl);
@@ -246,7 +194,6 @@ export default function CheckoutPage() {
       }
       startGeideaCardCheckout(session.sessionId, {
         onSuccess: () => {
-          window.sessionStorage.removeItem(CHECKOUT_DETAILS_KEY);
           window.location.assign(`/order/${session.orderId}`);
         },
         onError: (data) => {
@@ -300,7 +247,7 @@ export default function CheckoutPage() {
       <div className="container-page py-10 md:py-14">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[520px_1fr] lg:gap-16 xl:gap-[88px]">
           {/* LEFT: form */}
-          <form onSubmit={handlePurchase} noValidate className="flex flex-col gap-7">
+          <form ref={formRef} onSubmit={handlePurchase} noValidate className="flex flex-col gap-7">
             <div className="flex flex-col gap-2">
               <Link href="/cart" className="btn-text inline-flex w-fit items-center gap-1.5">
                 <ArrowLeft size={14} />
@@ -320,7 +267,12 @@ export default function CheckoutPage() {
                 <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
                   Your details
                 </h2>
-                <Field label="Full name" required>
+                <Field
+                  label="Full name"
+                  required
+                  error={validationAttempted ? fullNameError : null}
+                  errorId="full-name-error"
+                >
                   <input
                     required
                     autoComplete="name"
@@ -328,10 +280,25 @@ export default function CheckoutPage() {
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Ava Smith"
                     className="input-field"
-                    style={inputStyle}
+                    style={{
+                      ...inputStyle,
+                      borderColor:
+                        validationAttempted && fullNameError
+                          ? "var(--color-error)"
+                          : inputStyle.borderColor,
+                    }}
+                    aria-invalid={validationAttempted && !!fullNameError}
+                    aria-describedby={
+                      validationAttempted && fullNameError ? "full-name-error" : undefined
+                    }
                   />
                 </Field>
-                <Field label="Email" required error={emailTouched ? emailError : null}>
+                <Field
+                  label="Email"
+                  required
+                  error={emailTouched || validationAttempted ? emailError : null}
+                  errorId="email-error"
+                >
                   <input
                     required
                     type="email"
@@ -344,12 +311,24 @@ export default function CheckoutPage() {
                     style={{
                       ...inputStyle,
                       borderColor:
-                        emailTouched && emailError ? "var(--color-error)" : inputStyle.borderColor,
+                        (emailTouched || validationAttempted) && emailError
+                          ? "var(--color-error)"
+                          : inputStyle.borderColor,
                     }}
-                    aria-invalid={emailTouched && !!emailError}
+                    aria-invalid={(emailTouched || validationAttempted) && !!emailError}
+                    aria-describedby={
+                      (emailTouched || validationAttempted) && emailError
+                        ? "email-error"
+                        : undefined
+                    }
                   />
                 </Field>
-                <Field label="Phone number" required error={phoneTouched ? phoneError : null}>
+                <Field
+                  label="Phone number"
+                  required
+                  error={phoneTouched || validationAttempted ? phoneError : null}
+                  errorId="phone-error"
+                >
                   <div className="flex gap-2.5">
                     <div
                       className="input-field flex w-[126px] flex-shrink-0 items-center"
@@ -375,11 +354,16 @@ export default function CheckoutPage() {
                       style={{
                         ...inputStyle,
                         borderColor:
-                          phoneTouched && phoneError
+                          (phoneTouched || validationAttempted) && phoneError
                             ? "var(--color-error)"
                             : inputStyle.borderColor,
                       }}
-                      aria-invalid={phoneTouched && !!phoneError}
+                      aria-invalid={(phoneTouched || validationAttempted) && !!phoneError}
+                      aria-describedby={
+                        (phoneTouched || validationAttempted) && phoneError
+                          ? "phone-error"
+                          : undefined
+                      }
                     />
                   </div>
                 </Field>
@@ -409,7 +393,12 @@ export default function CheckoutPage() {
                     </span>
                   </div>
                 </Field>
-                <Field label="Address" required>
+                <Field
+                  label="Address"
+                  required
+                  error={validationAttempted ? streetAddressError : null}
+                  errorId="street-address-error"
+                >
                   <input
                     required
                     autoComplete="address-line1"
@@ -417,10 +406,25 @@ export default function CheckoutPage() {
                     onChange={(e) => setStreetAddress(e.target.value)}
                     placeholder="Street name and Area"
                     className="input-field"
-                    style={inputStyle}
+                    style={{
+                      ...inputStyle,
+                      borderColor:
+                        validationAttempted && streetAddressError
+                          ? "var(--color-error)"
+                          : inputStyle.borderColor,
+                    }}
+                    aria-invalid={validationAttempted && !!streetAddressError}
+                    aria-describedby={
+                      validationAttempted && streetAddressError ? "street-address-error" : undefined
+                    }
                   />
                 </Field>
-                <Field label="Apt & Floor No. / Villa No." required>
+                <Field
+                  label="Apt & Floor No. / Villa No."
+                  required
+                  error={validationAttempted ? unitVillaError : null}
+                  errorId="unit-villa-error"
+                >
                   <input
                     required
                     autoComplete="address-line2"
@@ -428,10 +432,25 @@ export default function CheckoutPage() {
                     onChange={(e) => setUnitVilla(e.target.value)}
                     placeholder="Apt 804, Floor 8 or Villa 12"
                     className="input-field"
-                    style={inputStyle}
+                    style={{
+                      ...inputStyle,
+                      borderColor:
+                        validationAttempted && unitVillaError
+                          ? "var(--color-error)"
+                          : inputStyle.borderColor,
+                    }}
+                    aria-invalid={validationAttempted && !!unitVillaError}
+                    aria-describedby={
+                      validationAttempted && unitVillaError ? "unit-villa-error" : undefined
+                    }
                   />
                 </Field>
-                <Field label="Building / Cluster name" required>
+                <Field
+                  label="Building / Cluster name"
+                  required
+                  error={validationAttempted ? buildingClusterError : null}
+                  errorId="building-cluster-error"
+                >
                   <input
                     required
                     autoComplete="address-line3"
@@ -439,7 +458,19 @@ export default function CheckoutPage() {
                     onChange={(e) => setBuildingCluster(e.target.value)}
                     placeholder="Marina Heights or Cluster J"
                     className="input-field"
-                    style={inputStyle}
+                    style={{
+                      ...inputStyle,
+                      borderColor:
+                        validationAttempted && buildingClusterError
+                          ? "var(--color-error)"
+                          : inputStyle.borderColor,
+                    }}
+                    aria-invalid={validationAttempted && !!buildingClusterError}
+                    aria-describedby={
+                      validationAttempted && buildingClusterError
+                        ? "building-cluster-error"
+                        : undefined
+                    }
                   />
                 </Field>
                 <Field label="Landmark">
@@ -495,28 +526,56 @@ export default function CheckoutPage() {
                   <p
                     role="status"
                     className="type-body-sm"
-                    style={{ color: "var(--color-text-secondary)" }}
+                    style={{ color: "var(--color-accent-amber-hover)" }}
                   >
                     {purchaseNotice}
                   </p>
                 )}
-                <button
-                  type="submit"
-                  disabled={purchasing || cartSyncing}
-                  className="btn btn-primary h-[54px] w-full gap-1.5 disabled:opacity-60"
-                >
-                  <ShieldCheck size={16} />
-                  <span>
-                    {cartSyncing
-                      ? "Preparing cart…"
-                      : purchasing
-                        ? "Opening secure payment…"
-                        : "Pay securely by card —"}
-                  </span>
-                  {!purchasing && !cartSyncing && (
-                    <DirhamPrice amount={totalValue} variant="white" />
-                  )}
-                </button>
+                <Tooltip.Provider delayDuration={200}>
+                  <Tooltip.Root>
+                    <Tooltip.Trigger asChild>
+                      <span className="block" tabIndex={!checkoutDetailsReady ? 0 : -1}>
+                        <button
+                          type="submit"
+                          disabled={checkoutDisabled}
+                          className="btn btn-primary h-[54px] w-full gap-1.5 enabled:cursor-pointer disabled:opacity-60"
+                          style={
+                            checkoutDisabled
+                              ? {
+                                  backgroundColor: "var(--color-accent-amber-hover)",
+                                  borderColor: "var(--color-accent-amber-hover)",
+                                }
+                              : undefined
+                          }
+                        >
+                          <ShieldCheck size={16} />
+                          <span>
+                            {cartSyncing
+                              ? "Preparing cart…"
+                              : purchasing
+                                ? "Opening secure payment…"
+                                : "Pay securely by card —"}
+                          </span>
+                          {!purchasing && !cartSyncing && (
+                            <DirhamPrice amount={totalValue} variant="white" />
+                          )}
+                        </button>
+                      </span>
+                    </Tooltip.Trigger>
+                    {!checkoutDetailsReady && (
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          side="top"
+                          sideOffset={10}
+                          className="z-50 max-w-72 rounded-md bg-[var(--color-text-primary)] px-3 py-2 text-center text-xs font-medium text-white shadow-md"
+                        >
+                          Fill in all mandatory fields to proceed with checkout.
+                          <Tooltip.Arrow className="fill-[var(--color-text-primary)]" />
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    )}
+                  </Tooltip.Root>
+                </Tooltip.Provider>
                 <p
                   className="type-caption-sm flex items-center justify-center gap-1.5 text-center"
                   style={{ color: "var(--color-text-secondary)" }}
@@ -669,7 +728,11 @@ export default function CheckoutPage() {
                   </button>
                 </div>
                 {discountError && (
-                  <p className="type-caption-sm" style={{ color: "var(--color-error)" }} role="alert">
+                  <p
+                    className="type-caption-sm"
+                    style={{ color: "var(--color-error)" }}
+                    role="alert"
+                  >
                     {discountError}
                   </p>
                 )}
@@ -730,20 +793,22 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-3.5 gap-y-1.5 px-2">
-              {["Free shipping", "14-day eligible returns", "1-year warranty"].map(
-                (t, i, arr) => (
-                <span key={t} className="flex items-center gap-3.5">
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 px-2">
+              {CHECKOUT_BENEFITS.map(({ icon: Icon, label }) => (
+                <span key={label} className="flex items-center gap-1.5">
+                  <Icon
+                    size={14}
+                    aria-hidden="true"
+                    style={{ color: "var(--color-text-primary)" }}
+                  />
                   <span
                     className="type-caption-sm"
                     style={{ color: "var(--color-text-secondary)" }}
                   >
-                    {t}
+                    {label}
                   </span>
-                  {i < arr.length - 1 && <span style={{ color: "var(--color-border)" }}>·</span>}
                 </span>
-                )
-              )}
+              ))}
             </div>
           </aside>
         </div>
@@ -756,11 +821,13 @@ function Field({
   label,
   required,
   error,
+  errorId,
   children,
 }: {
   label: string;
   required?: boolean;
   error?: string | null;
+  errorId?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -770,7 +837,7 @@ function Field({
       </span>
       {children}
       {error && (
-        <span className="type-caption-sm" style={{ color: "var(--color-error)" }}>
+        <span id={errorId} className="type-caption-sm" style={{ color: "var(--color-error)" }}>
           {error}
         </span>
       )}

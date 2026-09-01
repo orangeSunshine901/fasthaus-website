@@ -38,8 +38,8 @@ switch to live credentials until a signed sandbox callback passes verification.
 1. Checkout validates the anonymous cart and delivery details on the server.
 2. A pending Fasthaus order and one 15-minute Geidea session are created.
 3. The session opens in Geidea's card-payment modal.
-4. Success navigates to the order page. The Geidea return URL verifies payment status and sends
-   cancelled or unpaid attempts back to checkout, where tab-scoped form details are restored.
+4. The card-only modal omits `returnUrl`: success navigates to the order page, while cancel and
+   error close back onto the unchanged checkout form through the SDK callbacks.
 5. Only a valid server callback with matching merchant, amount, currency, reference, paid
    status, and success codes confirms the order.
 6. Confirmation emails use stable Resend idempotency keys so callback retries are safe.
