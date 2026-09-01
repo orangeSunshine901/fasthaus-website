@@ -13,8 +13,8 @@ const details = [
   { icon: Mail, label: "Email", value: "hello@fasthaus.studio" },
   { icon: MessageCircle, label: "WhatsApp", value: "+971 50 123 4567" },
   { icon: AtSign, label: "Instagram", value: "@fasthaus.studio" },
-  { icon: MapPin, label: "Location", value: "Al Quoz, Dubai, UAE" },
-  { icon: Clock, label: "Business Hours", value: "Sun – Thu, 9:00 – 18:00" },
+  { icon: MapPin, label: "Location", value: "Industrial Area 4, Sharjah, UAE" },
+  { icon: Clock, label: "Business Hours", value: "Mon – Fri, 10:00 – 19:00" },
 ];
 
 export default function ContactPage() {
