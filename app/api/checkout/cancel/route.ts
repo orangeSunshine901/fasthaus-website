@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     const supabase = await createServiceClient();
     const { data: order, error: orderError } = await supabase
       .from("orders")
-      .select("id,cart_id,status,geidea_session_id")
+      .select("id,cart_id,status,payment_status,geidea_session_id")
       .eq("id", parsed.data.orderId)
       .maybeSingle();
     if (orderError) throw orderError;
@@ -49,6 +49,9 @@ export async function POST(request: Request) {
     }
     if (order.status === "confirmed") {
       return NextResponse.json({ ok: true, confirmed: true });
+    }
+    if (order.payment_status === "Cancelled") {
+      return NextResponse.json({ ok: true, confirmed: false });
     }
     if (order.status !== "pending" || order.geidea_session_id !== parsed.data.sessionId) {
       throw new CartError("CART_CONFLICT", "Checkout session has changed.", 409);

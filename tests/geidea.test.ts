@@ -11,6 +11,7 @@ import {
   getGeideaEventOrderId,
   verifyGeideaCallback,
   verifyGeideaOrderResponse,
+  verifyGeideaOrdersResponse,
 } from "../lib/payment/geidea-callback.ts";
 import { formatGeideaDiagnostic } from "../lib/payment/geidea-diagnostics.ts";
 
@@ -22,10 +23,7 @@ const geideaOrderId = "e4bc51eb-72d0-4663-c565-08def3b74c5d";
 
 test("formats Geidea money and timestamps deterministically", () => {
   assert.equal(formatGeideaAmount(99), "99.00");
-  assert.equal(
-    formatGeideaTimestamp(new Date("2026-08-07T10:30:00Z")),
-    "2026/08/07 10:30:00"
-  );
+  assert.equal(formatGeideaTimestamp(new Date("2026-08-07T10:30:00Z")), "2026/08/07 10:30:00");
   assert.throws(() => formatGeideaAmount(Number.NaN));
 });
 
@@ -126,10 +124,7 @@ test("does not treat incomplete success codes as a paid order", () => {
     merchantReferenceId,
     timestamp: callback.order.updatedDate,
   });
-  assert.equal(
-    verifyGeideaCallback(callback, { merchantPublicKey, apiPassword }).isPaid,
-    false
-  );
+  assert.equal(verifyGeideaCallback(callback, { merchantPublicKey, apiPassword }).isPaid, false);
 });
 
 test("authenticates the event callback through a fetched Geidea order", () => {
@@ -156,5 +151,29 @@ test("authenticates the event callback through a fetched Geidea order", () => {
       merchantPublicKey,
       orderId: "33333333-3333-4333-8333-333333333333",
     })
+  );
+});
+
+test("selects a paid Geidea order when checking a merchant return", () => {
+  const cancelled = validCallback().order;
+  cancelled.status = "Failed";
+  cancelled.detailedStatus = "OrderFailed";
+  const paid = validCallback().order;
+  paid.transactions = [];
+  const order = verifyGeideaOrdersResponse(
+    {
+      responseCode: "000",
+      detailedResponseCode: "000",
+      orders: [cancelled, paid],
+    },
+    { merchantPublicKey, merchantReferenceId }
+  );
+  assert.equal(order?.isPaid, true);
+  assert.equal(
+    verifyGeideaOrdersResponse(
+      { responseCode: "000", detailedResponseCode: "000", orders: [] },
+      { merchantPublicKey, merchantReferenceId }
+    ),
+    null
   );
 });

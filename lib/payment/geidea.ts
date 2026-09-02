@@ -3,6 +3,7 @@ import { generateGeideaSessionSignature, formatGeideaTimestamp } from "./geidea-
 import { formatGeideaDiagnostic } from "./geidea-diagnostics";
 import {
   verifyGeideaOrderResponse,
+  verifyGeideaOrdersResponse,
   type VerifiedGeideaCallback,
 } from "./geidea-callback";
 
@@ -20,9 +21,7 @@ function withoutTrailingSlash(value: string): string {
 }
 
 export function getGeideaConfig() {
-  const hppBaseUrl = withoutTrailingSlash(
-    process.env.GEIDEA_HPP_BASE_URL ?? UAE_HPP_BASE_URL
-  );
+  const hppBaseUrl = withoutTrailingSlash(process.env.GEIDEA_HPP_BASE_URL ?? UAE_HPP_BASE_URL);
   return {
     merchantPublicKey: requiredEnv("GEIDEA_MERCHANT_PUBLIC_KEY", "GEIDEA_MERCHANT_ID"),
     apiPassword: requiredEnv("GEIDEA_API_PASSWORD"),
@@ -33,9 +32,7 @@ export function getGeideaConfig() {
 }
 
 export function getGeideaSdkUrl(): string {
-  const hppBaseUrl = withoutTrailingSlash(
-    process.env.GEIDEA_HPP_BASE_URL ?? UAE_HPP_BASE_URL
-  );
+  const hppBaseUrl = withoutTrailingSlash(process.env.GEIDEA_HPP_BASE_URL ?? UAE_HPP_BASE_URL);
   return process.env.GEIDEA_SDK_URL ?? `${hppBaseUrl}/hpp/geideaCheckout.min.js`;
 }
 
@@ -66,9 +63,7 @@ export type GeideaCheckoutSession = {
   cardRedirectUrl: string;
 };
 
-export async function fetchVerifiedGeideaOrder(
-  orderId: string
-): Promise<VerifiedGeideaCallback> {
+export async function fetchVerifiedGeideaOrder(orderId: string): Promise<VerifiedGeideaCallback> {
   const config = getGeideaConfig();
   const response = await fetch(
     `${config.apiBaseUrl}/pgw/api/v1/direct/order/${encodeURIComponent(orderId)}`,
@@ -95,6 +90,38 @@ export async function fetchVerifiedGeideaOrder(
   return verifyGeideaOrderResponse(body, {
     merchantPublicKey: config.merchantPublicKey,
     orderId,
+  });
+}
+
+export async function fetchVerifiedGeideaOrderByMerchantReference(
+  merchantReferenceId: string
+): Promise<VerifiedGeideaCallback | null> {
+  const config = getGeideaConfig();
+  const response = await fetch(
+    `${config.apiBaseUrl}/pgw/api/v1/direct/order?MerchantReferenceId=${encodeURIComponent(merchantReferenceId)}`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${Buffer.from(
+          `${config.merchantPublicKey}:${config.apiPassword}`
+        ).toString("base64")}`,
+      },
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    }
+  );
+
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    throw new Error(`Geidea returned an unreadable order response (${response.status}).`);
+  }
+  if (!response.ok) throw new Error(`Geidea order lookup failed (${response.status}).`);
+
+  return verifyGeideaOrdersResponse(body, {
+    merchantPublicKey: config.merchantPublicKey,
+    merchantReferenceId,
   });
 }
 
@@ -168,9 +195,7 @@ export async function createGeideaCheckoutSession(
             merchantReferenceId: input.merchantReferenceId,
             durationMs: Date.now() - startedAt,
             error:
-              error instanceof Error
-                ? { name: error.name, message: error.message }
-                : String(error),
+              error instanceof Error ? { name: error.name, message: error.message } : String(error),
           })
       );
     }
@@ -214,11 +239,7 @@ export async function createGeideaCheckoutSession(
     );
   }
 
-  if (
-    !response.ok ||
-    body.responseCode !== "000" ||
-    body.detailedResponseCode !== "000"
-  ) {
+  if (!response.ok || body.responseCode !== "000" || body.detailedResponseCode !== "000") {
     const message =
       body.detailedResponseMessage ?? body.responseMessage ?? `HTTP ${response.status}`;
     throw new Error(`Geidea session creation failed: ${message}`);
