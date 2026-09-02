@@ -1,9 +1,9 @@
 # Geidea Checkout
 
-Fasthaus offers Apple Pay and Google Pay through Geidea Express Checkout and retains the
-standard Geidea Checkout modal for card and Google Pay. Apple Pay and Samsung Pay are hidden
-from the standard modal through the session's `hideWallets` setting. Prices and order state
-remain server-authoritative.
+Fasthaus currently uses only the standard Geidea Checkout modal for card and Google Pay.
+Apple Pay and Samsung Pay are hidden from the modal through the session's `hideWallets`
+setting. The Express Checkout UI is temporarily disabled. Prices and order state remain
+server-authoritative.
 
 ## Required configuration
 
@@ -38,17 +38,15 @@ switch to live credentials until a signed sandbox callback passes verification.
 ## Payment lifecycle
 
 1. Checkout validates the anonymous cart and delivery details on the server.
-2. A pending Fasthaus order and a mode-specific 15-minute Geidea session are created.
-3. The Express session enables Apple Pay and Google Pay through `expressCheckouts`. The browser SDK
-   mounts whichever wallet buttons the current browser and device support.
-4. Opening the standard modal replaces the active Express session with a standard session. Its
-   `hideWallets: ["apple-pay", "samsung-pay"]` setting leaves card and Google Pay available.
-   Geidea does not allow `expressCheckouts` and `hideWallets` in the same Create Session request.
-5. Both client flows navigate to the order page after success. The modal omits `returnUrl`, and
-   cancel or error returns to the unchanged checkout form through SDK callbacks.
-6. Only a valid server callback with matching merchant, amount, currency, reference, paid
+2. A pending Fasthaus order and one standard 15-minute Geidea session are created after the
+   customer presses the payment button.
+3. The session sends `hideWallets: ["apple-pay", "samsung-pay"]`, leaving card and Google Pay
+   available in the standard modal. It does not send `expressCheckouts`.
+4. Success navigates to the order page. The modal omits `returnUrl`, while cancel or error returns
+   to the unchanged checkout form through SDK callbacks.
+5. Only a valid server callback with matching merchant, amount, currency, reference, paid
    status, and success codes confirms the order.
-7. Confirmation emails use a durable order-level delivery claim plus stable Resend
+6. Confirmation emails use a durable order-level delivery claim plus stable Resend
    idempotency keys, so sequential and concurrent callback retries cannot send a second pair.
 
 Apply all Supabase migrations through

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, CalendarCheck, ChevronDown, Shield, ShieldCheck, Truck } from "lucide-react";
@@ -14,7 +14,6 @@ import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { discountRateFor, WELCOME_DISCOUNT_CODE } from "@/lib/checkout/discount";
 import { startGeideaCheckout } from "@/lib/payment/geidea-client";
-import GeideaExpressWallets from "@/components/checkout/GeideaExpressWallets";
 
 const EMIRATES = [
   "Dubai",
@@ -38,9 +37,6 @@ type CheckoutSession = {
   expiresAt: string;
   cardRedirectUrl: string;
 };
-
-type PreparedCheckoutSession = CheckoutSession & { detailsKey: string };
-type CheckoutPaymentMode = "express" | "standard";
 
 const inputStyle = {
   borderColor: "var(--color-border)",
@@ -98,10 +94,6 @@ export default function CheckoutPage() {
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
-  const [walletSession, setWalletSession] = useState<PreparedCheckoutSession | null>(null);
-  const [walletLoading, setWalletLoading] = useState(false);
-  const [walletError, setWalletError] = useState<string | null>(null);
-  const [walletRetry, setWalletRetry] = useState(0);
 
   const subtotalValue = subtotal();
   const hasDiscount = newsletter || discountApplied;
@@ -115,28 +107,7 @@ export default function CheckoutPage() {
     !streetAddressError &&
     !unitVillaError &&
     !buildingClusterError;
-  const checkoutDetailsKey = JSON.stringify([
-    fullName,
-    email,
-    phone,
-    streetAddress,
-    unitVilla,
-    buildingCluster,
-    landmark,
-    emirate,
-    poBox,
-    hasDiscount,
-    totalValue,
-    items.map((item) => [
-      item.itemId,
-      item.id,
-      item.quantity,
-      (item.addOns ?? []).map((addOn) => [addOn.id, addOn.quantity]),
-    ]),
-  ]);
-  const activeWalletSession =
-    walletSession?.detailsKey === checkoutDetailsKey ? walletSession : null;
-  const checkoutDisabled = !checkoutDetailsReady || purchasing || walletLoading || cartSyncing;
+  const checkoutDisabled = !checkoutDetailsReady || purchasing || cartSyncing;
 
   useEffect(() => {
     if (items.length > 0)
@@ -147,106 +118,40 @@ export default function CheckoutPage() {
       });
   }, [items, totalValue]);
 
-  const requestCheckoutSession = useCallback(
-    async (paymentMode: CheckoutPaymentMode, signal?: AbortSignal): Promise<CheckoutSession> => {
-      const [firstName, ...lastNameParts] = fullName.trim().split(/\s+/);
-      const response = await fetch("/api/checkout/create-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal,
-        body: JSON.stringify({
-          paymentMode,
-          contact: { email, phone },
-          shippingAddress: {
-            firstName,
-            lastName: lastNameParts.join(" ") || firstName,
-            streetAddress,
-            line1: unitVilla,
-            line2: buildingCluster,
-            landmark: landmark || undefined,
-            emirate,
-            postalCode: poBox || undefined,
-          },
-          discountCode: hasDiscount ? WELCOME_DISCOUNT_CODE : undefined,
-        }),
-      });
-      const body = (await response.json()) as Partial<CheckoutSession> & {
-        error?: { message?: string };
-      };
-      if (
-        !response.ok ||
-        !body.orderId ||
-        !body.sessionId ||
-        !body.expiresAt ||
-        !body.cardRedirectUrl
-      ) {
-        throw new Error(body.error?.message ?? "Checkout could not be started.");
-      }
-      return body as CheckoutSession;
-    },
-    [
-      buildingCluster,
-      email,
-      emirate,
-      fullName,
-      hasDiscount,
-      landmark,
-      phone,
-      poBox,
-      streetAddress,
-      unitVilla,
-    ]
-  );
-
-  useEffect(() => {
-    if (
-      !checkoutDetailsReady ||
-      items.length === 0 ||
-      activeWalletSession ||
-      purchasing ||
-      cartSyncing
-    )
-      return;
-
-    const controller = new AbortController();
-    const timer = window.setTimeout(async () => {
-      setWalletLoading(true);
-      setWalletError(null);
-      try {
-        const session = await requestCheckoutSession("express", controller.signal);
-        setWalletSession({ ...session, detailsKey: checkoutDetailsKey });
-      } catch (error) {
-        if (!controller.signal.aborted) {
-          setWalletError(
-            error instanceof Error ? error.message : "Express checkout could not be started."
-          );
-        }
-      } finally {
-        if (!controller.signal.aborted) setWalletLoading(false);
-      }
-    }, 600);
-
-    return () => {
-      window.clearTimeout(timer);
-      controller.abort();
+  async function requestCheckoutSession(): Promise<CheckoutSession> {
+    const [firstName, ...lastNameParts] = fullName.trim().split(/\s+/);
+    const response = await fetch("/api/checkout/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contact: { email, phone },
+        shippingAddress: {
+          firstName,
+          lastName: lastNameParts.join(" ") || firstName,
+          streetAddress,
+          line1: unitVilla,
+          line2: buildingCluster,
+          landmark: landmark || undefined,
+          emirate,
+          postalCode: poBox || undefined,
+        },
+        discountCode: hasDiscount ? WELCOME_DISCOUNT_CODE : undefined,
+      }),
+    });
+    const body = (await response.json()) as Partial<CheckoutSession> & {
+      error?: { message?: string };
     };
-  }, [
-    activeWalletSession,
-    cartSyncing,
-    checkoutDetailsKey,
-    checkoutDetailsReady,
-    items.length,
-    purchasing,
-    requestCheckoutSession,
-    walletRetry,
-  ]);
-
-  useEffect(() => {
-    if (!walletSession) return;
-    const remaining = Date.parse(walletSession.expiresAt) - Date.now() - 30_000;
-    const timer = window.setTimeout(() => setWalletSession(null), Math.max(0, remaining));
-    return () => window.clearTimeout(timer);
-  }, [walletSession]);
+    if (
+      !response.ok ||
+      !body.orderId ||
+      !body.sessionId ||
+      !body.expiresAt ||
+      !body.cardRedirectUrl
+    ) {
+      throw new Error(body.error?.message ?? "Checkout could not be started.");
+    }
+    return body as CheckoutSession;
+  }
 
   function toggleNewsletter() {
     setNewsletter((prev) => {
@@ -282,9 +187,8 @@ export default function CheckoutPage() {
     }
     if (cartSyncing) return;
     setPurchasing(true);
-    setWalletSession(null);
     try {
-      const session = await requestCheckoutSession("standard");
+      const session = await requestCheckoutSession();
       if (session.sessionId.startsWith("test-geidea-session-")) {
         window.location.assign(session.cardRedirectUrl);
         return;
@@ -616,83 +520,7 @@ export default function CheckoutPage() {
                 </div>
               </section>
 
-              <section
-                className="flex flex-col gap-4 border-t pt-6"
-                style={{ borderColor: "var(--color-border)" }}
-              >
-                <h2 className="eyebrow" style={{ color: "var(--color-text-secondary)" }}>
-                  Express checkout
-                </h2>
-                {!checkoutDetailsReady ? (
-                  <p className="type-body-sm" style={{ color: "var(--color-text-secondary)" }}>
-                    Complete the required contact and delivery details to enable supported wallets.
-                  </p>
-                ) : activeWalletSession ? (
-                  <>
-                    <GeideaExpressWallets
-                      sessionId={activeWalletSession.sessionId}
-                      orderId={activeWalletSession.orderId}
-                    />
-                    <p
-                      className="type-caption-sm text-center"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    >
-                      Apple Pay and Google Pay appear automatically on supported devices and
-                      browsers.
-                    </p>
-                  </>
-                ) : walletLoading || cartSyncing ? (
-                  <div
-                    className="flex min-h-[60px] items-center justify-center rounded-[var(--radius-md)] border"
-                    style={{ borderColor: "var(--color-border)" }}
-                  >
-                    <Spinner />
-                    <span
-                      className="type-body-sm ml-2"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    >
-                      Loading secure wallets…
-                    </span>
-                  </div>
-                ) : walletError ? (
-                  <div className="flex flex-col gap-2.5">
-                    <p
-                      role="alert"
-                      className="type-body-sm"
-                      style={{ color: "var(--color-error)" }}
-                    >
-                      {walletError}
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => setWalletRetry((value) => value + 1)}
-                      className="btn-text w-fit"
-                    >
-                      Retry express checkout
-                    </button>
-                  </div>
-                ) : null}
-              </section>
-
               <div className="flex flex-col gap-3 pt-1">
-                {activeWalletSession && (
-                  <div className="flex items-center gap-3" aria-hidden="true">
-                    <span
-                      className="h-px flex-1"
-                      style={{ backgroundColor: "var(--color-border)" }}
-                    />
-                    <span
-                      className="type-caption-sm"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    >
-                      or use standard checkout
-                    </span>
-                    <span
-                      className="h-px flex-1"
-                      style={{ backgroundColor: "var(--color-border)" }}
-                    />
-                  </div>
-                )}
                 {purchaseError && (
                   <p role="alert" className="type-body-sm" style={{ color: "var(--color-error)" }}>
                     {purchaseError}
@@ -713,7 +541,7 @@ export default function CheckoutPage() {
                       <span className="block">
                         <button
                           type="submit"
-                          disabled={purchasing || walletLoading || cartSyncing}
+                          disabled={purchasing || cartSyncing}
                           aria-disabled={checkoutDisabled}
                           aria-describedby={
                             !checkoutDetailsReady ? "checkout-required-tooltip" : undefined
@@ -730,21 +558,15 @@ export default function CheckoutPage() {
                               : undefined
                           }
                         >
-                          {purchasing || walletLoading || cartSyncing ? (
-                            <Spinner />
-                          ) : (
-                            <ShieldCheck size={16} />
-                          )}
+                          {purchasing || cartSyncing ? <Spinner /> : <ShieldCheck size={16} />}
                           <span>
                             {cartSyncing
                               ? "Preparing cart…"
-                              : walletLoading
-                                ? "Preparing secure payment…"
-                                : purchasing
-                                  ? "Opening secure payment…"
-                                  : "Pay by card or Google Pay —"}
+                              : purchasing
+                                ? "Opening secure payment…"
+                                : "Pay by card or Google Pay —"}
                           </span>
-                          {!purchasing && !walletLoading && !cartSyncing && (
+                          {!purchasing && !cartSyncing && (
                             <DirhamPrice amount={totalValue} variant="white" />
                           )}
                         </button>
