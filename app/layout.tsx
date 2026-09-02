@@ -46,9 +46,22 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
+      suppressHydrationWarning
       className={`${dmSans.variable} ${golftenStamp.variable} h-full antialiased`}
     >
       <head>
+        <Script id="initial-cookie-scroll-lock" strategy="beforeInteractive">{`
+          try {
+            if (
+              localStorage.getItem('stcm.hasConsented') === null &&
+              localStorage.getItem('silktideCookieBanner_InitialChoice') === null
+            ) {
+              document.documentElement.classList.add('cookie-consent-scroll-locked', 'page-scroll-locked');
+            }
+          } catch (_) {
+            document.documentElement.classList.add('cookie-consent-scroll-locked', 'page-scroll-locked');
+          }
+        `}</Script>
         {/* Silktide ships as a standalone stylesheet rather than an importable CSS module. */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link

@@ -12,6 +12,8 @@ type SilktideConsentType = {
 };
 
 type SilktideConsentManagerConfig = {
+  onPromptOpen?: () => void;
+  onPromptClose?: () => void;
   backdrop?: { show?: boolean };
   icon?: { position?: string };
   prompt?: {

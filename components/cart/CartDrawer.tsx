@@ -11,6 +11,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { PRODUCTS } from "@/lib/data/products";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
+import { setPageScrollLocked } from "@/lib/page-scroll-lock";
 
 const CART_DRAWER_SLIDES = PRODUCTS.flatMap((product) =>
   product.variants.map((variant) => ({ product, variant }))
@@ -80,8 +81,7 @@ export default function CartDrawer() {
       currency: "AED",
     });
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    setPageScrollLocked("cart", true);
 
     const closeOnEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeDrawer();
@@ -89,7 +89,7 @@ export default function CartDrawer() {
     window.addEventListener("keydown", closeOnEscape);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      setPageScrollLocked("cart", false);
       window.removeEventListener("keydown", closeOnEscape);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

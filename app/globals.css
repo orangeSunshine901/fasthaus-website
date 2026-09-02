@@ -92,6 +92,19 @@
   --scroll-offset: 88px;
 }
 
+html.page-scroll-locked {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+html.page-scroll-locked body {
+  position: fixed;
+  inset: var(--page-scroll-lock-top, 0) 0 auto;
+  width: 100%;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
 @media (min-width: 768px) {
   :root {
     --text-md: 20px;

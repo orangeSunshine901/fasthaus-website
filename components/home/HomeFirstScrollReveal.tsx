@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useReturningHome } from "@/components/navigation/HomeNavigationProvider";
+import { isPageScrollLocked } from "@/lib/page-scroll-lock";
 
 const SCROLL_LOCK_MS = 950;
 const TOP_DEAD_SCROLL_PX = 120;
@@ -28,8 +29,8 @@ export default function HomeFirstScrollReveal() {
       transitioning = false;
       root.removeAttribute("data-lenis-prevent-wheel");
       root.removeAttribute("data-lenis-prevent-touch");
-      window.dispatchEvent(new CustomEvent(SCROLL_LOCK_EVENT, { detail: false }));
       document.documentElement.classList.remove("home-reveal-scroll-locked");
+      window.dispatchEvent(new CustomEvent(SCROLL_LOCK_EVENT, { detail: false }));
     };
 
     const transitionTo = (state: "pending" | "revealed") => {
@@ -49,6 +50,8 @@ export default function HomeFirstScrollReveal() {
     };
 
     const handleWheel = (event: WheelEvent) => {
+      if (isPageScrollLocked()) return;
+
       ignoreRouteScroll = false;
       const deltaY =
         event.deltaY *
@@ -87,6 +90,8 @@ export default function HomeFirstScrollReveal() {
     };
 
     const handleTouchMove = (event: TouchEvent) => {
+      if (isPageScrollLocked()) return;
+
       ignoreRouteScroll = false;
       const scrollingDown = (event.touches[0]?.clientY ?? touchStartY) < touchStartY;
       if (transitioning) {
@@ -111,6 +116,8 @@ export default function HomeFirstScrollReveal() {
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (isPageScrollLocked()) return;
+
       const isEditing =
         event.target instanceof Element &&
         event.target.closest(
@@ -151,7 +158,7 @@ export default function HomeFirstScrollReveal() {
     };
 
     const handleScroll = () => {
-      if (ignoreRouteScroll) {
+      if (isPageScrollLocked() || ignoreRouteScroll) {
         return;
       } else if (transitioning) {
         if (window.scrollY !== 0) window.scrollTo(0, 0);
@@ -162,7 +169,7 @@ export default function HomeFirstScrollReveal() {
       }
     };
 
-    if (window.scrollY > 0 || returningHome) {
+    if (!isPageScrollLocked() && (window.scrollY > 0 || returningHome)) {
       root.dataset.homeReveal = "revealed";
       root.dataset.homeContent = "revealed";
     }

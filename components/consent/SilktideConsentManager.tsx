@@ -1,14 +1,18 @@
 "use client";
 
 import Script from "next/script";
+import { setPageScrollLocked } from "@/lib/page-scroll-lock";
 
 const dispatchConsentChange = () => {
+  setPageScrollLocked("cookie-consent", false);
   window.dispatchEvent(new CustomEvent("fasthaus:consent-change"));
 };
 
 function initializeSilktide() {
   window.silktideConsentManager?.init({
     eventName: "stcm_consent_update",
+    onPromptOpen: () => setPageScrollLocked("cookie-consent", true),
+    onPromptClose: () => setPageScrollLocked("cookie-consent", false),
     backdrop: { show: true },
     icon: { position: "bottomLeft" },
     prompt: { position: "bottomRight", showRejectNonEssentialButton: false },

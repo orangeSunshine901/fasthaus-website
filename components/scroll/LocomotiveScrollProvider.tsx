@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { isPageScrollLocked, PAGE_SCROLL_LOCK_EVENT } from "@/lib/page-scroll-lock";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -62,15 +63,17 @@ export default function LocomotiveScrollProvider({ children }: { children: React
     let scroll: LocomotiveScrollInstance | null = null;
     let cancelled = false;
     let readyFrame = 0;
-    let revealScrollLocked = false;
+    const isScrollLocked = () =>
+      isPageScrollLocked() ||
+      document.documentElement.classList.contains("home-reveal-scroll-locked");
 
-    const handleRevealScrollLock = (event: Event) => {
-      revealScrollLocked = (event as CustomEvent<boolean>).detail;
-      if (revealScrollLocked) scroll?.stop();
+    const syncScrollLock = () => {
+      if (isScrollLocked()) scroll?.stop();
       else scroll?.start();
     };
 
-    window.addEventListener("home-reveal-scroll-lock", handleRevealScrollLock);
+    window.addEventListener("home-reveal-scroll-lock", syncScrollLock);
+    window.addEventListener(PAGE_SCROLL_LOCK_EVENT, syncScrollLock);
 
     async function initScroll() {
       const { default: LocomotiveScroll } = (await import("locomotive-scroll")) as {
@@ -105,7 +108,7 @@ export default function LocomotiveScrollProvider({ children }: { children: React
       });
 
       readyFrame = window.requestAnimationFrame(() => {
-        if (revealScrollLocked) scroll?.stop();
+        syncScrollLock();
         document.documentElement.classList.add("scroll-animations-ready");
         ScrollTrigger.refresh();
       });
@@ -116,7 +119,8 @@ export default function LocomotiveScrollProvider({ children }: { children: React
     return () => {
       cancelled = true;
       window.cancelAnimationFrame(readyFrame);
-      window.removeEventListener("home-reveal-scroll-lock", handleRevealScrollLock);
+      window.removeEventListener("home-reveal-scroll-lock", syncScrollLock);
+      window.removeEventListener(PAGE_SCROLL_LOCK_EVENT, syncScrollLock);
       document.documentElement.classList.remove("scroll-animations-ready");
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       scroll?.destroy();

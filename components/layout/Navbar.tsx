@@ -11,6 +11,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { PRODUCTS } from "@/lib/data/products";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { setPageScrollLocked } from "@/lib/page-scroll-lock";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -135,8 +136,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
       return;
     }
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    setPageScrollLocked("mobile-menu", true);
 
     const closeOnEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMobileOpen(false);
@@ -144,7 +144,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
     window.addEventListener("keydown", closeOnEscape);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      setPageScrollLocked("mobile-menu", false);
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [mobileOpen]);
