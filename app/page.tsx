@@ -149,6 +149,7 @@ export default function HomePage() {
         {/* Featured Products */}
         <section
           id="featured-products"
+          data-home-deferred-section
           className="scroll-target w-full pt-4"
           style={{ backgroundColor: "#000104" }}
         >

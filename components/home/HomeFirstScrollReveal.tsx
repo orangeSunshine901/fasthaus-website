@@ -156,6 +156,7 @@ export default function HomeFirstScrollReveal() {
       } else if (transitioning) {
         if (window.scrollY !== 0) window.scrollTo(0, 0);
       } else if (window.scrollY > 0) {
+        root.dataset.homeContent = "revealed";
         hasLeftTop = true;
         topOverscroll = 0;
       }
@@ -163,6 +164,7 @@ export default function HomeFirstScrollReveal() {
 
     if (window.scrollY > 0 || returningHome) {
       root.dataset.homeReveal = "revealed";
+      root.dataset.homeContent = "revealed";
     }
     window.addEventListener("wheel", handleWheel, { passive: false, capture: true });
     window.addEventListener("touchstart", handleTouchStart, { passive: true, capture: true });

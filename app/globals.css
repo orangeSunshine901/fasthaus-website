@@ -281,6 +281,12 @@ input[type="radio"] {
   transition-delay: 0s;
 }
 
+/* Keep below-hero content out of the initial frame and first-scroll hero reveal. */
+[data-home-content="pending"] [data-home-deferred-section] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* Lenis normally removes the scrollbar while stopped; keep it stable during this reveal. */
 html.lenis.home-reveal-scroll-locked.lenis-stopped {
   overflow-y: scroll !important;

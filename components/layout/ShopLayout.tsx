@@ -16,6 +16,7 @@ export default function ShopLayout({
     <div
       className={`flex flex-col min-h-screen${revealOnFirstScroll ? " bg-[#000104]" : ""}`}
       data-home-reveal={revealOnFirstScroll ? "pending" : undefined}
+      data-home-content={revealOnFirstScroll ? "pending" : undefined}
     >
       {revealOnFirstScroll && <HomeFirstScrollReveal />}
       {showAnnouncement && <AnnouncementBar revealOnFirstScroll={revealOnFirstScroll} />}

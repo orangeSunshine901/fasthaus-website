@@ -69,7 +69,7 @@ export default function FeaturedProductsCarousel({ products, summaries }: Props)
 
   return (
     <>
-      <div className="md:hidden">
+      <div data-scroll className="scroll-reveal-up md:hidden">
         <div ref={emblaRef} className="overflow-hidden">
           <div className="-ml-4 flex touch-pan-y">
             {products.map((product, index) => (
