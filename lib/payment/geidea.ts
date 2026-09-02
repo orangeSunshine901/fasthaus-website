@@ -1,10 +1,8 @@
 import "server-only";
 import { generateGeideaSessionSignature, formatGeideaTimestamp } from "./geidea-signature";
 import { formatGeideaDiagnostic } from "./geidea-diagnostics";
-import {
-  verifyGeideaOrderResponse,
-  type VerifiedGeideaCallback,
-} from "./geidea-callback";
+import { verifyGeideaOrderResponse, type VerifiedGeideaCallback } from "./geidea-callback";
+import { getGeideaWalletOptions, type GeideaCheckoutMode } from "./geidea-session-options";
 
 const UAE_API_BASE_URL = "https://api.geidea.ae";
 const UAE_HPP_BASE_URL = "https://payments.geidea.ae";
@@ -36,6 +34,7 @@ export function getGeideaSdkUrl(): string {
 }
 
 type CreateCheckoutSessionInput = {
+  paymentMode: GeideaCheckoutMode;
   amount: number;
   merchantReferenceId: string;
   callbackUrl: string;
@@ -124,6 +123,7 @@ export async function createGeideaCheckoutSession(
     cardOnFile: false,
     appearance: { receiptPage: true, styles: {}, uiMode: "modal" },
     customer: input.customer,
+    ...getGeideaWalletOptions(input.paymentMode),
   };
   const logSessionCreation = process.env.GEIDEA_LOG_SESSION_CREATION === "true";
   const startedAt = Date.now();

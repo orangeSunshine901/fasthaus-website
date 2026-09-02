@@ -6,9 +6,9 @@ export default function NotFound() {
   return (
     <ShopLayout>
       <div className="flex flex-col items-center justify-center py-20 md:py-32 px-6 text-center">
-        <div className="relative w-40 h-40 md:w-56 md:h-56 mb-6 opacity-80">
+        {/* <div className="relative w-40 h-40 md:w-56 md:h-56 mb-6 opacity-80">
           <Image src="/luna-lamp-rendering.png" alt="Lamp" fill className="object-contain" />
-        </div>
+        </div> */}
         <h1
           className="text-8xl md:text-9xl font-semibold mb-4"
           style={{ color: "var(--color-accent-amber)" }}

@@ -47,6 +47,7 @@ export const CheckoutStep1Schema = ContactSchema.merge(ShippingAddressSchema);
 
 export const CreateOrderSchema = z
   .object({
+    paymentMode: z.enum(["express", "standard"]),
     contact: ContactSchema,
     shippingAddress: ShippingAddressSchema,
     discountCode: z.string().trim().max(32).optional(),

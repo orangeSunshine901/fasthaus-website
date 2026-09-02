@@ -13,12 +13,28 @@ import {
   verifyGeideaOrderResponse,
 } from "../lib/payment/geidea-callback.ts";
 import { formatGeideaDiagnostic } from "../lib/payment/geidea-diagnostics.ts";
+import { getGeideaWalletOptions } from "../lib/payment/geidea-session-options.ts";
 
 const merchantPublicKey = "merchant-key";
 const apiPassword = "api-password";
 const merchantReferenceId = "11111111-1111-4111-8111-111111111111";
 // Geidea order GUIDs can use non-RFC variant nibbles such as `c`.
 const geideaOrderId = "e4bc51eb-72d0-4663-c565-08def3b74c5d";
+
+test("keeps Express Checkout and hidden-wallet options in separate sessions", () => {
+  const express = getGeideaWalletOptions("express");
+  const standard = getGeideaWalletOptions("standard");
+
+  assert.deepEqual(express, {
+    expressCheckouts: [
+      { wallet: "apple-pay", label: "Apple Pay" },
+      { wallet: "google-pay", label: "Google Pay" },
+    ],
+  });
+  assert.equal("hideWallets" in express, false);
+  assert.deepEqual(standard, { hideWallets: ["apple-pay", "samsung-pay"] });
+  assert.equal("expressCheckouts" in standard, false);
+});
 
 test("formats Geidea money and timestamps deterministically", () => {
   assert.equal(formatGeideaAmount(99), "99.00");

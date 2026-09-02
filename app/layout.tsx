@@ -107,7 +107,9 @@ export default function RootLayout({
           window.gtag('js', new Date());
           window.gtag('config', 'GT-WPFL2V2P');
         `}</Script>
-        <Script id="geidea-checkout-sdk" src={getGeideaSdkUrl()} strategy="beforeInteractive" />
+        {/* Geidea Express Checkout requires a synchronous SDK script without async or defer. */}
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script id="geidea-checkout-sdk" src={getGeideaSdkUrl()} />
         <meta
           name="google-site-verification"
           content="6oZVZ4_UZrObrRTiXbYTEg09M59D1JglTLxwXzB89Hg"

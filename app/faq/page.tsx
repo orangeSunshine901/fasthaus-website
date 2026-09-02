@@ -24,7 +24,7 @@ const FAQS: { category: string; question: string; answer: string }[] = [
     category: "Products",
     question: "How long does production take?",
     answer:
-      "Each lamp is made to order at our Dubai studio. Production takes 2–3 business days. You will get a notification the moment it ships.",
+      "Each lamp is made to order at our studio. Production takes 2–3 business days. You will get a notification the moment it ships.",
   },
   {
     category: "Shipping",

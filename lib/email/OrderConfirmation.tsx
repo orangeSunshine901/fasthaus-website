@@ -151,7 +151,7 @@ export function OrderConfirmation({ orderId, customerName, items, shippingAddres
           </Section>
 
           <Text style={{ fontSize: 12, color: "#B0AEA9", textAlign: "center" }}>
-            © 2026 Fasthaus Studio · Dubai, UAE
+            © 2026 Fasthaus Studio
           </Text>
         </Container>
       </Body>

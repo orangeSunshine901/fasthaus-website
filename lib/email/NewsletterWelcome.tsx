@@ -54,7 +54,7 @@ export function NewsletterWelcome({ email: _email }: Props) {
           </Button>
 
           <Text style={{ fontSize: 12, color: "#B0AEA9", marginTop: 40, textAlign: "center" }}>
-            © 2026 Fasthaus Studio · Dubai, UAE
+            © 2026 Fasthaus Studio
           </Text>
         </Container>
       </Body>

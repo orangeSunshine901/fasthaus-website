@@ -79,22 +79,30 @@ async function prepareOrder(supabase: ServiceClient, cart: CartDto, input: Creat
       p_shipping_address: shippingAddress,
       p_items: orderItems,
       p_claim_expires_at: claimExpiresAt,
+      p_session_mode: input.paymentMode,
     })
     .single();
   if (error || !data) throw error ?? new Error("Order preparation failed.");
   return { ...(data as PreparedOrder), claimExpiresAt };
 }
 
-async function waitForCheckoutSession(supabase: ServiceClient, cartId: string) {
+async function waitForCheckoutSession(
+  supabase: ServiceClient,
+  cartId: string,
+  paymentMode: CreateOrderInput["paymentMode"]
+) {
   for (let attempt = 0; attempt < 60; attempt += 1) {
     await new Promise((resolve) => setTimeout(resolve, 250));
     const { data, error } = await supabase
       .from("carts")
-      .select("status,checkout_session_id,checkout_url,checkout_session_expires_at")
+      .select(
+        "status,checkout_session_id,checkout_url,checkout_session_expires_at,checkout_session_mode"
+      )
       .eq("id", cartId)
       .single();
     if (error) throw error;
     if (
+      data.checkout_session_mode === paymentMode &&
       data.checkout_session_id &&
       data.checkout_url &&
       data.checkout_session_expires_at &&
@@ -160,7 +168,7 @@ export async function POST(request: Request) {
       });
     }
     if (!order.create_session) {
-      const session = await waitForCheckoutSession(supabase, cart.id!);
+      const session = await waitForCheckoutSession(supabase, cart.id!, parsed.data.paymentMode);
       return NextResponse.json({ orderId: order.order_id, ...session });
     }
 
@@ -176,6 +184,7 @@ export async function POST(request: Request) {
           status: "confirmed",
           geidea_session_id: sessionId,
           geidea_session_expires_at: expiresAt,
+          geidea_session_mode: parsed.data.paymentMode,
           geidea_order_id: `test-geidea-order-${order.order_id}`,
           payment_status: "Paid",
           payment_method: "test",
@@ -187,7 +196,7 @@ export async function POST(request: Request) {
         .maybeSingle();
       if (confirmationError) throw confirmationError;
       if (!confirmedOrder) {
-        const current = await waitForCheckoutSession(supabase, cart.id!);
+        const current = await waitForCheckoutSession(supabase, cart.id!, parsed.data.paymentMode);
         return NextResponse.json({ orderId: order.order_id, ...current });
       }
       const { data: convertedCart, error: conversionError } = await supabase
@@ -196,6 +205,7 @@ export async function POST(request: Request) {
           status: "CONVERTED",
           checkout_session_id: sessionId,
           checkout_session_expires_at: expiresAt,
+          checkout_session_mode: parsed.data.paymentMode,
           checkout_url: cardRedirectUrl,
           converted_order_id: order.order_id,
           updated_at: new Date().toISOString(),
@@ -221,6 +231,7 @@ export async function POST(request: Request) {
     let session;
     try {
       session = await createGeideaCheckoutSession({
+        paymentMode: parsed.data.paymentMode,
         amount: Number(order.order_total),
         merchantReferenceId: order.order_id,
         callbackUrl: `${baseUrl}/api/checkout/geidea-callback`,
@@ -260,6 +271,7 @@ export async function POST(request: Request) {
       .update({
         geidea_session_id: session.sessionId,
         geidea_session_expires_at: session.expiresAt,
+        geidea_session_mode: parsed.data.paymentMode,
         payment_status: "Initiated",
       })
       .eq("id", order.order_id)
@@ -269,7 +281,7 @@ export async function POST(request: Request) {
       .maybeSingle();
     if (orderUpdateError) throw orderUpdateError;
     if (!updatedOrder) {
-      const current = await waitForCheckoutSession(supabase, cart.id!);
+      const current = await waitForCheckoutSession(supabase, cart.id!, parsed.data.paymentMode);
       return NextResponse.json({ orderId: order.order_id, ...current });
     }
 
@@ -279,6 +291,7 @@ export async function POST(request: Request) {
         status: "CHECKOUT_STARTED",
         checkout_session_id: session.sessionId,
         checkout_session_expires_at: session.expiresAt,
+        checkout_session_mode: parsed.data.paymentMode,
         checkout_url: session.cardRedirectUrl,
         updated_at: new Date().toISOString(),
       })
@@ -289,7 +302,7 @@ export async function POST(request: Request) {
       .maybeSingle();
     if (cartUpdateError) throw cartUpdateError;
     if (!updatedCart) {
-      const current = await waitForCheckoutSession(supabase, cart.id!);
+      const current = await waitForCheckoutSession(supabase, cart.id!, parsed.data.paymentMode);
       return NextResponse.json({ orderId: order.order_id, ...current });
     }
 
