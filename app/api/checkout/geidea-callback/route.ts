@@ -21,6 +21,8 @@ type ShippingAddress = {
   phone?: string;
 };
 
+const EMAIL_CLAIM_LEASE_MS = 5 * 60_000;
+
 function sameMoney(left: number, right: number): boolean {
   return Math.round(left * 100) === Math.round(right * 100);
 }
@@ -160,6 +162,24 @@ export async function POST(request: Request) {
   }
 
   const address = order.shipping_address as ShippingAddress;
+  const emailClaimedAt = new Date().toISOString();
+  const staleEmailClaimBefore = new Date(Date.now() - EMAIL_CLAIM_LEASE_MS).toISOString();
+  const { data: emailClaim, error: emailClaimError } = await supabase
+    .from("orders")
+    .update({ confirmation_emails_claimed_at: emailClaimedAt })
+    .eq("id", order.id)
+    .is("confirmation_emails_sent_at", null)
+    .or(
+      `confirmation_emails_claimed_at.is.null,confirmation_emails_claimed_at.lt.${staleEmailClaimBefore}`
+    )
+    .select("id")
+    .maybeSingle();
+  if (emailClaimError) {
+    console.error("Could not claim paid order email delivery", emailClaimError);
+    return NextResponse.json({ error: "Order notification failed." }, { status: 500 });
+  }
+  if (!emailClaim) return NextResponse.json({ ok: true });
+
   try {
     await sendPaidOrderEmails({
       orderId: order.id,
@@ -175,7 +195,33 @@ export async function POST(request: Request) {
       total: Number(order.total),
     });
   } catch (error) {
+    const { error: releaseError } = await supabase
+      .from("orders")
+      .update({ confirmation_emails_claimed_at: null })
+      .eq("id", order.id)
+      .eq("confirmation_emails_claimed_at", emailClaimedAt)
+      .is("confirmation_emails_sent_at", null);
+    if (releaseError) console.error("Could not release paid order email claim", releaseError);
     console.error("Could not send paid order emails", error);
+    return NextResponse.json({ error: "Order notification failed." }, { status: 500 });
+  }
+
+  const { data: emailSent, error: emailSentError } = await supabase
+    .from("orders")
+    .update({
+      confirmation_emails_claimed_at: null,
+      confirmation_emails_sent_at: new Date().toISOString(),
+    })
+    .eq("id", order.id)
+    .eq("confirmation_emails_claimed_at", emailClaimedAt)
+    .is("confirmation_emails_sent_at", null)
+    .select("id")
+    .maybeSingle();
+  if (emailSentError || !emailSent) {
+    console.error(
+      "Could not record paid order email delivery",
+      emailSentError ?? "The email delivery claim was lost."
+    );
     return NextResponse.json({ error: "Order notification failed." }, { status: 500 });
   }
 

@@ -42,7 +42,8 @@ switch to live credentials until a signed sandbox callback passes verification.
    error close back onto the unchanged checkout form through the SDK callbacks.
 5. Only a valid server callback with matching merchant, amount, currency, reference, paid
    status, and success codes confirms the order.
-6. Confirmation emails use stable Resend idempotency keys so callback retries are safe.
+6. Confirmation emails use a durable order-level delivery claim plus stable Resend
+   idempotency keys, so sequential and concurrent callback retries cannot send a second pair.
 
 Apply `supabase/migrations/20260807091714_geidea_payment_state.sql` before enabling the
 gateway outside local test mode.
