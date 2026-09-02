@@ -17,23 +17,6 @@ export function getPaymentConfirmationDeadline(
     : Math.min(sessionDeadline, fixedDeadline);
 }
 
-export async function cancelGeideaCheckout(orderId: string, sessionId: string) {
-  const response = await fetch("/api/checkout/cancel", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ orderId, sessionId }),
-  });
-  const body = (await response.json()) as {
-    ok?: boolean;
-    confirmed?: boolean;
-    error?: { message?: string };
-  };
-  if (!response.ok || !body.ok) {
-    throw new Error(body.error?.message ?? "Checkout cancellation could not be recorded.");
-  }
-  return body;
-}
-
 export function startGeideaCardCheckout(sessionId: string, callbacks: Callbacks) {
   const Checkout = window.GeideaCheckout;
   if (!Checkout) throw new Error("Secure payment could not be loaded. Please try again.");

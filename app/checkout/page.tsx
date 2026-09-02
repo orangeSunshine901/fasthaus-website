@@ -13,7 +13,7 @@ import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { discountRateFor, WELCOME_DISCOUNT_CODE } from "@/lib/checkout/discount";
-import { cancelGeideaCheckout, startGeideaCardCheckout } from "@/lib/payment/geidea-client";
+import { startGeideaCardCheckout } from "@/lib/payment/geidea-client";
 
 const EMIRATES = [
   "Dubai",
@@ -44,25 +44,6 @@ const inputStyle = {
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CHECKOUT_DETAILS_KEY = "fasthaus_checkout_details_v1";
-
-type CheckoutDetails = {
-  version: 1;
-  fullName: string;
-  email: string;
-  phone: string;
-  streetAddress: string;
-  unitVilla: string;
-  buildingCluster: string;
-  landmark: string;
-  emirate: string;
-  poBox: string;
-  discountCode: string;
-  discountApplied: boolean;
-  newsletter: boolean;
-  orderId?: string;
-  sessionId?: string;
-};
 
 function isValidEmail(value: string): boolean {
   return EMAIL_PATTERN.test(value.trim());
@@ -70,14 +51,6 @@ function isValidEmail(value: string): boolean {
 
 function isValidAePhone(value: string): boolean {
   return value.trim().length > 0 && isValidPhoneNumber(value, "AE");
-}
-
-function clearCheckoutDetails() {
-  try {
-    window.sessionStorage.removeItem(CHECKOUT_DETAILS_KEY);
-  } catch {
-    // Storage is a best-effort checkout recovery mechanism.
-  }
 }
 
 export default function CheckoutPage() {
@@ -121,80 +94,6 @@ export default function CheckoutPage() {
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("payment") !== "cancelled") return;
-    const timer = window.setTimeout(async () => {
-      setPurchasing(true);
-      let saved: CheckoutDetails | null = null;
-      try {
-        const value = JSON.parse(
-          window.sessionStorage.getItem(CHECKOUT_DETAILS_KEY) ?? "null"
-        ) as CheckoutDetails | null;
-        const strings = value
-          ? [
-              value.fullName,
-              value.email,
-              value.phone,
-              value.streetAddress,
-              value.unitVilla,
-              value.buildingCluster,
-              value.landmark,
-              value.emirate,
-              value.poBox,
-              value.discountCode,
-            ]
-          : [];
-        if (
-          value?.version === 1 &&
-          strings.every((item) => typeof item === "string") &&
-          typeof value.discountApplied === "boolean" &&
-          typeof value.newsletter === "boolean"
-        ) {
-          saved = value;
-          setFullName(value.fullName);
-          setEmail(value.email);
-          setPhone(value.phone);
-          setStreetAddress(value.streetAddress);
-          setUnitVilla(value.unitVilla);
-          setBuildingCluster(value.buildingCluster);
-          setLandmark(value.landmark);
-          setEmirate(EMIRATES.includes(value.emirate) ? value.emirate : "Dubai");
-          setPoBox(value.poBox);
-          setDiscountCode(value.discountCode);
-          setDiscountApplied(value.discountApplied);
-          setNewsletter(value.newsletter);
-        }
-      } catch {
-        // Restoration is best-effort; checkout values are still validated on the server.
-      }
-
-      if (saved?.orderId && saved.sessionId) {
-        try {
-          const result = await cancelGeideaCheckout(saved.orderId, saved.sessionId);
-          if (result.confirmed) {
-            clearCheckoutDetails();
-            window.location.replace(`/order/${saved.orderId}`);
-            return;
-          }
-        } catch (error) {
-          console.error("Could not reset returning Geidea checkout", error);
-          setPurchaseError(
-            "Your payment was cancelled, but checkout could not be reset. Refresh before trying again."
-          );
-        }
-      }
-
-      setPurchaseNotice(
-        saved
-          ? "Payment cancelled. No charge was made and your details have been restored."
-          : "Payment cancelled. No charge was made."
-      );
-      window.history.replaceState(null, "", "/checkout");
-      setPurchasing(false);
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   const subtotalValue = subtotal();
   const hasDiscount = newsletter || discountApplied;
@@ -289,42 +188,13 @@ export default function CheckoutPage() {
     if (cartSyncing) return;
     setPurchasing(true);
     try {
-      const details: CheckoutDetails = {
-        version: 1,
-        fullName,
-        email,
-        phone,
-        streetAddress,
-        unitVilla,
-        buildingCluster,
-        landmark,
-        emirate,
-        poBox,
-        discountCode,
-        discountApplied,
-        newsletter,
-      };
-      try {
-        window.sessionStorage.setItem(CHECKOUT_DETAILS_KEY, JSON.stringify(details));
-      } catch {
-        // The modal still leaves the mounted checkout form intact when storage is unavailable.
-      }
       const session = await requestCheckoutSession();
-      try {
-        window.sessionStorage.setItem(
-          CHECKOUT_DETAILS_KEY,
-          JSON.stringify({ ...details, orderId: session.orderId, sessionId: session.sessionId })
-        );
-      } catch {
-        // Checkout restoration is best-effort.
-      }
       if (session.sessionId.startsWith("test-geidea-session-")) {
         window.location.assign(session.cardRedirectUrl);
         return;
       }
       startGeideaCardCheckout(session.sessionId, {
         onSuccess: () => {
-          clearCheckoutDetails();
           window.location.assign(`/order/${session.orderId}`);
         },
         onError: (data) => {
@@ -337,23 +207,12 @@ export default function CheckoutPage() {
           setPurchaseError(code ? `${detail} (${code})` : detail);
           setPurchasing(false);
         },
-        onCancel: async (data) => {
+        onCancel: (data) => {
           console.info("Geidea Checkout cancelled", data);
           setPurchaseNotice(
             "Payment cancelled. No charge was made and your details are still here."
           );
-          try {
-            const result = await cancelGeideaCheckout(session.orderId, session.sessionId);
-            if (result.confirmed) window.location.assign(`/order/${session.orderId}`);
-          } catch (error) {
-            console.error("Could not reset cancelled Geidea checkout", error);
-            setPurchaseNotice(null);
-            setPurchaseError(
-              "Payment was cancelled, but checkout could not be reset. Refresh before trying again."
-            );
-          } finally {
-            setPurchasing(false);
-          }
+          setPurchasing(false);
         },
       });
     } catch (error) {

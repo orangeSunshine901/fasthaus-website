@@ -70,7 +70,6 @@ const GeideaEventSchema = z
   .passthrough();
 
 const GeideaOrderResponseSchema = CodesSchema.extend({ order: GeideaOrderSchema });
-const GeideaOrdersResponseSchema = CodesSchema.extend({ orders: z.array(GeideaOrderSchema) });
 
 export type VerifiedGeideaCallback = {
   orderId: string;
@@ -149,27 +148,6 @@ export function verifyGeideaOrderResponse(
     throw new Error("Geidea order merchant public key does not match.");
   }
   return normalizeGeideaOrder(parsed.order, parsed, parsed.order.reference ?? null);
-}
-
-export function verifyGeideaOrdersResponse(
-  input: unknown,
-  expected: { merchantPublicKey: string; merchantReferenceId: string }
-): VerifiedGeideaCallback | null {
-  const parsed = GeideaOrdersResponseSchema.parse(input);
-  if (parsed.responseCode !== "000" || parsed.detailedResponseCode !== "000") {
-    throw new Error("Geidea order lookup was not successful.");
-  }
-  const orders = parsed.orders
-    .filter(
-      (order) =>
-        order.merchantPublicKey === expected.merchantPublicKey &&
-        order.merchantReferenceId === expected.merchantReferenceId
-    )
-    .map((order) => ({
-      ...normalizeGeideaOrder(order, parsed, order.reference ?? null),
-      isPaid: order.status === "Success" && order.detailedStatus === "Paid",
-    }));
-  return orders.find((order) => order.isPaid) ?? orders.at(-1) ?? null;
 }
 
 export function verifyGeideaCallback(

@@ -3,7 +3,6 @@ import { generateGeideaSessionSignature, formatGeideaTimestamp } from "./geidea-
 import { formatGeideaDiagnostic } from "./geidea-diagnostics";
 import {
   verifyGeideaOrderResponse,
-  verifyGeideaOrdersResponse,
   type VerifiedGeideaCallback,
 } from "./geidea-callback";
 
@@ -40,7 +39,6 @@ type CreateCheckoutSessionInput = {
   amount: number;
   merchantReferenceId: string;
   callbackUrl: string;
-  returnUrl: string;
   customer: {
     email: string;
     phoneNumber: string;
@@ -93,38 +91,6 @@ export async function fetchVerifiedGeideaOrder(orderId: string): Promise<Verifie
   });
 }
 
-export async function fetchVerifiedGeideaOrderByMerchantReference(
-  merchantReferenceId: string
-): Promise<VerifiedGeideaCallback | null> {
-  const config = getGeideaConfig();
-  const response = await fetch(
-    `${config.apiBaseUrl}/pgw/api/v1/direct/order?MerchantReferenceId=${encodeURIComponent(merchantReferenceId)}`,
-    {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Basic ${Buffer.from(
-          `${config.merchantPublicKey}:${config.apiPassword}`
-        ).toString("base64")}`,
-      },
-      cache: "no-store",
-      signal: AbortSignal.timeout(15_000),
-    }
-  );
-
-  let body: unknown;
-  try {
-    body = await response.json();
-  } catch {
-    throw new Error(`Geidea returned an unreadable order response (${response.status}).`);
-  }
-  if (!response.ok) throw new Error(`Geidea order lookup failed (${response.status}).`);
-
-  return verifyGeideaOrdersResponse(body, {
-    merchantPublicKey: config.merchantPublicKey,
-    merchantReferenceId,
-  });
-}
-
 export async function createGeideaCheckoutSession(
   input: CreateCheckoutSessionInput
 ): Promise<GeideaCheckoutSession> {
@@ -153,7 +119,6 @@ export async function createGeideaCheckoutSession(
     merchantReferenceId: input.merchantReferenceId,
     signature,
     callbackUrl: input.callbackUrl,
-    returnUrl: input.returnUrl,
     paymentOperation: "Pay",
     language: "en",
     cardOnFile: false,

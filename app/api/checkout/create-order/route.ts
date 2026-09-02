@@ -224,7 +224,6 @@ export async function POST(request: Request) {
         amount: Number(order.order_total),
         merchantReferenceId: order.order_id,
         callbackUrl: `${baseUrl}/api/checkout/geidea-callback`,
-        returnUrl: `${baseUrl}/api/checkout/geidea-return?orderId=${encodeURIComponent(order.order_id)}`,
         customer: {
           email: parsed.data.contact.email,
           phoneNumber: parsed.data.contact.phone,

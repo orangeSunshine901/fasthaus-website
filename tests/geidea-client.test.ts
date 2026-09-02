@@ -1,36 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
-  cancelGeideaCheckout,
   getPaymentConfirmationDeadline,
   PAYMENT_CONFIRMATION_WINDOW_MS,
   startGeideaCardCheckout,
 } from "../lib/payment/geidea-client.ts";
-
-test("sends the current order and session when checkout is cancelled", async () => {
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = (async (input, init) => {
-    assert.equal(input, "/api/checkout/cancel");
-    assert.equal(init?.method, "POST");
-    assert.deepEqual(JSON.parse(String(init?.body)), {
-      orderId: "11111111-1111-4111-8111-111111111111",
-      sessionId: "session-123",
-    });
-    return Response.json({ ok: true, confirmed: false });
-  }) as typeof fetch;
-
-  try {
-    assert.deepEqual(
-      await cancelGeideaCheckout(
-        "11111111-1111-4111-8111-111111111111",
-        "session-123"
-      ),
-      { ok: true, confirmed: false }
-    );
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
-});
 
 test("caps payment confirmation polling at the session expiry or two minutes", () => {
   const startedAt = Date.parse("2026-09-02T00:00:00Z");
