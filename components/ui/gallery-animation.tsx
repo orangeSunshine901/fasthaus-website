@@ -37,7 +37,10 @@ export function ExpandableGallery({ videos, className }: ExpandableGalleryProps)
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
+              onLoadedMetadata={(event) => {
+                event.currentTarget.currentTime = 0.001;
+              }}
               aria-hidden="true"
               className="h-full w-full object-cover"
             />
