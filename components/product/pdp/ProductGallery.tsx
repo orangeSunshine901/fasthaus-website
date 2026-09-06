@@ -7,9 +7,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
 import useEmblaCarousel from "embla-carousel-react";
-import InnerImageZoom from "react-inner-image-zoom";
-import "react-inner-image-zoom/lib/styles.min.css";
-import styles from "./ProductGallery.module.css";
+import MobileGalleryImage from "./MobileGalleryImage";
 import type { ProductCarouselImage, ProductVariant } from "@/lib/data/products";
 
 type Props = {
@@ -44,7 +42,14 @@ export default function ProductGallery({
   onSelect,
   onVariantChange,
 }: Props) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: images.length > 1 });
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: images.length > 1,
+    watchDrag: (_, event) => {
+      if ("touches" in event && event.touches.length > 1) return false;
+      return !(event.target instanceof Element &&
+        event.target.closest('[data-gallery-zoomed="true"]'));
+    },
+  });
   const reducedMotion = useReducedMotion();
   const activeImage = images[activeIndex] ?? images[0];
   const uiTheme = activeImage?.uiTheme ?? "dark";
@@ -106,32 +111,12 @@ export default function ProductGallery({
               aria-hidden={index !== activeIndex}
             >
               <div className="h-full md:hidden">
-                <InnerImageZoom
-                  src={getImageProps({
-                    src: image.mobileSrc ?? image.src,
-                    alt: "",
-                    width: 864,
-                    height: 1147,
-                    sizes: "(max-width: 440px) 100vw, 440px",
-                  }).props.src}
-                  imgAttributes={{
-                    alt: `${name} — image ${index + 1} of ${images.length}`,
-                    loading: index === 0 ? "eager" : "lazy",
-                    decoding: "async",
-                    srcSet: getImageProps({
-                      src: image.mobileSrc ?? image.src,
-                      alt: "",
-                      width: 864,
-                      height: 1147,
-                      sizes: "(max-width: 440px) 100vw, 440px",
-                    }).props.srcSet,
-                    sizes: "(max-width: 440px) 100vw, 440px",
-                  }}
-                  zoomSrc={image.mobileSrc ?? image.src}
-                  fullscreenOnMobile
-                  mobileBreakpoint={767}
-                  fadeDuration={reducedMotion ? 0 : 150}
-                  className={styles.mobileZoom}
+                <MobileGalleryImage
+                  key={`${image.mobileSrc ?? image.src}:${index === activeIndex}`}
+                  src={image.mobileSrc ?? image.src}
+                  alt={`${name} — image ${index + 1} of ${images.length}`}
+                  priority={index === 0}
+                  active={index === activeIndex}
                 />
               </div>
               <picture className="hidden md:block">
@@ -243,12 +228,12 @@ export default function ProductGallery({
 
       {images.length > 1 && (
         <>
-          <div className="absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-between px-[6px] md:hidden">
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-between px-[6px] md:hidden">
             <button
               type="button"
               onClick={scrollPrev}
               aria-label="Previous image"
-              className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="pointer-events-auto grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{ color: "var(--hero-ui-color)" }}
             >
               <ArrowLeft size={24} strokeWidth={1.5} aria-hidden="true" />
@@ -257,7 +242,7 @@ export default function ProductGallery({
               type="button"
               onClick={scrollNext}
               aria-label="Next image"
-              className="grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="pointer-events-auto grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{ color: "var(--hero-ui-color)" }}
             >
               <ArrowRight size={24} strokeWidth={1.5} aria-hidden="true" />
