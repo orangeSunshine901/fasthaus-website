@@ -294,17 +294,19 @@ export default function CartPage() {
               className="flex flex-wrap justify-center gap-2 border-t pt-3.5"
               style={{ borderColor: "var(--color-border)" }}
             >
-              {["VISA", "MASTERCARD", "G PAY", "APPLE PAY"].map((p) => (
-                <span
-                  key={p}
-                  className="type-caption-sm rounded-md border px-2 py-1"
-                  style={{
-                    borderColor: "var(--color-border)",
-                    color: "var(--color-text-secondary)",
-                  }}
-                >
-                  {p}
-                </span>
+              {[
+                { name: "Visa", src: "/Icons/payment-methods/visa.svg" },
+                { name: "Mastercard", src: "/Icons/payment-methods/master-card.png" },
+                { name: "Google Pay", src: "/Icons/payment-methods/google-pay.svg" },
+              ].map(({ name, src }) => (
+                <Image
+                  key={name}
+                  src={src}
+                  alt={name}
+                  width={40}
+                  height={24}
+                  className="h-6 w-10 object-cover"
+                />
               ))}
             </div>
           </aside>

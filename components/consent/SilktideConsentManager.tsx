@@ -72,9 +72,10 @@ export default function SilktideConsentManager() {
   return (
     <Script
       id="silktide-consent-manager"
-      src="/silktide-consent-manager.js"
+      src="/site-preferences.js"
       strategy="afterInteractive"
       onReady={initializeSilktide}
+      onError={() => setPageScrollLocked("cookie-consent", false)}
     />
   );
 }

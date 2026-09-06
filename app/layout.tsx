@@ -50,24 +50,12 @@ export default function RootLayout({
       className={`${dmSans.variable} ${golftenStamp.variable} h-full antialiased`}
     >
       <head>
-        <Script id="initial-cookie-scroll-lock" strategy="beforeInteractive">{`
-          try {
-            if (
-              localStorage.getItem('stcm.hasConsented') === null &&
-              localStorage.getItem('silktideCookieBanner_InitialChoice') === null
-            ) {
-              document.documentElement.classList.add('cookie-consent-scroll-locked', 'page-scroll-locked');
-            }
-          } catch (_) {
-            document.documentElement.classList.add('cookie-consent-scroll-locked', 'page-scroll-locked');
-          }
-        `}</Script>
         {/* Silktide ships as a standalone stylesheet rather than an importable CSS module. */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
           id="silktide-consent-manager-css"
-          href="/silktide-consent-manager.css"
+          href="/site-preferences.css"
         />
         <style id="silktide-consent-manager-overrides">{`
           #stcm-wrapper {
