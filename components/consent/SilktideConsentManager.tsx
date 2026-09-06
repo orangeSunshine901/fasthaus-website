@@ -11,7 +11,9 @@ const dispatchConsentChange = () => {
 function initializeSilktide() {
   window.silktideConsentManager?.init({
     eventName: "stcm_consent_update",
-    onPromptOpen: () => setPageScrollLocked("cookie-consent", true),
+    // Keep native mobile scrolling; fixing the body disrupts the home hero layout.
+    onPromptOpen: () =>
+      setPageScrollLocked("cookie-consent", window.matchMedia("(min-width: 768px)").matches),
     onPromptClose: () => setPageScrollLocked("cookie-consent", false),
     backdrop: { show: true },
     icon: { position: "bottomLeft" },

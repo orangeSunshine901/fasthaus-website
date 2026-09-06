@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useReturningHome } from "@/components/navigation/HomeNavigationProvider";
-import { isPageScrollLocked, PAGE_SCROLL_LOCK_EVENT } from "@/lib/page-scroll-lock";
+import { isPageScrollLocked } from "@/lib/page-scroll-lock";
 
 const SCROLL_LOCK_MS = 950;
 const TOP_DEAD_SCROLL_PX = 120;
@@ -24,7 +24,6 @@ export default function HomeFirstScrollReveal() {
     let topOverscroll = 0;
     let ignoreRouteScroll = returningHome;
     let hasLeftTop = !returningHome && window.scrollY > 0;
-    let consentWasOpen = document.documentElement.classList.contains("cookie-consent-scroll-locked");
 
     const finishTransition = () => {
       transitioning = false;
@@ -48,17 +47,6 @@ export default function HomeFirstScrollReveal() {
         finishTransition,
         window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : SCROLL_LOCK_MS
       );
-    };
-
-    const handleScrollLockChange = () => {
-      if (document.documentElement.classList.contains("cookie-consent-scroll-locked")) {
-        consentWasOpen = true;
-      } else if (consentWasOpen && !isPageScrollLocked()) {
-        consentWasOpen = false;
-        // Dismissing first-visit consent is also an entry into the hero.
-        // Do not leave its copy hidden waiting for an exact scrollY === 0 gesture.
-        transitionTo("revealed");
-      }
     };
 
     const handleWheel = (event: WheelEvent) => {
@@ -192,7 +180,6 @@ export default function HomeFirstScrollReveal() {
     window.addEventListener("touchmove", handleTouchMove, { passive: false, capture: true });
     window.addEventListener("keydown", handleKeyDown, { capture: true });
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener(PAGE_SCROLL_LOCK_EVENT, handleScrollLockChange);
 
     return () => {
       window.clearTimeout(transitionTimer);
@@ -202,7 +189,6 @@ export default function HomeFirstScrollReveal() {
       window.removeEventListener("touchmove", handleTouchMove, true);
       window.removeEventListener("keydown", handleKeyDown, true);
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener(PAGE_SCROLL_LOCK_EVENT, handleScrollLockChange);
     };
   }, [returningHome]);
 

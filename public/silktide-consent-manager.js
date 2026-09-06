@@ -1113,7 +1113,7 @@ class SilktideConsentManager {
 
       // Focus the primary action when the preferences modal opens.
       const modalSaveButton = this.preferences.querySelector('.stcm-modal-save');
-      modalSaveButton?.focus();
+      modalSaveButton?.focus({ preventScroll: true });
 
       // Trigger optional onPreferencesOpen callback
       if (typeof this.config.onPreferencesOpen === 'function') {
@@ -1130,7 +1130,7 @@ class SilktideConsentManager {
         this.prompt.style.display = '';
         this.showBackdrop();
         this.hideCookieIcon();
-        this.prompt.querySelector('.stcm-accept-all')?.focus();
+        this.prompt.querySelector('.stcm-accept-all')?.focus({ preventScroll: true });
       } else {
         this.hideBackdrop();
         this.showCookieIcon();
@@ -1296,7 +1296,7 @@ class SilktideConsentManager {
 
       // Set initial focus
       if (this.config.mode !== 'wizard') {
-        acceptButton?.focus();
+        acceptButton?.focus({ preventScroll: true });
       }
     }
 
