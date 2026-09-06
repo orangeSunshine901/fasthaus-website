@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useReturningHome } from "@/components/navigation/HomeNavigationProvider";
 import { isPageScrollLocked } from "@/lib/page-scroll-lock";
 
@@ -12,10 +12,11 @@ const DOWN_KEYS = new Set(["ArrowDown", "PageDown", "End", " "]);
 const UP_KEYS = new Set(["ArrowUp", "PageUp", "Home"]);
 
 export default function HomeFirstScrollReveal() {
+  const markerRef = useRef<HTMLSpanElement>(null);
   const returningHome = useReturningHome();
 
   useEffect(() => {
-    const root = document.querySelector<HTMLElement>("[data-home-reveal]");
+    const root = markerRef.current?.closest<HTMLElement>("[data-home-reveal]");
     if (!root) return;
 
     let transitionTimer = 0;
@@ -38,6 +39,9 @@ export default function HomeFirstScrollReveal() {
 
       transitioning = true;
       root.dataset.homeReveal = state;
+      // The gesture that reveals the hero is consumed here rather than scrolling
+      // the page, so nothing else would release the sections below it.
+      root.dataset.homeContent = state;
       root.setAttribute("data-lenis-prevent-wheel", "");
       root.setAttribute("data-lenis-prevent-touch", "");
       document.documentElement.classList.add("home-reveal-scroll-locked");
@@ -192,5 +196,5 @@ export default function HomeFirstScrollReveal() {
     };
   }, [returningHome]);
 
-  return null;
+  return <span ref={markerRef} hidden aria-hidden="true" />;
 }

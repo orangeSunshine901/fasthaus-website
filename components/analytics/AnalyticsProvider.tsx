@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import { capture, captureException, setAnalyticsConsent } from "@/lib/analytics/client";
@@ -10,12 +10,34 @@ import {
   type AnalyticsConsentState,
 } from "@/providers/AnalyticsConsentContext";
 
-export default function AnalyticsProvider({ children }: { children: React.ReactNode }) {
+// `useSearchParams` suspends while a static route is prerendered, and whatever
+// sits inside that boundary is thrown away and rebuilt at hydration. Keeping it
+// in a leaf of its own means the page tree is never the thing being rebuilt.
+function PageViewTracker({ consent }: { consent: AnalyticsConsentState }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const lastPageView = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (consent !== "granted") {
+      lastPageView.current = null;
+      return;
+    }
+
+    const query = searchParams.toString();
+    const pageViewKey = query ? `${pathname}?${query}` : pathname;
+    if (lastPageView.current === pageViewKey) return;
+
+    lastPageView.current = pageViewKey;
+    capture("$pageview", { $current_url: window.location.href });
+  }, [pathname, searchParams, consent]);
+
+  return null;
+}
+
+export default function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   const [consent, setConsent] = useState<AnalyticsConsentState>("unknown");
   const previousConsent = useRef<AnalyticsConsentState>("unknown");
-  const lastPageView = useRef<string | null>(null);
 
   const applyConsent = useCallback((nextConsent: AnalyticsConsentState) => {
     if (previousConsent.current === nextConsent) return;
@@ -33,7 +55,6 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
     }
 
     if (nextConsent === "denied") {
-      lastPageView.current = null;
       posthog.stopSessionRecording();
       posthog.opt_out_capturing();
       posthog.reset();
@@ -75,17 +96,6 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
   useEffect(() => {
     if (consent !== "granted") return;
 
-    const query = searchParams.toString();
-    const pageViewKey = query ? `${pathname}?${query}` : pathname;
-    if (lastPageView.current === pageViewKey) return;
-
-    lastPageView.current = pageViewKey;
-    capture("$pageview", { $current_url: window.location.href });
-  }, [pathname, searchParams, consent]);
-
-  useEffect(() => {
-    if (consent !== "granted") return;
-
     const onError = (event: ErrorEvent) =>
       captureException(event.error ?? event.message, { source: "window_error" });
     const onRejection = (event: PromiseRejectionEvent) =>
@@ -101,6 +111,9 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
 
   return (
     <AnalyticsConsentContext.Provider value={consent}>
+      <Suspense fallback={null}>
+        <PageViewTracker consent={consent} />
+      </Suspense>
       {children}
     </AnalyticsConsentContext.Provider>
   );

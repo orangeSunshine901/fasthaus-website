@@ -39,7 +39,8 @@
       "Bash(node -e \"console.log\\(require\\('@playwright/test/package.json'\\).version\\)\")",
       "Bash(npm i *)",
       "Bash(timeout 60 bash -c 'until curl -sf http://localhost:3000 >/dev/null; do sleep 1; done')",
-      "Bash(node shot-footer.js)"
+      "Bash(node shot-footer.js)",
+      "Bash(npm test *)"
     ]
   }
 }

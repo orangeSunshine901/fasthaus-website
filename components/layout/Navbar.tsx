@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ChevronDown, Menu, ShoppingCart, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
@@ -103,6 +103,7 @@ function CollectionMegaMenuContent() {
 }
 
 export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstScroll?: boolean }) {
+  const headerRef = useRef<HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [homeHeroPassed, setHomeHeroPassed] = useState(false);
   const openCartDrawer = useCartStore((s) => s.openDrawer);
@@ -152,16 +153,40 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
   useEffect(() => {
     if (!isHomePage) return;
 
-    const hero = document.querySelector<HTMLElement>("[data-home-hero]");
+    const layout = headerRef.current?.closest<HTMLElement>("[data-home-reveal]");
+    const hero = (layout ?? headerRef.current?.parentElement)?.querySelector<HTMLElement>(
+      "[data-home-hero]"
+    );
     if (!hero) return;
 
     const updateNavbar = () => {
-      setHomeHeroPassed(hero.getBoundingClientRect().bottom <= 0);
+      const rect = hero.getBoundingClientRect();
+      // Until the first-scroll reveal runs the page is held at the top, so the hero
+      // cannot have been passed. Content with no layout yet reports an empty rect,
+      // which is likewise not a passed hero.
+      const revealPending = layout?.dataset.homeReveal === "pending";
+      setHomeHeroPassed(!revealPending && rect.height > 0 && rect.bottom <= 0);
     };
 
     updateNavbar();
+    const sizeObserver = new ResizeObserver(updateNavbar);
+    sizeObserver.observe(hero);
+    // The reveal can resolve either side of this effect, so watch it rather than
+    // relying on a later scroll to correct the bar.
+    let revealObserver: MutationObserver | undefined;
+    if (layout) {
+      revealObserver = new MutationObserver(updateNavbar);
+      revealObserver.observe(layout, {
+        attributes: true,
+        attributeFilter: ["data-home-reveal"],
+      });
+    }
     window.addEventListener("scroll", updateNavbar, { passive: true });
-    return () => window.removeEventListener("scroll", updateNavbar);
+    return () => {
+      sizeObserver.disconnect();
+      revealObserver?.disconnect();
+      window.removeEventListener("scroll", updateNavbar);
+    };
   }, [isHomePage]);
 
   useEffect(() => {
@@ -204,6 +229,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
       )}
 
       <header
+        ref={headerRef}
         className={cn(
           isProductPage
             ? "absolute top-11 z-40 w-full border-transparent bg-transparent md:h-24"

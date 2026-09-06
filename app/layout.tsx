@@ -8,7 +8,6 @@ import SilktideConsentManager from "@/components/consent/SilktideConsentManager"
 import CartProvider from "@/components/cart/CartProvider";
 import HomeNavigationProvider from "@/components/navigation/HomeNavigationProvider";
 import { getGeideaSdkUrl } from "@/lib/payment/geidea";
-import { Suspense } from "react";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 import "./globals.css";
 
@@ -109,13 +108,11 @@ export default function RootLayout({
       >
         <SilktideConsentManager />
         <HomeNavigationProvider>
-          <Suspense fallback={<PageTransition>{children}</PageTransition>}>
-            <AnalyticsProvider>
-              <CartProvider>
-                <PageTransition>{children}</PageTransition>
-              </CartProvider>
-            </AnalyticsProvider>
-          </Suspense>
+          <AnalyticsProvider>
+            <CartProvider>
+              <PageTransition>{children}</PageTransition>
+            </CartProvider>
+          </AnalyticsProvider>
         </HomeNavigationProvider>
       </body>
     </html>
