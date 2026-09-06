@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import {
+  TransformComponent,
+  TransformWrapper,
+  type ReactZoomPanPinchRef,
+} from "react-zoom-pan-pinch";
 import { GALLERY_PORTRAITS } from "@/lib/data/gallery-portraits";
 
 type Props = {
@@ -14,10 +18,21 @@ type Props = {
 
 export default function MobileGalleryImage({ src, alt, priority, active }: Props) {
   const [zoomed, setZoomed] = useState(false);
+  const transformRef = useRef<ReactZoomPanPinchRef>(null);
+
+  // Reset the transform imperatively when the slide goes inactive. Keying this
+  // component on `active` instead would remount the <img> on every swipe, which
+  // forces the browser to re-decode an already-loaded image. The reset reaches
+  // `zoomed` through onTransform, so there is no setState to do here.
+  useEffect(() => {
+    if (active) return;
+    transformRef.current?.resetTransform(0);
+  }, [active]);
 
   return (
     <div className="h-full" data-gallery-zoomed={zoomed}>
       <TransformWrapper
+        ref={transformRef}
         disabled={!active}
         minScale={1}
         maxScale={4}
@@ -35,7 +50,10 @@ export default function MobileGalleryImage({ src, alt, priority, active }: Props
             src={GALLERY_PORTRAITS[src] ?? src}
             alt={alt}
             fill
-            sizes={zoomed ? "(max-width: 440px) 400vw, 1760px" : "(max-width: 440px) 100vw, 440px"}
+            // Pinned across zoom levels: the portrait sources cap at 1080px wide
+            // and the optimizer never enlarges, so a larger request returns the same
+            // pixels — a second billed transform and download for no added detail.
+            sizes="(max-width: 440px) 100vw, 440px"
             loading={priority ? "eager" : "lazy"}
             draggable={false}
             className="mx-auto max-w-[440px] select-none object-contain"

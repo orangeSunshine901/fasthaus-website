@@ -112,7 +112,7 @@ export default function ProductGallery({
             >
               <div className="h-full md:hidden">
                 <MobileGalleryImage
-                  key={`${image.mobileSrc ?? image.src}:${index === activeIndex}`}
+                  key={image.mobileSrc ?? image.src}
                   src={image.mobileSrc ?? image.src}
                   alt={`${name} — image ${index + 1} of ${images.length}`}
                   priority={index === 0}
