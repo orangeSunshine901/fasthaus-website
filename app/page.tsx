@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import ShopLayout from "@/components/layout/ShopLayout";
 import FeaturedProductsCarousel from "@/components/product/FeaturedProductsCarousel";
@@ -76,7 +76,12 @@ export default function HomePage() {
             muted
             loop
             playsInline
-            poster="/video-poster-test.png"
+            poster={getImageProps({
+              src: "/video-poster-test.png",
+              alt: "",
+              width: 960,
+              height: 480,
+            }).props.src}
             preload="metadata"
             aria-hidden="true"
           >

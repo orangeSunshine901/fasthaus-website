@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
@@ -113,7 +113,13 @@ export default function ProductCard({ product }: Props) {
                 {selectedVariant.collectionMobileImage && (
                   <source
                     media="(max-width: 767px)"
-                    srcSet={selectedVariant.collectionMobileImage}
+                    sizes="50vw"
+                    srcSet={getImageProps({
+                      src: selectedVariant.collectionMobileImage,
+                      alt: "",
+                      fill: true,
+                      sizes: "50vw",
+                    }).props.srcSet}
                   />
                 )}
                 <Image

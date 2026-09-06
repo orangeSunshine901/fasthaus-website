@@ -1,5 +1,6 @@
 "use client";
 
+import { getImageProps } from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,7 +15,12 @@ const storyFrameRate = 30;
 const storySequenceFrames = 47;
 const desktopStoryVideo = "/about/story-panel-1-scrub.mp4";
 const mobileStoryVideo = "/about/story-panel-mobile-scrub.mp4";
-const mobileStoryPoster = "/about/mobile-about-hero-poster.png";
+const mobileStoryPoster = getImageProps({
+  src: "/about/mobile-about-hero-poster.png",
+  alt: "",
+  width: 540,
+  height: 720,
+}).props.src;
 const storySequenceDuration = storySequenceFrames / storyFrameRate;
 
 const storyPanels = [

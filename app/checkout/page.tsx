@@ -627,6 +627,7 @@ export default function CheckoutPage() {
                         <Image
                           src={item.image}
                           alt={item.productName}
+                          sizes="64px"
                           fill
                           className="object-cover"
                         />
@@ -679,7 +680,7 @@ export default function CheckoutPage() {
                         className="media-rounded relative h-16 w-16 flex-shrink-0"
                         style={{ backgroundColor: "var(--color-surface-muted)" }}
                       >
-                        <Image src={ao.image} alt={ao.name} fill className="object-cover" />
+                        <Image src={ao.image} alt={ao.name} sizes="64px" fill className="object-cover" />
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                         <span

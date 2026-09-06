@@ -1,5 +1,6 @@
 "use client";
 
+import { getImageProps } from "next/image";
 import { useState } from "react";
 import { motion } from "motion/react";
 
@@ -34,7 +35,12 @@ export function ExpandableGallery({ videos, className }: ExpandableGalleryProps)
           >
             <video
               src={video.src}
-              poster={video.poster}
+              poster={getImageProps({
+                src: video.poster,
+                alt: "",
+                width: 640,
+                height: 360,
+              }).props.src}
               muted
               loop
               playsInline

@@ -1,12 +1,15 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
 import useEmblaCarousel from "embla-carousel-react";
+import InnerImageZoom from "react-inner-image-zoom";
+import "react-inner-image-zoom/lib/styles.min.css";
+import styles from "./ProductGallery.module.css";
 import type { ProductCarouselImage, ProductVariant } from "@/lib/data/products";
 
 type Props = {
@@ -102,13 +105,54 @@ export default function ProductGallery({
               className="relative h-full min-w-0 flex-[0_0_100%]"
               aria-hidden={index !== activeIndex}
             >
-              <picture>
-                {image.mobileSrc && <source media="(max-width: 767px)" srcSet={image.mobileSrc} />}
+              <div className="h-full md:hidden">
+                <InnerImageZoom
+                  src={getImageProps({
+                    src: image.mobileSrc ?? image.src,
+                    alt: "",
+                    width: 864,
+                    height: 1147,
+                    sizes: "(max-width: 440px) 100vw, 440px",
+                  }).props.src}
+                  imgAttributes={{
+                    alt: `${name} — image ${index + 1} of ${images.length}`,
+                    loading: index === 0 ? "eager" : "lazy",
+                    decoding: "async",
+                    srcSet: getImageProps({
+                      src: image.mobileSrc ?? image.src,
+                      alt: "",
+                      width: 864,
+                      height: 1147,
+                      sizes: "(max-width: 440px) 100vw, 440px",
+                    }).props.srcSet,
+                    sizes: "(max-width: 440px) 100vw, 440px",
+                  }}
+                  zoomSrc={image.mobileSrc ?? image.src}
+                  fullscreenOnMobile
+                  mobileBreakpoint={767}
+                  fadeDuration={reducedMotion ? 0 : 150}
+                  className={styles.mobileZoom}
+                />
+              </div>
+              <picture className="hidden md:block">
+                {image.mobileSrc && (
+                  <source
+                    media="(max-width: 767px)"
+                    sizes="(max-width: 440px) 100vw, 440px"
+                    srcSet={getImageProps({
+                      src: image.mobileSrc,
+                      alt: "",
+                      fill: true,
+                      sizes: "(max-width: 440px) 100vw, 440px",
+                    }).props.srcSet}
+                  />
+                )}
                 <Image
                   src={image.src}
                   alt={`${name} — image ${index + 1} of ${images.length}`}
                   fill
-                  sizes="100vw"
+                  sizes="(max-width: 440px) 100vw, (max-width: 767px) 440px, 100vw"
+                  loading={index === 0 ? "eager" : "lazy"}
                   className="mx-auto max-w-[440px] object-contain md:max-w-none md:object-cover"
                 />
               </picture>
@@ -128,16 +172,12 @@ export default function ProductGallery({
               transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
             >
               <picture>
-                {activeImage.mobileSrc && (
-                  <source media="(max-width: 767px)" srcSet={activeImage.mobileSrc} />
-                )}
                 <Image
                   src={activeImage.src}
                   alt=""
                   fill
                   sizes="100vw"
                   className="mx-auto max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
-                  priority={activeIndex === 0}
                 />
               </picture>
             </motion.div>
