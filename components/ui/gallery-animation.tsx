@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 
 interface ExpandableGalleryProps {
-  videos: string[];
+  videos: { src: string; poster: string }[];
   className?: string;
 }
 
@@ -18,7 +18,7 @@ export function ExpandableGallery({ videos, className }: ExpandableGalleryProps)
       <div className="flex h-72 w-full gap-2 md:h-[min(32vw,380px)] md:w-[calc(min(96vw,1140px)+48px)] md:gap-6">
         {videos.map((video, index) => (
           <motion.div
-            key={`${video}-${index}`}
+            key={video.src}
             className="relative min-w-0 overflow-hidden rounded-[var(--radius-sm)]"
             initial={false}
             animate={{ flex: hoveredIndex === null ? 1 : hoveredIndex === index ? 2 : 0.5 }}
@@ -33,7 +33,8 @@ export function ExpandableGallery({ videos, className }: ExpandableGalleryProps)
             }}
           >
             <video
-              src={video}
+              src={video.src}
+              poster={video.poster}
               muted
               loop
               playsInline

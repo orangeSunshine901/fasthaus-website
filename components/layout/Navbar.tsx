@@ -448,26 +448,25 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                       </Link>
                     ))}
                   </div>
+
+                  <div
+                    className="mt-4 border-t border-[#e7e1da] pt-4"
+                    style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+                  >
+                    <button
+                      type="button"
+                      className="flex h-[50px] w-full items-center justify-center gap-2 rounded-[12px] bg-[var(--color-accent-amber)] text-[16px] font-regular text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        openCartDrawer();
+                      }}
+                    >
+                      <ShoppingCart size={18} strokeWidth={1.8} />
+                      View Cart
+                    </button>
+                  </div>
                 </motion.nav>
               </ScrollArea>
-
-              {/* Bottom cart shortcut */}
-              <div
-                className="flex-shrink-0 border-t border-[#e7e1da] px-3 pt-2 min-[390px]:px-5"
-                style={{ paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}
-              >
-                <button
-                  type="button"
-                  className="flex h-[50px] w-full items-center justify-center gap-2 rounded-[12px] bg-[var(--color-accent-amber)] text-[16px] font-regular text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    openCartDrawer();
-                  }}
-                >
-                  <ShoppingCart size={18} strokeWidth={1.8} />
-                  View Cart
-                </button>
-              </div>
             </div>
           </motion.div>
         )}

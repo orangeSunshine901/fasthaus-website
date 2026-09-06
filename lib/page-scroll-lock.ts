@@ -28,7 +28,9 @@ export function setPageScrollLocked(source: ScrollLockSource, locked: boolean) {
     const scrollY = Number(root.dataset.scrollLockY ?? 0);
     delete root.dataset.scrollLockY;
     root.style.removeProperty("--page-scroll-lock-top");
-    window.scrollTo(0, scrollY);
+    // Restoration must finish before consumers handle the unlock event.
+    // The site's CSS scroll-behavior would otherwise animate this jump.
+    window.scrollTo({ top: scrollY, behavior: "instant" });
   }
 
   window.dispatchEvent(new Event(PAGE_SCROLL_LOCK_EVENT));

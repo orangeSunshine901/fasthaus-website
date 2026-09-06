@@ -14,6 +14,7 @@ const storyFrameRate = 30;
 const storySequenceFrames = 47;
 const desktopStoryVideo = "/about/story-panel-1-scrub.mp4";
 const mobileStoryVideo = "/about/story-panel-mobile-scrub.mp4";
+const mobileStoryPoster = "/about/mobile-about-hero-poster.png";
 const storySequenceDuration = storySequenceFrames / storyFrameRate;
 
 const storyPanels = [
@@ -53,8 +54,14 @@ const philosophy = [
 ];
 
 const studioVideos = [
-  "/about/Inside-the-studio-1.webm",
-  "/about/Inside-the-studio-2.webm",
+  {
+    src: "/about/Inside-the-studio-1.webm",
+    poster: "/about/Inside-the-studio-1-poster.webp",
+  },
+  {
+    src: "/about/Inside-the-studio-2.webm",
+    poster: "/about/Inside-the-studio-2-poster.webp",
+  },
 ];
 
 export default function AboutScrollStory() {
@@ -148,9 +155,12 @@ export default function AboutScrollStory() {
         const syncVideo = () => scrubVideo(storyTimeline.scrollTrigger?.progress ?? 0);
         video.addEventListener("loadedmetadata", syncVideo);
 
-        const selectedVideo = window.matchMedia("(max-width: 767px)").matches
-          ? mobileStoryVideo
-          : desktopStoryVideo;
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
+        const selectedVideo = isMobile ? mobileStoryVideo : desktopStoryVideo;
+
+        if (isMobile) {
+          video.poster = mobileStoryPoster;
+        }
 
         if (video.getAttribute("src") !== selectedVideo) {
           video.src = selectedVideo;
@@ -284,6 +294,7 @@ export default function AboutScrollStory() {
             >
               <video
                 src={mobileStoryVideo}
+                poster={mobileStoryPoster}
                 muted
                 playsInline
                 preload="metadata"
