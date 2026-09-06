@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { existsSync } from "node:fs";
 import {
   PRODUCTS,
   getVariantGalleryImages,
@@ -93,6 +94,28 @@ test("every product variant provides a mobile collection-card image", () => {
         variant.collectionMobileImage,
         `${variant.id} is missing its mobile collection image`
       );
+    }
+  }
+});
+
+test("mobile portrait crops cover landscape gallery shots, including a standalone main image", () => {
+  const variant = PRODUCTS.flatMap((product) => product.variants).find(
+    (variant) => variant.mainImage === "/flute-lamp/flute-clear-interaction-shot-dark.png"
+  )!;
+  const gallery = getVariantGalleryImages(variant);
+  assert.equal(gallery[0].src, variant.mainImage);
+  assert.match(gallery[0].mobileSrc!, /^\/gallery-portraits\//);
+  for (const product of PRODUCTS) {
+    for (const variant of product.variants) {
+      for (const image of getVariantGalleryImages(variant)) {
+        if (image.mobileSrc) {
+          assert.ok(existsSync(new URL(`../public${image.mobileSrc}`, import.meta.url)), image.mobileSrc);
+        }
+        const original = variant.images.find((entry) => entry.src === image.src);
+        if (original?.mobileSrc?.endsWith("-product-mobile.png")) {
+          assert.equal(image.mobileSrc, original.mobileSrc);
+        }
+      }
     }
   }
 });

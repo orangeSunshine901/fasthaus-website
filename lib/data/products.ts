@@ -1,3 +1,5 @@
+import { GALLERY_PORTRAITS } from "./gallery-portraits.ts";
+
 export type ProductCarouselImage = {
   src: string;
   mobileSrc?: string;
@@ -686,10 +688,14 @@ export function getVariantMainImage(variant: ProductVariant): string {
 export function getVariantGalleryImages(variant: ProductVariant): ProductCarouselImage[] {
   const mainImage = getVariantMainImage(variant);
   const matchingImage = variant.images.find((image) => image.src === mainImage);
-  return [
+  const images: ProductCarouselImage[] = [
     matchingImage ?? { src: mainImage, uiTheme: "dark" },
     ...variant.images.filter((image) => image.src !== mainImage),
   ];
+  return images.map((image) => {
+    const portrait = GALLERY_PORTRAITS[image.mobileSrc ?? image.src];
+    return portrait ? { ...image, mobileSrc: portrait } : image;
+  });
 }
 
 export function formatPrice(amount: number): string {

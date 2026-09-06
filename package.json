@@ -12,7 +12,8 @@
     "build": "next build",
     "test": "node --test --experimental-strip-types tests/*.test.ts",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "images:portraits": "node scripts/generate-gallery-portraits.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -27,6 +28,9 @@
     "class-variance-authority": "^0.7.1",
     "embla-carousel-react": "^8.6.0",
     "filepond": "^4.32.12",
+    "filepond-plugin-image-crop": "^2.0.6",
+    "filepond-plugin-image-resize": "^2.0.10",
+    "filepond-plugin-image-transform": "^3.8.8",
     "gsap": "^3.15.0",
     "libphonenumber-js": "^1.13.8",
     "locomotive-scroll": "^5.0.1",
@@ -53,6 +57,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^16.2.9",
+    "playwright": "^1.63.0",
     "prettier": "^3.8.4",
     "tailwindcss": "^4",
     "typescript": "^5"

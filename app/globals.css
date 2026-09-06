@@ -139,8 +139,10 @@ body {
   line-height: var(--leading-base);
 }
 
-img {
-  animation: image-fade-in 624ms ease-in-out backwards;
+@media (min-width: 768px) {
+  img {
+    animation: image-fade-in 624ms ease-in-out backwards;
+  }
 }
 
 @keyframes image-fade-in {

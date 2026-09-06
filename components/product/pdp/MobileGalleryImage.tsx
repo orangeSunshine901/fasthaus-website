@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import { GALLERY_PORTRAITS } from "@/lib/data/gallery-portraits";
 
 type Props = {
   src: string;
@@ -31,7 +32,7 @@ export default function MobileGalleryImage({ src, alt, priority, active }: Props
           contentStyle={{ position: "relative", width: "100%", height: "100%" }}
         >
           <Image
-            src={src}
+            src={GALLERY_PORTRAITS[src] ?? src}
             alt={alt}
             fill
             sizes={zoomed ? "(max-width: 440px) 400vw, 1760px" : "(max-width: 440px) 100vw, 440px"}
