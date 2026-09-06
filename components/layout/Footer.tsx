@@ -134,7 +134,7 @@ export default function Footer() {
       >
         <div className="flex flex-col gap-4">
           <Link href="/">
-            <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={110} height={26} />
+            <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={110} height={22} style={{ height: "auto" }} />
           </Link>
           <FooterNewsletter caption="New lamp releases, studio notes, and early access to limited drops." />
         </div>
@@ -209,7 +209,7 @@ export default function Footer() {
           {/* Branding + newsletter */}
           <div className="flex flex-col gap-4">
             <Link href="/">
-              <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={128} height={34} />
+              <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={128} height={26} style={{ height: "auto" }} />
             </Link>
             <p
               className="text-[14.5px] font-medium leading-[1.6]"

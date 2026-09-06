@@ -274,7 +274,6 @@ export default function HomePage() {
                       width={208}
                       height={42}
                       className="h-auto w-[168px] md:w-[208px] relative top-2 md:top-0.5"
-                      style={{ height: "59px" }}
                     />
                   </h2>{" "}
                 </div>

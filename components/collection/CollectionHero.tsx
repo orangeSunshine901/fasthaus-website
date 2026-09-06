@@ -58,7 +58,6 @@ uniform vec4 u_cursor;
 #define u_colorCount u_scene.w
 #define u_scale u_shape.x
 #define u_intensity u_shape.y
-#define u_paramA u_shape.z
 #define u_warp u_shape.w
 #define u_detail u_surface.x
 #define u_contrast u_surface.y
@@ -100,14 +99,6 @@ float grainHash(vec2 p) {
   vec3 p3 = fract(vec3(p.xyx) * 0.1031);
   p3 += dot(p3, p3.yzx + 33.33);
   return fract((p3.x + p3.y) * p3.z);
-}
-
-vec2 hash22(vec2 p) {
-#ifndef GL_FRAGMENT_PRECISION_HIGH
-  p = mod(p, 31.0);
-#endif
-  float n = sin(dot(p, vec2(41.0, 289.0)));
-  return fract(vec2(15731.743, 7892.321) * n);
 }
 
 float noise(vec2 p) {
@@ -429,6 +420,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   const shaderTimeRef = useRef(0);
   const shaderAnimationElapsedRef = useRef(0);
   const reducedMotionRef = useRef(shouldReduceMotion);
+  const requestRenderRef = useRef<(() => void) | null>(null);
   const activeSlide = slides[selectedIndex] ?? slides[0];
   const activePalette = palettes[selectedIndex] ?? palettes[0];
   const slideCount = slides.length;
@@ -526,6 +518,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       fromPaletteRef.current.set(toPaletteRef.current);
       transitionStartedAtRef.current = null;
     }
+    requestRenderRef.current?.();
   }, [shouldReduceMotion]);
 
   useEffect(() => {
@@ -539,6 +532,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
     } else {
       transitionStartedAtRef.current = animationTimeRef.current;
     }
+    requestRenderRef.current?.();
   }, [activePalette]);
 
   useEffect(() => {
@@ -604,10 +598,23 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       cursor: gl.getUniformLocation(program, "u_cursor"),
     };
 
+    gl.uniform4f(uniforms.shape, 1.32, 0.49, 0.84, 0.01);
+    gl.uniform4f(uniforms.surface, 1.73, 1.08, 0.07, 2);
+    gl.uniform4f(uniforms.finish, 0, 0, 0.04, 0.35);
+    gl.uniform4f(uniforms.transform, 4984, 3.37, 0.4, 1);
+    gl.uniform4f(uniforms.space, -0.13, 0.05, 0, 0);
+    gl.uniform4f(uniforms.cursor, 0, 3, 0.54, 0.56);
+
     let frame = 0;
     let documentVisible = !document.hidden;
     let sectionVisible = true;
     let lastFrameAt = performance.now();
+    let needsRender = true;
+
+    const isAnimating = () =>
+      !reducedMotionRef.current &&
+      (shaderAnimationElapsedRef.current < SHADER_ANIMATION_DURATION ||
+        transitionStartedAtRef.current !== null);
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
@@ -618,6 +625,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
+        needsRender = true;
       }
 
       gl.viewport(0, 0, width, height);
@@ -669,19 +677,14 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         reducedMotionRef.current ? 0 : (shaderTimeRef.current / 1000) * -0.67,
         4
       );
-      gl.uniform4f(uniforms.shape, 1.32, 0.49, 0.84, 0.01);
-      gl.uniform4f(uniforms.surface, 1.73, 1.08, 0.07, 2);
-      gl.uniform4f(uniforms.finish, 0, 0, 0.04, 0.35);
-      gl.uniform4f(uniforms.transform, 4984, 3.37, 0.4, 1);
-      gl.uniform4f(uniforms.space, -0.13, 0.05, 0, 0);
-      gl.uniform4f(uniforms.cursor, 0, 3, 0.54, 0.56);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-      frame = window.requestAnimationFrame(draw);
+      needsRender = false;
+      if (isAnimating()) frame = window.requestAnimationFrame(draw);
     };
 
     const syncAnimation = () => {
       if (documentVisible && sectionVisible) {
-        if (!frame) {
+        if (!frame && (needsRender || isAnimating())) {
           lastFrameAt = performance.now();
           frame = window.requestAnimationFrame(draw);
         }
@@ -691,12 +694,20 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       }
     };
 
+    requestRenderRef.current = () => {
+      needsRender = true;
+      syncAnimation();
+    };
+
     const handleVisibilityChange = () => {
       documentVisible = !document.hidden;
       syncAnimation();
     };
 
-    const resizeObserver = new ResizeObserver(resize);
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+      syncAnimation();
+    });
     const intersectionObserver = new IntersectionObserver(
       ([entry]) => {
         sectionVisible = entry.intersectionRatio >= 0.5;
@@ -711,6 +722,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
     syncAnimation();
 
     return () => {
+      requestRenderRef.current = null;
       window.cancelAnimationFrame(frame);
       resizeObserver.disconnect();
       intersectionObserver.disconnect();

@@ -29,7 +29,8 @@ export default function DirhamPrice({
         src={variant === "white" ? "/dirham-icon.svg" : "/dirham-icon-black.svg"}
         alt="AED"
         width={iconH}
-        height={iconH}
+        height={Math.round(iconH * (variant === "white" ? 334.44 / 384.53 : 11 / 12))}
+        style={{ height: "auto" }}
         className="inline-block"
       />
       <span>{amount.toFixed(2)}</span>

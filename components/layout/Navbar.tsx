@@ -192,7 +192,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
           allowVisibleAtTop={aboutMainNavHidden}
           leftSlot={
             <Link href="/" className="inline-flex items-center" aria-label="Fasthaus home">
-              <Image src="/fasthaus-logo-final-ivory.svg" alt="Fasthaus" width={104} height={22} />
+              <Image src="/fasthaus-logo-final-ivory.svg" alt="Fasthaus" width={104} height={21} style={{ height: "auto" }} />
             </Link>
           }
           rightSlot={
@@ -248,7 +248,8 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
               }
               alt="Fasthaus"
               width={100}
-              height={24}
+              height={20}
+              style={{ height: "auto" }}
               priority
             />
           </Link>
@@ -279,6 +280,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                   alt="Fasthaus"
                   width={128}
                   height={26}
+                  style={{ height: "auto" }}
                   priority
                 />
               </Link>
@@ -370,7 +372,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
               {/* Overlay header */}
               <div className="flex h-16 flex-shrink-0 items-center justify-between border-b border-[#e7e1da] pl-5 pr-3">
                 <Link href="/" onClick={() => setMobileOpen(false)} aria-label="Fasthaus home">
-                  <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={86} height={21} />
+                  <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={86} height={17} style={{ height: "auto" }} />
                 </Link>
                 <button
                   onClick={() => setMobileOpen(false)}

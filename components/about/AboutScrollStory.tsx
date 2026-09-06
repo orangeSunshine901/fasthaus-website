@@ -105,9 +105,10 @@ export default function AboutScrollStory() {
             Math.round(storyDuration * progress * storyFrameRate)
           );
           const nextTime = frame / storyFrameRate;
+          const seekTime = frame === 0 ? 0.001 : nextTime;
 
-          if (Math.abs(video.currentTime - nextTime) > 0.001) {
-            video.currentTime = nextTime;
+          if (Math.abs(video.currentTime - seekTime) > 0.0001) {
+            video.currentTime = seekTime;
           }
         };
 
@@ -146,6 +147,17 @@ export default function AboutScrollStory() {
 
         const syncVideo = () => scrubVideo(storyTimeline.scrollTrigger?.progress ?? 0);
         video.addEventListener("loadedmetadata", syncVideo);
+
+        const selectedVideo = window.matchMedia("(max-width: 767px)").matches
+          ? mobileStoryVideo
+          : desktopStoryVideo;
+
+        if (video.getAttribute("src") !== selectedVideo) {
+          video.src = selectedVideo;
+          video.load();
+        } else {
+          syncVideo();
+        }
 
         const revealViewport = {
           start: "top 64%",
@@ -242,10 +254,7 @@ export default function AboutScrollStory() {
             preload="auto"
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover"
-          >
-            <source src={mobileStoryVideo} type="video/mp4" media="(max-width: 767px)" />
-            <source src={desktopStoryVideo} type="video/mp4" />
-          </video>
+          />
           <div className="absolute inset-0 z-10 bg-black/40" aria-hidden="true" />
 
           <div className="absolute left-1/2 top-1/2 z-20 w-[min(88vw,780px)] -translate-x-1/2 -translate-y-1/2 text-center">
@@ -274,15 +283,21 @@ export default function AboutScrollStory() {
               className="relative flex min-h-[70svh] items-center justify-center overflow-hidden px-5 py-16 text-center"
             >
               <video
+                src={mobileStoryVideo}
                 muted
                 playsInline
                 preload="metadata"
                 aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover"
-              >
-                <source src={mobileStoryVideo} type="video/mp4" media="(max-width: 767px)" />
-                <source src={desktopStoryVideo} type="video/mp4" />
-              </video>
+                className="absolute inset-0 h-full w-full object-cover md:hidden"
+              />
+              <video
+                src={desktopStoryVideo}
+                muted
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
+                className="absolute inset-0 hidden h-full w-full object-cover md:block"
+              />
               <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
               {index === 0 ? (
                 <h1 className="relative text-[34px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">

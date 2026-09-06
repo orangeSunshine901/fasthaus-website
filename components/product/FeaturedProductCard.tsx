@@ -118,7 +118,7 @@ export default function FeaturedProductCard({
           className="type-caption inline-flex shrink-0 items-center gap-1"
           style={{ color: "#FFFFFF" }}
         >
-          <Image src="/dirham-icon.svg" alt="AED" width={12} height={12} className="inline-block" />
+          <Image src="/dirham-icon.svg" alt="AED" width={12} height={10} className="inline-block" style={{ height: "auto" }} />
           <span>{selectedVariant.price}</span>
         </span>
       </div>
