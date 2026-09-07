@@ -38,24 +38,24 @@ const purposeSteps = [
 
 const newsletterImages = [
   {
-    src: "/collection-image-1.png",
-    alt: "Fasthaus collection detail",
-    className: "-left-4 top-16 hidden rotate-[-14deg] md:block lg:left-10",
+    src: "/flute-lamp/flute-clear-lifestyle-shot-dark-4.png",
+    alt: "Clear NUJĀJ lamp in a dark lifestyle setting",
+    className: "-left-4 top-8 hidden rotate-[-14deg] md:block lg:left-10",
   },
   {
-    src: "/collection-image-2.png",
-    alt: "Fasthaus collection lamp",
-    className: "left-8 bottom-12 hidden rotate-[10deg] md:block lg:left-24",
+    src: "/mushroom-lamp/kasane-lamp-black-interaction-shot.png",
+    alt: "Black KASANE lamp in use",
+    className: "left-8 bottom-6 hidden rotate-[10deg] md:block lg:left-24",
   },
   {
-    src: "/collection-image-3.png",
-    alt: "Fasthaus lighting texture",
-    className: "-right-4 top-14 hidden rotate-[12deg] md:block lg:right-10",
+    src: "/pearl-lamp/pearl-lamp-red-lifestyle.png",
+    alt: "Red HAMRAH lamp in a lifestyle setting",
+    className: "-right-4 top-8 hidden rotate-[12deg] md:block lg:right-10",
   },
   {
-    src: "/collection-image-4.png",
-    alt: "Fasthaus product styling",
-    className: "right-10 bottom-10 hidden rotate-[-10deg] md:block lg:right-24",
+    src: "/stack-lamp/stack-lamp-orange-lifestyle.png",
+    alt: "Orange NASAQ lamp in a lifestyle setting",
+    className: "right-10 bottom-6 hidden rotate-[-10deg] md:block lg:right-24",
   },
 ];
 
@@ -76,12 +76,14 @@ export default function HomePage() {
             muted
             loop
             playsInline
-            poster={getImageProps({
-              src: "/video-poster-test.png",
-              alt: "",
-              width: 960,
-              height: 480,
-            }).props.src}
+            poster={
+              getImageProps({
+                src: "/video-poster-test.png",
+                alt: "",
+                width: 960,
+                height: 480,
+              }).props.src
+            }
             preload="metadata"
             aria-hidden="true"
           >
@@ -164,7 +166,7 @@ export default function HomePage() {
                 OUR PRODUCTS
               </p>
               <h2 className="type-display-lg text-white">Lamps with Character</h2>
-              <p className="type-body-md" style={{ color: "#E5E5E5" }}>
+              <p className="type-body-md md:max-w-[420px]" style={{ color: "#E5E5E5" }}>
                 A small collection of sculptural lights designed for desks, shelves, bedside
                 corners, and quiet evening spaces.
               </p>
@@ -258,59 +260,60 @@ export default function HomePage() {
         {/* Who We Are */}
         <section
           id="who-we-are"
-          className="scroll-target w-full"
-          style={{ backgroundColor: "#E5E5E5" }}
+          aria-labelledby="about-heading"
+          className="scroll-target w-full overflow-hidden bg-[#000104]"
         >
-          <div className="mx-auto flex w-full max-w-[1440px] flex-col items-start gap-8 overflow-hidden px-5 py-12 md:px-8 md:py-16 lg:flex-row lg:items-center lg:gap-14 lg:px-20">
-            <div
-              data-scroll
-              className="scroll-reveal-up flex w-full flex-1 flex-col items-start overflow-hidden"
-            >
-              <div className="flex w-full max-w-[704px] flex-col items-start overflow-hidden md:gap-6">
-                <div>
-                  <p className="eyebrow" style={{ color: "var(--color-accent-amber)" }}>
-                    ABOUT US
-                  </p>
-                  <h2 className="flex flex-wrap items-end gap-x-3 gap-y-2 type-display-lg max-w-[400px] font-bold text-[var(--color-text-primary)] md:text-6xl md:leading-[68px] pb-4 md:pb-0">
-                    What is
-                    <Image
-                      src="/fasthaus-logo-final.svg"
-                      alt="fasthaus"
-                      width={208}
-                      height={42}
-                      className="h-auto w-[168px] md:w-[208px] relative top-2 md:top-0.5"
-                    />
-                  </h2>{" "}
-                </div>
-                <div className="flex w-full flex-col gap-4">
-                  <p className="max-w-[540px] text-base font-light leading-5 text-zinc-600">
+          <div className="grid w-full lg:mx-auto lg:max-w-[1280px] lg:grid-cols-[1fr_1.05fr]">
+            <div className="contents lg:col-start-1 lg:row-start-1 lg:flex lg:min-h-[640px] lg:flex-col lg:justify-center lg:px-8 lg:py-16">
+              <div className="order-1 flex min-h-[396px] flex-col justify-center gap-4 px-6 py-12 md:px-8 lg:min-h-0 lg:p-0">
+                <p className="eyebrow text-[var(--color-accent-amber)]">ABOUT US</p>
+                <h2
+                  id="about-heading"
+                  className="type-display-lg text-white lg:whitespace-nowrap"
+                >
+                  What is{" "}
+                  <span className="whitespace-nowrap">
+                    fastha<span className="text-[var(--color-accent-amber)]">u</span>s
+                  </span>
+                </h2>
+                <div className="flex max-w-[620px] flex-col gap-6 text-[18px] leading-[1.55] text-[#D1CEC9] sm:text-xl md:max-w-[500px] lg:gap-7 lg:text-[clamp(18px,1.35vw,24px)]">
+                  <p>
                     Fueled by a love for design and storytelling, we create spatial objects that
                     bring form, function, and character into personal spaces.
                   </p>
-                  <p className="max-w-[540px] text-base font-light leading-5 text-zinc-600">
+                  <p>
                     Each piece is shaped with intention, built with considered materials, and made
                     to make your room feel a little more like you.
                   </p>
                 </div>
+              </div>
+              <div className="order-3 px-6 pb-10 pt-6 md:px-8 lg:mt-12 lg:p-0">
                 <Link
                   href="/about"
-                  className="btn btn-secondary text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.04)] transition-colors hover:bg-neutral-700 mt-4"
+                  className="btn btn-primary min-h-[60px] w-full rounded-full px-8 text-lg shadow-[0px_1px_2px_0px_rgba(0,0,0,0.04)] lg:min-h-[64px] lg:w-auto lg:gap-4 lg:px-10"
                 >
                   Learn more about us
+                  <svg
+                    className="hidden h-5 w-5 lg:block"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14m-6-6 6 6-6 6" />
+                  </svg>
                 </Link>
               </div>
             </div>
-            <div
-              data-scroll
-              data-scroll-speed="0.035"
-              data-scroll-enable-touch-speed
-              className="relative aspect-[520/400] w-full overflow-hidden rounded-[20px] lg:h-96 lg:w-[520px] lg:shrink-0"
-            >
+            <div className="relative order-2 aspect-[4/3] w-full lg:col-start-2 lg:row-start-1 lg:aspect-auto lg:min-h-[640px]">
               <Image
                 src="/home/fasthaus-baseplate.png"
-                alt="Fasthaus spatial lamp in a warm interior"
+                alt="Hands holding a white Fasthaus lamp with a blue baseplate"
                 fill
-                sizes="(min-width: 1024px) 520px, calc(100vw - 40px)"
+                sizes="(min-width: 1280px) 655px, (min-width: 1024px) 51.22vw, 100vw"
                 className="object-cover"
               />
             </div>
@@ -323,7 +326,7 @@ export default function HomePage() {
           className="scroll-target relative w-full overflow-hidden px-5 py-12 md:px-8 md:py-16"
           style={{ backgroundColor: "var(--color-accent-amber)" }}
         >
-          <div className="relative mx-auto max-w-[1280px]">
+          <div className="relative mx-auto w-full max-w-[1280px] md:flex md:min-h-[440px] md:items-center">
             {newsletterImages.map((image) => (
               <div
                 key={image.src}

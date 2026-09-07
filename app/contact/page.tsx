@@ -10,9 +10,24 @@ import { analyticsEvents } from "@/lib/analytics/events";
 type State = "idle" | "loading" | "success" | "error";
 
 const details = [
-  { icon: Mail, label: "Email", value: "hello@fasthaus.studio" },
-  { icon: MessageCircle, label: "WhatsApp", value: "+971 50 123 4567" },
-  { icon: AtSign, label: "Instagram", value: "@fasthaus.studio" },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "hello@fasthaus.studio",
+    href: "mailto:hello@fasthaus.studio",
+  },
+  {
+    icon: MessageCircle,
+    label: "WhatsApp",
+    value: "+971 52 739 1317",
+    href: "https://wa.me/971527391317",
+  },
+  {
+    icon: AtSign,
+    label: "Instagram",
+    value: "@fasthaus.studio",
+    href: "https://www.instagram.com/fasthaus.studio/?utm_source=ig_web_button_share_sheet",
+  },
   { icon: MapPin, label: "Location", value: "Industrial Area 4, Sharjah, UAE" },
   { icon: Clock, label: "Business Hours", value: "Mon – Fri, 10:00 – 19:00" },
 ];
@@ -193,7 +208,7 @@ export default function ContactPage() {
               Contact details
             </h2>
             <div className="flex flex-col gap-4">
-              {details.map(({ icon: Icon, label, value }) => (
+              {details.map(({ icon: Icon, label, value, href }) => (
                 <div key={label} className="flex items-center gap-3">
                   <div
                     className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[var(--radius-sm)]"
@@ -205,9 +220,21 @@ export default function ContactPage() {
                     <p className="type-caption-sm" style={{ color: "var(--color-text-secondary)" }}>
                       {label}
                     </p>
-                    <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>
-                      {value}
-                    </p>
+                    {href ? (
+                      <a
+                        href={href}
+                        target={href.startsWith("http") ? "_blank" : undefined}
+                        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        className="type-caption underline underline-offset-4 transition-colors hover:text-[var(--color-accent-amber)]"
+                        style={{ color: "var(--color-text-primary)" }}
+                      >
+                        {value}
+                      </a>
+                    ) : (
+                      <p className="type-caption" style={{ color: "var(--color-text-primary)" }}>
+                        {value}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}

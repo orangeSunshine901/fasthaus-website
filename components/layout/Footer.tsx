@@ -39,7 +39,14 @@ const linkColumns: FooterColumn[] = [
   },
   {
     heading: "Contact",
-    links: [{ label: "WhatsApp" }, { label: "Email", href: "/contact" }, { label: "Instagram" }],
+    links: [
+      { label: "WhatsApp", href: "https://wa.me/971527391317" },
+      { label: "Email", href: "mailto:hello@fasthaus.studio" },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/fasthaus.studio/?utm_source=ig_web_button_share_sheet",
+      },
+    ],
   },
 ];
 
@@ -95,7 +102,7 @@ function FooterNewsletter({ caption }: { caption?: string }) {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email address"
           disabled={state === "loading" || state === "success"}
-          className="h-12 min-w-0 flex-1 rounded-xl border bg-white px-4 text-[14.5px] outline-none transition-colors focus:border-[var(--color-accent-amber)]"
+          className="h-12 min-w-0 flex-1 rounded-xl border bg-white px-4 text-[14.5px] outline-none transition-colors placeholder:text-sm placeholder:text-[#6B6B6B] placeholder:opacity-100 focus:border-[var(--color-accent-amber)]"
           style={{ borderColor: "#E5DED5", color: "var(--color-text-primary)" }}
         />
         <button
@@ -151,7 +158,11 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="type-body-sm py-1.5"
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className={`type-body-sm py-1.5 ${
+                      col.heading === "Contact" ? "underline underline-offset-4" : ""
+                    }`}
                     style={{ color: "var(--color-text-secondary)" }}
                   >
                     {link.label}
@@ -244,7 +255,11 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-[14.5px] font-medium transition-colors hover:text-[var(--color-accent-amber)]"
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className={`text-[14.5px] font-medium transition-colors hover:text-[var(--color-accent-amber)] ${
+                      col.heading === "Contact" ? "underline underline-offset-4" : ""
+                    }`}
                     style={{ color: "#3A332B" }}
                   >
                     {link.label}

@@ -58,11 +58,9 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
           htmlFor="newsletter-email"
           className="type-caption text-left pl-1"
           style={{ color: "var(--color-text-primary)" }}
-        >
-          Subscribe to Newsletter *
-        </label>
+        ></label>
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <div className="flex min-h-14 flex-1 items-center gap-3 rounded-2xl bg-white px-5">
+          <div className="flex min-h-14 flex-1 items-center gap-3 rounded-[var(--radius-sm)] bg-white px-5">
             <svg
               aria-hidden="true"
               className="h-5 w-5 shrink-0"
@@ -97,7 +95,7 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
           <button
             type="submit"
             disabled={state === "loading"}
-            className="btn btn-secondary min-h-14 rounded-[var(--radius-full)] px-7 disabled:opacity-60"
+            className="btn btn-secondary min-h-14 rounded-[var(--radius-sm)] px-7 disabled:opacity-60"
           >
             {state === "loading" ? <Spinner /> : "Subscribe"}
           </button>

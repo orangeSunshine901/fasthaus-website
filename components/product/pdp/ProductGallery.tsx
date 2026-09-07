@@ -119,7 +119,7 @@ export default function ProductGallery({
                   active={index === activeIndex}
                 />
               </div>
-              <picture className="hidden md:block">
+              <picture className="relative hidden h-full md:block">
                 {image.mobileSrc && (
                   <source
                     media="(max-width: 767px)"
@@ -156,12 +156,12 @@ export default function ProductGallery({
               exit={{ opacity: 0 }}
               transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
             >
-              <picture>
+              <picture className="relative block h-full">
                 <Image
                   src={activeImage.src}
                   alt=""
                   fill
-                  sizes="100vw"
+                  sizes="(max-width: 440px) 100vw, (max-width: 767px) 440px, 100vw"
                   className="mx-auto max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
                 />
               </picture>

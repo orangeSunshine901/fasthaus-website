@@ -109,7 +109,7 @@ export default function ProductCard({ product }: Props) {
               exit={{ opacity: 0 }}
               transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeInOut" }}
             >
-              <picture>
+              <picture className="relative block h-full">
                 {selectedVariant.collectionMobileImage && (
                   <source
                     media="(max-width: 767px)"
