@@ -16,7 +16,7 @@ const storySequenceFrames = 47;
 const desktopStoryVideo = "/about/story-panel-1-scrub.mp4";
 const mobileStoryVideo = "/about/story-panel-mobile-scrub.mp4";
 const mobileStoryPoster = getImageProps({
-  src: "/about/mobile-about-hero-poster.png",
+  src: "/about/mobile-about-hero-poster-first-frame.webp",
   alt: "",
   width: 540,
   height: 720,
@@ -62,10 +62,12 @@ const philosophy = [
 const studioVideos = [
   {
     src: "/about/Inside-the-studio-1.webm",
+    fallbackSrc: "/about/Inside-the-studio-1.mp4",
     poster: "/about/Inside-the-studio-1-poster.webp",
   },
   {
     src: "/about/Inside-the-studio-2.webm",
+    fallbackSrc: "/about/Inside-the-studio-2.mp4",
     poster: "/about/Inside-the-studio-2-poster.webp",
   },
 ];
@@ -164,11 +166,8 @@ export default function AboutScrollStory() {
         const isMobile = window.matchMedia("(max-width: 767px)").matches;
         const selectedVideo = isMobile ? mobileStoryVideo : desktopStoryVideo;
 
-        if (isMobile) {
-          video.poster = mobileStoryPoster;
-        }
-
         if (video.getAttribute("src") !== selectedVideo) {
+          video.removeAttribute("poster");
           video.src = selectedVideo;
           video.load();
         } else {
@@ -265,6 +264,8 @@ export default function AboutScrollStory() {
         >
           <video
             data-story-video
+            src={mobileStoryVideo}
+            poster={mobileStoryPoster}
             muted
             playsInline
             preload="auto"
