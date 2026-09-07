@@ -30,8 +30,13 @@ export default function DirhamPrice({
         alt="AED"
         width={iconH}
         height={Math.round(iconH * (variant === "white" ? 334.44 / 384.53 : 11 / 12))}
-        style={{ height: "auto" }}
-        className="inline-block"
+        className={`inline-block ${
+          size === "sm"
+            ? "h-[10px] w-auto md:h-auto md:w-[12px]"
+            : size === "base"
+              ? "h-[12px] w-auto md:h-auto md:w-[14px]"
+              : "h-auto"
+        }`}
       />
       <span>{amount.toFixed(2)}</span>
       {compareAmount && (
