@@ -290,7 +290,7 @@ export default function CartDrawer() {
             ) : (
               <>
                 {/* Free shipping bar */}
-                <div
+                {/* <div
                   className="flex flex-col gap-2 border-b px-6 py-4"
                   style={{ backgroundColor: "#FAF7F3", borderColor: "#EEE9E3" }}
                 >
@@ -307,7 +307,7 @@ export default function CartDrawer() {
                       style={{ backgroundColor: "#1F8A5B" }}
                     />
                   </div>
-                </div>
+                </div> */}
 
                 {/* Items */}
                 <div className="flex-1 overflow-y-auto px-6 py-1" data-lenis-prevent>
@@ -460,7 +460,7 @@ export default function CartDrawer() {
                   <div className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
                     Free shipping ·{" "}
                     <Link href="/legal/refunds" onClick={closeDrawer} className="hover:underline">
-                      14-day eligible returns
+                      1 year warranty
                     </Link>
                   </div>
                   <Link

@@ -12,6 +12,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
+import { CHECKOUT_DISCOUNTS_ENABLED } from "@/lib/promotions";
 import { discountRateFor, WELCOME_DISCOUNT_CODE } from "@/lib/checkout/discount";
 import { startGeideaCheckout } from "@/lib/payment/geidea-client";
 
@@ -96,7 +97,7 @@ export default function CheckoutPage() {
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
 
   const subtotalValue = subtotal();
-  const hasDiscount = newsletter || discountApplied;
+  const hasDiscount = CHECKOUT_DISCOUNTS_ENABLED && (newsletter || discountApplied);
   const discountAmount = hasDiscount ? subtotalValue * discountRateFor(WELCOME_DISCOUNT_CODE) : 0;
   const totalValue = subtotalValue - discountAmount;
   const cartSyncing = pending.length > 0;
@@ -680,7 +681,13 @@ export default function CheckoutPage() {
                         className="media-rounded relative h-16 w-16 flex-shrink-0"
                         style={{ backgroundColor: "var(--color-surface-muted)" }}
                       >
-                        <Image src={ao.image} alt={ao.name} sizes="64px" fill className="object-cover" />
+                        <Image
+                          src={ao.image}
+                          alt={ao.name}
+                          sizes="64px"
+                          fill
+                          className="object-cover"
+                        />
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                         <span
@@ -703,69 +710,71 @@ export default function CheckoutPage() {
               </div>
 
               {/* Discount */}
-              <div
-                className="flex flex-col gap-3.5 rounded-[var(--radius-md)] p-4"
-                style={{ backgroundColor: "var(--color-surface)" }}
-              >
-                <div className="flex gap-2.5">
-                  <input
-                    type="text"
-                    placeholder="Discount code"
-                    value={discountCode}
-                    onChange={(e) => {
-                      setDiscountCode(e.target.value);
-                      setDiscountApplied(false);
-                      setDiscountError(null);
-                    }}
-                    readOnly={newsletter}
-                    className="input-field h-[46px] flex-1"
-                    style={{
-                      borderColor: "var(--color-border)",
-                      backgroundColor: "var(--color-bg)",
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={applyDiscountCode}
-                    className="btn h-[46px] px-5"
-                    style={{
-                      backgroundColor: hasDiscount
-                        ? "var(--color-success)"
-                        : "var(--color-text-primary)",
-                      color: "#fff",
-                      border: "none",
-                    }}
-                  >
-                    {hasDiscount ? "Applied" : "Apply"}
-                  </button>
-                </div>
-                {discountError && (
-                  <p
-                    className="type-caption-sm"
-                    style={{ color: "var(--color-error)" }}
-                    role="alert"
-                  >
-                    {discountError}
-                  </p>
-                )}
-                <label className="flex cursor-pointer items-start gap-3">
-                  <input
-                    type="checkbox"
-                    checked={newsletter}
-                    onChange={toggleNewsletter}
-                    className="mt-0.5 h-[18px] w-[18px] flex-shrink-0 accent-[var(--color-accent-amber)]"
-                  />
-                  <span
-                    className="type-caption-sm leading-relaxed"
-                    style={{ color: "var(--color-text-primary)" }}
-                  >
-                    Sign up to our newsletter and save 10%{" "}
-                    <span style={{ color: "var(--color-text-secondary)" }}>
-                      on this order. New designs and studio news, once a month — no spam.
+              {CHECKOUT_DISCOUNTS_ENABLED && (
+                <div
+                  className="flex flex-col gap-3.5 rounded-[var(--radius-md)] p-4"
+                  style={{ backgroundColor: "var(--color-surface)" }}
+                >
+                  <div className="flex gap-2.5">
+                    <input
+                      type="text"
+                      placeholder="Discount code"
+                      value={discountCode}
+                      onChange={(e) => {
+                        setDiscountCode(e.target.value);
+                        setDiscountApplied(false);
+                        setDiscountError(null);
+                      }}
+                      readOnly={newsletter}
+                      className="input-field h-[46px] flex-1"
+                      style={{
+                        borderColor: "var(--color-border)",
+                        backgroundColor: "var(--color-bg)",
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={applyDiscountCode}
+                      className="btn h-[46px] px-5"
+                      style={{
+                        backgroundColor: hasDiscount
+                          ? "var(--color-success)"
+                          : "var(--color-text-primary)",
+                        color: "#fff",
+                        border: "none",
+                      }}
+                    >
+                      {hasDiscount ? "Applied" : "Apply"}
+                    </button>
+                  </div>
+                  {discountError && (
+                    <p
+                      className="type-caption-sm"
+                      style={{ color: "var(--color-error)" }}
+                      role="alert"
+                    >
+                      {discountError}
+                    </p>
+                  )}
+                  <label className="flex cursor-pointer items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={newsletter}
+                      onChange={toggleNewsletter}
+                      className="mt-0.5 h-[18px] w-[18px] flex-shrink-0 accent-[var(--color-accent-amber)]"
+                    />
+                    <span
+                      className="type-caption-sm leading-relaxed"
+                      style={{ color: "var(--color-text-primary)" }}
+                    >
+                      Sign up to our newsletter and save 10%{" "}
+                      <span style={{ color: "var(--color-text-secondary)" }}>
+                        on this order. New designs and studio news, once a month — no spam.
+                      </span>
                     </span>
-                  </span>
-                </label>
-              </div>
+                  </label>
+                </div>
+              )}
 
               {/* Totals */}
               <div

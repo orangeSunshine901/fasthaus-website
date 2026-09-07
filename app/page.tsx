@@ -3,6 +3,7 @@ import Link from "next/link";
 import ShopLayout from "@/components/layout/ShopLayout";
 import FeaturedProductsCarousel from "@/components/product/FeaturedProductsCarousel";
 import { getFeaturedProducts } from "@/lib/data/products";
+import { NEWSLETTER_ENABLED } from "@/lib/promotions";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 import LocomotiveScrollProvider from "@/components/scroll/LocomotiveScrollProvider";
 
@@ -267,10 +268,7 @@ export default function HomePage() {
             <div className="contents lg:col-start-1 lg:row-start-1 lg:flex lg:min-h-[640px] lg:flex-col lg:justify-center lg:px-8 lg:py-16">
               <div className="order-1 flex min-h-[396px] flex-col justify-center gap-4 px-6 py-12 md:px-8 lg:min-h-0 lg:p-0">
                 <p className="eyebrow text-[var(--color-accent-amber)]">ABOUT US</p>
-                <h2
-                  id="about-heading"
-                  className="type-display-lg text-white lg:whitespace-nowrap"
-                >
+                <h2 id="about-heading" className="type-display-lg text-white lg:whitespace-nowrap">
                   What is{" "}
                   <span className="whitespace-nowrap">
                     fastha<span className="text-[var(--color-accent-amber)]">u</span>s
@@ -321,66 +319,68 @@ export default function HomePage() {
         </section>
 
         {/* Newsletter */}
-        <section
-          id="newsletter"
-          className="scroll-target relative w-full overflow-hidden px-5 py-12 md:px-8 md:py-16"
-          style={{ backgroundColor: "var(--color-accent-amber)" }}
-        >
-          <div className="relative mx-auto w-full max-w-[1280px] md:flex md:min-h-[440px] md:items-center">
-            {newsletterImages.map((image) => (
-              <div
-                key={image.src}
-                className={`absolute h-[128px] w-[128px] overflow-hidden rounded-[32px] border border-black/10 shadow-[0_24px_50px_rgba(0,0,0,0.18)] lg:h-[148px] lg:w-[148px] ${image.className}`}
-              >
+        {NEWSLETTER_ENABLED && (
+          <section
+            id="newsletter"
+            className="scroll-target relative w-full overflow-hidden px-5 py-12 md:px-8 md:py-16"
+            style={{ backgroundColor: "var(--color-accent-amber)" }}
+          >
+            <div className="relative mx-auto w-full max-w-[1280px] md:flex md:min-h-[440px] md:items-center">
+              {newsletterImages.map((image) => (
                 <div
-                  data-scroll
-                  data-scroll-speed={
-                    image.src.endsWith("1.png") || image.src.endsWith("4.png") ? "0.025" : "-0.02"
-                  }
-                  className="scroll-parallax-layer relative h-full w-full"
+                  key={image.src}
+                  className={`absolute h-[128px] w-[128px] overflow-hidden rounded-[32px] border border-black/10 shadow-[0_24px_50px_rgba(0,0,0,0.18)] lg:h-[148px] lg:w-[148px] ${image.className}`}
                 >
+                  <div
+                    data-scroll
+                    data-scroll-speed={
+                      image.src.endsWith("1.png") || image.src.endsWith("4.png") ? "0.025" : "-0.02"
+                    }
+                    className="scroll-parallax-layer relative h-full w-full"
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      sizes="148px"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+              ))}
+
+              <div
+                data-scroll
+                className="scroll-reveal-up relative z-10 mx-auto flex max-w-[720px] flex-col items-center text-center"
+              >
+                <div className="mb-6 inline-flex h-[60px] w-[60px] items-center justify-center rounded-full bg-transparent">
                   <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    sizes="148px"
-                    className="object-cover"
+                    src="/newsletter-icon.svg"
+                    alt=""
+                    width={40}
+                    height={40}
+                    className="h-12 w-12"
                   />
                 </div>
-              </div>
-            ))}
-
-            <div
-              data-scroll
-              className="scroll-reveal-up relative z-10 mx-auto flex max-w-[720px] flex-col items-center text-center"
-            >
-              <div className="mb-6 inline-flex h-[60px] w-[60px] items-center justify-center rounded-full bg-transparent">
-                <Image
-                  src="/newsletter-icon.svg"
-                  alt=""
-                  width={40}
-                  height={40}
-                  className="h-12 w-12"
-                />
-              </div>
-              <h2
-                className="type-display-xl w-full max-w-[405px] text-center"
-                style={{ color: "var(--color-text-primary)" }}
-              >
-                Subscribe to our Newsletter
-              </h2>
-              <p
-                className="type-body-md mt-4 max-w-[520px]"
-                style={{ color: "var(--color-text-primary)" }}
-              >
-                New arrivals, studio stories, and the occasional lighting tip.
-              </p>
-              <div className="mt-10 w-full">
-                <NewsletterForm variant="featured" />
+                <h2
+                  className="type-display-xl w-full max-w-[405px] text-center"
+                  style={{ color: "var(--color-text-primary)" }}
+                >
+                  Subscribe to our Newsletter
+                </h2>
+                <p
+                  className="type-body-md mt-4 max-w-[520px]"
+                  style={{ color: "var(--color-text-primary)" }}
+                >
+                  New arrivals, studio stories, and the occasional lighting tip.
+                </p>
+                <div className="mt-10 w-full">
+                  <NewsletterForm variant="featured" />
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </ShopLayout>
     </LocomotiveScrollProvider>
   );

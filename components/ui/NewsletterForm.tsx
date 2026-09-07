@@ -46,7 +46,7 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
           color: variant === "featured" ? "var(--color-text-primary)" : "var(--color-success)",
         }}
       >
-        Thanks for subscribing!
+        Thanks for subscribing the discount has been applied to your cart
       </p>
     );
   }
@@ -58,7 +58,9 @@ export default function NewsletterForm({ variant = "default" }: NewsletterFormPr
           htmlFor="newsletter-email"
           className="type-caption text-left pl-1"
           style={{ color: "var(--color-text-primary)" }}
-        ></label>
+        >
+          Subscribe for 10% off your first order
+        </label>
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
           <div className="flex min-h-14 flex-1 items-center gap-3 rounded-[var(--radius-sm)] bg-white px-5">
             <svg

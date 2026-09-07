@@ -1,5 +1,6 @@
 "use client";
 
+import { NEWSLETTER_ENABLED } from "@/lib/promotions";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -141,9 +142,17 @@ export default function Footer() {
       >
         <div className="flex flex-col gap-4">
           <Link href="/">
-            <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={110} height={22} style={{ height: "auto" }} />
+            <Image
+              src="/fasthaus-logo-final.svg"
+              alt="Fasthaus"
+              width={110}
+              height={22}
+              style={{ height: "auto" }}
+            />
           </Link>
-          <FooterNewsletter caption="New lamp releases, studio notes, and early access to limited drops." />
+          {NEWSLETTER_ENABLED && (
+            <FooterNewsletter caption="New lamp releases, studio notes, and early access to limited drops." />
+          )}
         </div>
 
         {/* 2×2 link grid */}
@@ -220,25 +229,35 @@ export default function Footer() {
           {/* Branding + newsletter */}
           <div className="flex flex-col gap-4">
             <Link href="/">
-              <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={128} height={26} style={{ height: "auto" }} />
+              <Image
+                src="/fasthaus-logo-final.svg"
+                alt="Fasthaus"
+                width={128}
+                height={26}
+                style={{ height: "auto" }}
+              />
             </Link>
-            <p
-              className="text-[14.5px] font-medium leading-[1.6]"
-              style={{ color: "#6E655B", textWrap: "pretty" }}
-            >
-              New lamp releases, studio notes, and early access to limited drops.
-            </p>
-            <FooterNewsletter />
-            <p className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
-              By subscribing you agree to our{" "}
-              <Link
-                href="/legal/terms"
-                className="underline transition-colors hover:text-[var(--color-accent-amber)]"
-              >
-                Terms and Conditions
-              </Link>
-              .
-            </p>
+            {NEWSLETTER_ENABLED && (
+              <>
+                <p
+                  className="text-[14.5px] font-medium leading-[1.6]"
+                  style={{ color: "#6E655B", textWrap: "pretty" }}
+                >
+                  New lamp releases, studio notes, and early access to limited drops.
+                </p>
+                <FooterNewsletter />
+                <p className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
+                  By subscribing you agree to our{" "}
+                  <Link
+                    href="/legal/terms"
+                    className="underline transition-colors hover:text-[var(--color-accent-amber)]"
+                  >
+                    Terms and Conditions
+                  </Link>
+                  .
+                </p>
+              </>
+            )}
           </div>
 
           {/* Link columns */}
