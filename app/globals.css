@@ -51,9 +51,9 @@
   --color-success: #2e7d5e;
 
   /* Type scale */
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-base: 16px;
+  --text-xs: 10px;
+  --text-sm: 12px;
+  --text-base: 14px;
   --text-md: 20px;
   --text-lg: 28px;
   --text-xl: 32px;
@@ -107,6 +107,9 @@ html.page-scroll-locked body {
 
 @media (min-width: 768px) {
   :root {
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-base: 16px;
     --text-md: 20px;
     --text-lg: 32px;
     --text-xl: 40px;
