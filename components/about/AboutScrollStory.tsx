@@ -1,6 +1,6 @@
 "use client";
 
-import { getImageProps } from "next/image";
+import Image, { getImageProps } from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,8 +15,9 @@ const storyFrameRate = 30;
 const storySequenceFrames = 47;
 const desktopStoryVideo = "/about/story-panel-1-scrub.mp4";
 const mobileStoryVideo = "/about/story-panel-mobile-scrub.mp4";
+const mobileStoryPosterSource = "/about/mobile-about-hero-poster-first-frame.webp";
 const mobileStoryPoster = getImageProps({
-  src: "/about/mobile-about-hero-poster-first-frame.webp",
+  src: mobileStoryPosterSource,
   alt: "",
   width: 540,
   height: 720,
@@ -76,6 +77,7 @@ export default function AboutScrollStory() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const progressFrameRef = useRef<number | null>(null);
   const [storyProgress, setStoryProgress] = useState({ value: 0, isVisible: true });
+  const [isMobileVideoReady, setIsMobileVideoReady] = useState(false);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -165,19 +167,22 @@ export default function AboutScrollStory() {
 
         const isMobile = window.matchMedia("(max-width: 767px)").matches;
         const selectedVideo = isMobile ? mobileStoryVideo : desktopStoryVideo;
-        const revealMobileVideo = () => {
-          if (isMobile) video.removeAttribute("poster");
-        };
+        let videoFrameCallback: number | null = null;
+        const revealMobileVideo = () => setIsMobileVideoReady(true);
 
-        video.addEventListener("loadeddata", revealMobileVideo);
+        if (isMobile) {
+          if (typeof video.requestVideoFrameCallback === "function") {
+            videoFrameCallback = video.requestVideoFrameCallback(revealMobileVideo);
+          } else {
+            video.addEventListener("seeked", revealMobileVideo, { once: true });
+          }
+        }
 
         if (video.getAttribute("src") !== selectedVideo) {
-          video.removeAttribute("poster");
           video.src = selectedVideo;
           video.load();
         } else {
           syncVideo();
-          if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) revealMobileVideo();
         }
 
         const revealViewport = {
@@ -235,7 +240,10 @@ export default function AboutScrollStory() {
 
         return () => {
           video.removeEventListener("loadedmetadata", syncVideo);
-          video.removeEventListener("loadeddata", revealMobileVideo);
+          video.removeEventListener("seeked", revealMobileVideo);
+          if (videoFrameCallback !== null) {
+            video.cancelVideoFrameCallback(videoFrameCallback);
+          }
           if (progressFrameRef.current !== null) {
             window.cancelAnimationFrame(progressFrameRef.current);
             progressFrameRef.current = null;
@@ -271,13 +279,22 @@ export default function AboutScrollStory() {
         >
           <video
             data-story-video
-            src={mobileStoryVideo}
-            poster={mobileStoryPoster}
             muted
             playsInline
             preload="auto"
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover"
+          />
+          <Image
+            src={mobileStoryPosterSource}
+            alt=""
+            fill
+            preload
+            sizes="(max-width: 767px) 100vw, 1px"
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 z-[1] object-cover transition-opacity duration-150 md:hidden ${
+              isMobileVideoReady ? "opacity-0" : "opacity-100"
+            }`}
           />
           <div className="absolute inset-0 z-10 bg-black/40" aria-hidden="true" />
 
