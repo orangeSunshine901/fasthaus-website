@@ -308,8 +308,9 @@ export default function HomePage() {
             </div>
             <div className="relative order-2 aspect-[4/3] w-full lg:col-start-2 lg:row-start-1 lg:aspect-auto lg:min-h-[640px]">
               <Image
-                src="/home/fasthaus-baseplate.png"
+                src="/home/fasthaus-baseplate.jpg"
                 alt="Hands holding a white Fasthaus lamp with a blue baseplate"
+                loading="eager"
                 fill
                 sizes="(min-width: 1280px) 655px, (min-width: 1024px) 51.22vw, 100vw"
                 className="object-cover"

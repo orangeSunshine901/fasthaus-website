@@ -225,41 +225,7 @@ export default function Footer() {
 
       {/* ── DESKTOP ── */}
       <div className="hidden md:block">
-        <div className="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,400px)_1fr_1fr_1fr_1fr] gap-14 px-8 pb-12 pt-16">
-          {/* Branding + newsletter */}
-          <div className="flex flex-col gap-4">
-            <Link href="/">
-              <Image
-                src="/fasthaus-logo-final.svg"
-                alt="Fasthaus"
-                width={128}
-                height={26}
-                style={{ height: "auto" }}
-              />
-            </Link>
-            {NEWSLETTER_ENABLED && (
-              <>
-                <p
-                  className="text-[14.5px] font-medium leading-[1.6]"
-                  style={{ color: "#6E655B", textWrap: "pretty" }}
-                >
-                  New lamp releases, studio notes, and early access to limited drops.
-                </p>
-                <FooterNewsletter />
-                <p className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
-                  By subscribing you agree to our{" "}
-                  <Link
-                    href="/legal/terms"
-                    className="underline transition-colors hover:text-[var(--color-accent-amber)]"
-                  >
-                    Terms and Conditions
-                  </Link>
-                  .
-                </p>
-              </>
-            )}
-          </div>
-
+        <div className="mx-auto grid max-w-[1240px] grid-cols-4 gap-x-12 px-8 pb-8 pt-16 lg:gap-x-20 xl:gap-x-24">
           {/* Link columns */}
           {linkColumns.map((col) => (
             <div key={col.heading} className="flex flex-col gap-3.5">
@@ -276,9 +242,7 @@ export default function Footer() {
                     href={link.href}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className={`text-[14.5px] font-medium transition-colors hover:text-[var(--color-accent-amber)] ${
-                      col.heading === "Contact" ? "underline underline-offset-4" : ""
-                    }`}
+                    className="w-fit text-[14.5px] font-medium underline-offset-4 transition-colors hover:text-[var(--color-accent-amber)] hover:underline"
                     style={{ color: "#3A332B" }}
                   >
                     {link.label}
@@ -297,6 +261,22 @@ export default function Footer() {
           ))}
         </div>
 
+        {/* Outline logo */}
+        <Link
+          href="/"
+          aria-label="Fasthaus home"
+          className="mx-auto block max-w-[1240px] px-8 pb-2"
+        >
+          <Image
+            src="/fasthaus-logo-outline.svg"
+            alt="Fasthaus"
+            width={1094}
+            height={221}
+            sizes="(min-width: 1240px) 1176px, calc(100vw - 64px)"
+            className="h-auto w-full"
+          />
+        </Link>
+
         {/* Bottom bar */}
         <div
           className="mx-auto flex max-w-[1240px] items-center justify-between gap-6 border-t px-8 pb-9 pt-5"
@@ -311,7 +291,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="text-[13px] font-semibold transition-colors hover:text-[var(--color-accent-amber)]"
+                  className="text-[13px] font-semibold underline-offset-4 transition-colors hover:text-[var(--color-accent-amber)] hover:underline"
                   style={{ color: "#8A8075" }}
                 >
                   {link.label}

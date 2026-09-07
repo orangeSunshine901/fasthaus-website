@@ -88,11 +88,12 @@ export default function RootLayout({
         `}</Script>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=GT-WPFL2V2P"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
-        <Script id="google-tag" strategy="beforeInteractive">{`
+        <Script id="google-tag" strategy="afterInteractive">{`
           window.gtag('js', new Date());
           window.gtag('config', 'GT-WPFL2V2P');
+          window.gtag('config', 'G-NVLXES9Z6Q');
         `}</Script>
         {/* Geidea Express Checkout requires a synchronous SDK script without async or defer. */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
