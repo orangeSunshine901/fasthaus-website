@@ -165,6 +165,11 @@ export default function AboutScrollStory() {
 
         const isMobile = window.matchMedia("(max-width: 767px)").matches;
         const selectedVideo = isMobile ? mobileStoryVideo : desktopStoryVideo;
+        const revealMobileVideo = () => {
+          if (isMobile) video.removeAttribute("poster");
+        };
+
+        video.addEventListener("loadeddata", revealMobileVideo);
 
         if (video.getAttribute("src") !== selectedVideo) {
           video.removeAttribute("poster");
@@ -172,6 +177,7 @@ export default function AboutScrollStory() {
           video.load();
         } else {
           syncVideo();
+          if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) revealMobileVideo();
         }
 
         const revealViewport = {
@@ -229,6 +235,7 @@ export default function AboutScrollStory() {
 
         return () => {
           video.removeEventListener("loadedmetadata", syncVideo);
+          video.removeEventListener("loadeddata", revealMobileVideo);
           if (progressFrameRef.current !== null) {
             window.cancelAnimationFrame(progressFrameRef.current);
             progressFrameRef.current = null;
