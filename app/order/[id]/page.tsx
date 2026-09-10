@@ -53,7 +53,10 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
               >
                 <Check size={26} style={{ color: "var(--color-success)" }} />
               </span>
-              <p className="type-caption-sm">Order #{order.id.slice(0, 8).toUpperCase()}</p>
+              <p className="type-caption-sm">
+                <span className="type-caption-sm">Order #</span>
+                {order.id.slice(0, 8).toUpperCase()}
+              </p>
               <h1 className="type-display-xl">Thank you for your order!</h1>
               <p className="type-body-md" style={{ color: "var(--color-text-secondary)" }}>
                 Your payment is confirmed and we’re preparing your order.
