@@ -14,7 +14,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
   const supabase = await createServiceClient();
   const { data: order } = await supabase
     .from("orders")
-    .select("id,status,total,shipping_address,created_at,cart_id,geidea_session_expires_at")
+    .select("id,status,total,guest_email,shipping_address,created_at,cart_id,geidea_session_expires_at")
     .eq("id", id)
     .maybeSingle();
   if (!order) notFound();
@@ -31,6 +31,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
     line2?: string;
     landmark?: string;
     emirate?: string;
+    email?: string;
   };
 
   return (
@@ -118,6 +119,12 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
                 </>
               ) : null}
               {shipping.emirate}, United Arab Emirates
+              {shipping.email ?? order.guest_email ? (
+                <>
+                  <br />
+                  {shipping.email ?? order.guest_email}
+                </>
+              ) : null}
             </p>
           </div>
         </section>
