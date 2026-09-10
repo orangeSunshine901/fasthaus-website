@@ -5,6 +5,12 @@ import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { useAnalyticsConsent } from "@/providers/AnalyticsConsentContext";
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 export default function PurchaseCompleted({
   orderId,
   revenue,
@@ -16,6 +22,19 @@ export default function PurchaseCompleted({
 }) {
   const consent = useAnalyticsConsent();
   const capturedOrder = useRef<string | null>(null);
+  const convertedOrder = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (convertedOrder.current === orderId) return;
+
+    window.gtag?.("event", "conversion", {
+      send_to: "AW-18420023335/tA71CK6dxfEcEKeArc9E",
+      value: revenue,
+      currency: "AED",
+      transaction_id: orderId,
+    });
+    convertedOrder.current = orderId;
+  }, [orderId, revenue]);
 
   useEffect(() => {
     if (consent !== "granted" || capturedOrder.current === orderId) return;
