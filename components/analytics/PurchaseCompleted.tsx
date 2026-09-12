@@ -7,34 +7,57 @@ import { useAnalyticsConsent } from "@/providers/AnalyticsConsentContext";
 
 declare global {
   interface Window {
-    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 
 export default function PurchaseCompleted({
   orderId,
   revenue,
+  value,
+  shipping,
+  discount,
+  items,
   itemCount,
 }: {
   orderId: string;
   revenue: number;
+  value: number;
+  shipping: number;
+  discount: number;
+  items: Array<{
+    id: string;
+    item_id: string;
+    item_name: string;
+    item_variant: string;
+    price: number;
+    quantity: number;
+  }>;
   itemCount: number;
 }) {
   const consent = useAnalyticsConsent();
   const capturedOrder = useRef<string | null>(null);
-  const convertedOrder = useRef<string | null>(null);
+  const pushedOrder = useRef<string | null>(null);
 
   useEffect(() => {
-    if (convertedOrder.current === orderId) return;
+    if (pushedOrder.current === orderId) return;
 
-    window.gtag?.("event", "conversion", {
-      send_to: "AW-18420023335/8d6TCIW5u_UcEKeArc9E",
-      value: revenue,
-      currency: "AED",
-      transaction_id: orderId,
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      event: "purchase",
+      ecommerce: {
+        transaction_id: orderId,
+        value,
+        currency: "AED",
+        shipping,
+        tax: 0,
+        discount,
+        items,
+      },
     });
-    convertedOrder.current = orderId;
-  }, [orderId, revenue]);
+    pushedOrder.current = orderId;
+  }, [discount, items, orderId, shipping, value]);
 
   useEffect(() => {
     if (consent !== "granted" || capturedOrder.current === orderId) return;

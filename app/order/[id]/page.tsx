@@ -14,15 +14,38 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
   const supabase = await createServiceClient();
   const { data: order } = await supabase
     .from("orders")
-    .select("id,status,total,guest_email,shipping_address,created_at,cart_id,geidea_session_expires_at")
+    .select("id,status,subtotal,shipping_total,total,guest_email,shipping_address,created_at,cart_id,geidea_session_expires_at")
     .eq("id", id)
     .maybeSingle();
   if (!order) notFound();
   const { data: items } = await supabase
     .from("order_items")
-    .select("id,product_name,variant_name,quantity,unit_price")
+    .select("id,catalog_variant_id,product_name,variant_name,quantity,unit_price")
     .eq("order_id", id);
   const confirmed = order.status === "confirmed";
+  const toFiniteNumber = (amount: unknown) => {
+    const value = Number(amount);
+    return Number.isFinite(value) ? value : 0;
+  };
+  const subtotal = toFiniteNumber(order.subtotal);
+  const shippingTotal = toFiniteNumber(order.shipping_total ?? 0);
+  const total = toFiniteNumber(order.total);
+  const value = Number((total - shippingTotal).toFixed(2));
+  const discount = Number(Math.max(0, subtotal - value).toFixed(2));
+  const purchaseItems = (items ?? []).flatMap((item) => {
+    const catalogVariantId = item.catalog_variant_id;
+    if (!catalogVariantId || catalogVariantId.startsWith("addon:")) return [];
+
+    return [{
+      id: catalogVariantId,
+      item_id: catalogVariantId,
+      item_name: item.product_name,
+      item_variant: item.variant_name,
+      price: Number(toFiniteNumber(item.unit_price).toFixed(2)),
+      quantity: toFiniteNumber(item.quantity),
+    }];
+  });
+  const itemCount = (items ?? []).reduce((sum, item) => sum + Number(item.quantity), 0);
   const shipping = order.shipping_address as {
     firstName?: string;
     lastName?: string;
@@ -40,8 +63,12 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
       {confirmed && (
         <PurchaseCompleted
           orderId={order.id}
-          revenue={Number(order.total)}
-          itemCount={(items ?? []).reduce((sum, item) => sum + Number(item.quantity), 0)}
+          revenue={total}
+          value={value}
+          shipping={shippingTotal}
+          discount={discount}
+          items={purchaseItems}
+          itemCount={itemCount}
         />
       )}
       <div className="mx-auto max-w-[760px] px-5 py-16 md:py-24">
