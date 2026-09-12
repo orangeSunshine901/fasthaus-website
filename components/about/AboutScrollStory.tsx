@@ -1,6 +1,6 @@
 "use client";
 
-import Image, { getImageProps } from "next/image";
+import { getImageProps } from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,6 +15,7 @@ const storyFrameRate = 30;
 const storySequenceFrames = 47;
 const desktopStoryVideo = "/about/story-panel-1-scrub.mp4";
 const mobileStoryVideo = "/about/story-panel-mobile-scrub.mp4";
+const desktopStoryPosterSource = "/about/desktop-about-hero-poster-first-frame.webp";
 const mobileStoryPosterSource = "/about/mobile-about-hero-poster-first-frame.webp";
 const mobileStoryPoster = getImageProps({
   src: mobileStoryPosterSource,
@@ -77,7 +78,7 @@ export default function AboutScrollStory() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const progressFrameRef = useRef<number | null>(null);
   const [storyProgress, setStoryProgress] = useState({ value: 0, isVisible: true });
-  const [isMobileVideoReady, setIsMobileVideoReady] = useState(false);
+  const [isStoryVideoReady, setIsStoryVideoReady] = useState(false);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -166,19 +167,26 @@ export default function AboutScrollStory() {
         video.addEventListener("loadedmetadata", syncVideo);
 
         const isMobile = window.matchMedia("(max-width: 767px)").matches;
+        const connection = navigator as Navigator & { connection?: { saveData?: boolean } };
+        const prefersReducedData =
+          connection.connection?.saveData ||
+          window.matchMedia("(prefers-reduced-data: reduce)").matches;
         const selectedVideo = isMobile ? mobileStoryVideo : desktopStoryVideo;
         let videoFrameCallback: number | null = null;
-        const revealMobileVideo = () => setIsMobileVideoReady(true);
+        const revealVideo = () => setIsStoryVideoReady(true);
 
-        if (isMobile) {
+        if (!prefersReducedData) {
           if (typeof video.requestVideoFrameCallback === "function") {
-            videoFrameCallback = video.requestVideoFrameCallback(revealMobileVideo);
+            videoFrameCallback = video.requestVideoFrameCallback(revealVideo);
           } else {
-            video.addEventListener("seeked", revealMobileVideo, { once: true });
+            video.addEventListener("seeked", revealVideo, { once: true });
           }
         }
 
-        if (video.getAttribute("src") !== selectedVideo) {
+        if (prefersReducedData) {
+          video.removeAttribute("src");
+          video.load();
+        } else if (video.getAttribute("src") !== selectedVideo) {
           video.src = selectedVideo;
           video.load();
         } else {
@@ -240,7 +248,7 @@ export default function AboutScrollStory() {
 
         return () => {
           video.removeEventListener("loadedmetadata", syncVideo);
-          video.removeEventListener("seeked", revealMobileVideo);
+          video.removeEventListener("seeked", revealVideo);
           if (videoFrameCallback !== null) {
             video.cancelVideoFrameCallback(videoFrameCallback);
           }
@@ -281,21 +289,23 @@ export default function AboutScrollStory() {
             data-story-video
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <Image
-            src={mobileStoryPosterSource}
-            alt=""
-            fill
-            preload
-            sizes="(max-width: 767px) 100vw, 1px"
-            aria-hidden="true"
-            className={`pointer-events-none absolute inset-0 z-[1] object-cover transition-opacity duration-150 md:hidden ${
-              isMobileVideoReady ? "opacity-0" : "opacity-100"
+          <picture
+            className={`pointer-events-none absolute inset-0 z-[1] transition-opacity duration-150 ${
+              isStoryVideoReady ? "opacity-0" : "opacity-100"
             }`}
-          />
+          >
+            <source media="(min-width: 768px)" srcSet={desktopStoryPosterSource} />
+            <img
+              src={mobileStoryPosterSource}
+              alt=""
+              fetchPriority="high"
+              className="h-full w-full object-cover"
+            />
+          </picture>
           <div className="absolute inset-0 z-10 bg-black/40" aria-hidden="true" />
 
           <div className="absolute left-1/2 top-1/2 z-20 w-[min(88vw,780px)] -translate-x-1/2 -translate-y-1/2 text-center">
