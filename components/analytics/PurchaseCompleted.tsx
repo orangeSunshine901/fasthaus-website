@@ -28,7 +28,7 @@ export default function PurchaseCompleted({
     if (convertedOrder.current === orderId) return;
 
     window.gtag?.("event", "conversion", {
-      send_to: "AW-18420023335/tA71CK6dxfEcEKeArc9E",
+      send_to: "AW-18420023335/8d6TCIW5u_UcEKeArc9E",
       value: revenue,
       currency: "AED",
       transaction_id: orderId,
