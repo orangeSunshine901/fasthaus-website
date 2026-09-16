@@ -169,9 +169,7 @@ export default function Footer() {
                     href={link.href}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className={`type-body-sm py-1.5 ${
-                      col.heading === "Contact" ? "underline underline-offset-4" : ""
-                    }`}
+                    className="type-body-sm py-1.5 no-underline"
                     style={{ color: "var(--color-text-secondary)" }}
                   >
                     {link.label}

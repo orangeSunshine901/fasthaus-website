@@ -68,7 +68,7 @@ export default function FeaturedProductCard({
                       : "opacity-100 "
                   : ""
               }`}
-              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+              sizes="(max-width: 767px) 100vw, (max-width: 921px) 50vw, 25vw"
             />
             <Image
               src={displayedImages.on}
@@ -81,7 +81,7 @@ export default function FeaturedProductCard({
                     ? "opacity-100"
                     : "opacity-0"
               }`}
-              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+              sizes="(max-width: 767px) 100vw, (max-width: 921px) 50vw, 25vw"
             />
           </motion.div>
         </AnimatePresence>
@@ -101,7 +101,7 @@ export default function FeaturedProductCard({
           href={`/product/${product.slug}?variant=${encodeURIComponent(selectedVariant.id)}`}
           className="glass-surface relative z-10 inline-flex -translate-y-4 items-center gap-2 overflow-hidden rounded-full px-4 py-2"
         >
-          <span className="text-sm font-medium text-white font-['DM_Sans'] leading-5">
+          <span className="text-sm font-medium text-white font-[var(--font-satoshi)] leading-5">
             View Product
           </span>
           <div className="w-5 h-5 relative">

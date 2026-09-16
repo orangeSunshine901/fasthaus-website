@@ -146,7 +146,7 @@ export default function ProductCard({ product }: Props) {
             }`}
           >
             <div className="glass-surface glass-cta-surface relative inline-flex items-center justify-center gap-1 overflow-hidden rounded-full px-3 py-2">
-              <div className="text-center justify-start text-white text-sm font-medium font-['DM_Sans'] leading-5">
+              <div className="text-center justify-start text-white text-sm font-medium font-[var(--font-satoshi)] leading-5">
                 View Product
               </div>
               <div className="w-5 h-5 relative">

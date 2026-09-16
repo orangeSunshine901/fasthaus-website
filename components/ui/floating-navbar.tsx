@@ -11,6 +11,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { requestNavigationScrollReset } from "@/lib/navigation-scroll";
 
 export const FloatingNav = ({
   navItems,
@@ -92,6 +93,7 @@ export const FloatingNav = ({
                       <NavigationMenuTrigger asChild showChevron={false} unstyled>
                         <Link
                           href={navItem.link}
+                          onNavigate={() => requestNavigationScrollReset(navItem.link)}
                           className="group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]"
                         >
                           <span className="block sm:hidden">{navItem.icon}</span>
@@ -112,6 +114,7 @@ export const FloatingNav = ({
                 <Link
                   key={`link-${idx}`}
                   href={navItem.link}
+                  onNavigate={() => requestNavigationScrollReset(navItem.link)}
                   className={cn(
                     "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold underline-offset-4 transition-colors hover:text-[var(--color-accent-amber)] hover:underline"
                   )}

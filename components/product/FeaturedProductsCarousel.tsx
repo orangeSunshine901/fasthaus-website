@@ -110,7 +110,7 @@ export default function FeaturedProductsCarousel({ products, summaries }: Props)
         )}
       </div>
 
-      <div className="hidden grid-cols-2 gap-6 md:grid xl:grid-cols-4">
+      <div className="hidden grid-cols-2 gap-6 md:grid min-[922px]:grid-cols-4">
         {products.map((product, index) => (
           <div
             key={product.id}

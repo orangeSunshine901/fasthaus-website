@@ -134,8 +134,7 @@ export default function AboutScrollStory() {
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: storySection,
-            start: () =>
-              window.matchMedia("(max-width: 767px)").matches ? "top 56px" : "top top",
+            start: () => (window.matchMedia("(max-width: 767px)").matches ? "top 56px" : "top top"),
             end: () => `+=${Math.round(window.innerHeight * 2.64)}`,
             scrub: true,
             pin: storyPin,
@@ -379,7 +378,7 @@ export default function AboutScrollStory() {
               data-philosophy-reveal
               className="rounded-[8px] border border-white/15 bg-[#000104] p-5"
             >
-              <span className="mb-3 block text-[24px] text-[var(--color-accent-amber)]">
+              <span className="mb-3 grid size-6 place-items-center text-[24px] leading-none text-[var(--color-accent-amber)]">
                 {item.icon}
               </span>
               <h3 className="type-title-md mb-1 text-white">{item.label}</h3>

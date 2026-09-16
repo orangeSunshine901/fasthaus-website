@@ -1,10 +1,11 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useLayoutEffect, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { resetNavigationScrollIfRequested } from "@/lib/navigation-scroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +24,10 @@ export default function PageTransition({ children }: { children: ReactNode }) {
     });
   };
 
+  useLayoutEffect(() => {
+    if (reducedMotion) resetNavigationScrollIfRequested(pathname);
+  }, [pathname, reducedMotion]);
+
   if (reducedMotion) {
     return <div className="flex min-h-screen flex-col">{children}</div>;
   }
@@ -35,6 +40,7 @@ export default function PageTransition({ children }: { children: ReactNode }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={PAGE_TRANSITION}
+        onAnimationStart={() => resetNavigationScrollIfRequested(pathname)}
         onAnimationComplete={refreshScrollTriggers}
         className="flex min-h-screen flex-col"
       >

@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import PageTransition from "@/components/layout/PageTransition";
@@ -7,13 +6,16 @@ import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import SilktideConsentManager from "@/components/consent/SilktideConsentManager";
 import CartProvider from "@/components/cart/CartProvider";
 import HomeNavigationProvider from "@/components/navigation/HomeNavigationProvider";
+import GlassFilters from "@/components/ui/GlassFilters";
 import { getGeideaSdkUrl } from "@/lib/payment/geidea";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
+const satoshi = localFont({
+  src: "./fonts/satoshi/WEB/fonts/Satoshi-Variable.woff2",
+  weight: "300 900",
+  style: "normal",
+  variable: "--font-satoshi",
   display: "swap",
 });
 
@@ -46,7 +48,7 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${dmSans.variable} ${golftenStamp.variable} h-full antialiased`}
+      className={`${satoshi.variable} ${golftenStamp.variable} h-full antialiased`}
     >
       <head>
         {/* Silktide ships as a standalone stylesheet rather than an importable CSS module. */}
@@ -59,7 +61,7 @@ export default function RootLayout({
         <style id="silktide-consent-manager-overrides">{`
           #stcm-wrapper {
             --boxShadow: -5px 5px 10px 0px #00000012, 0px 0px 50px 0px #0000001a;
-            --fontFamily: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+            --fontFamily: var(--font-satoshi), system-ui, sans-serif;
             --primaryColor: #ff4b1f;
             --backgroundColor: #f8f6f3;
             --textColor: #4b494b;
@@ -101,10 +103,7 @@ export default function RootLayout({
           content="6oZVZ4_UZrObrRTiXbYTEg09M59D1JglTLxwXzB89Hg"
         />
       </head>
-      <body
-        className="min-h-full flex flex-col"
-        style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', system-ui, sans-serif)" }}
-      >
+      <body className="min-h-full flex flex-col">
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-K3NWXVJ8"
@@ -113,6 +112,7 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+        <GlassFilters />
         <SilktideConsentManager />
         <HomeNavigationProvider>
           <AnalyticsProvider>

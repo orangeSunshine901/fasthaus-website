@@ -785,9 +785,10 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
           <div className="absolute inset-0 -translate-y-[10%] md:translate-y-0">
             <div className="absolute left-1/2 top-[46%] z-10 -translate-x-1/2 -translate-y-1/2">
               <motion.h2
-                className="font-golften-stamp whitespace-nowrap text-center text-[102px] md:text-[132px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
+                className="collection-hero-title font-golften-stamp whitespace-nowrap text-center text-[102px] md:text-[132px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
                 variants={shouldReduceMotion ? REDUCED_TITLE_VARIANTS : TITLE_VARIANTS}
                 transition={contentTransition}
+                style={{ fontFamily: "var(--font-golften-stamp)" }}
               >
                 {activeSlide.lampName}
               </motion.h2>
@@ -814,10 +815,13 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
 
             <div className="absolute bottom-[5%] left-[50.5%] z-40 flex -translate-x-1/2 flex-col items-center gap-12 md:bottom-[12%]">
               <motion.p
-                className="font-golften-stamp whitespace-nowrap font-semibold uppercase tracking-[0.004em] text-white"
+                className="collection-hero-label font-golften-stamp whitespace-nowrap font-semibold uppercase tracking-[0.004em] text-white"
                 variants={shouldReduceMotion ? REDUCED_VARIANTS : LABEL_VARIANTS}
                 transition={labelTransition}
-                style={{ fontSize: "var(--collection-hero-label-size)" }}
+                style={{
+                  fontFamily: "var(--font-golften-stamp)",
+                  fontSize: "var(--collection-hero-label-size)",
+                }}
               >
                 {activeSlide.colorName}
               </motion.p>
@@ -826,7 +830,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                 className="border border-white pointer-events-auto relative inline-flex md:translate-y-[26px] cursor-pointer items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2 transition-transform duration-300 ease-in-out hover:scale-[1.03]"
                 aria-label={`View ${activeSlide.lampName} in ${activeSlide.colorName}`}
               >
-                <span className="text-center text-sm font-medium leading-5 text-white">
+                <span className="text-center text-sm font-medium font-[var(--font-satoshi)] leading-5 text-white">
                   View Product
                 </span>
                 <span className="relative h-5 w-5">

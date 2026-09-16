@@ -191,7 +191,7 @@ export default function ProductGallery({
         <div
           role="group"
           aria-label="Choose lamp color"
-          className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/60 px-3.5 py-2.5 shadow-sm backdrop-blur-md md:bottom-auto md:left-8 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:flex-col md:px-2.5 md:py-3.5"
+          className="glass-backdrop absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/60 px-3.5 py-2.5 shadow-sm md:bottom-auto md:left-8 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:flex-col md:px-2.5 md:py-3.5"
         >
           {variants.map((variant) => (
             <Tooltip.Root key={variant.id}>
