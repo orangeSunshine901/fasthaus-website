@@ -260,7 +260,8 @@ Modal - Header
   gap: 16px;
 }
 
-#stcm-modal h1 {
+/* Rendered as h2 so the consent modal never adds a second H1 to the page. */
+#stcm-modal header h2 {
   font-family: var(--fontFamily);
   color: var(--textColor);
   font-size: 24px;

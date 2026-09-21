@@ -320,6 +320,7 @@ export default function CartPage() {
                   width={40}
                   height={24}
                   className="h-6 w-10 object-cover"
+                  style={{ aspectRatio: "5 / 3" }}
                 />
               ))}
             </div>

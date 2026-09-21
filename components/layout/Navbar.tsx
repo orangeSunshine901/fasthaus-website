@@ -223,7 +223,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                 alt="Fasthaus"
                 width={104}
                 height={21}
-                style={{ height: "auto" }}
+                style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
               />
             </Link>
           }
@@ -282,7 +282,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
               alt="Fasthaus"
               width={100}
               height={20}
-              style={{ height: "auto" }}
+              style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
               priority
             />
           </Link>
@@ -313,7 +313,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                   alt="Fasthaus"
                   width={128}
                   height={26}
-                  style={{ height: "auto" }}
+                  style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
                   priority
                 />
               </Link>
@@ -410,7 +410,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                     alt="Fasthaus"
                     width={86}
                     height={17}
-                    style={{ height: "auto" }}
+                    style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
                   />
                 </Link>
                 <button

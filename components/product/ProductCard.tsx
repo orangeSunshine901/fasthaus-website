@@ -157,6 +157,7 @@ export default function ProductCard({ product }: Props) {
                   width={20}
                   height={20}
                   className="h-full w-full object-contain"
+                  style={{ aspectRatio: "1 / 1" }}
                 />
               </div>
             </div>

@@ -37,6 +37,9 @@ export default function DirhamPrice({
               ? "h-[12px] w-auto md:h-auto md:w-[14px]"
               : "h-auto"
         }`}
+        style={{
+          aspectRatio: variant === "white" ? "384.53 / 334.44" : "12 / 11",
+        }}
       />
       <span>{amount.toFixed(2)}</span>
       {compareAmount && (

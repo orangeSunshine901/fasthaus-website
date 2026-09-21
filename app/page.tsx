@@ -6,6 +6,17 @@ import { getFeaturedProducts } from "@/lib/data/products";
 import { NEWSLETTER_ENABLED } from "@/lib/promotions";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 import LocomotiveScrollProvider from "@/components/scroll/LocomotiveScrollProvider";
+import JsonLd from "@/components/seo/JsonLd";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/json-ld";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from "@/lib/seo/site";
+
+export const metadata = pageMetadata({
+  title: DEFAULT_TITLE,
+  absoluteTitle: true,
+  description: DEFAULT_DESCRIPTION,
+  path: "/",
+});
 
 const featuredSummaries: Record<string, string> = {
   "luna-desk-lamp": "A ribbed diffuser with a soft ambient glow for desks and reading corners.",
@@ -66,6 +77,7 @@ export default function HomePage() {
   return (
     <LocomotiveScrollProvider>
       <ShopLayout revealOnFirstScroll>
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         {/* Hero */}
         <section
           data-home-hero
@@ -94,61 +106,46 @@ export default function HomePage() {
           {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-neutral-100/10 to-transparent" /> */}
           {/* <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,1)_0%,rgba(0,0,0,0.55)_1%,rgba(0,0,0,0.18)_5%,rgba(0,0,0,0.10)_7%)]" /> */}
 
-          <div
-            data-home-reveal-item
-            className="absolute inset-x-5 bottom-[10%] z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
-          >
-            <h1 className="type-display-xl self-stretch text-white">
-              The light that makes the whole room feel right.
-            </h1>
-            {/* <h1 className="type-display-xl self-stretch text-white">
-              Soft glow, sharp form, better room energy.
-            </h1> */}
-            <p className="type-body-md self-stretch text-white/90">
-              Stop settling for mass-produced décor. No more wasteful materials. Each lamp is made
-              to order from plant-based material for a beautiful home with a lighter impact.
-            </p>
-            {/* <p className="type-body-md self-stretch text-white/90">
-              We make spatial objects for spaces that need more feeling, less filler, and a little
-              story in the corner.
-            </p> */}
-            <Link href="/collection" className="btn btn-primary w-full self-stretch">
-              Shop Collection
-            </Link>
-            <Link
-              href="/about"
-              className="btn btn-light w-full self-stretch border-white bg-white hover:bg-white/90"
+          {/* One hero block for every breakpoint so the page renders a single H1. */}
+          <div className="container-page absolute bottom-[10%] left-1/2 z-10 -translate-x-1/2 md:bottom-auto md:top-[520px]">
+            <div
+              data-home-reveal-item
+              className="flex max-w-100 flex-col items-start gap-3.5 md:max-w-none md:gap-6"
             >
-              Our Story
-            </Link>
-          </div>
-
-          <div className="container-page absolute left-1/2 top-[520px] z-10 hidden -translate-x-1/2 md:block">
-            <div data-home-reveal-item className="flex flex-col items-start gap-6">
-              <h1 className="type-display-xl max-w-lg text-white">
+              <h1 className="type-display-xl self-stretch text-white md:max-w-lg md:self-auto">
                 The light that makes the whole room feel right.
               </h1>
-              {/* <h1 className="type-display-xl max-w-lg text-white">
+              {/* <h1 className="type-display-xl self-stretch text-white md:max-w-lg md:self-auto">
                 Soft glow, sharp form, better room energy.
               </h1> */}
-              <p className="type-body-md max-w-md text-white/80">
+              <p className="type-body-md self-stretch text-white/90 md:max-w-md md:self-auto md:text-white/80">
                 Stop settling for mass-produced décor. No more wasteful materials. Each lamp is made
                 to order from plant-based material for a beautiful home with a lighter impact.
               </p>
-              {/* <p className="type-body-md max-w-md text-white/80">
+              {/* <p className="type-body-md self-stretch text-white/90 md:max-w-md md:self-auto md:text-white/80">
                 We make spatial objects for spaces that need more feeling, less filler, and a little
                 story in the corner.
               </p> */}
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Link href="/collection" className="btn btn-primary">
+              <div className="flex flex-col gap-3.5 self-stretch md:flex-row md:gap-3 md:self-auto">
+                <Link href="/collection" className="btn btn-primary w-full md:w-auto">
                   Shop Collection
                 </Link>
-                <Link
-                  href="/about"
-                  className="btn border-white/60 bg-transparent text-white hover:bg-white/10"
-                >
-                  Our Story
-                </Link>
+                <div className="md:hidden">
+                  <Link
+                    href="/about"
+                    className="btn btn-light w-full border-white bg-white hover:bg-white/90"
+                  >
+                    Our Story
+                  </Link>
+                </div>
+                <div className="hidden md:block">
+                  <Link
+                    href="/about"
+                    className="btn border-white/60 bg-transparent text-white hover:bg-white/10"
+                  >
+                    Our Story
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -209,9 +206,10 @@ export default function HomePage() {
                         src={step.icon}
                         alt=""
                         width={24}
-                        height={24}
-                        aria-hidden="true"
-                        className="h-6 w-6"
+                      height={24}
+                      aria-hidden="true"
+                      className="h-6 w-6"
+                      style={{ aspectRatio: "1 / 1" }}
                       />
                     </div>
                     <Image
@@ -221,6 +219,7 @@ export default function HomePage() {
                       height={44}
                       aria-hidden="true"
                       className="h-11 w-11 md:hidden"
+                      style={{ aspectRatio: "1 / 1" }}
                     />
                     <div className="flex w-full flex-col items-start gap-3">
                       <div className="flex w-full flex-col items-start gap-2 md:gap-3">
@@ -242,7 +241,14 @@ export default function HomePage() {
                 className="scroll-reveal-soft scroll-stagger-3 flex w-full items-center gap-4 rounded-2xl bg-[#EEF7E8] p-5 md:h-20 md:gap-8 md:p-6"
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)]">
-                  <Image src="/leaf-icon.svg" alt="" width={20} height={20} aria-hidden="true" />
+                  <Image
+                    src="/leaf-icon.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                    aria-hidden="true"
+                    style={{ aspectRatio: "1 / 1" }}
+                  />
                 </div>
                 <div className="flex flex-1 flex-col items-start gap-1 md:flex-row md:items-center md:gap-8">
                   <h3 className="text-display-md font-semibold text-[var(--color-text-primary)] md:shrink-0">
@@ -363,6 +369,7 @@ export default function HomePage() {
                     width={40}
                     height={40}
                     className="h-12 w-12"
+                    style={{ aspectRatio: "44 / 41" }}
                   />
                 </div>
                 <h2

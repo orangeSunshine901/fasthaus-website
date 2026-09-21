@@ -841,6 +841,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                     width={20}
                     height={20}
                     className="h-full w-full object-contain"
+                    style={{ aspectRatio: "1 / 1" }}
                   />
                 </span>
               </Link>

@@ -73,7 +73,7 @@ export default function ProductTabs({
               business days after inspection.
             </p>
             <div className="flex flex-wrap gap-5 pt-1 text-[14px] font-bold text-[var(--color-accent-amber)]">
-              <Link href="/shipping-returns" className="hover:underline">
+              <Link href="/legal/shipping" className="hover:underline">
                 Shipping policy →
               </Link>
               <Link href="/legal/refunds" className="hover:underline">
@@ -92,7 +92,7 @@ export default function ProductTabs({
               to start a claim.
             </p>
             <Link
-              href="/warranty"
+              href="/legal/warranty"
               className="self-start pt-1 text-[14px] font-bold text-[var(--color-accent-amber)] hover:underline"
             >
               Warranty policy →

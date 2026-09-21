@@ -1,6 +1,5 @@
 "use client";
 
-import { getImageProps } from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -17,12 +16,6 @@ const desktopStoryVideo = "/about/story-panel-1-scrub.mp4";
 const mobileStoryVideo = "/about/story-panel-mobile-scrub.mp4";
 const desktopStoryPosterSource = "/about/desktop-about-hero-poster-first-frame.webp";
 const mobileStoryPosterSource = "/about/mobile-about-hero-poster-first-frame.webp";
-const mobileStoryPoster = getImageProps({
-  src: mobileStoryPosterSource,
-  alt: "",
-  width: 540,
-  height: 720,
-}).props.src;
 const storySequenceDuration = storySequenceFrames / storyFrameRate;
 
 const storyPanels = [
@@ -89,13 +82,14 @@ export default function AboutScrollStory() {
 
     const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      mm.add("all", () => {
         const storySection = root.querySelector<HTMLElement>("[data-story-section]");
         const storyPin = root.querySelector<HTMLElement>("[data-story-pin]");
         const video = root.querySelector<HTMLVideoElement>("[data-story-video]");
         const heroCopy = root.querySelector<HTMLElement>("[data-hero-copy]");
         const copyPanels = gsap.utils.toArray<HTMLElement>("[data-story-copy]", root);
         const isMobile = window.matchMedia("(max-width: 767px)").matches;
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         if (!storySection || !storyPin || !video || !heroCopy) {
           return;
@@ -112,7 +106,7 @@ export default function AboutScrollStory() {
           });
         };
 
-        gsap.set(copyPanels, { autoAlpha: 0, y: 22 });
+        gsap.set(copyPanels, { autoAlpha: 0, y: prefersReducedMotion ? 0 : 22 });
 
         const scrubVideo = (progress: number) => {
           if (video.readyState < 1 || !Number.isFinite(video.duration)) {
@@ -161,7 +155,7 @@ export default function AboutScrollStory() {
           const changeAt = storySequenceDuration * (index + 1);
 
           storyTimeline
-            .set(previousCopy, { autoAlpha: 0, y: -20 }, changeAt)
+            .set(previousCopy, { autoAlpha: 0, y: prefersReducedMotion ? 0 : -20 }, changeAt)
             .set(copy, { autoAlpha: 1, y: 0 }, changeAt);
         });
 
@@ -218,7 +212,7 @@ export default function AboutScrollStory() {
         const philosophyItems = gsap.utils.toArray<HTMLElement>("[data-philosophy-reveal]", root);
         const philosophySection = root.querySelector<HTMLElement>("[data-philosophy-section]");
 
-        if (philosophySection && philosophyItems.length > 0) {
+        if (!prefersReducedMotion && philosophySection && philosophyItems.length > 0) {
           gsap.fromTo(
             philosophyItems,
             { autoAlpha: 0, x: -80 },
@@ -239,7 +233,7 @@ export default function AboutScrollStory() {
         const studioSection = root.querySelector<HTMLElement>("[data-studio-section]");
         const studioItems = gsap.utils.toArray<HTMLElement>("[data-studio-reveal]", root);
 
-        if (studioSection && studioItems.length > 0) {
+        if (!prefersReducedMotion && studioSection && studioItems.length > 0) {
           gsap.fromTo(
             studioItems,
             { autoAlpha: 0, x: -80 },
@@ -294,7 +288,7 @@ export default function AboutScrollStory() {
       <section data-story-section className="relative overflow-hidden bg-[#000104]">
         <div
           data-story-pin
-          className="relative h-[calc(100svh-104px)] min-h-[560px] overflow-hidden motion-reduce:hidden md:h-[calc(100vh-104px)] md:min-h-[620px]"
+          className="relative h-[calc(100svh-104px)] min-h-[560px] overflow-hidden md:h-[calc(100vh-104px)] md:min-h-[620px]"
         >
           <video
             data-story-video
@@ -336,43 +330,6 @@ export default function AboutScrollStory() {
               </h2>
             ))}
           </div>
-        </div>
-
-        <div className="hidden motion-reduce:grid">
-          {storyPanels.map((panel, index) => (
-            <article
-              key={panel.text}
-              className="relative flex min-h-[70svh] items-center justify-center overflow-hidden px-5 py-16 text-center"
-            >
-              <video
-                src={mobileStoryVideo}
-                poster={mobileStoryPoster}
-                muted
-                playsInline
-                preload="metadata"
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover md:hidden"
-              />
-              <video
-                src={desktopStoryVideo}
-                muted
-                playsInline
-                preload="metadata"
-                aria-hidden="true"
-                className="absolute inset-0 hidden h-full w-full object-cover md:block"
-              />
-              <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
-              {index === 0 ? (
-                <h1 className="relative text-[32px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
-                  {panel.text}
-                </h1>
-              ) : (
-                <p className="relative text-[28px] font-normal leading-[1.2] text-[#F8F6F3] drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
-                  {panel.text}
-                </p>
-              )}
-            </article>
-          ))}
         </div>
       </section>
 

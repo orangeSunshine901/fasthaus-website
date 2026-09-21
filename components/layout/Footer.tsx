@@ -147,7 +147,7 @@ export default function Footer() {
               alt="Fasthaus"
               width={110}
               height={22}
-              style={{ height: "auto" }}
+              style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
             />
           </Link>
           {NEWSLETTER_ENABLED && (
@@ -272,6 +272,7 @@ export default function Footer() {
             height={221}
             sizes="(min-width: 1240px) 1176px, calc(100vw - 64px)"
             className="h-auto w-full"
+            style={{ aspectRatio: "1094 / 221" }}
           />
         </Link>
 

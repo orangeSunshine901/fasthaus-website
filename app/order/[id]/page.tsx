@@ -6,8 +6,12 @@ import ClearPurchasedCart from "@/components/cart/ClearPurchasedCart";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import PaymentConfirmationPoller from "@/components/order/PaymentConfirmationPoller";
 import { createServiceClient } from "@/lib/supabase/server";
+import { privatePageMetadata } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
+
+// Static on purpose: order data must never leak into titles or social metadata.
+export const metadata = privatePageMetadata("Order Confirmation", { follow: false });
 
 export default async function OrderPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

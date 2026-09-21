@@ -13,7 +13,8 @@
     "test": "node --test --experimental-strip-types tests/*.test.ts",
     "start": "next start",
     "lint": "eslint",
-    "images:portraits": "node scripts/generate-gallery-portraits.mjs"
+    "images:portraits": "node scripts/generate-gallery-portraits.mjs",
+    "seo:check": "node scripts/seo-check.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

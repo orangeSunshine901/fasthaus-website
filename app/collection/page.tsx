@@ -1,9 +1,17 @@
 import ShopLayout from "@/components/layout/ShopLayout";
 import ProductCard from "@/components/product/ProductCard";
 import { PRODUCTS } from "@/lib/data/products";
-import Link from "next/link";
 import CollectionHero, { type CollectionHeroSlide } from "@/components/collection/CollectionHero";
 import CollectionViewed from "@/components/analytics/CollectionViewed";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Shop the Lamp Collection",
+  description:
+    "Browse the full Fasthaus collection of sculptural lamps, each made to order in the UAE from plant-based material and available in several colours.",
+  path: "/collection",
+});
 
 const COLLECTION_HERO_SLIDES = [
   {
@@ -49,14 +57,12 @@ export default function CollectionsPage() {
 
       {/* Collection Grid */}
       <div className="container-page py-8 md:py-12">
-        {/* Breadcrumb */}
-        <nav className="text-sm mb-2" style={{ color: "var(--color-text-secondary)" }}>
-          <Link href="/" className="hover:underline">
-            Home
-          </Link>
-          {" / "}
-          <span style={{ color: "var(--color-text-primary)" }}>Collection</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { name: "Home", path: "/" },
+            { name: "Collection", path: "/collection" },
+          ]}
+        />
 
         {/* Page header */}
         <div className="mb-8">

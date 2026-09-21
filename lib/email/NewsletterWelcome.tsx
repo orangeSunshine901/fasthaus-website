@@ -24,6 +24,7 @@ export function NewsletterWelcome({ email: _email }: Props) {
           <Img
             src="https://fasthaus.ae/fasthaus-logo-final.svg"
             alt="Fasthaus"
+            width={139}
             height={28}
             style={{ marginBottom: 32 }}
           />

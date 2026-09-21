@@ -113,6 +113,7 @@ export default function FeaturedProductCard({
               width={20}
               height={20}
               className="h-full w-full object-contain"
+              style={{ aspectRatio: "1 / 1" }}
             />
           </div>
         </Link>
@@ -126,7 +127,14 @@ export default function FeaturedProductCard({
           className="type-caption inline-flex shrink-0 items-center gap-1"
           style={{ color: "#FFFFFF" }}
         >
-          <Image src="/dirham-icon.svg" alt="AED" width={12} height={10} className="inline-block" style={{ height: "auto" }} />
+          <Image
+            src="/dirham-icon.svg"
+            alt="AED"
+            width={12}
+            height={10}
+            className="inline-block"
+            style={{ aspectRatio: "384.53 / 334.44", height: "auto" }}
+          />
           <span>{selectedVariant.price}</span>
         </span>
       </div>

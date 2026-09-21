@@ -55,6 +55,9 @@ export default function ProductGallery({
   const uiTheme = activeImage?.uiTheme ?? "dark";
   const cursorColor = uiTheme === "light" ? "white" : "black";
 
+  const imageAlt = (index: number) =>
+    `${name} lamp in ${selectedVariant.color}, view ${index + 1} of ${images.length}`;
+
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
@@ -99,7 +102,7 @@ export default function ProductGallery({
           Collection
         </Link>
         <span className="text-[var(--hero-ui-subtle)]">/</span>
-        <span className="font-semibold text-[var(--hero-ui-color)]">{name}</span>
+        <span aria-current="page" className="font-semibold text-[var(--hero-ui-color)]">{name}</span>
       </nav>
 
       <div ref={emblaRef} className="relative h-full overflow-hidden">
@@ -114,7 +117,7 @@ export default function ProductGallery({
                 <MobileGalleryImage
                   key={image.mobileSrc ?? image.src}
                   src={image.mobileSrc ?? image.src}
-                  alt={`${name} — image ${index + 1} of ${images.length}`}
+                  alt={imageAlt(index)}
                   priority={index === 0}
                   active={index === activeIndex}
                 />
@@ -134,7 +137,7 @@ export default function ProductGallery({
                 )}
                 <Image
                   src={image.src}
-                  alt={`${name} — image ${index + 1} of ${images.length}`}
+                  alt={imageAlt(index)}
                   width={2880}
                   height={1496}
                   sizes="(max-width: 440px) 100vw, (max-width: 767px) 440px, 100vw"

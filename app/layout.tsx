@@ -8,6 +8,15 @@ import CartProvider from "@/components/cart/CartProvider";
 import HomeNavigationProvider from "@/components/navigation/HomeNavigationProvider";
 import GlassFilters from "@/components/ui/GlassFilters";
 import { getGeideaSdkUrl } from "@/lib/payment/geidea";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_TITLE,
+  IS_INDEXABLE_DEPLOYMENT,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo/site";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 import "./globals.css";
 
@@ -32,10 +41,28 @@ export const viewport: Viewport = {
   themeColor: "#FFFFFF",
 };
 
+// Pages override title/description/canonical via lib/seo/metadata.ts; these are the fallbacks.
 export const metadata: Metadata = {
-  title: "Fasthaus — Modern Lamps, Made to Glow Differently",
-  description:
-    "Minimal lighting & home goods. Fast to browse, clean to look at, effortless to buy.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: DEFAULT_TITLE, template: `%s | ${SITE_NAME}` },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: {
+    siteName: SITE_NAME,
+    locale: SITE_LOCALE,
+    type: "website",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [{ url: DEFAULT_OG_IMAGE.url, alt: DEFAULT_OG_IMAGE.alt }],
+  },
+  // Preview/development deployments must never be indexed.
+  ...(IS_INDEXABLE_DEPLOYMENT ? {} : { robots: { index: false, follow: false } }),
 };
 
 export default function RootLayout({

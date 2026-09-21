@@ -35,7 +35,15 @@ export default function PurchaseRow({
     { icon: <CalendarCheck size={15} />, label: "14-day eligible returns" },
     { icon: <ShieldCheck size={15} />, label: "1-year warranty" },
     {
-      icon: <Image src="/uae-flag-icon.svg" alt="" width={15} height={15} />,
+      icon: (
+        <Image
+          src="/uae-flag-icon.svg"
+          alt=""
+          width={15}
+          height={15}
+          style={{ aspectRatio: "1 / 1" }}
+        />
+      ),
       label: "Made in the UAE",
     },
   ];
@@ -95,7 +103,14 @@ export default function PurchaseRow({
               className="flex items-center gap-2.5 rounded-[10px] px-3.5 py-3"
               style={{ backgroundColor: "var(--color-surface)" }}
             >
-              <Image src={feature.icon} alt="" width={18} height={18} className="shrink-0" />
+              <Image
+                src={feature.icon}
+                alt=""
+                width={18}
+                height={18}
+                className="shrink-0"
+                style={{ aspectRatio: "1 / 1" }}
+              />
               <span
                 className="text-[14px] font-semibold"
                 style={{ color: "var(--color-text-primary)" }}
@@ -242,7 +257,7 @@ export default function PurchaseRow({
             Made to order · Delivery included
           </span>
           <Link
-            href="/shipping-returns"
+            href="/legal/shipping"
             className="self-start text-[14px] font-medium hover:underline"
             style={{ color: "var(--color-accent-amber)" }}
           >
@@ -255,17 +270,17 @@ export default function PurchaseRow({
         className="flex flex-col gap-5 border-t pt-6 lg:col-start-1 lg:row-start-2"
         style={{ borderColor: "var(--color-border)" }}
       >
-        <h3
+        <h2
           className="text-[20px] font-medium tracking-[-0.015em]"
           style={{ color: "var(--color-text-primary)" }}
         >
           Product details
-        </h3>
+        </h2>
         <div className="grid items-stretch gap-6 sm:grid-cols-[minmax(220px,0.9fr)_minmax(0,1.15fr)] sm:gap-9">
           <div className="relative aspect-square w-[70%] justify-self-center overflow-hidden rounded-[14px] md:w-full">
             <Image
               src={product.dimensions.image}
-              alt={`${product.name} illustration`}
+              alt={`Outline drawing of the ${product.name} lamp showing its dimensions`}
               width={1676}
               height={1676}
               sizes="(max-width: 639px) 70vw, (max-width: 767px) 35vw, 360px"

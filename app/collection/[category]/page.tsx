@@ -1,49 +1,68 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import ShopLayout from "@/components/layout/ShopLayout";
 import ProductCard from "@/components/product/ProductCard";
-import { PRODUCTS } from "@/lib/data/products";
 import Link from "next/link";
 import CollectionViewed from "@/components/analytics/CollectionViewed";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { CATEGORIES, getCategory, getCategoryProducts } from "@/lib/data/categories";
+import { pageMetadata } from "@/lib/seo/metadata";
 
-const categoryLabels: Record<string, string> = {
-  "desk-lamps": "Desk Lamps",
-  "table-lamps": "Table Lamps",
-  "floor-lamps": "Floor Lamps",
-};
+// Unknown category slugs return a real 404 instead of an "All Products" soft-404.
+export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return [{ category: "desk-lamps" }, { category: "table-lamps" }, { category: "floor-lamps" }];
+  return CATEGORIES.map((category) => ({ category: category.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}): Promise<Metadata> {
+  const { category: slug } = await params;
+  const category = getCategory(slug);
+  if (!category) return {};
+
+  return pageMetadata({
+    title: category.name,
+    description: category.description,
+    path: `/collection/${category.slug}`,
+    // Empty categories stay reachable but out of the index (and the sitemap) until stocked.
+    noindex: getCategoryProducts(category.slug).length === 0,
+  });
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
-  const { category } = await params;
-  const label = categoryLabels[category] ?? "All Products";
-  const products = PRODUCTS.filter((p) => p.category === category);
+  const { category: slug } = await params;
+  const category = getCategory(slug);
+  if (!category) notFound();
+
+  const products = getCategoryProducts(category.slug);
 
   return (
     <ShopLayout>
-      <CollectionViewed collection={category} productCount={products.length} />
+      <CollectionViewed collection={category.slug} productCount={products.length} />
       <div className="container-page py-8 md:py-12">
-        {/* Breadcrumb */}
-        <nav className="text-sm mb-2" style={{ color: "var(--color-text-secondary)" }}>
-          <Link href="/" className="hover:underline">
-            Home
-          </Link>
-          {" / "}
-          <Link href="/collection" className="hover:underline">
-            Collection
-          </Link>
-          {" / "}
-          <span style={{ color: "var(--color-text-primary)" }}>{label}</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { name: "Home", path: "/" },
+            { name: "Collection", path: "/collection" },
+            { name: category.name, path: `/collection/${category.slug}` },
+          ]}
+        />
 
         {/* Page header */}
         <div className="mb-8">
           <div>
             <h1 className="type-display-xl" style={{ color: "var(--color-text-primary)" }}>
-              {label}
+              {category.name}
             </h1>
             <p className="type-body-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
-              {products.length} products
+              {category.description}
+            </p>
+            <p className="type-body-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
+              {products.length} {products.length === 1 ? "product" : "products"}
             </p>
           </div>
         </div>

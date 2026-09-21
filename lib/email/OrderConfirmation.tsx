@@ -49,6 +49,7 @@ export function OrderConfirmation({ orderId, customerName, items, shippingAddres
           <Img
             src="https://fasthaus.ae/fasthaus-logo-final.svg"
             alt="Fasthaus"
+            width={139}
             height={28}
             style={{ marginBottom: 32 }}
           />
