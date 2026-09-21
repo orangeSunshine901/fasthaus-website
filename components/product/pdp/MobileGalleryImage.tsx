@@ -49,14 +49,15 @@ export default function MobileGalleryImage({ src, alt, priority, active }: Props
           <Image
             src={GALLERY_PORTRAITS[src] ?? src}
             alt={alt}
-            fill
+            width={864}
+            height={1147}
             // Pinned across zoom levels: the portrait sources cap at 1080px wide
             // and the optimizer never enlarges, so a larger request returns the same
             // pixels — a second billed transform and download for no added detail.
             sizes="(max-width: 440px) 100vw, 440px"
             loading={priority ? "eager" : "lazy"}
             draggable={false}
-            className="mx-auto max-w-[440px] select-none object-contain"
+            className="absolute inset-0 mx-auto h-full w-full max-w-[440px] select-none object-contain"
           />
         </TransformComponent>
       </TransformWrapper>

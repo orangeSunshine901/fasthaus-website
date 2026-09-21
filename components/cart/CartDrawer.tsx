@@ -181,9 +181,10 @@ export default function CartDrawer() {
                       <Image
                         src={activeSlide.variant.cartDrawerImage}
                         alt={`${activeSlide.product.name} in ${activeSlide.variant.color}`}
-                        fill
+                        width={1080}
+                        height={1440}
                         sizes="440px"
-                        className="object-cover"
+                        className="absolute inset-0 h-full w-full object-cover"
                       />
                     </motion.div>
                   </AnimatePresence>

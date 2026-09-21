@@ -628,9 +628,10 @@ export default function CheckoutPage() {
                         <Image
                           src={item.image}
                           alt={item.productName}
+                          width={64}
+                          height={64}
                           sizes="64px"
-                          fill
-                          className="object-cover"
+                          className="absolute inset-0 h-full w-full object-cover"
                         />
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -684,9 +685,10 @@ export default function CheckoutPage() {
                         <Image
                           src={ao.image}
                           alt={ao.name}
+                          width={64}
+                          height={64}
                           sizes="64px"
-                          fill
-                          className="object-cover"
+                          className="absolute inset-0 h-full w-full object-cover"
                         />
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col gap-0.5">

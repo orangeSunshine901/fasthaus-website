@@ -79,9 +79,10 @@ export default function ProductSidebar({
                 <Image
                   src={addOn.image}
                   alt={addOn.name}
-                  fill
+                  width={74}
+                  height={60}
                   sizes="74px"
-                  className="object-cover"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
               </div>
             </label>

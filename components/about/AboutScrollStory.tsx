@@ -95,6 +95,7 @@ export default function AboutScrollStory() {
         const video = root.querySelector<HTMLVideoElement>("[data-story-video]");
         const heroCopy = root.querySelector<HTMLElement>("[data-hero-copy]");
         const copyPanels = gsap.utils.toArray<HTMLElement>("[data-story-copy]", root);
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
         if (!storySection || !storyPin || !video || !heroCopy) {
           return;
@@ -141,7 +142,9 @@ export default function AboutScrollStory() {
             anticipatePin: 1,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
-              scrubVideo(self.progress);
+              if (!isMobile) {
+                scrubVideo(self.progress);
+              }
               updateStoryProgress(self.progress, self.progress < 1);
             },
             onEnter: () => updateStoryProgress(0, true),
@@ -163,9 +166,10 @@ export default function AboutScrollStory() {
         });
 
         const syncVideo = () => scrubVideo(storyTimeline.scrollTrigger?.progress ?? 0);
-        video.addEventListener("loadedmetadata", syncVideo);
+        if (!isMobile) {
+          video.addEventListener("loadedmetadata", syncVideo);
+        }
 
-        const isMobile = window.matchMedia("(max-width: 767px)").matches;
         const connection = navigator as Navigator & { connection?: { saveData?: boolean } };
         const prefersReducedData =
           connection.connection?.saveData ||
@@ -173,6 +177,9 @@ export default function AboutScrollStory() {
         const selectedVideo = isMobile ? mobileStoryVideo : desktopStoryVideo;
         let videoFrameCallback: number | null = null;
         const revealVideo = () => setIsStoryVideoReady(true);
+
+        video.autoplay = isMobile;
+        video.loop = isMobile;
 
         if (!prefersReducedData) {
           if (typeof video.requestVideoFrameCallback === "function") {
@@ -188,6 +195,11 @@ export default function AboutScrollStory() {
         } else if (video.getAttribute("src") !== selectedVideo) {
           video.src = selectedVideo;
           video.load();
+          if (isMobile) {
+            void video.play().catch(() => undefined);
+          }
+        } else if (isMobile) {
+          void video.play().catch(() => undefined);
         } else {
           syncVideo();
         }
@@ -310,7 +322,7 @@ export default function AboutScrollStory() {
           <div className="absolute left-1/2 top-1/2 z-20 w-[min(88vw,780px)] -translate-x-1/2 -translate-y-1/2 text-center">
             <h1
               data-hero-copy
-              className="text-[34px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] md:text-[40px] md:leading-[1.25] lg:text-[44px]"
+              className="text-[32px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] md:text-[40px] md:leading-[1.25] lg:text-[44px]"
             >
               {heroText}
             </h1>
@@ -351,7 +363,7 @@ export default function AboutScrollStory() {
               />
               <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
               {index === 0 ? (
-                <h1 className="relative text-[34px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
+                <h1 className="relative text-[32px] font-normal leading-[1.18] tracking-normal text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
                   {panel.text}
                 </h1>
               ) : (

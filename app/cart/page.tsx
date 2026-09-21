@@ -79,7 +79,14 @@ export default function CartPage() {
                     className="media-rounded relative h-20 w-20 md:h-24 md:w-24"
                     style={{ backgroundColor: "var(--color-surface-muted)" }}
                   >
-                    <Image src={item.image} alt={item.productName} sizes="(min-width: 768px) 96px, 80px" fill className="object-cover" />
+                    <Image
+                      src={item.image}
+                      alt={item.productName}
+                      width={96}
+                      height={96}
+                      sizes="(min-width: 768px) 96px, 80px"
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
                   </Link>
                   <div className="flex min-w-0 flex-col gap-1">
                     <p className="type-title-sm" style={{ color: "var(--color-text-primary)" }}>
@@ -139,7 +146,14 @@ export default function CartPage() {
                       className="media-rounded relative h-14 w-14"
                       style={{ backgroundColor: "var(--color-surface-muted)" }}
                     >
-                      <Image src={ao.image} alt={ao.name} sizes="56px" fill className="object-cover" />
+                      <Image
+                        src={ao.image}
+                        alt={ao.name}
+                        width={56}
+                        height={56}
+                        sizes="56px"
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
                     </div>
                     <div className="flex min-w-0 flex-col gap-1">
                       <p className="type-title-sm" style={{ color: "var(--color-text-primary)" }}>

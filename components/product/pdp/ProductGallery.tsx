@@ -135,10 +135,11 @@ export default function ProductGallery({
                 <Image
                   src={image.src}
                   alt={`${name} — image ${index + 1} of ${images.length}`}
-                  fill
+                  width={2880}
+                  height={1496}
                   sizes="(max-width: 440px) 100vw, (max-width: 767px) 440px, 100vw"
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="mx-auto max-w-[440px] object-contain md:max-w-none md:object-cover"
+                  className="absolute inset-0 mx-auto h-full w-full max-w-[440px] object-contain md:max-w-none md:object-cover"
                 />
               </picture>
             </div>
@@ -160,9 +161,10 @@ export default function ProductGallery({
                 <Image
                   src={activeImage.src}
                   alt=""
-                  fill
+                  width={2880}
+                  height={1496}
                   sizes="(max-width: 440px) 100vw, (max-width: 767px) 440px, 100vw"
-                  className="mx-auto max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
+                  className="absolute inset-0 mx-auto h-full w-full max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
                 />
               </picture>
             </motion.div>

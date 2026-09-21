@@ -58,8 +58,9 @@ export default function FeaturedProductCard({
             <Image
               src={displayedImages.off}
               alt={product.name}
-              fill
-              className={`md:scale-[1] object-cover transition-opacity duration-500 ${
+              width={1000}
+              height={1000}
+              className={`absolute inset-0 h-full w-full md:scale-[1] object-cover transition-opacity duration-500 ${
                 displayedImages
                   ? activeMobile === undefined
                     ? "opacity-100 group-hover:opacity-0"
@@ -73,8 +74,9 @@ export default function FeaturedProductCard({
             <Image
               src={displayedImages.on}
               alt=""
-              fill
-              className={`md:scale-[1] object-cover transition-all duration-500  ${
+              width={1000}
+              height={1000}
+              className={`absolute inset-0 h-full w-full md:scale-[1] object-cover transition-all duration-500  ${
                 activeMobile === undefined
                   ? "opacity-0 group-hover:opacity-100"
                   : activeMobile
@@ -105,7 +107,13 @@ export default function FeaturedProductCard({
             View Product
           </span>
           <div className="w-5 h-5 relative">
-            <Image src="/ArrowRight.svg" alt="" fill className="object-contain" />
+            <Image
+              src="/ArrowRight.svg"
+              alt=""
+              width={20}
+              height={20}
+              className="h-full w-full object-contain"
+            />
           </div>
         </Link>
       </div>

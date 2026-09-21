@@ -804,9 +804,10 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                 <Image
                   src={activeSlide.image}
                   alt={activeSlide.lampName + " lamp in " + activeSlide.colorName}
-                  fill
+                  width={1000}
+                  height={1000}
                   sizes="(min-width: 768px) 48vw, 112vw"
-                  className="object-contain"
+                  className="absolute inset-0 h-full w-full object-contain"
                   priority={selectedIndex === 0}
                   draggable={false}
                 />
@@ -834,7 +835,13 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                   View Product
                 </span>
                 <span className="relative h-5 w-5">
-                  <Image src="/ArrowRight.svg" alt="" fill className="object-contain" />
+                  <Image
+                    src="/ArrowRight.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="h-full w-full object-contain"
+                  />
                 </span>
               </Link>
             </div>

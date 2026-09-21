@@ -125,8 +125,9 @@ export default function ProductCard({ product }: Props) {
                 <Image
                   src={selectedVariant.collectionImage}
                   alt={`${product.name} in ${selectedVariant.color}`}
-                  fill
-                  className="object-cover"
+                  width={1080}
+                  height={1080}
+                  className="absolute inset-0 h-full w-full object-cover"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </picture>
@@ -150,7 +151,13 @@ export default function ProductCard({ product }: Props) {
                 View Product
               </div>
               <div className="w-5 h-5 relative">
-                <Image src="/ArrowRight.svg" alt="" fill className="object-contain" />
+                <Image
+                  src="/ArrowRight.svg"
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="h-full w-full object-contain"
+                />
               </div>
             </div>
           </div>

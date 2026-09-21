@@ -72,9 +72,10 @@ function CollectionMegaMenuContent() {
               <Image
                 src={previewVariant.collectionImage}
                 alt={`${activeProduct.name} in ${previewVariant.color}`}
-                fill
+                width={1080}
+                height={1080}
                 sizes="360px"
-                className="object-cover"
+                className="absolute inset-0 h-full w-full object-cover"
               />
             </motion.div>
           </AnimatePresence>
@@ -217,7 +218,13 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
           allowVisibleAtTop={aboutMainNavHidden}
           leftSlot={
             <Link href="/" className="inline-flex items-center" aria-label="Fasthaus home">
-              <Image src="/fasthaus-logo-final-ivory.svg" alt="Fasthaus" width={104} height={21} style={{ height: "auto" }} />
+              <Image
+                src="/fasthaus-logo-final-ivory.svg"
+                alt="Fasthaus"
+                width={104}
+                height={21}
+                style={{ height: "auto" }}
+              />
             </Link>
           }
           rightSlot={
@@ -398,7 +405,13 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
               {/* Overlay header */}
               <div className="flex h-16 flex-shrink-0 items-center justify-between border-b border-[#e7e1da] pl-5 pr-3">
                 <Link href="/" onClick={() => setMobileOpen(false)} aria-label="Fasthaus home">
-                  <Image src="/fasthaus-logo-final.svg" alt="Fasthaus" width={86} height={17} style={{ height: "auto" }} />
+                  <Image
+                    src="/fasthaus-logo-final.svg"
+                    alt="Fasthaus"
+                    width={86}
+                    height={17}
+                    style={{ height: "auto" }}
+                  />
                 </Link>
                 <button
                   onClick={() => setMobileOpen(false)}
@@ -435,9 +448,10 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                             <Image
                               src={variant.collectionImage}
                               alt={product.name}
-                              fill
+                              width={169}
+                              height={169}
                               sizes="169px"
-                              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                              className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                             />
                           </div>
                           <span className="mt-2 block text-sm font-semibold leading-5 text-[var(--color-text-primary)]">
@@ -450,20 +464,20 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
 
                   <Link
                     href="/collection"
-                    className="mt-4 flex h-[50px] items-center justify-center gap-2 rounded-[12px] bg-[#181512] text-[16px] font-regular text-[var(--color-bg)]"
+                    className="mt-4 flex h-[50px] items-center justify-center gap-2 rounded-[12px] bg-[#181512] text-[16px] font-normal text-[var(--color-bg)]"
                     onClick={() => setMobileOpen(false)}
                   >
                     See all lamps
-                    <ArrowRight size={17} strokeWidth={2} />
+                    <ArrowRight className="mt-1" size={14} strokeWidth={1.8} />
                   </Link>
 
-                  <div className="mt-[18px] border-t border-[#e7e1da]">
+                  <div className="mt-[16px] border-t border-[#e7e1da]">
                     {MOBILE_NAV.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
                         className={cn(
-                          "block border-b border-[#e7e1da] py-[18px] text-lg font-semibold leading-7 last:border-b-0",
+                          "block border-b border-[#e7e1da] py-[16px] text-[length:var(--text-md)] font-semibold leading-7 last:border-b-0",
                           isActive(link.href)
                             ? "text-[var(--color-accent-amber)]"
                             : "text-[var(--color-text-primary)]"
@@ -476,18 +490,18 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                   </div>
 
                   <div
-                    className="mt-4 border-t border-[#e7e1da] pt-4"
+                    className="border-t border-[#e7e1da] pt-2"
                     style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
                   >
                     <button
                       type="button"
-                      className="flex h-[50px] w-full items-center justify-center gap-2 rounded-[12px] bg-[var(--color-accent-amber)] text-[16px] font-regular text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
+                      className="flex h-[50px] w-full items-center justify-center gap-2 rounded-[12px] bg-[var(--color-accent-amber)] font-normal text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
                       onClick={() => {
                         setMobileOpen(false);
                         openCartDrawer();
                       }}
                     >
-                      <ShoppingCart size={18} strokeWidth={1.8} />
+                      <ShoppingCart size={14} strokeWidth={1.8} />
                       View Cart
                     </button>
                   </div>

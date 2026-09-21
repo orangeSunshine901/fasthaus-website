@@ -201,6 +201,12 @@ select {
   font: inherit;
 }
 
+@media (max-width: 767px) {
+  button {
+    font-size: 16px;
+  }
+}
+
 button,
 a,
 label,

@@ -188,7 +188,7 @@ export default function PurchaseRow({
             type="button"
             onClick={onAddToCart}
             disabled={busy}
-            className="flex h-[54px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white text-[16px] transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
+            className="flex h-[54px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
             style={{
               borderColor: "var(--color-text-primary)",
               color: "var(--color-text-primary)",
@@ -266,9 +266,10 @@ export default function PurchaseRow({
             <Image
               src={product.dimensions.image}
               alt={`${product.name} illustration`}
-              fill
+              width={1676}
+              height={1676}
               sizes="(max-width: 639px) 70vw, (max-width: 767px) 35vw, 360px"
-              className="object-cover"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
           <div className="grid content-center grid-cols-[105px_minmax(0,1fr)] text-[14px] md:grid-cols-[125px_minmax(0,1fr)] md:text-[15px]">
@@ -286,7 +287,7 @@ export default function PurchaseRow({
                     {label}
                   </span>
                   <span
-                    className={`${border} py-3 font-regular leading-[1.45]`}
+                    className={`${border} py-3 font-normal leading-[1.45]`}
                     style={{
                       color: "var(--color-text-primary)",
                       borderColor: "var(--color-border)",

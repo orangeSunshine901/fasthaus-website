@@ -69,7 +69,7 @@ export default function HomePage() {
         {/* Hero */}
         <section
           data-home-hero
-          className="relative h-[640px] w-full overflow-hidden bg-[#000104] md:h-[840px]"
+          className="relative h-[640px] min-h-svh w-full overflow-hidden bg-[#000104] md:h-[840px]"
         >
           <video
             className="absolute inset-0 h-full w-full object-cover object-center"
@@ -96,7 +96,7 @@ export default function HomePage() {
 
           <div
             data-home-reveal-item
-            className="absolute inset-x-5 bottom-2 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
+            className="absolute inset-x-5 bottom-26 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
           >
             <h1 className="type-display-xl self-stretch text-white">
               The light that makes the whole room feel right.
@@ -311,9 +311,10 @@ export default function HomePage() {
                 src="/home/fasthaus-baseplate.jpg"
                 alt="Hands holding a white Fasthaus lamp with a blue baseplate"
                 loading="eager"
-                fill
+                width={1123}
+                height={842}
                 sizes="(min-width: 1280px) 655px, (min-width: 1024px) 51.22vw, 100vw"
-                className="object-cover"
+                className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
           </div>
@@ -342,9 +343,10 @@ export default function HomePage() {
                     <Image
                       src={image.src}
                       alt={image.alt}
-                      fill
+                      width={148}
+                      height={148}
                       sizes="148px"
-                      className="object-cover"
+                      className="absolute inset-0 h-full w-full object-cover"
                     />
                   </div>
                 </div>
