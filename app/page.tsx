@@ -96,7 +96,7 @@ export default function HomePage() {
 
           <div
             data-home-reveal-item
-            className="absolute inset-x-5 bottom-26 z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
+            className="absolute inset-x-5 bottom-[10%] z-10 flex max-w-100 flex-col items-start gap-3.5 md:hidden"
           >
             <h1 className="type-display-xl self-stretch text-white">
               The light that makes the whole room feel right.
