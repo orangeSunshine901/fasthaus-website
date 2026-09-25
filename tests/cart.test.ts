@@ -213,7 +213,8 @@ test("hydrates immediately from a session snapshot and reconciles with the serve
 });
 
 test("uses the same normalized discount rule on client and server", () => {
-  assert.equal(discountRateFor(" welcome10 "), 0.1);
+  assert.equal(discountRateFor(" faste10 "), 0.1);
+  assert.equal(discountRateFor("WELCOME10"), 0);
   assert.equal(discountRateFor("not-a-code"), 0);
   assert.equal(discountRateFor(), 0);
 });

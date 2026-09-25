@@ -13,7 +13,7 @@ import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { CHECKOUT_DISCOUNTS_ENABLED } from "@/lib/promotions";
-import { discountRateFor, WELCOME_DISCOUNT_CODE } from "@/lib/checkout/discount";
+import { CHECKOUT_DISCOUNT_CODE, discountRateFor } from "@/lib/checkout/discount";
 import { startGeideaCheckout } from "@/lib/payment/geidea-client";
 
 const EMIRATES = [
@@ -91,14 +91,13 @@ export default function CheckoutPage() {
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
   const [discountError, setDiscountError] = useState<string | null>(null);
-  const [newsletter, setNewsletter] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
 
   const subtotalValue = subtotal();
-  const hasDiscount = CHECKOUT_DISCOUNTS_ENABLED && (newsletter || discountApplied);
-  const discountAmount = hasDiscount ? subtotalValue * discountRateFor(WELCOME_DISCOUNT_CODE) : 0;
+  const hasDiscount = CHECKOUT_DISCOUNTS_ENABLED && discountApplied;
+  const discountAmount = hasDiscount ? subtotalValue * discountRateFor(CHECKOUT_DISCOUNT_CODE) : 0;
   const totalValue = subtotalValue - discountAmount;
   const cartSyncing = pending.length > 0;
   const checkoutDetailsReady =
@@ -136,7 +135,7 @@ export default function CheckoutPage() {
           emirate,
           postalCode: poBox || undefined,
         },
-        discountCode: hasDiscount ? WELCOME_DISCOUNT_CODE : undefined,
+        discountCode: hasDiscount ? CHECKOUT_DISCOUNT_CODE : undefined,
       }),
     });
     const body = (await response.json()) as Partial<CheckoutSession> & {
@@ -152,16 +151,6 @@ export default function CheckoutPage() {
       throw new Error(body.error?.message ?? "Checkout could not be started.");
     }
     return body as CheckoutSession;
-  }
-
-  function toggleNewsletter() {
-    setNewsletter((prev) => {
-      const next = !prev;
-      setDiscountCode(next ? WELCOME_DISCOUNT_CODE : "");
-      setDiscountApplied(false);
-      setDiscountError(null);
-      return next;
-    });
   }
 
   function applyDiscountCode() {
@@ -727,7 +716,6 @@ export default function CheckoutPage() {
                         setDiscountApplied(false);
                         setDiscountError(null);
                       }}
-                      readOnly={newsletter}
                       className="input-field h-[46px] flex-1"
                       style={{
                         borderColor: "var(--color-border)",
@@ -758,23 +746,6 @@ export default function CheckoutPage() {
                       {discountError}
                     </p>
                   )}
-                  <label className="flex cursor-pointer items-start gap-3">
-                    <input
-                      type="checkbox"
-                      checked={newsletter}
-                      onChange={toggleNewsletter}
-                      className="mt-0.5 h-[18px] w-[18px] flex-shrink-0 accent-[var(--color-accent-amber)]"
-                    />
-                    <span
-                      className="type-caption-sm leading-relaxed"
-                      style={{ color: "var(--color-text-primary)" }}
-                    >
-                      Sign up to our newsletter and save 10%{" "}
-                      <span style={{ color: "var(--color-text-secondary)" }}>
-                        on this order. New designs and studio news, once a month — no spam.
-                      </span>
-                    </span>
-                  </label>
                 </div>
               )}
 
@@ -789,9 +760,7 @@ export default function CheckoutPage() {
                 </div>
                 {hasDiscount && (
                   <div className="type-body-sm flex justify-between">
-                    <span style={{ color: "var(--color-success)" }}>
-                      {newsletter ? "Newsletter discount (10%)" : "Discount code (10%)"}
-                    </span>
+                    <span style={{ color: "var(--color-success)" }}>Discount code (10%)</span>
                     <span
                       className="inline-flex items-center gap-0.5"
                       style={{ color: "var(--color-success)" }}
