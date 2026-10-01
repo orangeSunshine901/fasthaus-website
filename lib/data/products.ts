@@ -514,7 +514,7 @@ export const PRODUCTS: Product[] = [
       { icon: "/bedside-icon.svg", label: "Bedside" },
       { icon: "/reading-nook-icon.svg", label: "Reading Nook" },
     ],
-    designStory: "PEARL is a sculptural table lamp inspired by the UAE’s pearl-diving heritage.",
+    designStory: "HAMRAH is a sculptural table lamp inspired by the UAE’s pearl-diving heritage.",
     addOns: ADD_ONS,
   },
   {
