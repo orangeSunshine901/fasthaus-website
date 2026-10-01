@@ -1,7 +1,5 @@
 import { cn } from "@/lib/utils";
 
-import "./marquee.css";
-
 interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Should the marquee scroll horizontally or vertically.

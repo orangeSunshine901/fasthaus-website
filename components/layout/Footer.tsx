@@ -57,18 +57,6 @@ const legalLinks: { label: string; href: string }[] = [
   { label: "Cookies", href: "/legal/cookies" },
 ];
 
-const paymentMethods = ["VISA", "MASTERCARD", "AMEX", "G PAY", "APPLE PAY", "TABBY"];
-
-const paymentIcons = [
-  { name: "Visa", src: "/payment/visa.png" },
-  { name: "Stripe", src: "/payment/stripe.png" },
-  { name: "Mastercard", src: "/payment/mastercard.png" },
-  { name: "G Pay", src: "/payment/gpay.png" },
-  { name: "Apple Pay", src: "/payment/applepay.png" },
-  { name: "Klarna", src: "/payment/klarna.png" },
-  { name: "PayPal", src: "/payment/paypal.png" },
-];
-
 function FooterNewsletter({ caption }: { caption?: string }) {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "success" | "error">("idle");

@@ -223,6 +223,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                 alt="Fasthaus"
                 width={104}
                 height={21}
+                loading="eager"
                 style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
               />
             </Link>
@@ -283,7 +284,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
               width={100}
               height={20}
               style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
-              priority
+              preload
             />
           </Link>
           <CartBadge
@@ -314,7 +315,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                   width={128}
                   height={26}
                   style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
-                  priority
+                  preload
                 />
               </Link>
 

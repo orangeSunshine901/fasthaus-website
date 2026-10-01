@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Global rather than imported by the component: as a route chunk it was preloaded, unused, on every page that prefetches a shop route. */
+@import "../components/animata/container/marquee.css";
 
 @theme inline {
   --color-bg: #ffffff;

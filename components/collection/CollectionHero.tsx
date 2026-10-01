@@ -808,7 +808,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                   height={1000}
                   sizes="(min-width: 768px) 48vw, 112vw"
                   className="absolute inset-0 h-full w-full object-contain"
-                  priority={selectedIndex === 0}
+                  preload={selectedIndex === 0}
                   draggable={false}
                 />
               </motion.div>

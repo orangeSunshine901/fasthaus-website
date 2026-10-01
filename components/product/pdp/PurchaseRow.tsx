@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck, Star } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Truck, CalendarCheck, ShieldCheck } from "lucide-react";
 import type { Product, ProductVariant } from "@/lib/data/products";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { Spinner } from "@/components/ui/spinner";
@@ -48,7 +48,6 @@ export default function PurchaseRow({
     },
   ];
 
-  const filledStars = Math.round(product.rating);
   const productDetails = product.specifications.map(({ label, lines }) => [
     label,
     lines.join(" · "),

@@ -23,13 +23,17 @@ export default function DirhamPrice({
   className = "",
 }: Props) {
   const { text, iconH } = sizeMap[size];
+  // sm/base are sized by CSS per breakpoint. Next warns when exactly one rendered
+  // dimension differs from the attributes, so give those sizes attributes that CSS
+  // always overrides on both axes; they only carry the aspect ratio.
+  const iconW = size === "sm" || size === "base" ? iconH * 2 : iconH;
   return (
     <span className={`inline-flex items-center gap-0.5 ${text} ${className}`}>
       <Image
         src={variant === "white" ? "/dirham-icon.svg" : "/dirham-icon-black.svg"}
         alt="AED"
-        width={iconH}
-        height={Math.round(iconH * (variant === "white" ? 334.44 / 384.53 : 11 / 12))}
+        width={iconW}
+        height={Math.round(iconW * (variant === "white" ? 334.44 / 384.53 : 11 / 12))}
         className={`inline-block ${
           size === "sm"
             ? "h-[10px] w-auto md:h-auto md:w-[12px]"

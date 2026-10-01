@@ -132,6 +132,9 @@ export default function ProductGallery({
                       alt: "",
                       fill: true,
                       sizes: "(max-width: 440px) 100vw, 440px",
+                      // Same URL as MobileGalleryImage's slide, so it must agree on loading
+                      // or Next's LCP check reads the slide as lazy.
+                      loading: index === 0 ? "eager" : "lazy",
                     }).props.srcSet}
                   />
                 )}
@@ -167,6 +170,7 @@ export default function ProductGallery({
                   width={2880}
                   height={1496}
                   sizes="(max-width: 440px) 100vw, (max-width: 767px) 440px, 100vw"
+                  loading="eager"
                   className="absolute inset-0 mx-auto h-full w-full max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
                 />
               </picture>
