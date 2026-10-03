@@ -11,6 +11,40 @@ declare global {
   }
 }
 
+// Silktide re-applies the stored consent choice and pushes this event once it initialises,
+// which happens after hydration. Pushing the purchase before it would hit GTM while consent
+// still reads "denied" from the layout defaults.
+const CONSENT_EVENT = "stcm_consent_update";
+const CONSENT_WAIT_MS = 3_000;
+const CONSENT_POLL_MS = 100;
+
+const purchaseStorageKey = (orderId: string) => `fh_purchase:${orderId}`;
+
+function wasPurchasePushed(orderId: string): boolean {
+  try {
+    return window.localStorage.getItem(purchaseStorageKey(orderId)) !== null;
+  } catch {
+    return false;
+  }
+}
+
+function markPurchasePushed(orderId: string): void {
+  try {
+    window.localStorage.setItem(purchaseStorageKey(orderId), String(Date.now()));
+  } catch {
+    // Storage unavailable (private mode, blocked site data); the ref still guards this mount.
+  }
+}
+
+function hasConsentBeenApplied(): boolean {
+  return (window.dataLayer ?? []).some(
+    (entry) =>
+      typeof entry === "object" &&
+      entry !== null &&
+      (entry as { event?: unknown }).event === CONSENT_EVENT
+  );
+}
+
 export default function PurchaseCompleted({
   orderId,
   revenue,
@@ -40,23 +74,56 @@ export default function PurchaseCompleted({
   const pushedOrder = useRef<string | null>(null);
 
   useEffect(() => {
-    if (pushedOrder.current === orderId) return;
+    const isDone = () => pushedOrder.current === orderId || wasPurchasePushed(orderId);
+    if (isDone()) return;
 
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ ecommerce: null });
-    window.dataLayer.push({
-      event: "purchase",
-      ecommerce: {
-        transaction_id: orderId,
-        value,
-        currency: "AED",
-        shipping,
-        tax: 0,
-        discount,
-        items,
-      },
-    });
-    pushedOrder.current = orderId;
+    // The consent path and the timeout fallback both end here, so the guard runs once per order.
+    const pushPurchase = () => {
+      if (isDone()) return;
+      pushedOrder.current = orderId;
+      markPurchasePushed(orderId);
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ ecommerce: null });
+      window.dataLayer.push({
+        event: "purchase",
+        ecommerce: {
+          transaction_id: orderId,
+          value,
+          currency: "AED",
+          shipping,
+          tax: 0,
+          discount,
+          items,
+        },
+      });
+    };
+
+    if (hasConsentBeenApplied()) {
+      pushPurchase();
+      return;
+    }
+
+    const startedAt = Date.now();
+    const interval = window.setInterval(() => {
+      if (hasConsentBeenApplied() || Date.now() - startedAt >= CONSENT_WAIT_MS) {
+        stopWaiting();
+        pushPurchase();
+      }
+    }, CONSENT_POLL_MS);
+    // Never lose the purchase if the customer leaves before consent is applied.
+    const onPageHide = () => {
+      stopWaiting();
+      pushPurchase();
+    };
+    window.addEventListener("pagehide", onPageHide);
+
+    function stopWaiting() {
+      window.clearInterval(interval);
+      window.removeEventListener("pagehide", onPageHide);
+    }
+
+    return stopWaiting;
   }, [discount, items, orderId, shipping, value]);
 
   useEffect(() => {

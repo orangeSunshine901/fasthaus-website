@@ -37,6 +37,8 @@ export type Dimensions = { image: string; heightCm: number; widthCm: number };
 
 export type AddOn = {
   id: string;
+  /** Stable analytics item_id; never change once orders reference it. */
+  sku: string;
   name: string;
   price: number;
   image: string;
@@ -68,6 +70,7 @@ export type Product = {
 export const ADD_ONS: AddOn[] = [
   {
     id: "dimmer-switch",
+    sku: "ADDON-DIMMER",
     name: "Dimmer Switch",
     price: 99,
     image: "/add-on-dimmer-switch.png",
@@ -76,6 +79,7 @@ export const ADD_ONS: AddOn[] = [
   },
   {
     id: "care-kit",
+    sku: "ADDON-CAREKIT",
     name: "Care Kit",
     price: 49,
     image: "/add-on-care-kit.png",

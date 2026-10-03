@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import PurchaseCompleted from "@/components/analytics/PurchaseCompleted";
 import ClearPurchasedCart from "@/components/cart/ClearPurchasedCart";
 import DirhamPrice from "@/components/ui/DirhamPrice";
+import { findAddOn, findVariant } from "@/lib/cart/catalog";
 import PaymentConfirmationPoller from "@/components/order/PaymentConfirmationPoller";
 import { createServiceClient } from "@/lib/supabase/server";
 import { privatePageMetadata } from "@/lib/seo/metadata";
@@ -31,24 +32,33 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
     const value = Number(amount);
     return Number.isFinite(value) ? value : 0;
   };
-  const subtotal = toFiniteNumber(order.subtotal);
+  const toCents = (amount: number) => Math.round(amount * 100);
   const shippingTotal = toFiniteNumber(order.shipping_total ?? 0);
   const total = toFiniteNumber(order.total);
-  const value = Number((total - shippingTotal).toFixed(2));
-  const discount = Number(Math.max(0, subtotal - value).toFixed(2));
+  // item_id must match the Merchant Center product ID, which is the catalog SKU (same source as json-ld.ts).
   const purchaseItems = (items ?? []).flatMap((item) => {
     const catalogVariantId = item.catalog_variant_id;
-    if (!catalogVariantId || catalogVariantId.startsWith("addon:")) return [];
+    if (!catalogVariantId) return [];
+
+    const sku = catalogVariantId.startsWith("addon:")
+      ? findAddOn(catalogVariantId.slice("addon:".length))?.sku
+      : findVariant(catalogVariantId)?.variant.sku;
+    const itemId = sku ?? catalogVariantId;
 
     return [{
-      id: catalogVariantId,
-      item_id: catalogVariantId,
+      id: itemId,
+      item_id: itemId,
       item_name: item.product_name,
       item_variant: item.variant_name,
       price: Number(toFiniteNumber(item.unit_price).toFixed(2)),
       quantity: toFiniteNumber(item.quantity),
     }];
   });
+  // Product revenue after discount, excluding shipping, so value = Σ(price × quantity) − discount.
+  const itemsCents = purchaseItems.reduce((sum, item) => sum + toCents(item.price) * item.quantity, 0);
+  const valueCents = toCents(total - shippingTotal);
+  const value = valueCents / 100;
+  const discount = Math.max(0, itemsCents - valueCents) / 100;
   const itemCount = (items ?? []).reduce((sum, item) => sum + Number(item.quantity), 0);
   const shipping = order.shipping_address as {
     firstName?: string;
