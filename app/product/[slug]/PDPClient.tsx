@@ -9,6 +9,7 @@ import PurchaseRow from "@/components/product/pdp/PurchaseRow";
 import ProductTabs, { type ProductTab } from "@/components/product/pdp/ProductTabs";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
+import { productItem, pushEcommerceEventWhenConsentReady } from "@/lib/analytics/ecommerce";
 
 export default function PDPClient({
   product,
@@ -43,6 +44,21 @@ export default function PDPClient({
       made_to_order: true,
     });
   }, [product]);
+
+  // GA4 view_item: once per page view and again whenever the shopper switches variant.
+  useEffect(
+    () =>
+      pushEcommerceEventWhenConsentReady("view_item", [
+        productItem({
+          variantId: selectedVariant.id,
+          productName: product.name,
+          variantName: selectedVariant.color,
+          price: selectedVariant.price,
+          quantity: 1,
+        }),
+      ]),
+    [product.name, selectedVariant]
+  );
 
   async function addSelectedItem() {
     const added = await addItem({

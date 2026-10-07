@@ -310,7 +310,7 @@ export default function CartPage() {
             >
               {[
                 { name: "Visa", src: "/Icons/payment-methods/visa.svg" },
-                { name: "Mastercard", src: "/Icons/payment-methods/master-card.png" },
+                { name: "Mastercard", src: "/Icons/payment-methods/master-card.svg" },
                 { name: "Google Pay", src: "/Icons/payment-methods/google-pay.svg" },
               ].map(({ name, src }) => (
                 <Image

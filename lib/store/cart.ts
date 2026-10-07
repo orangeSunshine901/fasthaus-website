@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import type { CartDto, CartItemMutationDto } from "../cart/types";
+import { addOnItem, productItem, pushEcommerceEvent } from "../analytics/ecommerce.ts";
 
 export type CartAddOn = { id: string; name: string; price: number; image: string; quantity?: number };
 export type CartLineAddOn = CartAddOn & { quantity: number };
@@ -141,6 +142,13 @@ export const useCartStore = create<State>((set, get) => {
             ? { ...row, itemId: saved.itemId, quantity: saved.quantity }
             : row),
         }));
+        // Report what was actually added; the server may clamp the line at the quantity limit.
+        const addedQuantity = Math.max(0, saved.quantity - (previous?.quantity ?? 0));
+        if (addedQuantity > 0)
+          pushEcommerceEvent("add_to_cart", [
+            productItem({ variantId: item.id, productName: item.productName, variantName: item.variantColor, price: item.price, quantity: addedQuantity }),
+            ...addOns.map((addOn) => addOnItem({ addOnId: addOn.id, name: addOn.name, productName: item.productName, price: addOn.price, quantity: addOn.quantity ?? item.quantity })),
+          ]);
         return true;
       } catch (error) {
         set((state) => ({
@@ -233,7 +241,12 @@ export const useCartStore = create<State>((set, get) => {
     addAddOn: async (variantId, addOnId) => {
       const item = get().items.find((row) => row.id === variantId); if (!item || (item.addOns ?? []).some((addOn) => addOn.id === addOnId)) return;
       const addOns = [...(item.addOns ?? []).map((addOn) => ({ id: addOn.id, quantity: addOn.quantity })), { id: addOnId, quantity: 1 }];
-      await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity: item.quantity, addOns }) }));
+      const added = await mutate(variantId, () => request(`/api/cart/items/${item.itemId}`, { method: "PATCH", body: JSON.stringify({ quantity: item.quantity, addOns }) }));
+      const addedAddOn = get().items.find((row) => row.id === variantId)?.addOns?.find((addOn) => addOn.id === addOnId);
+      if (added && addedAddOn)
+        pushEcommerceEvent("add_to_cart", [
+          addOnItem({ addOnId, name: addedAddOn.name, productName: item.productName, price: addedAddOn.price, quantity: 1 }),
+        ]);
     },
     removeAddOn: async (variantId, addOnId) => {
       const item = get().items.find((row) => row.id === variantId); if (!item) return;

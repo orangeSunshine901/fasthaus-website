@@ -8,9 +8,11 @@ import { isValidPhoneNumber } from "libphonenumber-js";
 import { Tooltip } from "radix-ui";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { Spinner } from "@/components/ui/spinner";
+import ShippingNotification from "@/components/checkout/ShippingNotification";
 import { useCartStore } from "@/lib/store/cart";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
+import { cartEcommerceItems, pushEcommerceEventWhenConsentReady } from "@/lib/analytics/ecommerce";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { CHECKOUT_DISCOUNTS_ENABLED } from "@/lib/promotions";
 import { CHECKOUT_DISCOUNT_CODE, discountRateFor } from "@/lib/checkout/discount";
@@ -55,7 +57,7 @@ function isValidAePhone(value: string): boolean {
 }
 
 export default function CheckoutPage() {
-  const { items, addOns, subtotal, pending } = useCartStore();
+  const { items, addOns, subtotal, pending, loaded } = useCartStore();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -117,6 +119,18 @@ export default function CheckoutPage() {
         currency: "AED",
       });
   }, [items, totalValue]);
+
+  // GA4 begin_checkout: once per checkout visit, after the server cart (and any in-flight
+  // "Buy now" add) has settled, so items and prices are confirmed.
+  const beganCheckout = useRef(false);
+  const checkoutCartReady = loaded && !cartSyncing && items.length > 0;
+  useEffect(() => {
+    if (!checkoutCartReady || beganCheckout.current) return;
+    return pushEcommerceEventWhenConsentReady("begin_checkout", () => {
+      beganCheckout.current = true;
+      return cartEcommerceItems(useCartStore.getState().items);
+    });
+  }, [checkoutCartReady]);
 
   async function requestCheckoutSession(): Promise<CheckoutSession> {
     const [firstName, ...lastNameParts] = fullName.trim().split(/\s+/);
@@ -387,6 +401,7 @@ export default function CheckoutPage() {
                     </span>
                   </div>
                 </Field>
+                <ShippingNotification email={email} name={fullName} />
                 <Field
                   label="Address"
                   required
