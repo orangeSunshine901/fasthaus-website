@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PRODUCTS, getProductBySlug, getRelatedProducts } from "@/lib/data/products";
+import { PRODUCTS } from "@/lib/data/products";
+import { getMediaProducts } from "@/lib/cms/products";
 import { getCategory } from "@/lib/data/categories";
 import ShopLayout from "@/components/layout/ShopLayout";
 import RelatedProductCard from "@/components/product/pdp/RelatedProductCard";
@@ -23,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = (await getMediaProducts()).find((product) => product.slug === slug);
   if (!product) return {};
 
   // Canonical is always the clean product URL, so ?variant=… links consolidate to it.
@@ -43,7 +44,8 @@ export default async function ProductPage({
   searchParams: Promise<{ variant?: string | string[] }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const products = await getMediaProducts();
+  const product = products.find((product) => product.slug === slug);
   if (!product) notFound();
 
   const variantParam = (await searchParams).variant;
@@ -51,7 +53,8 @@ export default async function ProductPage({
   const initialVariant =
     product.variants.find((variant) => variant.id === requestedVariantId) ?? product.variants[0];
 
-  const related = getRelatedProducts(slug, product.category);
+  const related = [...products.filter((item) => item.slug !== slug && item.category === product.category),
+    ...products.filter((item) => item.slug !== slug && item.category !== product.category)].slice(0, 4);
   const category = getCategory(product.category);
   // Mirrors the visible gallery breadcrumb. Categories are intentionally not shown in the trail.
   const breadcrumbs = [

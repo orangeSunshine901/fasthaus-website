@@ -7,6 +7,8 @@ import SilktideConsentManager from "@/components/consent/SilktideConsentManager"
 import CartProvider from "@/components/cart/CartProvider";
 import HomeNavigationProvider from "@/components/navigation/HomeNavigationProvider";
 import GlassFilters from "@/components/ui/GlassFilters";
+import { ProductMediaProvider } from "@/components/product/ProductMediaProvider";
+import { getMediaProducts } from "@/lib/cms/products";
 import { getGeideaSdkUrl } from "@/lib/payment/geidea";
 import {
   DEFAULT_DESCRIPTION,
@@ -65,11 +67,12 @@ export const metadata: Metadata = {
   ...(IS_INDEXABLE_DEPLOYMENT ? {} : { robots: { index: false, follow: false } }),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const products = await getMediaProducts();
   return (
     <html
       lang="en"
@@ -141,13 +144,15 @@ export default function RootLayout({
         </noscript>
         <GlassFilters />
         <SilktideConsentManager />
-        <HomeNavigationProvider>
-          <AnalyticsProvider>
-            <CartProvider>
-              <PageTransition>{children}</PageTransition>
-            </CartProvider>
-          </AnalyticsProvider>
-        </HomeNavigationProvider>
+        <ProductMediaProvider products={products}>
+          <HomeNavigationProvider>
+            <AnalyticsProvider>
+              <CartProvider>
+                <PageTransition>{children}</PageTransition>
+              </CartProvider>
+            </AnalyticsProvider>
+          </HomeNavigationProvider>
+        </ProductMediaProvider>
       </body>
     </html>
   );

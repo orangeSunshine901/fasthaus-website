@@ -25,6 +25,7 @@ export type ProductVariant = {
   cartDrawerImage: string;
   /** Mobile-composed image displayed on collection and category product cards. */
   collectionMobileImage?: string;
+  collectionHeroImage?: string;
   /** Primary image shown when this color is selected on the product page. */
   mainImage?: string;
   images: ProductCarouselImage[];
@@ -100,6 +101,7 @@ export const PRODUCTS: Product[] = [
     variants: [
       {
         id: "3-cobalt-blue",
+        collectionHeroImage: "/stack-lamp/stack-lamp-blue-off-shadow.png",
         color: "Cobalt Blue",
         colorHex: "#007ffe",
         sku: "STL-BLU",
@@ -241,6 +243,7 @@ export const PRODUCTS: Product[] = [
     variants: [
       {
         id: "1-matcha",
+        collectionHeroImage: "/flute-lamp/flute-matcha-off-shadow.png",
         color: "Matcha",
         colorHex: "#c5d371",
         sku: "TFL-MG",
@@ -392,6 +395,7 @@ export const PRODUCTS: Product[] = [
     variants: [
       {
         id: "4-cherry-red",
+        collectionHeroImage: "/pearl-lamp/pearl-lamp-red-off-shadow.png",
         color: "Cherry Red",
         colorHex: "#942025",
         sku: "PTL-FRD",
@@ -534,6 +538,7 @@ export const PRODUCTS: Product[] = [
     variants: [
       {
         id: "2-tangerine",
+        collectionHeroImage: "/mushroom-lamp/mushroom-orange-off.png",
         color: "Tangerine",
         colorHex: "#f7633a",
         sku: "ML-TG",

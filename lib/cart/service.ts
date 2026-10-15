@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { createServiceClient } from "@/lib/supabase/server";
+import { getMediaProducts } from "@/lib/cms/products";
 import { clearCartId, readCartId, setCartId } from "./cookie";
 import { findAddOn, findVariant, MAX_CART_QUANTITY, toMinorUnits } from "./catalog";
 import { effectiveUnitPrice } from "./pricing";
@@ -88,6 +89,7 @@ async function cartDto(cart: CartRow): Promise<CartDto> {
     .order("created_at");
   if (error) throw error;
   const warnings: CartDto["warnings"] = [];
+  const mediaVariants = (await getMediaProducts()).flatMap((product) => product.variants);
   const items = ((data ?? []) as ItemRow[]).map((row) => {
     const catalog = findVariant(row.variant_id);
     const available = !!catalog && catalog.variant.stock >= row.quantity;
@@ -128,7 +130,7 @@ async function cartDto(cart: CartRow): Promise<CartDto> {
       slug: catalog?.product.slug ?? "",
       name: catalog?.product.name ?? "Unavailable product",
       variantName: catalog?.variant.color ?? "",
-      imageUrl: catalog?.variant.collectionImage ?? null,
+      imageUrl: mediaVariants.find((variant) => variant.id === row.variant_id)?.collectionImage ?? null,
       unitPrice,
       quantity: row.quantity,
       lineTotal,

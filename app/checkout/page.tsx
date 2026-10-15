@@ -3,7 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, CalendarCheck, ChevronDown, Shield, ShieldCheck, Truck } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarCheck,
+  ChevronDown,
+  Minus,
+  Plus,
+  Shield,
+  ShieldCheck,
+  Truck,
+} from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import { Tooltip } from "radix-ui";
 import DirhamPrice from "@/components/ui/DirhamPrice";
@@ -57,7 +67,10 @@ function isValidAePhone(value: string): boolean {
 }
 
 export default function CheckoutPage() {
-  const { items, addOns, subtotal, pending, loaded } = useCartStore();
+  const { items, addOns, subtotal, pending, loaded, updateQuantity } = useCartStore();
+  const reducedMotion = useReducedMotion();
+  // Direction the quantity digit rolls: up when increasing, down when decreasing.
+  const [quantityDirection, setQuantityDirection] = useState(1);
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -110,6 +123,9 @@ export default function CheckoutPage() {
     !unitVillaError &&
     !buildingClusterError;
   const checkoutDisabled = !checkoutDetailsReady || purchasing || cartSyncing;
+  // Quantities freeze while an add is still optimistic or payment has started.
+  const quantityLocked = (item: (typeof items)[number]) =>
+    purchasing || pending.includes(item.id) || item.itemId.startsWith("optimistic:");
 
   useEffect(() => {
     if (items.length > 0)
@@ -234,14 +250,18 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen" style={{ backgroundColor: "var(--color-bg)" }}>
         {/* Empty cart guard */}
-        <div className="container-page flex flex-col items-center justify-center gap-4 py-32 text-center">
-          <p className="type-body-md" style={{ color: "var(--color-text-secondary)" }}>
+        <div className="container-page flex flex-col items-center justify-center gap-8 py-[25%] text-center">
+          <h1 className="type-lg" style={{ color: "var(--color-text-primary)" }}>
             Your cart is empty.
-          </p>
+          </h1>
           <Link
             href="/collection"
-            className="type-body-sm"
-            style={{ color: "var(--color-accent-amber)" }}
+            className="type-body-md text-[var(--color-accent-amber)] transition-colors duration-150 hover:bg-[var(--color-accent-amber)] hover:text-white"
+            style={{
+              padding: "0.5rem 1rem",
+              border: "1px solid var(--color-accent-amber)",
+              borderRadius: "0.375rem",
+            }}
           >
             Back to collection
           </Link>
@@ -649,8 +669,70 @@ export default function CheckoutPage() {
                           className="type-caption-sm"
                           style={{ color: "var(--color-text-secondary)" }}
                         >
-                          {item.variantColor} · {item.quantity} item{item.quantity > 1 ? "s" : ""}
+                          {item.variantColor}
                         </span>
+                        <div
+                          className="mt-1.5 flex w-fit items-center overflow-hidden rounded-[9px] border"
+                          style={{ borderColor: "#EEE9E3" }}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setQuantityDirection(-1);
+                              updateQuantity(item.id, item.quantity - 1);
+                            }}
+                            disabled={quantityLocked(item) || item.quantity <= 1}
+                            className="grid h-[28px] w-[28px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
+                            style={{ color: "#6E655B" }}
+                            aria-label={`Decrease ${item.productName} quantity`}
+                          >
+                            <Minus size={13} />
+                          </button>
+                          <span
+                            className="relative grid h-[28px] w-7 place-items-center overflow-hidden text-[14px] font-bold tabular-nums"
+                            style={{ color: "var(--color-text-primary)" }}
+                            aria-live="polite"
+                            aria-label={`Quantity ${item.quantity}`}
+                          >
+                            <AnimatePresence
+                              initial={false}
+                              mode="popLayout"
+                              custom={quantityDirection}
+                            >
+                              <motion.span
+                                key={item.quantity}
+                                custom={quantityDirection}
+                                variants={{
+                                  enter: (direction: number) => ({ y: direction * 14, opacity: 0 }),
+                                  center: { y: 0, opacity: 1 },
+                                  exit: (direction: number) => ({ y: direction * -14, opacity: 0 }),
+                                }}
+                                initial={reducedMotion ? false : "enter"}
+                                animate="center"
+                                exit={reducedMotion ? undefined : "exit"}
+                                transition={{ duration: 0.22, ease: [0.2, 0.8, 0.2, 1] }}
+                              >
+                                {item.quantity}
+                              </motion.span>
+                            </AnimatePresence>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setQuantityDirection(1);
+                              updateQuantity(item.id, item.quantity + 1);
+                            }}
+                            disabled={
+                              quantityLocked(item) ||
+                              (item.maxQuantity !== null && item.quantity >= item.maxQuantity)
+                            }
+                            className="grid h-[28px] w-[28px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
+                            style={{ color: "#6E655B" }}
+                            aria-label={`Increase ${item.productName} quantity`}
+                          >
+                            <Plus size={13} />
+                          </button>
+                        </div>
                       </div>
                       <DirhamPrice amount={item.price * item.quantity} size="sm" />
                     </div>

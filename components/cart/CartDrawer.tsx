@@ -8,16 +8,16 @@ import { ArrowLeft, ArrowRight, Minus, Plus, X } from "lucide-react";
 import DirhamPrice from "@/components/ui/DirhamPrice";
 import { Spinner } from "@/components/ui/spinner";
 import { useCartStore } from "@/lib/store/cart";
-import { PRODUCTS } from "@/lib/data/products";
+import { useMediaProducts } from "@/components/product/ProductMediaProvider";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { setPageScrollLocked } from "@/lib/page-scroll-lock";
 
-const CART_DRAWER_SLIDES = PRODUCTS.flatMap((product) =>
-  product.variants.map((variant) => ({ product, variant }))
-).filter(({ variant }) => variant.cartDrawerImage);
-
 export default function CartDrawer() {
+  const products = useMediaProducts();
+  const CART_DRAWER_SLIDES = products.flatMap((product) =>
+    product.variants.map((variant) => ({ product, variant }))
+  ).filter(({ variant }) => variant.cartDrawerImage);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const reducedMotion = useReducedMotion();
   const {
@@ -44,7 +44,7 @@ export default function CartDrawer() {
     }, 5000);
 
     return () => window.clearInterval(interval);
-  }, [drawerOpen, isEmpty, reducedMotion]);
+  }, [drawerOpen, isEmpty, reducedMotion, CART_DRAWER_SLIDES.length]);
 
   const showPreviousSlide = () =>
     setActiveSlideIndex(

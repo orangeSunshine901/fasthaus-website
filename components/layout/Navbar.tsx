@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
-import { PRODUCTS } from "@/lib/data/products";
+import { useMediaProducts } from "@/components/product/ProductMediaProvider";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { setPageScrollLocked } from "@/lib/page-scroll-lock";
@@ -52,6 +52,7 @@ function CartBadge({ size = 20, className = "" }: { size?: number; className?: s
 }
 
 function CollectionMegaMenuContent() {
+  const PRODUCTS = useMediaProducts();
   const [activeProductId, setActiveProductId] = useState(PRODUCTS[0]?.id);
   const activeProduct = PRODUCTS.find((product) => product.id === activeProductId) ?? PRODUCTS[0];
   const previewVariant = activeProduct?.variants[0];
@@ -91,7 +92,7 @@ function CollectionMegaMenuContent() {
               onFocus={() => setActiveProductId(product.id)}
               className="min-w-0 overflow-hidden rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
             >
-              <span className="block text-base font-semibold leading-6">{product.name}</span>
+              <span className="block text-base font-bold leading-6">{product.name}</span>
               <span className="mt-1 block truncate text-sm leading-5 text-[var(--color-text-secondary)]">
                 {product.description}
               </span>
@@ -104,6 +105,7 @@ function CollectionMegaMenuContent() {
 }
 
 export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstScroll?: boolean }) {
+  const PRODUCTS = useMediaProducts();
   const headerRef = useRef<HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [homeHeroPassed, setHomeHeroPassed] = useState(false);

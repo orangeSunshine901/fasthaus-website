@@ -19,7 +19,7 @@ function PageViewTracker({ consent }: { consent: AnalyticsConsentState }) {
   const lastPageView = useRef<string | null>(null);
 
   useEffect(() => {
-    if (consent !== "granted") {
+    if (consent !== "granted" || pathname.startsWith("/admin")) {
       lastPageView.current = null;
       return;
     }
@@ -36,10 +36,12 @@ function PageViewTracker({ consent }: { consent: AnalyticsConsentState }) {
 }
 
 export default function AnalyticsProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [consent, setConsent] = useState<AnalyticsConsentState>("unknown");
   const previousConsent = useRef<AnalyticsConsentState>("unknown");
 
-  const applyConsent = useCallback((nextConsent: AnalyticsConsentState) => {
+  const applyConsent = useCallback((requestedConsent: AnalyticsConsentState) => {
+    const nextConsent = pathname.startsWith("/admin") ? "denied" : requestedConsent;
     if (previousConsent.current === nextConsent) return;
 
     previousConsent.current = nextConsent;
@@ -59,7 +61,7 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
       posthog.opt_out_capturing();
       posthog.reset();
     }
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     let cancelled = false;

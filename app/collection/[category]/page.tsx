@@ -7,6 +7,7 @@ import CollectionViewed from "@/components/analytics/CollectionViewed";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import { CATEGORIES, getCategory, getCategoryProducts } from "@/lib/data/categories";
 import { pageMetadata } from "@/lib/seo/metadata";
+import { getMediaProducts } from "@/lib/cms/products";
 
 // Unknown category slugs return a real 404 instead of an "All Products" soft-404.
 export const dynamicParams = false;
@@ -38,7 +39,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const category = getCategory(slug);
   if (!category) notFound();
 
-  const products = getCategoryProducts(category.slug);
+  const products = (await getMediaProducts()).filter((product) => product.category === category.slug);
 
   return (
     <ShopLayout>

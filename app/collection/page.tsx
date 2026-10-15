@@ -1,6 +1,6 @@
 import ShopLayout from "@/components/layout/ShopLayout";
 import ProductCard from "@/components/product/ProductCard";
-import { PRODUCTS } from "@/lib/data/products";
+import { getMediaProducts } from "@/lib/cms/products";
 import CollectionHero, { type CollectionHeroSlide } from "@/components/collection/CollectionHero";
 import CollectionViewed from "@/components/analytics/CollectionViewed";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
@@ -48,12 +48,18 @@ const COLLECTION_HERO_SLIDES = [
   },
 ] as const satisfies readonly CollectionHeroSlide[];
 
-export default function CollectionsPage() {
+export default async function CollectionsPage() {
+  const products = await getMediaProducts();
+  const slides = COLLECTION_HERO_SLIDES.map((slide) => {
+    const variantId = new URL(slide.href, "https://fasthaus.ae").searchParams.get("variant");
+    const variant = products.flatMap((product) => product.variants).find((item) => item.id === variantId);
+    return { ...slide, image: variant?.collectionHeroImage ?? slide.image };
+  }) as [CollectionHeroSlide, ...CollectionHeroSlide[]];
   return (
     <ShopLayout>
-      <CollectionViewed collection="all" productCount={PRODUCTS.length} />
+      <CollectionViewed collection="all" productCount={products.length} />
       {/* Hero */}
-      <CollectionHero slides={COLLECTION_HERO_SLIDES} />
+      <CollectionHero slides={slides} />
 
       {/* Collection Grid */}
       <div className="container-page py-8 md:py-12">
@@ -79,7 +85,7 @@ export default function CollectionsPage() {
 
         {/* Product grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
-          {PRODUCTS.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

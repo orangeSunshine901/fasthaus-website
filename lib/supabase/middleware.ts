@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { cmsCookieOptions } from "@/lib/cms/auth";
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -8,6 +9,8 @@ export async function updateSession(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      cookieOptions: request.nextUrl.pathname.startsWith("/admin") || request.nextUrl.pathname.startsWith("/api/cms")
+        ? cmsCookieOptions : undefined,
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -24,5 +27,8 @@ export async function updateSession(request: NextRequest) {
   );
 
   await supabase.auth.getUser();
+  if (request.nextUrl.pathname.startsWith("/admin") || request.nextUrl.pathname.startsWith("/api/cms")) {
+    response.headers.set("Cache-Control", "private, no-store");
+  }
   return response;
 }

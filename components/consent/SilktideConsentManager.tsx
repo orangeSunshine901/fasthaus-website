@@ -1,6 +1,8 @@
 "use client";
 
 import Script from "next/script";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { setPageScrollLocked } from "@/lib/page-scroll-lock";
 
 const dispatchConsentChange = () => {
@@ -71,6 +73,15 @@ function initializeSilktide() {
 }
 
 export default function SilktideConsentManager() {
+  const pathname = usePathname();
+  const isAdmin = pathname.startsWith("/admin");
+  useEffect(() => {
+    if (isAdmin) {
+      window.silktideConsentManager?.getInstance()?.destroy();
+      setPageScrollLocked("cookie-consent", false);
+    }
+  }, [isAdmin]);
+  if (isAdmin) return null;
   return (
     <Script
       id="silktide-consent-manager"

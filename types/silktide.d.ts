@@ -29,6 +29,7 @@ type SilktideConsentManagerConfig = {
 };
 
 type SilktideConsentManagerInstance = {
+  destroy: () => void;
   getConsentChoice: (id: string) => boolean | null;
   getAcceptedConsents: () => Record<string, boolean | null>;
   getRejectedConsents: () => Record<string, boolean>;

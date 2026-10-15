@@ -1,0 +1,15 @@
+.cms-studio {
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+}
+
+.cms-studio img {
+  animation: none;
+}
