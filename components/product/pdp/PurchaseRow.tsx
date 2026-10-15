@@ -55,15 +55,15 @@ export default function PurchaseRow({
 
   return (
     <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_356px] lg:gap-x-12 lg:gap-y-5">
-      {/* Product info column */}
-      <div className="flex min-w-0 flex-col gap-5 lg:col-start-1 lg:row-start-1">
+      {/* Product info column: mobile only. From md up the hero shows the name and story. */}
+      <div className="flex min-w-0 flex-col gap-5 md:hidden">
         <div className="flex flex-col gap-3">
-          <h1
+          <h2
             className="text-[34px] font-extrabold leading-[1.03] tracking-[-0.03em] md:text-[46px]"
             style={{ color: "var(--color-text-primary)" }}
           >
             {product.name}
-          </h1>
+          </h2>
           <div className="flex items-center gap-3">
             {/* <div className="flex items-center gap-0.5">
               {Array.from({ length: 5 }).map((_, index) => (
@@ -123,7 +123,7 @@ export default function PurchaseRow({
 
       {/* Buy box */}
       <div
-        className="flex flex-col gap-[18px] rounded-[18px] border bg-white p-6 md:p-7 lg:col-start-2 lg:row-span-2 lg:row-start-1"
+        className="flex flex-col gap-[18px] rounded-[18px] border bg-white p-6 md:p-7 lg:col-start-2 lg:row-start-1"
         style={{ borderColor: "var(--color-border)" }}
       >
         <div className="flex flex-col gap-2">
@@ -177,6 +177,20 @@ export default function PurchaseRow({
         <div className="flex flex-col gap-2.5">
           <button
             type="button"
+            onClick={onAddToCart}
+            disabled={busy}
+            className="flex h-[54px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
+            style={{
+              borderColor: "var(--color-text-primary)",
+              color: "var(--color-text-primary)",
+              fontWeight: 500,
+            }}
+          >
+            {busy ? <Spinner /> : <ShoppingCart size={16} />}
+            {busy ? "Adding…" : "Add to cart"}
+          </button>
+          <button
+            type="button"
             onClick={onBuyNow}
             disabled={busy}
             className="flex h-[54px] items-center justify-center rounded-[12px] text-white transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
@@ -197,20 +211,6 @@ export default function PurchaseRow({
                 />
               </>
             )}
-          </button>
-          <button
-            type="button"
-            onClick={onAddToCart}
-            disabled={busy}
-            className="flex h-[54px] items-center justify-center gap-2 rounded-[12px] border-[1.5px] bg-white transition-colors hover:bg-[var(--color-surface)] disabled:cursor-wait disabled:opacity-60"
-            style={{
-              borderColor: "var(--color-text-primary)",
-              color: "var(--color-text-primary)",
-              fontWeight: 500,
-            }}
-          >
-            {busy ? <Spinner /> : <ShoppingCart size={16} />}
-            {busy ? "Adding…" : "Add to cart"}
           </button>
           {error && (
             <p
@@ -266,7 +266,7 @@ export default function PurchaseRow({
       </div>
 
       <div
-        className="flex flex-col gap-5 border-t pt-6 lg:col-start-1 lg:row-start-2"
+        className="flex flex-col gap-5 border-t pt-6 lg:col-start-1 lg:row-start-1 lg:border-t-0 lg:pt-0"
         style={{ borderColor: "var(--color-border)" }}
       >
         <h2

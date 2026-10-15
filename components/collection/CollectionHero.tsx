@@ -784,14 +784,14 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         >
           <div className="absolute inset-0 -translate-y-[10%] md:translate-y-0">
             <div className="absolute left-1/2 top-[46%] z-10 -translate-x-1/2 -translate-y-1/2">
-              <motion.h2
+              <motion.h1
                 className="collection-hero-title font-golften-stamp whitespace-nowrap text-center text-[102px] md:text-[132px] font-light leading-none tracking-[0.004em] text-[#F8F6F3] [text-shadow:2px_2px_22px_rgba(20,17,20,0.9),0_0_10px_rgba(248,246,243,0.5)] md:[text-shadow:2px_2px_16px_rgb(184,185,186)]"
                 variants={shouldReduceMotion ? REDUCED_TITLE_VARIANTS : TITLE_VARIANTS}
                 transition={contentTransition}
                 style={{ fontFamily: "var(--font-golften-stamp)" }}
               >
                 {activeSlide.lampName}
-              </motion.h2>
+              </motion.h1>
             </div>
 
             <div className="absolute inset-0 z-0 flex items-center translate-x-[-6px] justify-center pb-[3%]">

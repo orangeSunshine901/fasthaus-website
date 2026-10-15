@@ -77,7 +77,7 @@ export default async function CollectionsPage() {
               Collection
             </h1>
             <p className="type-body-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
-              Browse our full collection of considered everyday lighting — built to last and made to
+              Browse our full collection of considered everyday lighting, built to last and made to
               love.
             </p>
           </div>

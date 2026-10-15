@@ -60,7 +60,7 @@ export default function PDPClient({
     [product.name, selectedVariant]
   );
 
-  async function addSelectedItem() {
+  async function addSelectedItem(quantity: number) {
     const added = await addItem({
       id: selectedVariant.id,
       productId: product.id,
@@ -85,16 +85,26 @@ export default function PDPClient({
   }
 
   async function handleAddToCart() {
-    const addingItem = addSelectedItem();
+    const addingItem = addSelectedItem(quantity);
     openDrawer();
     await addingItem;
   }
 
   async function handleBuyNow() {
-    const addingItem = addSelectedItem();
+    const addingItem = addSelectedItem(quantity);
     closeDrawer();
     router.push("/checkout");
     await addingItem;
+  }
+
+  // Hero shortcut: one of the selected colour, then checkout, where the quantity can be
+  // changed. A colour already in the cart is not added again, so its quantity stays put.
+  async function handleQuickBuy() {
+    const inCart = useCartStore.getState().items.some((item) => item.id === selectedVariant.id);
+    const addingItem = inCart ? Promise.resolve(true) : addSelectedItem(1);
+    closeDrawer();
+    router.push("/checkout");
+    return addingItem;
   }
 
   function handleVariantChange(variant: ProductVariant) {
@@ -119,10 +129,12 @@ export default function PDPClient({
       <ProductGallery
         images={selectedVariant.images}
         name={product.name}
+        description={product.designStory}
         variants={product.variants}
         selectedVariant={selectedVariant}
         activeIndex={activeImage}
         onVariantChange={handleVariantChange}
+        onQuickBuy={handleQuickBuy}
         onSelect={(index) => {
           setActiveImage(index);
           capture(analyticsEvents.productImageViewed, {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -8,17 +8,23 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Tooltip } from "radix-ui";
 import useEmblaCarousel from "embla-carousel-react";
 import MobileGalleryImage from "./MobileGalleryImage";
+import HeroQuickBuy from "./HeroQuickBuy";
 import type { ProductCarouselImage, ProductVariant } from "@/lib/data/products";
 
 type Props = {
   images: ProductCarouselImage[];
   name: string;
+  description: string;
   variants: ProductVariant[];
   selectedVariant: ProductVariant;
   activeIndex: number;
   onSelect: (index: number) => void;
   onVariantChange: (variant: ProductVariant) => void;
+  onQuickBuy: () => Promise<boolean>;
 };
+
+// If the hero image never reports a load (e.g. a failed request), reveal anyway.
+const REVEAL_FALLBACK_MS = 2500;
 
 function formatCounter(value: number) {
   return String(value).padStart(2, "0");
@@ -36,24 +42,36 @@ function createArrowCursor(direction: "left" | "right", color: "black" | "white"
 export default function ProductGallery({
   images,
   name,
+  description,
   variants,
   selectedVariant,
   activeIndex,
   onSelect,
   onVariantChange,
+  onQuickBuy,
 }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: images.length > 1,
     watchDrag: (_, event) => {
       if ("touches" in event && event.touches.length > 1) return false;
-      return !(event.target instanceof Element &&
-        event.target.closest('[data-gallery-zoomed="true"]'));
+      return !(
+        event.target instanceof Element && event.target.closest('[data-gallery-zoomed="true"]')
+      );
     },
   });
   const reducedMotion = useReducedMotion();
   const activeImage = images[activeIndex] ?? images[0];
   const uiTheme = activeImage?.uiTheme ?? "dark";
   const cursorColor = uiTheme === "light" ? "white" : "black";
+  // The first hero image eases in once it has actually loaded; the quick-buy text follows.
+  const [heroLoaded, setHeroLoaded] = useState(false);
+  const revealed = heroLoaded || !!reducedMotion;
+
+  useEffect(() => {
+    if (heroLoaded) return;
+    const timer = window.setTimeout(() => setHeroLoaded(true), REVEAL_FALLBACK_MS);
+    return () => window.clearTimeout(timer);
+  }, [heroLoaded]);
 
   const imageAlt = (index: number) =>
     `${name} lamp in ${selectedVariant.color}, view ${index + 1} of ${images.length}`;
@@ -102,7 +120,9 @@ export default function ProductGallery({
           Collection
         </Link>
         <span className="text-[var(--hero-ui-subtle)]">/</span>
-        <span aria-current="page" className="font-semibold text-[var(--hero-ui-color)]">{name}</span>
+        <span aria-current="page" className="font-semibold text-[var(--hero-ui-color)]">
+          {name}
+        </span>
       </nav>
 
       <div ref={emblaRef} className="relative h-full overflow-hidden">
@@ -127,15 +147,17 @@ export default function ProductGallery({
                   <source
                     media="(max-width: 767px)"
                     sizes="(max-width: 440px) 100vw, 440px"
-                    srcSet={getImageProps({
-                      src: image.mobileSrc,
-                      alt: "",
-                      fill: true,
-                      sizes: "(max-width: 440px) 100vw, 440px",
-                      // Same URL as MobileGalleryImage's slide, so it must agree on loading
-                      // or Next's LCP check reads the slide as lazy.
-                      loading: index === 0 ? "eager" : "lazy",
-                    }).props.srcSet}
+                    srcSet={
+                      getImageProps({
+                        src: image.mobileSrc,
+                        alt: "",
+                        fill: true,
+                        sizes: "(max-width: 440px) 100vw, 440px",
+                        // Same URL as MobileGalleryImage's slide, so it must agree on loading
+                        // or Next's LCP check reads the slide as lazy.
+                        loading: index === 0 ? "eager" : "lazy",
+                      }).props.srcSet
+                    }
                   />
                 )}
                 <Image
@@ -153,29 +175,41 @@ export default function ProductGallery({
         </div>
 
         {activeImage && (
-          <AnimatePresence initial={false} mode="sync">
-            <motion.div
-              key={activeImage.src}
-              className="pointer-events-none absolute inset-0 hidden md:block"
-              aria-hidden="true"
-              initial={reducedMotion ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
-            >
-              <picture className="relative block h-full">
-                <Image
-                  src={activeImage.src}
-                  alt=""
-                  width={2880}
-                  height={1496}
-                  sizes="(max-width: 440px) 100vw, (max-width: 767px) 440px, 100vw"
-                  loading="eager"
-                  className="absolute inset-0 mx-auto h-full w-full max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
-                />
-              </picture>
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            className="pointer-events-none absolute inset-0 hidden md:block"
+            aria-hidden="true"
+            initial={reducedMotion ? false : { opacity: 0, scale: 1.04 }}
+            animate={revealed ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.04 }}
+            transition={{
+              opacity: { duration: 0.9, ease: "easeOut" },
+              scale: { duration: 1.4, ease: [0.2, 0.8, 0.2, 1] },
+            }}
+          >
+            <AnimatePresence initial={false} mode="sync">
+              <motion.div
+                key={activeImage.src}
+                className="pointer-events-none absolute inset-0 hidden md:block"
+                aria-hidden="true"
+                initial={reducedMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
+              >
+                <picture className="relative block h-full">
+                  <Image
+                    src={activeImage.src}
+                    alt=""
+                    width={2880}
+                    height={1496}
+                    sizes="(max-width: 440px) 100vw, (max-width: 767px) 440px, 100vw"
+                    loading="eager"
+                    onLoad={() => setHeroLoaded(true)}
+                    className="absolute inset-0 mx-auto h-full w-full max-w-[440px] object-contain [animation:none] md:max-w-none md:object-cover"
+                  />
+                </picture>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
         )}
 
         {images.length > 1 && (
@@ -195,6 +229,15 @@ export default function ProductGallery({
           </>
         )}
       </div>
+
+      <HeroQuickBuy
+        name={name}
+        description={description}
+        price={selectedVariant.price}
+        uiTheme={uiTheme}
+        revealed={revealed}
+        onBuyNow={onQuickBuy}
+      />
 
       <Tooltip.Provider delayDuration={0}>
         <div
