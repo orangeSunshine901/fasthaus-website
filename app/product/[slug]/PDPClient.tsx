@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ShoppingCart } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { getVariantImage, type Product, type ProductVariant } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
+import DirhamPrice from "@/components/ui/DirhamPrice";
 import ProductGallery from "@/components/product/pdp/ProductGallery";
 import PurchaseRow from "@/components/product/pdp/PurchaseRow";
 import ProductTabs, { type ProductTab } from "@/components/product/pdp/ProductTabs";
@@ -18,12 +21,13 @@ export default function PDPClient({
   product: Product;
   initialVariantId: string;
 }) {
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
-    product.variants.find((variant) => variant.id === initialVariantId) ?? product.variants[0]
-  );
+  const searchParams = useSearchParams();
+  const selectedVariant = product.variants.find(
+    (variant) => variant.id === (searchParams.get("variant") ?? initialVariantId)
+  ) ?? product.variants[0];
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<ProductTab>("Materials");
+  const [activeTab, setActiveTab] = useState<ProductTab>("materials");
 
   const addItem = useCartStore((s) => s.addItem);
   const openDrawer = useCartStore((s) => s.openDrawer);
@@ -31,6 +35,7 @@ export default function PDPClient({
   const cartError = useCartStore((s) => s.error);
   const adding = useCartStore((s) => s.pending.includes(selectedVariant.id));
   const router = useRouter();
+  const drawerOpen = useCartStore((s) => s.drawerOpen);
 
   useEffect(() => {
     capture(analyticsEvents.productViewed, {
@@ -108,13 +113,11 @@ export default function PDPClient({
   }
 
   function handleVariantChange(variant: ProductVariant) {
-    setSelectedVariant(variant);
     setActiveImage(0);
-    window.history.replaceState(
-      window.history.state,
-      "",
-      `?variant=${encodeURIComponent(variant.id)}`
-    );
+    const url = new URL(window.location.href);
+    url.searchParams.set("variant", variant.id);
+    // Let Next.js sync the URL with its router, including Back from checkout.
+    window.history.replaceState(null, "", url);
     capture(analyticsEvents.productOptionSelected, {
       product_id: product.id,
       option_type: "color",
@@ -157,6 +160,30 @@ export default function PDPClient({
       <div className="scroll-mt-28">
         <ProductTabs product={product} activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
+      {!drawerOpen && (
+        <div
+          aria-label="Quick purchase"
+          className="sticky bottom-0 z-40 -mx-5 flex items-center gap-4 border-t border-[var(--color-border)] bg-white px-5 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden"
+        >
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13px] text-[var(--color-text-secondary)]">
+              {selectedVariant.color} · Qty {quantity}
+            </p>
+            <DirhamPrice amount={selectedVariant.price * quantity} size="lg" />
+          </div>
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={adding}
+            aria-busy={adding}
+            className="flex min-h-[52px] min-w-[160px] shrink-0 items-center justify-center gap-2.5 rounded-[12px] bg-[var(--color-accent-amber)] px-4 text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-accent-amber-hover)] active:bg-[var(--color-accent-amber-hover)] disabled:cursor-wait disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-text-primary)]"
+            style={{ fontSize: "16px", fontWeight: 700 }}
+          >
+            {adding ? <Spinner aria-hidden="true" /> : <ShoppingCart size={18} strokeWidth={2} aria-hidden="true" />}
+            <span>{adding ? "Adding…" : "Add to cart"}</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

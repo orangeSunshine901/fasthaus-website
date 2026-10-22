@@ -76,7 +76,7 @@ export default function HeroQuickBuy({
             onClick={handleClick}
             aria-busy={opening}
             style={{ fontWeight: "700" }}
-            className="group relative flex items-center gap-2 py-2.5 text-[17px] text-[var(--hero-ui-color)] outline-none transition-colors duration-200 hover:text-[var(--color-accent-amber)] focus-visible:text-[var(--color-accent-amber)] aria-busy:text-[var(--color-accent-amber)]"
+            className="group relative flex items-center gap-2 py-2.5 text-[17px] text-[var(--hero-ui-color)] outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current transition-colors duration-200 hover:text-[var(--color-accent-amber)] focus-visible:text-[var(--color-accent-amber)] aria-busy:text-[var(--color-accent-amber)]"
           >
             <span>{opening ? "Opening checkout…" : "Buy now"}</span>
             <svg

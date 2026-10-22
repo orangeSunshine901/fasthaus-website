@@ -99,7 +99,7 @@ export default function ProductGallery({
 
   return (
     <div
-      className="product-hero relative left-1/2 aspect-[864/1147] h-auto w-screen -translate-x-1/2 overflow-hidden md:aspect-auto md:h-[840px]"
+      className="product-hero relative left-1/2 aspect-[864/1147] h-auto w-screen -translate-x-1/2 overflow-hidden md:aspect-auto md:h-[clamp(540px,calc(100svh-44px),840px)]"
       data-ui-theme={uiTheme}
     >
       <nav
@@ -251,7 +251,7 @@ export default function ProductGallery({
                 <button
                   type="button"
                   onClick={() => onVariantChange(variant)}
-                  className="h-8 w-8 rounded-full border-2 border-white transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-2"
+                  className="h-11 w-11 rounded-full border-2 border-white transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-2 md:h-8 md:w-8"
                   style={{
                     backgroundColor: variant.colorHex,
                     boxShadow:
@@ -280,38 +280,31 @@ export default function ProductGallery({
 
       {images.length > 1 && (
         <>
-          <div className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-between px-[6px] md:hidden">
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 items-center justify-between px-[6px] md:inset-x-auto md:right-10 md:top-auto md:bottom-10 md:translate-y-0 md:gap-1 md:rounded-full md:bg-white/95 md:px-1">
             <button
               type="button"
               onClick={scrollPrev}
               aria-label="Previous image"
-              className="pointer-events-auto grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
-              style={{ color: "var(--hero-ui-color)" }}
+              className="pointer-events-auto grid h-11 w-11 place-items-center rounded-full text-[var(--hero-ui-color)] outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:text-[var(--color-text-primary)]"
             >
               <ArrowLeft size={24} strokeWidth={1.5} aria-hidden="true" />
             </button>
+            <span className="hidden min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em] text-[var(--color-text-primary)] md:block" aria-hidden="true">
+              {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
+            </span>
             <button
               type="button"
               onClick={scrollNext}
               aria-label="Next image"
-              className="pointer-events-auto grid h-11 w-11 place-items-center outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2"
-              style={{ color: "var(--hero-ui-color)" }}
+              className="pointer-events-auto grid h-11 w-11 place-items-center rounded-full text-[var(--hero-ui-color)] outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:text-[var(--color-text-primary)]"
             >
               <ArrowRight size={24} strokeWidth={1.5} aria-hidden="true" />
             </button>
           </div>
 
-          <div
-            className="absolute right-4 z-40 hidden items-center md:right-10 md:flex"
-            style={{ bottom: "calc(40px + env(safe-area-inset-bottom))" }}
-          >
-            <span
-              className="min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em]"
-              style={{ color: "var(--hero-ui-color)" }}
-            >
-              {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
-            </span>
-          </div>
+          <p className="sr-only" aria-live="polite" aria-atomic="true">
+            {selectedVariant.color}: image {activeIndex + 1} of {images.length}
+          </p>
         </>
       )}
     </div>

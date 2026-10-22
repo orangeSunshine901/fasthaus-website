@@ -460,7 +460,7 @@ export default function CartDrawer() {
                   </div>
                   <div className="text-[12.5px] font-medium" style={{ color: "#8A8075" }}>
                     Free shipping ·{" "}
-                    <Link href="/legal/refunds" onClick={closeDrawer} className="hover:underline">
+                    <Link href="/legal/warranty" onClick={closeDrawer} className="hover:underline">
                       1 year warranty
                     </Link>
                   </div>

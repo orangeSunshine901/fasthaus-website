@@ -64,30 +64,33 @@ export default function PurchaseRow({
           >
             {product.name}
           </h2>
-          <div className="flex items-center gap-3">
-            {/* <div className="flex items-center gap-0.5">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Star
-                  key={index}
-                  size={16}
-                  strokeWidth={1.5}
-                  fill={index < filledStars ? "var(--color-accent-amber)" : "none"}
-                  style={{
-                    color:
-                      index < filledStars ? "var(--color-accent-amber)" : "var(--color-border)",
-                  }}
-                />
-              ))}
-            </div> */}
-            {/* <span
-              className="text-[14px] font-medium"
-              style={{ color: "var(--color-text-secondary)" }}
-            >
-              {product.rating.toFixed(1)} · {product.reviewCount} reviews
-            </span> */}
+          <div className="flex items-baseline gap-2.5">
+            <DirhamPrice amount={selectedVariant.price} size="xl" />
+            <span className="text-[13px] text-[var(--color-text-secondary)]">incl. VAT</span>
           </div>
         </div>
 
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <p className="text-[16px]">
+              <span className="text-[var(--color-text-secondary)]">Colour: </span>
+              <span className="font-semibold text-[var(--color-text-primary)]">{selectedVariant.color}</span>
+            </p>
+            <div className="space-y-1 text-[14px] text-[var(--color-text-secondary)]">
+              <p>{product.specifications.find((spec) => spec.label === "Dimensions")?.lines.join(" · ")}</p>
+              <p>Warm LED bulb included</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2.5 border-t border-[var(--color-border)] pt-4">
+            <Truck size={18} className="mt-0.5 shrink-0 text-[var(--color-text-primary)]" aria-hidden="true" />
+            <div className="space-y-1">
+              <p className="text-[15px] text-[var(--color-text-primary)]">
+                <span className="font-semibold">Arrives in 3–5 business days</span>
+              </p>
+              <p className="text-[13px] text-[var(--color-text-secondary)]">Free delivery · Made to order</p>
+            </div>
+          </div>
+        </div>
         <p
           className="max-w-[62ch] text-[16.5px] leading-[1.6]"
           style={{ color: "var(--color-text-secondary)" }}
@@ -126,12 +129,15 @@ export default function PurchaseRow({
         className="flex flex-col gap-[18px] rounded-[18px] border bg-white p-6 md:p-7 lg:col-start-2 lg:row-start-1"
         style={{ borderColor: "var(--color-border)" }}
       >
+        <p className="hidden text-[14px] font-medium md:block" aria-live="polite">
+          Colour: {selectedVariant.color}
+        </p>
         <div className="flex flex-col gap-2">
           <span
             className="text-[12.5px] font-bold uppercase tracking-[0.06em]"
             style={{ color: "var(--color-text-secondary)" }}
           >
-            Amount
+            Quantity
           </span>
           <div
             className="flex w-full items-center overflow-hidden rounded-[10px] border md:w-fit"
@@ -164,7 +170,7 @@ export default function PurchaseRow({
             </button>
           </div>
         </div>
-        <div className="flex items-baseline gap-2.5">
+        <div className="hidden items-baseline gap-2.5 md:flex">
           <DirhamPrice variant="black" amount={selectedVariant.price} size="xl" />
           <span
             className="text-[13px] font-medium"
@@ -193,7 +199,7 @@ export default function PurchaseRow({
             type="button"
             onClick={onBuyNow}
             disabled={busy}
-            className="flex h-[54px] items-center justify-center rounded-[12px] text-white transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
+            className="flex h-[54px] items-center justify-center rounded-[12px] text-[var(--color-text-primary)] transition-[filter] hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
             style={{ backgroundColor: "var(--color-accent-amber)", fontWeight: 600 }}
           >
             {busy ? (
@@ -206,8 +212,8 @@ export default function PurchaseRow({
                 <DirhamPrice
                   amount={selectedVariant.price * quantity + addOnsTotal}
                   size="sm"
-                  variant="white"
-                  className="font-bold text-white text-[16px]"
+                  variant="black"
+                  className="font-bold text-[var(--color-text-primary)] text-[16px]"
                 />
               </>
             )}
@@ -234,11 +240,15 @@ export default function PurchaseRow({
               style={{ color: "var(--color-text-secondary)" }}
             >
               {icon}
-              <span className="text-[10px] font-medium">{label}</span>
+              <span className="text-[10px] font-medium md:text-[12px]">{label}</span>
             </div>
           ))}
         </div>
 
+        <p className="text-[13px] leading-relaxed text-[var(--color-text-secondary)] md:hidden">
+          Warranty: 12 months on electrical components; 30 days on printed workmanship.{" "}
+          <Link href="/legal/warranty" className="underline underline-offset-4">Coverage details</Link>
+        </p>
         <div
           className="flex flex-col gap-2 rounded-[14px] p-5"
           style={{ backgroundColor: "var(--color-surface)" }}
@@ -257,8 +267,7 @@ export default function PurchaseRow({
           </span>
           <Link
             href="/legal/shipping"
-            className="self-start text-[14px] font-medium hover:underline"
-            style={{ color: "var(--color-accent-amber)" }}
+            className="self-start text-[14px] font-medium text-[var(--color-text-primary)] underline underline-offset-4"
           >
             Shipping details →
           </Link>
