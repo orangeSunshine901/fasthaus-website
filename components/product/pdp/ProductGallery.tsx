@@ -9,6 +9,7 @@ import { Tooltip } from "radix-ui";
 import useEmblaCarousel from "embla-carousel-react";
 import MobileGalleryImage from "./MobileGalleryImage";
 import HeroQuickBuy from "./HeroQuickBuy";
+import GalleryPreview from "./GalleryPreview";
 import type { ProductCarouselImage, ProductVariant } from "@/lib/data/products";
 
 type Props = {
@@ -277,6 +278,14 @@ export default function ProductGallery({
           ))}
         </div>
       </Tooltip.Provider>
+
+      <GalleryPreview
+        images={images}
+        name={name}
+        color={selectedVariant.color}
+        activeIndex={activeIndex}
+        onSelect={(index) => emblaApi?.scrollTo(index)}
+      />
 
       {images.length > 1 && (
         <>

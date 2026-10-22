@@ -196,11 +196,11 @@ export const PRODUCTS: Product[] = [
     specifications: [
       {
         label: "Dimensions",
-        lines: ["Ø 22 cm × H 28 cm"],
+        lines: ["Ø 18 cm × H 25 cm"],
       },
       {
         label: "Lighting",
-        lines: ["Warm LED Bulb"],
+        lines: ["Warm Dimmable LED Bulb"],
       },
       {
         label: "Light source",
@@ -219,7 +219,7 @@ export const PRODUCTS: Product[] = [
       "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
     ],
     materials: ["Plant-based PLA", "UV-printed stainless steel"],
-    dimensions: { image: "/outline/nasaq-lamp-outline.png", heightCm: 24, widthCm: 14 },
+    dimensions: { image: "/outline/nasaq-lamp-outline.png", heightCm: 25, widthCm: 18 },
     perfectFor: [
       { icon: "/workspaces-icon.svg", label: "Workspaces" },
       { icon: "/living-room-icon.svg", label: "Dining" },
@@ -349,11 +349,11 @@ export const PRODUCTS: Product[] = [
     specifications: [
       {
         label: "Dimensions",
-        lines: ["Ø 22 cm × H 28 cm"],
+        lines: ["Ø 22 cm × H 23 cm"],
       },
       {
         label: "Lighting",
-        lines: ["Warm LED Bulb"],
+        lines: ["Warm Dimmable LED Bulb"],
       },
       {
         label: "Light source",
@@ -372,7 +372,7 @@ export const PRODUCTS: Product[] = [
       "The lamp base is made from plant-based PLA and paired with a laser-cut, UV-printed stainless-steel base plate. The PETG shade offers excellent translucency and durability and can be recycled where suitable facilities are available.",
     ],
     materials: ["Plant-based PLA", "PETG", "UV-printed stainless steel"],
-    dimensions: { image: "/outline/nujaj-lamp-outline.png", heightCm: 28, widthCm: 22 },
+    dimensions: { image: "/outline/nujaj-lamp-outline.png", heightCm: 23, widthCm: 22 },
     perfectFor: [
       { icon: "/workspaces-icon.svg", label: "Workspaces" },
       { icon: "/bedside-icon.svg", label: "Bedside" },
@@ -493,11 +493,11 @@ export const PRODUCTS: Product[] = [
     specifications: [
       {
         label: "Dimensions",
-        lines: ["Ø 22 cm × H 28 cm"],
+        lines: ["Ø 21 cm × H 23 cm"],
       },
       {
         label: "Lighting",
-        lines: ["Warm LED Bulb"],
+        lines: ["Warm Dimmable LED Bulb"],
       },
       {
         label: "Light source",
@@ -516,7 +516,7 @@ export const PRODUCTS: Product[] = [
       "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
     ],
     materials: ["Plant-based PLA", "UV-printed stainless steel"],
-    dimensions: { image: "/outline/hamrah-lamp-outline.png", heightCm: 32, widthCm: 20 },
+    dimensions: { image: "/outline/hamrah-lamp-outline.png", heightCm: 23, widthCm: 21 },
     perfectFor: [
       { icon: "/living-room-icon.svg", label: "Living Room" },
       { icon: "/bedside-icon.svg", label: "Bedside" },
@@ -629,11 +629,11 @@ export const PRODUCTS: Product[] = [
     specifications: [
       {
         label: "Dimensions",
-        lines: ["Ø 22 cm × H 28 cm"],
+        lines: ["Ø 22 cm × H 23 cm"],
       },
       {
         label: "Lighting",
-        lines: ["Warm LED Bulb"],
+        lines: ["Warm Dimmable LED Bulb"],
       },
       {
         label: "Light source",
@@ -652,7 +652,7 @@ export const PRODUCTS: Product[] = [
       "The lamp body and shade are made from plant-based PLA, a more sustainable alternative to conventional plastics. A laser-cut, UV-printed stainless-steel base plate provides lasting strength, stability, and recyclability.",
     ],
     materials: ["Plant-based PLA", "UV-printed stainless steel"],
-    dimensions: { image: "/outline/kasane-lamp-outline.png", heightCm: 38, widthCm: 26 },
+    dimensions: { image: "/outline/kasane-lamp-outline.png", heightCm: 23, widthCm: 22 },
     perfectFor: [
       { icon: "/living-room-icon.svg", label: "Living Room" },
       { icon: "/bedside-icon.svg", label: "Bedside" },
