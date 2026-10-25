@@ -8,6 +8,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { GIFT_WITH_ORDER_ENABLED } from "@/lib/promotions";
 
 type OrderItem = {
   name: string;
@@ -54,6 +55,11 @@ export function ProductionOrderNotification({
           <Text style={{ color: "#575757", margin: "0 0 24px" }}>
             Payment has been confirmed. Please begin production.
           </Text>
+          {GIFT_WITH_ORDER_ENABLED && (
+            <Text style={{ color: "#141114", fontWeight: 700, margin: "0 0 24px" }}>
+              Include one complimentary gift with this lamp order.
+            </Text>
+          )}
 
           <Section
             style={{

@@ -5,6 +5,7 @@ import PageTransition from "@/components/layout/PageTransition";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import SilktideConsentManager from "@/components/consent/SilktideConsentManager";
 import CartProvider from "@/components/cart/CartProvider";
+import GiftOfferBanner from "@/components/layout/GiftOfferBanner";
 import HomeNavigationProvider from "@/components/navigation/HomeNavigationProvider";
 import GlassFilters from "@/components/ui/GlassFilters";
 import { ProductMediaProvider } from "@/components/product/ProductMediaProvider";
@@ -149,6 +150,7 @@ export default async function RootLayout({
             <AnalyticsProvider>
               <CartProvider>
                 <PageTransition>{children}</PageTransition>
+                <GiftOfferBanner />
               </CartProvider>
             </AnalyticsProvider>
           </HomeNavigationProvider>

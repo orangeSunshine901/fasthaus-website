@@ -12,6 +12,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { GIFT_WITH_ORDER_ENABLED } from "@/lib/promotions";
 
 type OrderItem = {
   name: string;
@@ -60,6 +61,11 @@ export function OrderConfirmation({ orderId, customerName, items, shippingAddres
           <Text style={{ color: "#575757", marginBottom: 24 }}>
             Hi {customerName}, thank you for your order. We&apos;re getting it ready.
           </Text>
+          {GIFT_WITH_ORDER_ENABLED && (
+            <Text style={{ color: "#141114", marginBottom: 24 }}>
+              A complimentary gift is included with your lamp order.
+            </Text>
+          )}
 
           <Text style={{ fontSize: 12, color: "#575757", marginBottom: 4 }}>ORDER NUMBER</Text>
           <Text style={{ fontSize: 16, fontWeight: 600, color: "#141114", marginBottom: 24 }}>
