@@ -11,6 +11,7 @@ export function shouldShowGiftOffer({
   pathname,
   dismissed,
   blocked,
+  qualified = false,
 }: {
   activeMs: number;
   viewedLamp: boolean;
@@ -18,9 +19,9 @@ export function shouldShowGiftOffer({
   pathname: string;
   dismissed: boolean;
   blocked: boolean;
+  qualified?: boolean;
 }) {
-  return activeMs >= GIFT_OFFER_DELAY_MS
-    && (viewedLamp || hasLampInCart)
+  return (qualified || (activeMs >= GIFT_OFFER_DELAY_MS && (viewedLamp || hasLampInCart)))
     && isGiftOfferRoute(pathname)
     && !dismissed
     && !blocked;

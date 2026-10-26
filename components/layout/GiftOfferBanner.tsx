@@ -7,14 +7,18 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useMediaProducts } from "@/components/product/ProductMediaProvider";
 import { isGiftOfferRoute, shouldShowGiftOffer } from "@/lib/gift-offer";
 import { isPageScrollLocked, PAGE_SCROLL_LOCK_EVENT } from "@/lib/page-scroll-lock";
-import { GIFT_WITH_ORDER_ENABLED } from "@/lib/promotions";
+import { CHECKOUT_DISCOUNTS_ENABLED, GIFT_WITH_ORDER_ENABLED } from "@/lib/promotions";
+import { CHECKOUT_DISCOUNT_CODE } from "@/lib/checkout/discount";
 import { useCartStore } from "@/lib/store/cart";
+import useReturningDiscount from "./useReturningDiscount";
 
 const CONFETTI_COLORS = ["var(--color-accent-amber)", "var(--color-highlight)", "#C4884B"];
+const QUALIFIED_KEY = "fasthaus_gift_offer_qualified";
 
 export default function GiftOfferBanner() {
   const pathname = usePathname();
   const reducedMotion = useReducedMotion();
+  const discountOffer = useReturningDiscount(CHECKOUT_DISCOUNTS_ENABLED);
   const products = useMediaProducts();
   const hasLampInCart = useCartStore((state) => state.items.some((item) =>
     products.some((product) => product.id === item.productId)
@@ -24,13 +28,19 @@ export default function GiftOfferBanner() {
   const activeMs = useRef(0);
   const viewedLamp = useRef(false);
   const dismissed = useRef(false);
+  const discountDismissed = useRef(false);
+  const qualified = useRef(false);
   const isProductPage = products.some((product) => pathname === `/product/${product.slug}`);
 
   useEffect(() => {
-    if (!GIFT_WITH_ORDER_ENABLED) return;
+    if (!GIFT_WITH_ORDER_ENABLED && !discountOffer) return;
     viewedLamp.current ||= isProductPage;
+    try {
+      qualified.current ||= sessionStorage.getItem(QUALIFIED_KEY) === "1";
+    } catch {
+      // The offer still works for this page load when storage is unavailable.
+    }
 
-    // shortcut: browsing intent lasts for this page session, add consented persistence if return-visit targeting is needed.
     let lastTick = performance.now();
     const update = () => {
       const now = performance.now();
@@ -41,43 +51,56 @@ export default function GiftOfferBanner() {
         || drawerOpen || isPageScrollLocked() || consentOpen;
       if (!blocked && isGiftOfferRoute(pathname)) activeMs.current += now - lastTick;
       lastTick = now;
-      setVisible(shouldShowGiftOffer({
+      const nextVisible = shouldShowGiftOffer({
         activeMs: activeMs.current,
         viewedLamp: viewedLamp.current,
         hasLampInCart,
         pathname,
-        dismissed: dismissed.current,
+        dismissed: discountOffer ? discountDismissed.current : dismissed.current,
         blocked,
-      }));
+        qualified: qualified.current || discountOffer,
+      });
+      if (nextVisible && !qualified.current) {
+        qualified.current = true;
+        try {
+          sessionStorage.setItem(QUALIFIED_KEY, "1");
+        } catch {
+          // Keep the offer available in memory when storage is unavailable.
+        }
+      }
+      setVisible(nextVisible);
     };
     const onVisibilityChange = () => {
       lastTick = performance.now();
       update();
     };
+    const frame = window.requestAnimationFrame(update);
     const interval = window.setInterval(update, 1000);
     window.addEventListener(PAGE_SCROLL_LOCK_EVENT, update);
     document.addEventListener("visibilitychange", onVisibilityChange);
     return () => {
       window.clearInterval(interval);
+      window.cancelAnimationFrame(frame);
       window.removeEventListener(PAGE_SCROLL_LOCK_EVENT, update);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [pathname, isProductPage, hasLampInCart, drawerOpen]);
+  }, [pathname, isProductPage, hasLampInCart, drawerOpen, discountOffer]);
 
   function dismiss() {
-    dismissed.current = true;
+    if (discountOffer) discountDismissed.current = true;
+    else dismissed.current = true;
     setVisible(false);
   }
 
-  if (!GIFT_WITH_ORDER_ENABLED || drawerOpen || !isGiftOfferRoute(pathname)) return null;
+  if ((!GIFT_WITH_ORDER_ENABLED && !discountOffer) || drawerOpen || !isGiftOfferRoute(pathname)) return null;
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.aside
-          aria-label="Complimentary gift offer"
+          aria-label={discountOffer ? "Returning visitor offer" : "Complimentary gift offer"}
           aria-live="polite"
-          className="fixed inset-x-4 top-[calc(112px+env(safe-area-inset-top))] z-40 flex items-start gap-3 rounded-[14px] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-[var(--color-text-primary)] md:left-auto md:right-6 md:top-[164px] md:w-[400px]"
+          className="fixed inset-x-4 top-[calc(112px+env(safe-area-inset-top))] z-40 isolate flex items-start gap-3 rounded-[14px] p-4 text-[var(--color-text-primary)] md:left-auto md:right-6 md:top-[164px] md:w-[400px]"
           style={{ transformOrigin: "top right" }}
           initial={reducedMotion ? { opacity: 0 } : { opacity: 0, x: 12, y: -8, scale: 0.98 }}
           animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
@@ -88,6 +111,10 @@ export default function GiftOfferBanner() {
           }}
           transition={{ duration: reducedMotion ? 0.12 : 0.32, ease: [0.22, 1, 0.36, 1] }}
         >
+          <span
+            aria-hidden="true"
+            className="glass-backdrop pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit] border border-white/60 bg-white/75"
+          />
           {!reducedMotion && (
             <span aria-hidden="true" className="pointer-events-none absolute inset-0">
               {[-24, -12, 0, 12, 24, 36, 48, 60, 72, 84].map((x, index) => (
@@ -109,9 +136,16 @@ export default function GiftOfferBanner() {
           )}
           <Gift size={22} strokeWidth={1.5} aria-hidden="true" className="mt-0.5 shrink-0" />
           <div className="min-w-0 flex-1">
-            <p className="text-base font-bold leading-snug">A gift with your lamp</p>
-            <p className="mt-1 text-sm leading-relaxed text-[var(--color-text-secondary)]">
-              A complimentary gift is included with your lamp order. No code or signup needed.
+            <p className="text-base font-bold leading-snug">
+              {discountOffer ? "Welcome back — enjoy 10% off" : "A gift with your lamp"}
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-[var(--color-text-primary)]/80">
+              {discountOffer ? (
+                <>
+                  Use <strong className="select-all">{CHECKOUT_DISCOUNT_CODE}</strong> at checkout for 10% off your order.
+                  {GIFT_WITH_ORDER_ENABLED && " Your complimentary gift is included too."}
+                </>
+              ) : "A complimentary gift is included with your lamp order. No code or signup needed."}
             </p>
           </div>
           <motion.button

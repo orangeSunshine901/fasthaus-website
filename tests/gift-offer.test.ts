@@ -28,3 +28,11 @@ test("only shows on shopping routes and respects dismissal and overlays", () => 
   assert.equal(shouldShowGiftOffer({ ...engaged, dismissed: true }), false);
   assert.equal(shouldShowGiftOffer({ ...engaged, blocked: true }), false);
 });
+
+test("a previously qualified visitor sees the offer immediately after refresh", () => {
+  const refreshed = { ...engaged, activeMs: 0, viewedLamp: false, qualified: true };
+  assert.equal(shouldShowGiftOffer(refreshed), true);
+  assert.equal(shouldShowGiftOffer({ ...refreshed, dismissed: true }), false);
+  assert.equal(shouldShowGiftOffer({ ...refreshed, blocked: true }), false);
+  assert.equal(shouldShowGiftOffer({ ...refreshed, pathname: "/checkout" }), false);
+});
