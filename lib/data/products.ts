@@ -200,15 +200,25 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Lighting",
-        lines: ["Warm Dimmable LED Bulb"],
+        lines: ["Warm Dimmable LED Bulb Included"],
       },
       {
         label: "Light source",
-        lines: ["E27 Solhetta Bulb 470lm 4W", "Bulb Included."],
+        lines: ["E27 Solhetta Bulb 470lm 4W"],
       },
       {
         label: "Power",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
+        lines: [
+          "Bulb fitting: E27",
+          "Control: Inline dimmer",
+          "Input voltage: 220–240V AC",
+          "Maximum bulb wattage: 8W LED (dimmable only)",
+          "Cord length: 1.8m / 71 in",
+        ],
+      },
+      {
+        label: "Plug",
+        lines: ["Type G (UK-style 3-pin)"],
       },
       {
         label: "Material",
@@ -353,15 +363,25 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Lighting",
-        lines: ["Warm Dimmable LED Bulb"],
+        lines: ["Warm Dimmable LED Bulb Included"],
       },
       {
         label: "Light source",
-        lines: ["E27 Solhetta Bulb 470lm 4W", "Bulb Included."],
+        lines: ["E27 Solhetta Bulb 470lm 4W"],
       },
       {
         label: "Power",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
+        lines: [
+          "Bulb fitting: E27",
+          "Control: Inline dimmer",
+          "Input voltage: 220–240V AC",
+          "Maximum bulb wattage: 8W LED (dimmable only)",
+          "Cord length: 1.8m / 71 in",
+        ],
+      },
+      {
+        label: "Plug",
+        lines: ["Type G (UK-style 3-pin)"],
       },
       {
         label: "Material",
@@ -497,15 +517,25 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Lighting",
-        lines: ["Warm Dimmable LED Bulb"],
+        lines: ["Warm Dimmable LED Bulb Included"],
       },
       {
         label: "Light source",
-        lines: ["E27 Solhetta Bulb 470lm 4W", "Bulb Included."],
+        lines: ["E27 Solhetta Bulb 470lm 4W"],
       },
       {
         label: "Power",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
+        lines: [
+          "Bulb fitting: E27",
+          "Control: Inline dimmer",
+          "Input voltage: 220–240V AC",
+          "Maximum bulb wattage: 8W LED (dimmable only)",
+          "Cord length: 1.8m / 71 in",
+        ],
+      },
+      {
+        label: "Plug",
+        lines: ["Type G (UK-style 3-pin)"],
       },
       {
         label: "Material",
@@ -633,15 +663,25 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Lighting",
-        lines: ["Warm Dimmable LED Bulb"],
+        lines: ["Warm Dimmable LED Bulb Included"],
       },
       {
         label: "Light source",
-        lines: ["E27 Solhetta Bulb 470lm 4W", "Bulb Included."],
+        lines: ["E27 Solhetta Bulb 470lm 4W"],
       },
       {
         label: "Power",
-        lines: ["E27 Switch Voltage (input) 220-240V", "Max Watt 4W Cord Length 1.8m / 70 in"],
+        lines: [
+          "Bulb fitting: E27",
+          "Control: Inline dimmer",
+          "Input voltage: 220–240V AC",
+          "Maximum bulb wattage: 8W LED (dimmable only)",
+          "Cord length: 1.8m / 71 in",
+        ],
+      },
+      {
+        label: "Plug",
+        lines: ["Type G (UK-style 3-pin)"],
       },
       {
         label: "Material",

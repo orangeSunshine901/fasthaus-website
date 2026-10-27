@@ -244,7 +244,7 @@ export default function ProductGallery({
         <div
           role="group"
           aria-label="Choose lamp color"
-          className="glass-backdrop absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/60 px-3.5 py-2.5 shadow-sm md:bottom-auto md:left-8 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:flex-col md:px-2.5 md:py-3.5"
+          className="glass-backdrop absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/60 px-2 py-1.5 shadow-sm md:bottom-auto md:left-8 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:flex-col md:gap-2 md:px-1.5 md:py-3"
         >
           {variants.map((variant) => (
             <Tooltip.Root key={variant.id}>
@@ -252,17 +252,22 @@ export default function ProductGallery({
                 <button
                   type="button"
                   onClick={() => onVariantChange(variant)}
-                  className="h-11 w-11 rounded-full border-2 border-white transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-2 md:h-8 md:w-8"
-                  style={{
-                    backgroundColor: variant.colorHex,
-                    boxShadow:
-                      selectedVariant.id === variant.id
-                        ? "0 0 0 2px var(--color-accent-amber)"
-                        : "0 0 0 1px var(--color-border)",
-                  }}
+                  className="grid h-11 w-11 place-items-center rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-2 md:h-8 md:w-8"
                   aria-label={`View ${name} in ${variant.color}`}
                   aria-pressed={selectedVariant.id === variant.id}
-                />
+                >
+                  <span
+                    aria-hidden="true"
+                    className="h-9 w-9 rounded-full border-2 border-white md:h-7 md:w-7"
+                    style={{
+                      backgroundColor: variant.colorHex,
+                      boxShadow:
+                        selectedVariant.id === variant.id
+                          ? "0 0 0 2px var(--color-accent-amber)"
+                          : "0 0 0 1px var(--color-border)",
+                    }}
+                  />
+                </button>
               </Tooltip.Trigger>
               <Tooltip.Portal>
                 <Tooltip.Content
@@ -289,25 +294,25 @@ export default function ProductGallery({
 
       {images.length > 1 && (
         <>
-          <div className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 items-center justify-between px-[6px] md:inset-x-auto md:right-10 md:top-auto md:bottom-10 md:translate-y-0 md:gap-1 md:rounded-full md:bg-white/95 md:px-1">
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 items-center justify-between px-[6px] md:inset-x-auto md:right-10 md:top-auto md:bottom-10 md:translate-y-0 md:rounded-full md:bg-white/95 md:px-1">
             <button
               type="button"
               onClick={scrollPrev}
               aria-label="Previous image"
-              className="pointer-events-auto grid h-11 w-11 place-items-center rounded-full text-[var(--hero-ui-color)] outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:text-[var(--color-text-primary)]"
+              className="pointer-events-auto grid h-11 w-11 place-items-center rounded-full text-[var(--hero-ui-color)] outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:h-10 md:w-10 md:text-[var(--color-text-primary)] pointer-coarse:min-h-11 pointer-coarse:min-w-11"
             >
-              <ArrowLeft size={24} strokeWidth={1.5} aria-hidden="true" />
+              <ArrowLeft size={20} strokeWidth={1.5} aria-hidden="true" />
             </button>
-            <span className="hidden min-w-[58px] text-center text-xs font-medium tabular-nums tracking-[0.08em] text-[var(--color-text-primary)] md:block" aria-hidden="true">
+            <span className="hidden min-w-12 text-center text-xs font-medium tabular-nums tracking-[0.08em] text-[var(--color-text-primary)] md:block" aria-hidden="true">
               {formatCounter(activeIndex + 1)} / {formatCounter(images.length)}
             </span>
             <button
               type="button"
               onClick={scrollNext}
               aria-label="Next image"
-              className="pointer-events-auto grid h-11 w-11 place-items-center rounded-full text-[var(--hero-ui-color)] outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:text-[var(--color-text-primary)]"
+              className="pointer-events-auto grid h-11 w-11 place-items-center rounded-full text-[var(--hero-ui-color)] outline-none transition-opacity hover:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 md:h-10 md:w-10 md:text-[var(--color-text-primary)] pointer-coarse:min-h-11 pointer-coarse:min-w-11"
             >
-              <ArrowRight size={24} strokeWidth={1.5} aria-hidden="true" />
+              <ArrowRight size={20} strokeWidth={1.5} aria-hidden="true" />
             </button>
           </div>
 

@@ -30,13 +30,18 @@ export default function FeaturedProductCard({
 
   return (
     <article
-      className={`group relative flex h-full flex-col rounded-[14px] border border-transparent transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-[#575757] ${
+      className={`group relative isolate flex h-full cursor-pointer flex-col rounded-[14px] border border-transparent transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-[#575757] ${
         compactMobile ? "gap-2 p-3 md:gap-3 md:p-4" : "gap-2 p-4 pt-0"
       }`}
       style={{
         backgroundColor: "#000104",
       }}
     >
+      <Link
+        href={`/product/${product.slug}?variant=${encodeURIComponent(selectedVariant.id)}`}
+        aria-label={`View ${product.name} in ${selectedVariant.color}`}
+        className="absolute inset-0 z-10 cursor-pointer rounded-[inherit] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+      />
       <div
         className={`media-rounded relative ${
           compactMobile ? "w-full" : displayedImages ? "-mx-4 w-[calc(100%+2rem)]" : "w-full"
@@ -99,8 +104,7 @@ export default function FeaturedProductCard({
         }`}
         style={{ perspective: "1000px" }}
       >
-        <Link
-          href={`/product/${product.slug}?variant=${encodeURIComponent(selectedVariant.id)}`}
+        <div
           className="glass-surface relative z-10 inline-flex -translate-y-4 items-center gap-2 overflow-hidden rounded-full px-4 py-2"
         >
           <span className="text-sm font-medium text-white font-[var(--font-satoshi)] leading-5">
@@ -116,7 +120,7 @@ export default function FeaturedProductCard({
               style={{ aspectRatio: "1 / 1" }}
             />
           </div>
-        </Link>
+        </div>
       </div>
 
       <div className="flex items-start justify-between gap-4">
@@ -152,7 +156,7 @@ export default function FeaturedProductCard({
                   type="button"
                   onPointerDown={compactMobile ? (event) => event.stopPropagation() : undefined}
                   onClick={() => setSelectedVariant(variant)}
-                  className={`relative z-10 h-[16px] w-[16px] rounded-full border  transition-transform duration-200 ${
+                  className={`relative z-20 h-[16px] w-[16px] cursor-pointer rounded-full border  transition-transform duration-200 ${
                     selectedVariant.id === variant.id ? "" : "hover:scale-[1.24]"
                   }`}
                   style={{
