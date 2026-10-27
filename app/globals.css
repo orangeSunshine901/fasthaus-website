@@ -337,6 +337,63 @@ input[type="radio"] {
   transition-delay: 0s;
 }
 
+.home-scroll-cue {
+  top: min(76%, calc(100svh - 144px));
+  text-shadow: 0 1px 4px rgb(0 0 0 / 80%);
+  transition: opacity 200ms ease, visibility 0s linear 200ms;
+  animation: home-scroll-cue-appear 200ms ease-out 7s both;
+}
+
+.home-scroll-cue svg {
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 90%));
+}
+
+[data-home-reveal="revealed"] .home-scroll-cue {
+  animation: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.home-scroll-cue-gesture {
+  --cue-travel: 8px;
+  animation: home-scroll-gesture 1.4s cubic-bezier(0.16, 1, 0.3, 1) 7s,
+    home-scroll-gesture 1.4s cubic-bezier(0.16, 1, 0.3, 1) 12s;
+}
+
+.home-scroll-cue-swipe {
+  --cue-travel: -8px;
+}
+
+[data-home-reveal="revealed"] .home-scroll-cue-gesture {
+  animation: none;
+}
+
+@keyframes home-scroll-cue-appear {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes home-scroll-gesture {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  65% {
+    opacity: 0.35;
+    transform: translateY(var(--cue-travel));
+  }
+  66% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
 /* Keep below-hero content out of the initial frame and first-scroll hero reveal. */
 [data-home-content="pending"] [data-home-deferred-section] {
   visibility: hidden;
@@ -463,6 +520,10 @@ html.lenis.home-reveal-scroll-locked.lenis-stopped {
   }
 
   img {
+    animation: none;
+  }
+
+  .home-scroll-cue-gesture {
     animation: none;
   }
 

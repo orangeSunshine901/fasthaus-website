@@ -5,6 +5,7 @@ import FeaturedProductsCarousel from "@/components/product/FeaturedProductsCarou
 import { getMediaProducts } from "@/lib/cms/products";
 import { NEWSLETTER_ENABLED } from "@/lib/promotions";
 import NewsletterForm from "@/components/ui/NewsletterForm";
+import HomeScrollCue from "@/components/home/HomeScrollCue";
 import LocomotiveScrollProvider from "@/components/scroll/LocomotiveScrollProvider";
 import JsonLd from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo/metadata";
@@ -103,6 +104,7 @@ export default async function HomePage() {
             <source src="/home-hero-mobile.webm" type="video/webm" media="(max-width: 767px)" />
             <source src="/home-hero.webm" type="video/webm" />
           </video>
+          <HomeScrollCue />
           {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-neutral-100/10 to-transparent" /> */}
           {/* <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,1)_0%,rgba(0,0,0,0.55)_1%,rgba(0,0,0,0.18)_5%,rgba(0,0,0,0.10)_7%)]" /> */}
 
