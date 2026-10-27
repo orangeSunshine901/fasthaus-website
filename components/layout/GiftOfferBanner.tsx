@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Gift, X } from "lucide-react";
+import { BadgePercent, Gift, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useMediaProducts } from "@/components/product/ProductMediaProvider";
 import { isGiftOfferRoute, shouldShowGiftOffer } from "@/lib/gift-offer";
@@ -19,6 +19,7 @@ export default function GiftOfferBanner() {
   const pathname = usePathname();
   const reducedMotion = useReducedMotion();
   const discountOffer = useReturningDiscount(CHECKOUT_DISCOUNTS_ENABLED);
+  const OfferIcon = discountOffer ? BadgePercent : Gift;
   const products = useMediaProducts();
   const hasLampInCart = useCartStore((state) => state.items.some((item) =>
     products.some((product) => product.id === item.productId)
@@ -134,7 +135,7 @@ export default function GiftOfferBanner() {
               ))}
             </span>
           )}
-          <Gift size={22} strokeWidth={1.5} aria-hidden="true" className="mt-0.5 shrink-0" />
+          <OfferIcon size={22} strokeWidth={1.5} aria-hidden="true" className="mt-0.5 shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-base font-bold leading-snug">
               {discountOffer ? "Welcome back — enjoy 10% off" : "A gift with your lamp"}
@@ -143,7 +144,6 @@ export default function GiftOfferBanner() {
               {discountOffer ? (
                 <>
                   Use <strong className="select-all">{CHECKOUT_DISCOUNT_CODE}</strong> at checkout for 10% off your order.
-                  {GIFT_WITH_ORDER_ENABLED && " Your complimentary gift is included too."}
                 </>
               ) : "A complimentary gift is included with your lamp order. No code or signup needed."}
             </p>
@@ -151,7 +151,7 @@ export default function GiftOfferBanner() {
           <motion.button
             type="button"
             onClick={dismiss}
-            aria-label="Dismiss gift offer"
+            aria-label={discountOffer ? "Dismiss discount offer" : "Dismiss gift offer"}
             whileHover={reducedMotion ? undefined : { scale: 1.06 }}
             whileTap={reducedMotion ? undefined : { scale: 0.94 }}
             transition={{ duration: 0.12 }}
