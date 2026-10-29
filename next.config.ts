@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
+      { source: "/game-test", destination: "/game-test/index.html" },
       {
         source: "/site-preferences.js",
         destination: "/silktide-consent-manager.js",
