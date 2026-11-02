@@ -101,7 +101,7 @@ export default function GiftOfferBanner() {
         <motion.aside
           aria-label={discountOffer ? "Returning visitor offer" : "Complimentary gift offer"}
           aria-live="polite"
-          className="fixed right-[max(12px,env(safe-area-inset-right))] top-[calc(112px+env(safe-area-inset-top))] z-40 isolate flex w-[calc(100%_-_24px)] max-w-[400px] items-start gap-2 rounded-[14px] p-3 text-[var(--color-text-primary)] md:right-6 md:top-[164px] md:w-[400px] md:gap-3 md:p-4"
+          className={`fixed right-[max(12px,env(safe-area-inset-right))] top-[calc(112px+env(safe-area-inset-top))] z-40 isolate flex w-[calc(100%_-_24px)] max-w-[400px] items-start gap-2 rounded-[14px] p-3 md:right-6 md:top-[164px] md:w-[400px] md:gap-3 md:p-4 ${discountOffer ? "text-[var(--color-text-primary)]" : "text-white"}`}
           style={{ transformOrigin: "top right" }}
           initial={reducedMotion ? { opacity: 0 } : { opacity: 0, x: 12, y: -8, scale: 0.98 }}
           animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
@@ -114,7 +114,7 @@ export default function GiftOfferBanner() {
         >
           <span
             aria-hidden="true"
-            className="glass-backdrop pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit] border border-white/60 bg-white/75"
+            className={`glass-backdrop pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit] border ${discountOffer ? "border-white/60 bg-white/75" : "border-white/40 bg-[#a04400]/[0.88]"}`}
           />
           {!reducedMotion && (
             <span aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -145,7 +145,7 @@ export default function GiftOfferBanner() {
                 {discountOffer ? "Welcome back — enjoy 10% off" : "A gift with your lamp"}
               </span>
             </p>
-            <p className="mt-0.5 text-sm leading-relaxed text-[var(--color-text-primary)]/80 md:mt-1">
+            <p className={`mt-0.5 text-sm leading-relaxed md:mt-1 ${discountOffer ? "text-[var(--color-text-primary)]/80" : "text-white"}`}>
               <span className="md:hidden">
                 {discountOffer ? (
                   <>Use <strong className="select-all">{CHECKOUT_DISCOUNT_CODE}</strong> at checkout.</>
@@ -165,7 +165,7 @@ export default function GiftOfferBanner() {
             whileHover={reducedMotion ? undefined : { scale: 1.06 }}
             whileTap={reducedMotion ? undefined : { scale: 0.94 }}
             transition={{ duration: 0.12 }}
-            className="absolute right-0 top-0 flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-text-primary)] md:static md:-mr-2 md:-mt-2"
+            className={`absolute right-0 top-0 flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors focus-visible:outline-2 md:static md:-mr-2 md:-mt-2 ${discountOffer ? "hover:bg-[var(--color-surface-muted)] focus-visible:outline-offset-2 focus-visible:outline-[var(--color-text-primary)]" : "hover:bg-white/15 focus-visible:-outline-offset-4! focus-visible:outline-white!"}`}
           >
             <X size={18} aria-hidden="true" />
           </motion.button>

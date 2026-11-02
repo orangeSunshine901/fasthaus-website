@@ -63,6 +63,7 @@ export default function FeaturedProductCard({
             <Image
               src={displayedImages.off}
               alt={product.name}
+              loading="eager"
               width={1000}
               height={1000}
               className={`absolute inset-0 h-full w-full md:scale-[1] object-cover transition-opacity duration-500 ${

@@ -165,7 +165,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         id: "3-white",
-        color: "White",
+        color: "Marshmallow White",
         colorHex: "#F5F5F5",
         sku: "STL-WHT",
         price: 299,
