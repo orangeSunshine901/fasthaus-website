@@ -109,3 +109,12 @@ html[lang="ar"] .start-content>span{font-size:13px;line-height:1.8}
   .game-footer{align-items:flex-start;flex-wrap:wrap}.game-footer>div{margin-inline-start:auto}
 }
 @media(prefers-reduced-motion:no-preference){.primary-button,.hint-button,.language-switch,.copy-button{transition:background-color 160ms ease-out,border-color 160ms ease-out,box-shadow 160ms ease-out}}
+
+.language-choice{max-width:40ch}
+.language-choice #language-title{font-family:Pixelify,Satoshi,sans-serif;font-size:29px;line-height:1.35;letter-spacing:0}
+#language-choice .language-question-ar{font-family:GameArabic,sans-serif;font-size:21px;line-height:1.9;color:var(--ink)}
+.language-options{display:flex;justify-content:center;gap:16px;width:100%;direction:ltr}
+.language-options .primary-button{flex:1;min-width:145px;justify-content:center;font-size:17px;padding:15px 20px}
+.language-options [lang="ar"]{font-family:GameArabic,sans-serif}
+.portrait img{clip-path:inset(0 0 5% 0)}
+@media(max-width:480px){.language-choice #language-title{font-size:25px}#language-choice .language-question-ar{font-size:19px}.language-options{flex-direction:column;gap:13px}.language-options .primary-button{min-width:0;width:100%}}

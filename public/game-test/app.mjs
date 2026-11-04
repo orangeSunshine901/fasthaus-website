@@ -9,6 +9,7 @@ const ctx = scene.getContext('2d');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const mobileQuery = window.matchMedia('(max-width: 480px)');
 let state = createGame();
+let choosingLanguage = true;
 let language = 'en';
 try {
   const requested = new URLSearchParams(location.search).get('lang');
@@ -243,6 +244,10 @@ function update(){
   const copy=TRANSLATIONS[language];
   const lamp=copy.lamps.find(lamp=>lamp.id===state.rounds[state.round]), welcome=state.phase==='start',intro=state.phase==='intro',guess=state.phase==='guess',reveal=state.phase==='reveal',complete=state.phase==='complete';
   $('start-overlay').hidden=!welcome;$('game-content').inert=welcome;
+  $('language-choice').hidden=!welcome||!choosingLanguage;
+  $('start-content').hidden=!welcome||choosingLanguage;
+  $('start-overlay').setAttribute('aria-labelledby',choosingLanguage?'language-title':'start-title');
+  $('language-switch').hidden=welcome&&choosingLanguage;
   $('progress-count').textContent=t('progress',{found:state.found.length,total:ROUND_COUNT});
   document.querySelector('.progress').setAttribute('aria-label',t('progressLabel',{found:state.found.length,total:ROUND_COUNT}));
   $('progress-lights').replaceChildren(...state.rounds.map(id=>{const pip=document.createElement('span');pip.className=`progress-pip${state.found.includes(id)?' lit':''}`;return pip;}));
@@ -311,17 +316,27 @@ function applyLanguage(){
   updateCopyStatus();updateSound();update();
 }
 
-$('language-switch').addEventListener('click',()=>{
-  language=language==='en'?'ar':'en';
+function setLanguage(nextLanguage){
+  language=nextLanguage;
   try{localStorage.setItem('fasthaus:game-language',language);}catch{}
   try{
     const url=new URL(location.href);url.searchParams.set('lang',language);
     history.replaceState(null,'',url);
   }catch{}
   applyLanguage();
-});
+}
+
+$('language-switch').addEventListener('click',()=>setLanguage(language==='en'?'ar':'en'));
+for(const [id,locale] of [['choose-english','en'],['choose-arabic','ar']]){
+  $(id).addEventListener('click',()=>{
+    choosingLanguage=false;
+    setLanguage(locale);
+    $('enter-studio').focus({preventScroll:true});
+  });
+}
 
 $('enter-studio').addEventListener('click',()=>{
+  if(choosingLanguage)return;
   state=enterStudio(state);update();
   $('main-action').focus({preventScroll:true});
   $('dialogue').scrollIntoView({block:'nearest',behavior:reducedMotion.matches?'instant':'smooth'});
@@ -346,7 +361,7 @@ $('skip-speech').addEventListener('click',event=>{
   if(state.phase==='guess')targets.find(button=>!button.disabled)?.focus({preventScroll:true});
   else $('main-action').focus({preventScroll:true});
 });
-function restart(){state=createGame();glowStart=null;lastFound=null;hovered=null;copyState='idle';soundUnavailable=false;update();updateCopyStatus();requestDraw(true);$('enter-studio').focus();emit('restart');}
+function restart(){state=createGame();choosingLanguage=true;glowStart=null;lastFound=null;hovered=null;copyState='idle';soundUnavailable=false;update();updateCopyStatus();requestDraw(true);$(language==='ar'?'choose-arabic':'choose-english').focus();emit('restart');}
 $('restart').addEventListener('click',restart);$('replay').addEventListener('click',restart);
 $('sound').addEventListener('click',()=>{soundOn=!soundOn;updateSound();if(soundOn)chime();});
 $('copy-code').addEventListener('click',async()=>{

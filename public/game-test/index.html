@@ -16,7 +16,7 @@
   <header class="site-header">
     <a href="https://www.fasthaus.ae" class="wordmark" aria-label="Fasthaus home" data-i18n-aria="home"><img src="./assets/logo-ivory.svg" width="126" height="32" alt="Fasthaus"></a>
     <div class="header-actions">
-    <button type="button" id="language-switch" class="language-switch" lang="ar" dir="rtl" aria-label="Switch to Arabic" aria-pressed="false">العربية</button>
+    <button type="button" id="language-switch" class="language-switch" lang="ar" dir="rtl" aria-label="Switch to Arabic" aria-pressed="false" hidden>العربية</button>
     <a class="studio-link" href="https://www.fasthaus.ae/collection"><span data-i18n="back">Back to the collection</span> <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
     </div>
   </header>
@@ -57,8 +57,16 @@
       </section>
       <div class="game-footer"><span id="play-tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7V3Zm0 5h10M12 3v5"/></svg> Choose your reply to continue</span><div><button id="sound" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 4-5 4H3v8h3l5 4V4Zm5 5 5 6m0-6-5 6"/></svg><span>Sound off</span></button><button id="restart" hidden data-i18n="restart">Start over</button></div></div>
       </div>
-      <section class="start-overlay" id="start-overlay" aria-labelledby="start-title">
-        <div class="start-content">
+      <section class="start-overlay" id="start-overlay" aria-labelledby="language-title">
+        <div class="start-content language-choice" id="language-choice">
+          <h2 id="language-title" lang="en" dir="ltr">Which language would you like to play in?</h2>
+          <p class="language-question-ar" lang="ar" dir="rtl">بأيّ لغة تودّ اللعب؟</p>
+          <div class="language-options" role="group" aria-labelledby="language-title">
+            <button type="button" id="choose-english" class="primary-button" lang="en" dir="ltr">English</button>
+            <button type="button" id="choose-arabic" class="primary-button" lang="ar" dir="rtl">العربية</button>
+          </div>
+        </div>
+        <div class="start-content" id="start-content" hidden>
           <h2 id="start-title" data-i18n="startTitle">Ready to find the light?</h2>
           <p data-i18n="startDescription">Four lamps. Three stories to find.<br>A little curiosity goes a long way.</p>
           <button type="button" class="primary-button" id="enter-studio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7V5Z"/></svg> <span data-i18n="start">Start game</span></button>
