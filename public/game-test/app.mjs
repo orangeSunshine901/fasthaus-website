@@ -296,6 +296,7 @@ function applyLanguage(){
   document.querySelectorAll('[data-i18n]').forEach(element=>{element.textContent=t(element.dataset.i18n);});
   document.querySelectorAll('[data-i18n-aria]').forEach(element=>{element.setAttribute('aria-label',t(element.dataset.i18nAria));});
   $('portrait').alt=t('portrait');
+  $('portrait').src=language==='ar'?'./assets/keeper-portrait.png':'./assets/keeper-portrait-en.png';
   $('language-switch').textContent=t('switchText');
   $('language-switch').setAttribute('aria-label',t('switchLabel'));
   $('language-switch').setAttribute('aria-pressed',String(language==='ar'));
