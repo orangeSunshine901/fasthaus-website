@@ -53,3 +53,59 @@
 
 .replay-button.primary-button{padding:12px 17px;min-height:46px;background:#efbc75;color:#252a28;border:1px solid #edbd78;font-weight:600}
 .replay-button.primary-button:hover{background:#f6c990;text-decoration:none}
+
+@font-face{font-family:GameArabic;src:url('./assets/noto-sans-arabic.ttf') format('truetype');font-weight:100 900;font-display:swap}
+.game:has(.start-overlay:not([hidden])){min-height:430px}
+.header-actions{display:flex;align-items:center;justify-content:flex-end;gap:22px;min-width:0}
+.language-switch{background:#293238;border:1px solid #c2a46c;color:#f5d698;min-height:44px;padding:9px 16px;font-family:GameArabic,Satoshi,sans-serif;font-size:14px;line-height:1.5;white-space:nowrap}
+.primary-button,.replay-button.primary-button{background:#f4c35f;border-color:#ffe2a0;color:#292317;box-shadow:inset 0 1px 0 #fff5cf,0 3px 10px #0003;font-weight:700;white-space:normal;text-align:start}
+.primary-button>[data-i18n]{font-size:inherit;line-height:inherit}
+.primary-button:not(:disabled):is(:hover,:focus-visible),.replay-button.primary-button:is(:hover,:focus-visible){background:#ffda82;border-color:#ffedbc;box-shadow:inset 0 1px 0 #fff5cf,0 4px 16px #e5ab4166}
+.hint-button{background:#e7d9b5;border-color:#a17c39;font-weight:600}
+.hint-button>[data-i18n]{font-size:inherit;color:inherit}
+.hint-button:not(:disabled):is(:hover,:focus-visible),.copy-button:is(:hover,:focus-visible){background:#f6dea2;border-color:#b28426;box-shadow:0 3px 12px #d29d3b55}
+.hint-button:disabled{background:#e5e3d7;color:#707668;border-color:#b4baa9;box-shadow:none}
+.copy-button{min-height:44px;padding:10px 14px}
+.language-switch:is(:hover,:focus-visible){background:#493c28;border-color:#ffda82;color:#fff0c8;box-shadow:0 3px 14px #f0b96b44}
+.lamp-target:not(:disabled):is(:hover,:focus-visible){border:2px solid #ffe2a0;background:#f0b96b14;box-shadow:inset 0 0 16px #f0b96b26,0 0 18px #f0b96b33}
+.primary-button:not(:disabled):active,.language-switch:active,.hint-button:not(:disabled):active{box-shadow:inset 0 2px 5px #0003}
+.primary-button,.hint-button,.language-switch,.copy-button{overflow-wrap:anywhere}
+.dialogue,.dialogue.is-intro,.room{direction:ltr}
+.speech-skip{margin-left:0;margin-inline-start:auto}
+html[lang="ar"]{font-family:GameArabic,Satoshi,sans-serif}
+html[lang="ar"] h1{font-size:44px;line-height:1.5;letter-spacing:0}
+html[lang="ar"] .title-row p{line-height:1.9;font-size:15px}
+html[lang="ar"] .speech-panel{direction:rtl;text-align:start;grid-template-columns:minmax(0,1fr) minmax(150px,174px)}
+html[lang="ar"] .dialogue.is-intro .speech-panel{grid-template-columns:minmax(0,1fr)}
+html[lang="ar"] .dialogue h2,html[lang="ar"] .dialogue #dialogue-copy,html[lang="ar"] .start-content h2{font-family:GameArabic,Satoshi,sans-serif;letter-spacing:0}
+html[lang="ar"] .dialogue h2{font-size:23px;line-height:1.9;font-weight:600}
+html[lang="ar"] .dialogue #dialogue-copy{font-size:18px;line-height:1.95;font-weight:400}
+html[lang="ar"] .start-content h2{font-size:29px;line-height:1.7}
+html[lang="ar"] .start-content p{font-size:16px;line-height:2}
+html[lang="ar"] :is(.game-toolbar,.room-instruction,.coupon-label,.code-row){letter-spacing:0}
+html[lang="ar"] :is(.speaker-row,.speaker-row #round-label,.speech-skip,.action-note,.player-label,.room-instruction,.game-toolbar,.game-footer,.game-footer button,.page-footer){font-size:13px;line-height:1.8}
+html[lang="ar"] .dialogue :is(.primary-button,.hint-button),html[lang="ar"] .studio-link{font-size:14px;line-height:1.8}
+html[lang="ar"] .dialogue.is-intro .primary-button{text-align:start}
+html[lang="ar"] .room-instruction{left:auto;right:20px;direction:rtl;text-align:right;max-width:calc(100% - 40px)}
+html[lang="ar"] .dialogue .hint,html[lang="ar"] .dialogue .feedback{font-size:15px;line-height:1.9}
+html[lang="ar"] .reward h2{letter-spacing:0;line-height:1.7}
+html[lang="ar"] .reward p{font-size:15px;line-height:1.9}
+html[lang="ar"] .discount-value{display:flex;align-items:baseline;gap:8px;letter-spacing:0}
+html[lang="ar"] .discount-value small{order:-1}
+html[dir="rtl"] :is(.studio-link,.primary-button) svg{transform:scaleX(-1)}
+html[dir="rtl"] #enter-studio svg{transform:none}
+html[lang="ar"] .start-content>span{font-size:13px;line-height:1.8}
+@media(max-width:700px){
+  .header-actions{gap:12px;flex-wrap:wrap}.language-switch{padding:8px 12px}.site-header{gap:18px}
+  html[lang="ar"] h1{font-size:31px}
+  html[lang="ar"] .title-row{flex-wrap:wrap}
+  html[lang="ar"] .title-row p{max-width:42ch;font-size:14px}
+  html[lang="ar"] .speech-panel{grid-template-columns:minmax(0,1fr);padding:20px 16px}
+  html[lang="ar"] .dialogue h2{font-size:20px;line-height:1.85}
+  html[lang="ar"] .dialogue #dialogue-copy{font-size:17px;line-height:1.95}
+  html[lang="ar"] .start-content h2{font-size:25px}
+  html[lang="ar"] .start-content p{font-size:15px;line-height:1.9}
+  html[lang="ar"] .room-instruction{right:13px;max-width:calc(100% - 26px);font-size:11px}
+  .game-footer{align-items:flex-start;flex-wrap:wrap}.game-footer>div{margin-inline-start:auto}
+}
+@media(prefers-reduced-motion:no-preference){.primary-button,.hint-button,.language-switch,.copy-button{transition:background-color 160ms ease-out,border-color 160ms ease-out,box-shadow 160ms ease-out}}

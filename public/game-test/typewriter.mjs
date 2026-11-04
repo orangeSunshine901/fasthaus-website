@@ -1,3 +1,14 @@
+export function splitGraphemes(text) {
+  if (typeof Intl.Segmenter === 'function') {
+    return Array.from(new Intl.Segmenter(undefined, {granularity:'grapheme'}).segment(text), part => part.segment);
+  }
+  return Array.from(text).reduce((parts, character) => {
+    if (/\p{Mark}/u.test(character) && parts.length) parts[parts.length - 1] += character;
+    else parts.push(character);
+    return parts;
+  }, []);
+}
+
 export function createTypewriter(render, { schedule = setTimeout, cancel = clearTimeout } = {}) {
   let text = null, characters = [], count = 0, timer = null, generation = 0;
 
@@ -15,7 +26,7 @@ export function createTypewriter(render, { schedule = setTimeout, cancel = clear
     if (timer !== null) cancel(timer);
     timer = null;
     text = nextText;
-    characters = Array.from(text);
+    characters = splitGraphemes(text);
     count = 0;
     if (instant || !characters.length) { finish(); return; }
     const currentGeneration = generation;
@@ -25,7 +36,7 @@ export function createTypewriter(render, { schedule = setTimeout, cancel = clear
       count++;
       const complete = count === characters.length;
       render(count, complete);
-      if (!complete) timer = schedule(tick, /[.!?]/.test(characters[count - 1]) ? 140 : 24);
+      if (!complete) timer = schedule(tick, /[.!?؟،]/.test(characters[count - 1]) ? 140 : 24);
     }
     tick();
   }

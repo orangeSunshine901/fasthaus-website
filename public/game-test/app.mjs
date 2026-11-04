@@ -1,5 +1,6 @@
-import { LAMPS, ROUND_COUNT, INTRO_DIALOGUE, createGame, enterStudio, advanceIntro, chooseLamp, revealHint, advanceGame } from './game.mjs';
-import { createTypewriter } from './typewriter.mjs';
+import { LAMPS, ROUND_COUNT, createGame, enterStudio, advanceIntro, chooseLamp, revealHint, advanceGame } from './game.mjs';
+import { createTypewriter, splitGraphemes } from './typewriter.mjs';
+import { TRANSLATIONS, translate } from './i18n.mjs';
 
 const $ = id => document.getElementById(id);
 const arrowMark='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>';
@@ -8,6 +9,14 @@ const ctx = scene.getContext('2d');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const mobileQuery = window.matchMedia('(max-width: 480px)');
 let state = createGame();
+let language = 'en';
+try {
+  const requested = new URLSearchParams(location.search).get('lang');
+  language = requested === 'ar' || requested === 'en' ? requested : localStorage.getItem('fasthaus:game-language') === 'ar' ? 'ar' : 'en';
+} catch {}
+const t = (key, values) => translate(language, key, values);
+let copyState = 'idle';
+let soundUnavailable = false;
 let hovered = null;
 let soundOn = false;
 let audio;
@@ -40,7 +49,7 @@ function say(title, detail) {
     const typed = document.createElement('span'), pending = document.createElement('span');
     pending.className = 'speech-pending'; visual.append(typed, pending);
     $(index === 0 ? 'dialogue-title' : 'dialogue-copy').replaceChildren(accessible, visual);
-    return { typed, pending, characters: Array.from(text) };
+    return { typed, pending, characters: splitGraphemes(text) };
   });
   speechTyper.play(key, reducedMotion.matches);
 }
@@ -167,13 +176,14 @@ function drawScene(now=performance.now()) {
   }
   LAMPS.forEach((lamp,i)=>{
     const [x,y]=l.positions[i], lit=state.found.includes(lamp.id);
-    if(lit){
+    const previewed=hovered===lamp.id && state.phase==='guess' && !lit;
+    if(lit || previewed){
       let intensity=lastFound===lamp.id&&glowStart!==null?Math.min(1,(now-glowStart)/650):1;
       if(reducedMotion.matches)intensity=1;
       for(let ring=6;ring>0;ring--){ctx.globalAlpha=(.009+warmth*.003)*intensity;rect(ctx,x-31-ring*5,y-70-ring*4,62+ring*10,54+ring*8,'#f7c87a');}
       ctx.globalAlpha=1;
     }
-    drawLamp(ctx,lamp.id,x,y,lit);
+    drawLamp(ctx,lamp.id,x,y,lit || previewed);
     pixelText(ctx,`0${i+1}`,x-39,y-9,lit?'#e8cd98':'#b0b59b');
     if(hovered===lamp.id&&state.phase==='guess'&&!lit){rect(ctx,x-4,y-79,9,1,'#e9be7d');rect(ctx,x-2,y-78,5,2,'#e9be7d');rect(ctx,x,y-76,1,2,'#e9be7d');}
   });
@@ -215,10 +225,10 @@ function chime() {
   try{
     audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume().catch(()=>{});
     [523.25,659.25,783.99].forEach((frequency,i)=>{const oscillator=audio.createOscillator(),gain=audio.createGain(),t=audio.currentTime+i*.09;oscillator.type='square';oscillator.frequency.value=frequency;gain.gain.setValueAtTime(.025,t);gain.gain.exponentialRampToValueAtTime(.001,t+.12);oscillator.connect(gain);gain.connect(audio.destination);oscillator.start(t);oscillator.stop(t+.13);});
-  }catch{soundOn=false;updateSound();$('feedback').textContent='Sound is unavailable in this browser. You can keep playing.';}
+  }catch{soundOn=false;soundUnavailable=true;updateSound();$('feedback').textContent=t('soundUnavailable');}
 }
 function updateSound(){
-  $('sound').setAttribute('aria-pressed',String(soundOn));$('sound').querySelector('span').textContent=soundOn?'Sound on':'Sound off';
+  $('sound').setAttribute('aria-pressed',String(soundOn));$('sound').querySelector('span').textContent=t(soundOn?'soundOn':'soundOff');
   $('sound').querySelector('path').setAttribute('d',soundOn?'m11 4-5 4H3v8h3l5 4V4Zm5 4c3 2 3 6 0 8m3-11c5 4 5 10 0 14':'m11 4-5 4H3v8h3l5 4V4Zm5 5 5 6m0-6-5 6');
 }
 
@@ -230,41 +240,86 @@ function positionTargets(){
 }
 
 function update(){
-  const lamp=LAMPS.find(lamp=>lamp.id===state.rounds[state.round]), welcome=state.phase==='start',intro=state.phase==='intro',guess=state.phase==='guess',reveal=state.phase==='reveal',complete=state.phase==='complete';
+  const copy=TRANSLATIONS[language];
+  const lamp=copy.lamps.find(lamp=>lamp.id===state.rounds[state.round]), welcome=state.phase==='start',intro=state.phase==='intro',guess=state.phase==='guess',reveal=state.phase==='reveal',complete=state.phase==='complete';
   $('start-overlay').hidden=!welcome;$('game-content').inert=welcome;
-  $('progress-count').textContent=`${state.found.length} / ${ROUND_COUNT} lit`;
-  document.querySelector('.progress').setAttribute('aria-label',`${state.found.length} of ${ROUND_COUNT} lamps lit`);
+  $('progress-count').textContent=t('progress',{found:state.found.length,total:ROUND_COUNT});
+  document.querySelector('.progress').setAttribute('aria-label',t('progressLabel',{found:state.found.length,total:ROUND_COUNT}));
   $('progress-lights').replaceChildren(...state.rounds.map(id=>{const pip=document.createElement('span');pip.className=`progress-pip${state.found.includes(id)?' lit':''}`;return pip;}));
   targets.forEach((button,i)=>{button.disabled=!guess||state.found.includes(LAMPS[i].id);});
   $('dialogue').hidden=complete||welcome;$('dialogue').classList.toggle('is-intro',intro);$('reward').hidden=!complete;$('restart').hidden=welcome||(intro&&state.introStep===0)||complete;
   $('player-label').hidden=!intro;
   $('main-action').hidden=guess;$('hint-action').hidden=!guess;
-  $('hint-action').disabled=state.hints===3;$('hint-count').textContent=`${state.hints} / 3`;
+  $('hint-action').disabled=state.hints===lamp.hints.length;$('hint-count').textContent=t('hintCount',{count:state.hints,total:lamp.hints.length});
   $('hint-text').hidden=!guess||state.hints===0;
   $('hint-text').textContent=state.hints?lamp.hints[state.hints-1]:'';
-  $('feedback').textContent=state.wrong?'That one has a different story. Try another lamp, or ask for a clue.':'';
-  $('room-instruction').textContent=intro?'A little conversation before the lights come on.':complete?'The studio looks better with you in it.':reveal?'A bright idea, found.':'Which lamp am I describing?';
-  $('play-tip').lastChild.textContent=intro?' Choose your reply to continue':complete?' All three stories discovered':' Click or tap to choose a lamp';
-  $('round-label').textContent=intro?INTRO_DIALOGUE[state.introStep].label:`Story ${state.round+1} of ${ROUND_COUNT}`;
+  $('feedback').textContent=state.wrong?t('wrong'):soundUnavailable?t('soundUnavailable'):'';
+  $('room-instruction').textContent=t(intro||welcome?'introRoom':complete?'completeRoom':reveal?'revealRoom':'guessRoom');
+  $('play-tip').lastChild.textContent=' '+t(intro?'replyTip':complete?'completeTip':'guessTip');
+  $('round-label').textContent=intro?copy.intro[state.introStep].label:t('story',{number:state.round+1,total:ROUND_COUNT});
   $('action-note').hidden=complete||intro;
   if(intro){
-    const speech=INTRO_DIALOGUE[state.introStep];
+    const speech=copy.intro[state.introStep];
     say(speech.line,speech.detail);
     $('main-action').replaceChildren(document.createTextNode(speech.reply+' '));
     $('main-action').insertAdjacentHTML('beforeend',arrowMark);
-    $('action-note').textContent=`${state.introStep+1} / ${INTRO_DIALOGUE.length}`;
+    $('action-note').textContent=t('hintCount',{count:state.introStep+1,total:copy.intro.length});
   } else if(guess){
-    say(lamp.clue,'Choose the lamp on the shelf. Follow your eye.');
-    $('action-note').textContent='Hints are on the house.';
+    say(lamp.clue,t('guessDetail'));
+    $('action-note').textContent=t('hintsFree');
   } else if(reveal){
-    say(`That’s ${lamp.name}.`,lamp.story);
-    $('main-action').innerHTML=(state.found.length===ROUND_COUNT?'Open my reward ':'Next story ')+arrowMark;
-    $('action-note').textContent=state.found.length===ROUND_COUNT?'Three for three. Nicely spotted.':`${ROUND_COUNT-state.found.length} more ${state.found.length===ROUND_COUNT-1?'story':'stories'} to discover.`;
+    say(t('reveal',{name:lamp.name}),lamp.story);
+    $('main-action').replaceChildren(document.createTextNode(t(state.found.length===ROUND_COUNT?'openReward':'next')+' '));
+    $('main-action').insertAdjacentHTML('beforeend',arrowMark);
+    $('action-note').textContent=t(state.found.length===ROUND_COUNT?'perfect':ROUND_COUNT-state.found.length===2?'remainingTwo':'remainingOne');
   }
   if(complete||welcome)speechTyper.finish();
   if(welcome)speechKey=null;
   requestDraw();
 }
+
+function updateCopyStatus(){
+  $('copy-code').textContent=t(copyState==='copied'?'copied':'copy');
+  $('copy-status').textContent=t(copyState==='copied'?'copySuccess':copyState==='manual'?'copyManual':'copyIdle');
+}
+
+function applyLanguage(){
+  document.documentElement.lang=language;
+  document.documentElement.dir=language==='ar'?'rtl':'ltr';
+  document.title=t('pageTitle');
+  document.querySelector('meta[name="description"]').content=t('subtitle');
+  document.querySelectorAll('[data-i18n]').forEach(element=>{element.textContent=t(element.dataset.i18n);});
+  document.querySelectorAll('[data-i18n-aria]').forEach(element=>{element.setAttribute('aria-label',t(element.dataset.i18nAria));});
+  $('portrait').alt=t('portrait');
+  $('language-switch').textContent=t('switchText');
+  $('language-switch').setAttribute('aria-label',t('switchLabel'));
+  $('language-switch').setAttribute('aria-pressed',String(language==='ar'));
+  $('language-switch').lang=language==='ar'?'en':'ar';
+  $('language-switch').dir=language==='ar'?'ltr':'rtl';
+  const lamps=TRANSLATIONS[language].lamps;
+  targets.forEach((button,index)=>{
+    button.setAttribute('aria-label',t('chooseLamp',{number:index+1,description:lamps[index].description}));
+    button.querySelector('.lamp-label').textContent=t('chooseLabel',{number:index+1});
+    button.querySelector('.lamp-label').dir=language==='ar'?'rtl':'ltr';
+  });
+  document.querySelectorAll('.product-link').forEach((link,index)=>{
+    const lamp=lamps[index];
+    link.querySelector('img').alt=t('productAlt',{name:lamp.name});
+    link.querySelector('strong').firstChild.textContent=lamp.name;
+    link.querySelector('p').textContent=lamp.note;
+  });
+  updateCopyStatus();updateSound();update();
+}
+
+$('language-switch').addEventListener('click',()=>{
+  language=language==='en'?'ar':'en';
+  try{localStorage.setItem('fasthaus:game-language',language);}catch{}
+  try{
+    const url=new URL(location.href);url.searchParams.set('lang',language);
+    history.replaceState(null,'',url);
+  }catch{}
+  applyLanguage();
+});
 
 $('enter-studio').addEventListener('click',()=>{
   state=enterStudio(state);update();
@@ -291,12 +346,12 @@ $('skip-speech').addEventListener('click',event=>{
   if(state.phase==='guess')targets.find(button=>!button.disabled)?.focus({preventScroll:true});
   else $('main-action').focus({preventScroll:true});
 });
-function restart(){state=createGame();glowStart=null;lastFound=null;hovered=null;update();requestDraw(true);$('enter-studio').focus();$('copy-status').textContent='Demo code — not active at checkout yet.';$('copy-code').textContent='Copy code';emit('restart');}
+function restart(){state=createGame();glowStart=null;lastFound=null;hovered=null;copyState='idle';soundUnavailable=false;update();updateCopyStatus();requestDraw(true);$('enter-studio').focus();emit('restart');}
 $('restart').addEventListener('click',restart);$('replay').addEventListener('click',restart);
 $('sound').addEventListener('click',()=>{soundOn=!soundOn;updateSound();if(soundOn)chime();});
 $('copy-code').addEventListener('click',async()=>{
-  try{await navigator.clipboard.writeText($('coupon-code').textContent);$('copy-code').textContent='Copied';$('copy-status').textContent='Copied. This demo code is not active at checkout yet.';}
-  catch{const selection=window.getSelection(),range=document.createRange();range.selectNodeContents($('coupon-code'));selection.removeAllRanges();selection.addRange(range);$('copy-status').textContent='Select and copy AFTERHOURS10. It is a demo code, not active at checkout.';}
+  try{await navigator.clipboard.writeText($('coupon-code').textContent);copyState='copied';updateCopyStatus();}
+  catch{const selection=window.getSelection(),range=document.createRange();range.selectNodeContents($('coupon-code'));selection.removeAllRanges();selection.addRange(range);copyState='manual';updateCopyStatus();}
 });
 LAMPS.forEach(lamp=>{
   const link=document.createElement('a');link.className='product-link';link.href=lamp.url;link.target='_blank';link.rel='noopener';
@@ -306,4 +361,4 @@ LAMPS.forEach(lamp=>{
 });
 mobileQuery.addEventListener('change',positionTargets);reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches)speechTyper.finish();requestDraw();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)speechTyper.finish();if(document.hidden&&animationFrame){cancelAnimationFrame(animationFrame);animationFrame=0;}else if(!document.hidden)requestDraw();});
-positionTargets();update();requestDraw(true);
+positionTargets();applyLanguage();requestDraw(true);
