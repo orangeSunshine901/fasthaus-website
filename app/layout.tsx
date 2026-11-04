@@ -133,6 +133,10 @@ export default async function RootLayout({
           name="google-site-verification"
           content="6oZVZ4_UZrObrRTiXbYTEg09M59D1JglTLxwXzB89Hg"
         />
+        <meta
+          name="facebook-domain-verification"
+          content="b5zsn3av1u9jopsaee42t6tqbi6umc"
+        />
       </head>
       <body className="min-h-full flex flex-col">
         <noscript>
