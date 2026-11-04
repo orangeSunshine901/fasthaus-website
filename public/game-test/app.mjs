@@ -99,7 +99,33 @@ function polygon(c,points,color) {
   }
 }
 
+// Bounds exclude only transparent padding in the original Dropbox PNGs.
+const lampSprites = Object.fromEntries([
+  ['hamrah', [40, 32, 304, 328]],
+  ['nujaj', [24, 32, 340, 324]],
+  ['kasane', [40, 12, 312, 352]],
+  ['nasaq', [80, 28, 228, 336]],
+].map(([id, bounds]) => {
+  const image = new Image();
+  image.onload = () => requestDraw();
+  image.src = `./assets/${id}-sprite.png`;
+  return [id, { image, bounds }];
+}));
+
 function drawLamp(c,id,x,y,lit) {
+  const sprite = lampSprites[id];
+  if (sprite.image.complete && sprite.image.naturalWidth) {
+    const [, , sourceWidth, sourceHeight] = sprite.bounds;
+    const scale = Math.min(76 / sourceWidth, 72 / sourceHeight);
+    const width = Math.round(sourceWidth * scale), height = Math.round(sourceHeight * scale);
+    c.save();
+    oval(c,x,y+2,30,3,'#252e31');
+    c.filter = lit ? 'brightness(1.12) saturate(1.08)' : 'brightness(0.78) saturate(0.72)';
+    c.drawImage(sprite.image, ...sprite.bounds, x-Math.round(width/2), y+2-height, width, height);
+    c.restore();
+    return;
+  }
+  // Keep the shelves usable while loading, or if an image fails to download.
   c.save();c.translate(x,y);
   const shade=lit?'#ffe8b7':'#cbd0c4', shadow=lit?'#d8b77d':'#9fa99f', light=lit?'#fff3ce':'#e0e1d5';
   oval(c,0,2,30,3,'#252e31');
