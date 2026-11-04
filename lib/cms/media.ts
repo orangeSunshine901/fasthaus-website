@@ -30,6 +30,7 @@ export const variantMediaSchema = z
           .object({
             src: imageSource.min(1),
             mobileSrc: imageSource.optional(),
+            unoptimized: z.boolean().optional(),
             uiTheme: z.enum(["light", "dark"]),
           })
           .strict()

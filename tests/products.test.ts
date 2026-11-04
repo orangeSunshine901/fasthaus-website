@@ -98,6 +98,30 @@ test("every product variant provides a mobile collection-card image", () => {
   }
 });
 
+test("Dropbox photo sets lead their matching colour galleries with the full product", () => {
+  const sets = [
+    ["2-tangerine", "/mushroom-lamp/kasane-tangerine"],
+    ["1-matcha", "/flute-lamp/nujaj-matcha"],
+    ["3-white", "/stack-lamp/nasaq-marshmallow-white"],
+  ];
+  for (const [id, prefix] of sets) {
+    const variant = PRODUCTS.flatMap((product) => product.variants).find((item) => item.id === id)!;
+    const gallery = getVariantGalleryImages(variant);
+    assert.equal(gallery[0].src, variant.images[0].src);
+    assert.equal(variant.mainImage, gallery[0].src);
+    for (const [index, shot] of ["full", "shade-detail", "base-detail", "shade-macro"].entries()) {
+      const image = gallery[index];
+      assert.match(image.src, new RegExp(`^${prefix}-${shot}-desktop-[a-f0-9]{8}\\.webp$`));
+      assert.match(image.mobileSrc!, new RegExp(`^${prefix}-${shot}-mobile-[a-f0-9]{8}\\.webp$`));
+      assert.equal(image.unoptimized, true);
+      assert.equal(image.uiTheme, "dark", "Reviewed bright photos need dark overlay controls");
+    }
+    for (const image of gallery) {
+      assert.ok(existsSync(new URL(`../public${image.src}`, import.meta.url)), image.src);
+    }
+  }
+});
+
 test("mobile portrait crops cover landscape gallery shots, including a standalone main image", () => {
   const variant = PRODUCTS.flatMap((product) => product.variants).find(
     (variant) => variant.mainImage === "/flute-lamp/flute-clear-interaction-shot-dark.png"

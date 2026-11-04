@@ -11,12 +11,14 @@ import { GALLERY_PORTRAITS } from "@/lib/data/gallery-portraits";
 
 type Props = {
   src: string;
+  desktopSrc?: string;
   alt: string;
   priority: boolean;
   active: boolean;
+  unoptimized?: boolean;
 };
 
-export default function MobileGalleryImage({ src, alt, priority, active }: Props) {
+export default function MobileGalleryImage({ src, desktopSrc, alt, priority, active, unoptimized }: Props) {
   const [zoomed, setZoomed] = useState(false);
   const transformRef = useRef<ReactZoomPanPinchRef>(null);
 
@@ -46,19 +48,21 @@ export default function MobileGalleryImage({ src, alt, priority, active }: Props
           wrapperStyle={{ width: "100%", height: "100%", touchAction: zoomed ? "none" : "pan-y" }}
           contentStyle={{ position: "relative", width: "100%", height: "100%" }}
         >
-          <Image
-            src={GALLERY_PORTRAITS[src] ?? src}
-            alt={alt}
-            width={864}
-            height={1147}
-            // Pinned across zoom levels: the portrait sources cap at 1080px wide
-            // and the optimizer never enlarges, so a larger request returns the same
-            // pixels — a second billed transform and download for no added detail.
-            sizes="(max-width: 440px) 100vw, 440px"
-            loading={priority ? "eager" : "lazy"}
-            draggable={false}
-            className="absolute inset-0 mx-auto h-full w-full max-w-[440px] select-none object-contain"
-          />
+          <picture>
+            {desktopSrc && <source media="(min-width: 768px)" srcSet={desktopSrc} />}
+            <Image
+              src={GALLERY_PORTRAITS[src] ?? src}
+              unoptimized={unoptimized}
+              alt={alt}
+              width={864}
+              height={1147}
+              // Keep optimized portrait requests pinned across zoom levels to avoid repeat transforms.
+              sizes="(max-width: 440px) 100vw, 440px"
+              loading={priority ? "eager" : "lazy"}
+              draggable={false}
+              className="absolute inset-0 mx-auto h-full w-full max-w-[440px] select-none object-contain"
+            />
+          </picture>
         </TransformComponent>
       </TransformWrapper>
     </div>

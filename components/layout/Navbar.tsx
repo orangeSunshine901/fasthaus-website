@@ -126,7 +126,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
     pathname === "/collection" ||
     pathname.startsWith("/collection/") ||
     isProductPage;
-  const desktopTextColor = "#FFFDF5";
+  const desktopTextColor = isProductPage ? "var(--product-nav-color)" : "#FFFDF5";
   const homeMobileOverlay = isHomePage && !homeHeroPassed;
   const floatingNavItems = [
     { name: "collection", link: "/collection", megaMenu: <CollectionMegaMenuContent /> },
@@ -240,6 +240,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
 
       <header
         ref={headerRef}
+        data-product-nav={isProductPage ? "" : undefined}
         className={cn(
           isProductPage
             ? "absolute top-11 z-40 w-full border-transparent bg-transparent md:h-24"
@@ -270,7 +271,7 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
           >
             <Menu
               size={22}
-              style={{ color: homeMobileOverlay ? "#FFFDF5" : "var(--color-text-primary)" }}
+              style={{ color: isProductPage ? "var(--product-nav-color)" : homeMobileOverlay ? "#FFFDF5" : "var(--color-text-primary)" }}
             />
           </button>
           <Link
@@ -285,13 +286,24 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
               alt="Fasthaus"
               width={100}
               height={20}
+              className={isProductPage ? "product-nav-dark-logo" : undefined}
               style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
               preload
             />
+            {isProductPage && (
+              <Image
+                src="/fasthaus-logo-final-ivory.svg"
+                alt="Fasthaus"
+                width={100}
+                height={20}
+                className="product-nav-light-logo"
+                style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
+              />
+            )}
           </Link>
           <CartBadge
             size={22}
-            className={homeMobileOverlay ? "text-[#FFFDF5]" : "text-[var(--color-text-primary)]"}
+            className={isProductPage ? "text-[var(--product-nav-color)]" : homeMobileOverlay ? "text-[#FFFDF5]" : "text-[var(--color-text-primary)]"}
           />
         </div>
 
@@ -316,9 +328,20 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                   alt="Fasthaus"
                   width={128}
                   height={26}
+                  className={isProductPage ? "product-nav-light-logo" : undefined}
                   style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
                   preload
                 />
+                {isProductPage && (
+                  <Image
+                    src="/fasthaus-logo-final.svg"
+                    alt="Fasthaus"
+                    width={128}
+                    height={26}
+                    className="product-nav-dark-logo"
+                    style={{ aspectRatio: "8230.08 / 1656.08", height: "auto" }}
+                  />
+                )}
               </Link>
 
               {/* Center links */}

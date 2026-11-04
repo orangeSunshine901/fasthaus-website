@@ -3,6 +3,7 @@ import { GALLERY_PORTRAITS } from "./gallery-portraits.ts";
 export type ProductCarouselImage = {
   src: string;
   mobileSrc?: string;
+  unoptimized?: boolean;
   uiTheme: "light" | "dark";
 };
 
@@ -177,8 +178,32 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/stack-lamp/stack-lamp-white-off-collection.png",
         cartDrawerImage: "",
         collectionMobileImage: "/stack-lamp/stack-lamp-white-off-product-mobile.png",
-        mainImage: "/stack-lamp/stack-lamp-white-on.png",
+        mainImage: "/stack-lamp/nasaq-marshmallow-white-full-desktop-0da2edf9.webp",
         images: [
+          {
+            src: "/stack-lamp/nasaq-marshmallow-white-full-desktop-0da2edf9.webp",
+            mobileSrc: "/stack-lamp/nasaq-marshmallow-white-full-mobile-d353c6bb.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/nasaq-marshmallow-white-shade-detail-desktop-f65f4769.webp",
+            mobileSrc: "/stack-lamp/nasaq-marshmallow-white-shade-detail-mobile-0e138124.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/nasaq-marshmallow-white-base-detail-desktop-acedda55.webp",
+            mobileSrc: "/stack-lamp/nasaq-marshmallow-white-base-detail-mobile-94dd9262.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/nasaq-marshmallow-white-shade-macro-desktop-4c422d1c.webp",
+            mobileSrc: "/stack-lamp/nasaq-marshmallow-white-shade-macro-mobile-bc9c57ef.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
           {
             src: "/stack-lamp/stack-lamp-white-off-product.png",
             mobileSrc: "/stack-lamp/stack-lamp-white-off-product-mobile.png",
@@ -266,8 +291,32 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/flute-lamp/flute-lamp-matcha-off-collection.png",
         cartDrawerImage: "/cart/portrait-image-1.png",
         collectionMobileImage: "/flute-lamp/flute-lamp-matcha-off-product-mobile.png",
-        mainImage: "/flute-lamp/flute-clear-garden-main.jpg",
+        mainImage: "/flute-lamp/nujaj-matcha-full-desktop-b3ffc60b.webp",
         images: [
+          {
+            src: "/flute-lamp/nujaj-matcha-full-desktop-b3ffc60b.webp",
+            mobileSrc: "/flute-lamp/nujaj-matcha-full-mobile-3cfbc02b.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/flute-lamp/nujaj-matcha-shade-detail-desktop-7e854e87.webp",
+            mobileSrc: "/flute-lamp/nujaj-matcha-shade-detail-mobile-8cda39c4.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/flute-lamp/nujaj-matcha-base-detail-desktop-3251dded.webp",
+            mobileSrc: "/flute-lamp/nujaj-matcha-base-detail-mobile-3a8bbb32.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/flute-lamp/nujaj-matcha-shade-macro-desktop-4de38afa.webp",
+            mobileSrc: "/flute-lamp/nujaj-matcha-shade-macro-mobile-7f30e8c7.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
           {
             src: "/flute-lamp/flute-lamp-matcha-off-product.png",
             mobileSrc: "/flute-lamp/flute-lamp-matcha-off-product-mobile.png",
@@ -279,7 +328,7 @@ export const PRODUCTS: Product[] = [
             uiTheme: "dark",
           },
           { src: "/flute-lamp/flute-matcha-lifestyle-shot.png", uiTheme: "dark" },
-          { src: "/flute-lamp/flute-matcha-lifestyle-shot-dark.png", uiTheme: "dark" },
+          { src: "/flute-lamp/flute-matcha-lifestyle-shot-dark.png", uiTheme: "light" },
         ],
       },
       {
@@ -581,8 +630,32 @@ export const PRODUCTS: Product[] = [
         collectionImage: "/mushroom-lamp/mushroom-lamp-orange-off-collection.png",
         cartDrawerImage: "",
         collectionMobileImage: "/mushroom-lamp/mushroom-lamp-orange-off-product-mobile.png",
-        mainImage: "/mushroom-lamp/mushroom-lamp-orange-off-product.png",
+        mainImage: "/mushroom-lamp/kasane-tangerine-full-desktop-2e73f8a8.webp",
         images: [
+          {
+            src: "/mushroom-lamp/kasane-tangerine-full-desktop-2e73f8a8.webp",
+            mobileSrc: "/mushroom-lamp/kasane-tangerine-full-mobile-551cc2d1.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/mushroom-lamp/kasane-tangerine-shade-detail-desktop-830d0aec.webp",
+            mobileSrc: "/mushroom-lamp/kasane-tangerine-shade-detail-mobile-e7330e0d.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/mushroom-lamp/kasane-tangerine-base-detail-desktop-fa064a94.webp",
+            mobileSrc: "/mushroom-lamp/kasane-tangerine-base-detail-mobile-cbc9ce29.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
+          {
+            src: "/mushroom-lamp/kasane-tangerine-shade-macro-desktop-0a7cb1c4.webp",
+            mobileSrc: "/mushroom-lamp/kasane-tangerine-shade-macro-mobile-8d7e552c.webp",
+            unoptimized: true,
+            uiTheme: "dark",
+          },
           {
             src: "/mushroom-lamp/mushroom-lamp-orange-off-product.png",
             mobileSrc: "/mushroom-lamp/mushroom-lamp-orange-off-product-mobile.png",

@@ -17,11 +17,12 @@ test("media overrides reach the correct colour without changing commerce data or
   const media = {
     ...variantMedia(variant),
     collection: "https://example.com/new.webp",
-    images: [{ src: "https://example.com/gallery.webp", uiTheme: "light" as const }],
+    images: [{ src: "https://example.com/gallery.webp", uiTheme: "light" as const, unoptimized: true }],
   };
   const result = applyProductMedia(PRODUCTS, [{ variant_id: variant.id, media, version: 1 }]);
   assert.equal(result[0].variants[0].collectionImage, media.collection);
   assert.equal(result[0].variants[0].images[0].src, media.images[0].src);
+  assert.equal(result[0].variants[0].images[0].unoptimized, true);
   assert.equal(result[0].variants[0].price, variant.price);
   assert.equal(result[0].variants[0].sku, variant.sku);
   assert.equal(result[0].variants[0].stock, variant.stock);

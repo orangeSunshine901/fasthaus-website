@@ -139,6 +139,8 @@ export default function ProductGallery({
                   <MobileGalleryImage
                     key={image.mobileSrc ?? image.src}
                     src={image.mobileSrc ?? image.src}
+                    desktopSrc={image.unoptimized ? image.src : undefined}
+                    unoptimized={image.unoptimized}
                     alt={imageAlt(index)}
                     priority={index === 0}
                     active={index === activeIndex}
@@ -150,7 +152,7 @@ export default function ProductGallery({
                       media="(max-width: 767px)"
                       sizes="(max-width: 440px) 100vw, 440px"
                       srcSet={
-                        getImageProps({
+                        image.unoptimized ? image.mobileSrc : getImageProps({
                           src: image.mobileSrc,
                           alt: "",
                           fill: true,
@@ -164,6 +166,7 @@ export default function ProductGallery({
                   )}
                   <Image
                     src={image.src}
+                    unoptimized={image.unoptimized}
                     alt={imageAlt(index)}
                     width={2880}
                     height={1496}
@@ -198,8 +201,12 @@ export default function ProductGallery({
                   transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
                 >
                   <picture className="relative block h-full">
+                    {activeImage.unoptimized && activeImage.mobileSrc && (
+                      <source media="(max-width: 767px)" srcSet={activeImage.mobileSrc} />
+                    )}
                     <Image
                       src={activeImage.src}
+                      unoptimized={activeImage.unoptimized}
                       alt=""
                       width={2880}
                       height={1496}
