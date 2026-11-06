@@ -369,7 +369,7 @@ body:has(.product-hero[data-ui-theme="light"]) [data-product-nav] .product-nav-d
   top: min(76%, calc(100svh - 144px));
   text-shadow: 0 1px 4px rgb(0 0 0 / 80%);
   transition: opacity 200ms ease, visibility 0s linear 200ms;
-  animation: home-scroll-cue-appear 200ms ease-out 7s both;
+  animation: home-scroll-cue-appear 200ms ease-out 2s both;
 }
 
 .home-scroll-cue svg {
@@ -384,8 +384,8 @@ body:has(.product-hero[data-ui-theme="light"]) [data-product-nav] .product-nav-d
 
 .home-scroll-cue-gesture {
   --cue-travel: 8px;
-  animation: home-scroll-gesture 1.4s cubic-bezier(0.16, 1, 0.3, 1) 7s,
-    home-scroll-gesture 1.4s cubic-bezier(0.16, 1, 0.3, 1) 12s;
+  animation: home-scroll-gesture 1.4s cubic-bezier(0.16, 1, 0.3, 1) 2s,
+    home-scroll-gesture 1.4s cubic-bezier(0.16, 1, 0.3, 1) 7s;
 }
 
 .home-scroll-cue-swipe {
