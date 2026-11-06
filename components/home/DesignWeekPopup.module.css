@@ -1,0 +1,119 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  background: rgb(0 0 0 / 62%);
+}
+
+.panel {
+  display: grid;
+  grid-template-areas: "header" "poster" "details";
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: min(100%, 32rem);
+  max-block-size: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: 14px;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  box-shadow: 0 14px 48px rgb(0 0 0 / 28%);
+}
+
+.header {
+  grid-area: header;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-block-size: 52px;
+  padding: 4px 6px 4px 16px;
+  background: var(--color-bg);
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.close {
+  display: grid;
+  flex: none;
+  inline-size: 44px;
+  block-size: 44px;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus-visible {
+  background: var(--color-surface);
+}
+
+.poster {
+  grid-area: poster;
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1;
+  background: var(--color-surface);
+}
+
+.details {
+  grid-area: details;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 12px 16px 16px;
+}
+
+.copy {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.copy strong {
+  display: block;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.directions {
+  flex-shrink: 0;
+  min-block-size: 44px;
+  padding: 10px 14px;
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 27rem) {
+  .directions {
+    inline-size: 100%;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 40rem) and (min-width: 32rem) {
+  .panel {
+    grid-template-areas: "poster header" "poster details";
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    inline-size: min(100%, 42rem, calc(200dvh - 3rem));
+  }
+
+  .details {
+    align-content: center;
+  }
+}

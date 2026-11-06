@@ -6,6 +6,7 @@ import { getMediaProducts } from "@/lib/cms/products";
 import { NEWSLETTER_ENABLED } from "@/lib/promotions";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 import HomeScrollCue from "@/components/home/HomeScrollCue";
+import DesignWeekPopup from "@/components/home/DesignWeekPopup";
 import LocomotiveScrollProvider from "@/components/scroll/LocomotiveScrollProvider";
 import JsonLd from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo/metadata";
@@ -79,6 +80,7 @@ export default async function HomePage() {
     <LocomotiveScrollProvider>
       <ShopLayout revealOnFirstScroll>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
+        <DesignWeekPopup />
         {/* Hero */}
         <section
           data-home-hero
