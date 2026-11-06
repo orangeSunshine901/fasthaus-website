@@ -1,10 +1,10 @@
 export const PAGE_SCROLL_LOCK_EVENT = "fasthaus:page-scroll-lock-change";
 
-type ScrollLockSource = "cart" | "cookie-consent" | "mobile-menu";
+type ScrollLockSource = "cart" | "cookie-consent" | "mobile-menu" | "design-week-popup";
 
 const sourceClass = (source: ScrollLockSource) => `${source}-scroll-locked`;
 const SOURCE_SELECTOR =
-  ".cart-scroll-locked,.cookie-consent-scroll-locked,.mobile-menu-scroll-locked";
+  ".cart-scroll-locked,.cookie-consent-scroll-locked,.mobile-menu-scroll-locked,.design-week-popup-scroll-locked";
 
 export function isPageScrollLocked() {
   return document.documentElement.classList.contains("page-scroll-locked");

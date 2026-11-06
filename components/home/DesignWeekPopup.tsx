@@ -4,7 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowUpRight, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { isPageScrollLocked } from "@/lib/page-scroll-lock";
+import { isPageScrollLocked, setPageScrollLocked } from "@/lib/page-scroll-lock";
 import { useCartStore } from "@/lib/store/cart";
 import styles from "./DesignWeekPopup.module.css";
 
@@ -17,6 +17,12 @@ let shownInPage = false;
 export default function DesignWeekPopup() {
   const [open, setOpen] = useState(false);
   const previousFocus = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    setPageScrollLocked("design-week-popup", true);
+    return () => setPageScrollLocked("design-week-popup", false);
+  }, [open]);
 
   useEffect(() => {
     if (shownInPage || Date.now() >= MARKET_CLOSE) return;
@@ -37,6 +43,7 @@ export default function DesignWeekPopup() {
       );
       const blocked =
         document.hidden ||
+        !window.silktideConsentManager?.getInstance() ||
         consentOpen ||
         isPageScrollLocked() ||
         useCartStore.getState().drawerOpen ||
@@ -85,10 +92,11 @@ export default function DesignWeekPopup() {
             </header>
             <Image
               className={styles.poster}
-              src="/fasthaus-ddw-2026-booth-58.webp"
+              src="/pop-up-banner/Fasthaus-DDW-Booth-58-Popup.webp"
               alt=""
               width={1200}
               height={1200}
+              unoptimized
               sizes="(orientation: landscape) and (max-height: 640px) and (min-width: 512px) 50vw, (max-width: 536px) calc(100vw - 24px), 512px"
             />
             <div className={styles.details}>
