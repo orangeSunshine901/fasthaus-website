@@ -1,0 +1,442 @@
+[    2004ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[    2041ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   48951ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   48958ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   51785ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   51807ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   54612ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   54618ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   54630ms] [WARNING] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   54632ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <LoadingBoundaryProvider loading={[...]}>
+      <SegmentViewNode type="layout" pagePath="layout.tsx">
+        <SegmentTrieNode>
+        <link>
+        <script>
+        <script>
+        <script>
+        <script>
+        <script>
+        <script>
+        <RootLayout>
+          <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning={true} className="satoshi_f9...">
+            <head>
+            <body className="min-h-full...">
+              <noscript>
+              <svg>
+              <SilktideConsentManager>
+              <ProductMediaProvider products={[...]}>
+                <HomeNavigationProvider>
+                  <AnalyticsProvider>
+                    <Suspense>
+                    <CartProvider>
+                      <PageTransition>
+                        <div
+                          className="flex min-h-screen flex-col"
+-                         style={{opacity:"1"}}
+                        >
+                      ...
+                      ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:1057
+[   54676ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <Navbar revealOnFirstScroll={true}>
+      ...
+        <NavigationMenuTrigger asChild={true} showChevron={false} unstyled={true}>
+          <NavigationMenuTrigger data-slot="navigation..." className="group" asChild={true}>
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_3...">
+              <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                <NavigationMenuCollectionItemSlot scope={undefined}>
+                  <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                    <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                      <Primitive.button.Slot data-radix-collection-item="" onKeyDown={function handleEvent} ...>
+                        <Primitive.button id="radix-_R_d..." disabled={undefined} data-disabled={undefined} ...>
+                          <Primitive.button.Slot id="radix-_R_d..." disabled={undefined} data-disabled={undefined} ...>
+                            <LinkComponent href="/collection" onNavigate={function onNavigate} className="group grou..." ...>
+                              <a
+                                className="group group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm..."
++                               id="radix-_R_dblpbmmilb_-trigger-radix-_R_3dblpbmmilb_"
+-                               id="radix-_R_qnlpbnemilb_-trigger-radix-_R_6qnlpbnemilb_"
+                                disabled={undefined}
+                                data-disabled={undefined}
+                                data-state="closed"
+                                aria-expanded={false}
+                                aria-controls={undefined}
+                                data-slot="navigation-menu-trigger"
+                                onPointerEnter={function handleEvent}
+                                onPointerMove={function handleEvent}
+                                onPointerLeave={function handleEvent}
+                                onKeyDown={function}
+                                data-radix-collection-item=""
+                                ref={function}
+                                onClick={function onClick}
+                                onMouseEnter={function onMouseEnter}
+                                onTouchStart={function onTouchStart}
+                                href="/collection"
+                              >
+      ...
+        <NavigationMenuTrigger asChild={true} showChevron={false} unstyled={true}>
+          <NavigationMenuTrigger data-slot="navigation..." className="group" asChild={true}>
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_b...">
+              <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                <NavigationMenuCollectionItemSlot scope={undefined}>
+                  <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                    <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                      <Primitive.button.Slot data-radix-collection-item="" onKeyDown={function handleEvent} ...>
+                        <Primitive.button id="radix-_R_l..." disabled={undefined} data-disabled={undefined} ...>
+                          <Primitive.button.Slot id="radix-_R_l..." disabled={undefined} data-disabled={undefined} ...>
+                            <LinkComponent href="/collection" className="group grou..." id="radix-_R_l..." ...>
+                              <a
+                                className="group group box-content flex h-16 w-[100px] items-center justify-center rou..."
++                               id="radix-_R_l9pbmmilb_-trigger-radix-_R_bl9pbmmilb_"
+-                               id="radix-_R_l9pbnemilb_-trigger-radix-_R_bl9pbnemilb_"
+                                disabled={undefined}
+                                data-disabled={undefined}
+                                data-state="closed"
+                                aria-expanded={false}
+                                aria-controls={undefined}
+                                data-slot="navigation-menu-trigger"
+                                onPointerEnter={function handleEvent}
+                                onPointerMove={function handleEvent}
+                                onPointerLeave={function handleEvent}
+                                onKeyDown={function}
+                                data-radix-collection-item=""
+                                ref={function}
+                                onClick={function onClick}
+                                onMouseEnter={function onMouseEnter}
+                                onTouchStart={function onTouchStart}
+                                href="/collection"
+                              >
+      ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:1057
+[   54718ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <Navbar revealOnFirstScroll={true}>
+      ...
+        <NavigationMenuTrigger asChild={true} showChevron={false} unstyled={true}>
+          <NavigationMenuTrigger data-slot="navigation..." className="group" asChild={true}>
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_3...">
+              <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                <NavigationMenuCollectionItemSlot scope={undefined}>
+                  <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                    <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                      <Primitive.button.Slot data-radix-collection-item="" onKeyDown={function handleEvent} ...>
+                        <Primitive.button id="radix-_R_d..." disabled={undefined} data-disabled={undefined} ...>
+                          <Primitive.button.Slot id="radix-_R_d..." disabled={undefined} data-disabled={undefined} ...>
+                            <LinkComponent href="/collection" onNavigate={function onNavigate} className="group grou..." ...>
+                              <a
+                                className="group group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm..."
++                               id="radix-_R_dblpbmmilb_-trigger-radix-_R_3dblpbmmilb_"
+-                               id="radix-_R_qnlpbnemilb_-trigger-radix-_R_6qnlpbnemilb_"
+                                disabled={undefined}
+                                data-disabled={undefined}
+                                data-state="closed"
+                                aria-expanded={false}
+                                aria-controls={undefined}
+                                data-slot="navigation-menu-trigger"
+                                onPointerEnter={function handleEvent}
+                                onPointerMove={function handleEvent}
+                                onPointerLeave={function handleEvent}
+                                onKeyDown={function}
+                                data-radix-collection-item=""
+                                ref={function}
+                                onClick={function onClick}
+                                onMouseEnter={function onMouseEnter}
+                                onTouchStart={function onTouchStart}
+                                href="/collection"
+                              >
+      ...
+        <NavigationMenuTrigger asChild={true} showChevron={false} unstyled={true}>
+          <NavigationMenuTrigger data-slot="navigation..." className="group" asChild={true}>
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_b...">
+              <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                <NavigationMenuCollectionItemSlot scope={undefined}>
+                  <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                    <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                      <Primitive.button.Slot data-radix-collection-item="" onKeyDown={function handleEvent} ...>
+                        <Primitive.button id="radix-_R_l..." disabled={undefined} data-disabled={undefined} ...>
+                          <Primitive.button.Slot id="radix-_R_l..." disabled={undefined} data-disabled={undefined} ...>
+                            <LinkComponent href="/collection" className="group grou..." id="radix-_R_l..." ...>
+                              <a
+                                className="group group box-content flex h-16 w-[100px] items-center justify-center rou..."
++                               id="radix-_R_l9pbmmilb_-trigger-radix-_R_bl9pbmmilb_"
+-                               id="radix-_R_l9pbnemilb_-trigger-radix-_R_bl9pbnemilb_"
+                                disabled={undefined}
+                                data-disabled={undefined}
+                                data-state="closed"
+                                aria-expanded={false}
+                                aria-controls={undefined}
+                                data-slot="navigation-menu-trigger"
+                                onPointerEnter={function handleEvent}
+                                onPointerMove={function handleEvent}
+                                onPointerLeave={function handleEvent}
+                                onKeyDown={function}
+                                data-radix-collection-item=""
+                                ref={function}
+                                onClick={function onClick}
+                                onMouseEnter={function onMouseEnter}
+                                onTouchStart={function onTouchStart}
+                                href="/collection"
+                              >
+      ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:1057
+[   70902ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   70910ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   73733ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   73740ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   76586ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   76592ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   76606ms] [WARNING] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:781
+[   76607ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <LoadingBoundaryProvider loading={[...]}>
+      <SegmentViewNode type="layout" pagePath="layout.tsx">
+        <SegmentTrieNode>
+        <link>
+        <script>
+        <script>
+        <script>
+        <script>
+        <script>
+        <script>
+        <RootLayout>
+          <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning={true} className="satoshi_f9...">
+            <head>
+            <body className="min-h-full...">
+              <noscript>
+              <svg>
+              <SilktideConsentManager>
+              <ProductMediaProvider products={[...]}>
+                <HomeNavigationProvider>
+                  <AnalyticsProvider>
+                    <Suspense>
+                    <CartProvider>
+                      <PageTransition>
+                        <div
+                          className="flex min-h-screen flex-col"
+-                         style={{opacity:"1"}}
+                        >
+                      ...
+                      ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:1057
+[   76632ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <Navbar revealOnFirstScroll={true}>
+      ...
+        <NavigationMenuTrigger asChild={true} showChevron={false} unstyled={true}>
+          <NavigationMenuTrigger data-slot="navigation..." className="group" asChild={true}>
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_3...">
+              <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                <NavigationMenuCollectionItemSlot scope={undefined}>
+                  <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                    <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                      <Primitive.button.Slot data-radix-collection-item="" onKeyDown={function handleEvent} ...>
+                        <Primitive.button id="radix-_R_d..." disabled={undefined} data-disabled={undefined} ...>
+                          <Primitive.button.Slot id="radix-_R_d..." disabled={undefined} data-disabled={undefined} ...>
+                            <LinkComponent href="/collection" onNavigate={function onNavigate} className="group grou..." ...>
+                              <a
+                                className="group group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm..."
++                               id="radix-_R_dblpbmmilb_-trigger-radix-_R_3dblpbmmilb_"
+-                               id="radix-_R_qnlpbnemilb_-trigger-radix-_R_6qnlpbnemilb_"
+                                disabled={undefined}
+                                data-disabled={undefined}
+                                data-state="closed"
+                                aria-expanded={false}
+                                aria-controls={undefined}
+                                data-slot="navigation-menu-trigger"
+                                onPointerEnter={function handleEvent}
+                                onPointerMove={function handleEvent}
+                                onPointerLeave={function handleEvent}
+                                onKeyDown={function}
+                                data-radix-collection-item=""
+                                ref={function}
+                                onClick={function onClick}
+                                onMouseEnter={function onMouseEnter}
+                                onTouchStart={function onTouchStart}
+                                href="/collection"
+                              >
+      ...
+        <NavigationMenuTrigger asChild={true} showChevron={false} unstyled={true}>
+          <NavigationMenuTrigger data-slot="navigation..." className="group" asChild={true}>
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_b...">
+              <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                <NavigationMenuCollectionItemSlot scope={undefined}>
+                  <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                    <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                      <Primitive.button.Slot data-radix-collection-item="" onKeyDown={function handleEvent} ...>
+                        <Primitive.button id="radix-_R_l..." disabled={undefined} data-disabled={undefined} ...>
+                          <Primitive.button.Slot id="radix-_R_l..." disabled={undefined} data-disabled={undefined} ...>
+                            <LinkComponent href="/collection" className="group grou..." id="radix-_R_l..." ...>
+                              <a
+                                className="group group box-content flex h-16 w-[100px] items-center justify-center rou..."
++                               id="radix-_R_l9pbmmilb_-trigger-radix-_R_bl9pbmmilb_"
+-                               id="radix-_R_l9pbnemilb_-trigger-radix-_R_bl9pbnemilb_"
+                                disabled={undefined}
+                                data-disabled={undefined}
+                                data-state="closed"
+                                aria-expanded={false}
+                                aria-controls={undefined}
+                                data-slot="navigation-menu-trigger"
+                                onPointerEnter={function handleEvent}
+                                onPointerMove={function handleEvent}
+                                onPointerLeave={function handleEvent}
+                                onKeyDown={function}
+                                data-radix-collection-item=""
+                                ref={function}
+                                onClick={function onClick}
+                                onMouseEnter={function onMouseEnter}
+                                onTouchStart={function onTouchStart}
+                                href="/collection"
+                              >
+      ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:1057
+[   76673ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <Navbar revealOnFirstScroll={true}>
+      ...
+        <NavigationMenuTrigger asChild={true} showChevron={false} unstyled={true}>
+          <NavigationMenuTrigger data-slot="navigation..." className="group" asChild={true}>
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_3...">
+              <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                <NavigationMenuCollectionItemSlot scope={undefined}>
+                  <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                    <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                      <Primitive.button.Slot data-radix-collection-item="" onKeyDown={function handleEvent} ...>
+                        <Primitive.button id="radix-_R_d..." disabled={undefined} data-disabled={undefined} ...>
+                          <Primitive.button.Slot id="radix-_R_d..." disabled={undefined} data-disabled={undefined} ...>
+                            <LinkComponent href="/collection" onNavigate={function onNavigate} className="group grou..." ...>
+                              <a
+                                className="group group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm..."
++                               id="radix-_R_dblpbmmilb_-trigger-radix-_R_3dblpbmmilb_"
+-                               id="radix-_R_qnlpbnemilb_-trigger-radix-_R_6qnlpbnemilb_"
+                                disabled={undefined}
+                                data-disabled={undefined}
+                                data-state="closed"
+                                aria-expanded={false}
+                                aria-controls={undefined}
+                                data-slot="navigation-menu-trigger"
+                                onPointerEnter={function handleEvent}
+                                onPointerMove={function handleEvent}
+                                onPointerLeave={function handleEvent}
+                                onKeyDown={function}
+                                data-radix-collection-item=""
+                                ref={function}
+                                onClick={function onClick}
+                                onMouseEnter={function onMouseEnter}
+                                onTouchStart={function onTouchStart}
+                                href="/collection"
+                              >
+      ...
+        <NavigationMenuTrigger asChild={true} showChevron={false} unstyled={true}>
+          <NavigationMenuTrigger data-slot="navigation..." className="group" asChild={true}>
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_b...">
+              <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                <NavigationMenuCollectionItemSlot scope={undefined}>
+                  <NavigationMenuCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                    <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                      <Primitive.button.Slot data-radix-collection-item="" onKeyDown={function handleEvent} ...>
+                        <Primitive.button id="radix-_R_l..." disabled={undefined} data-disabled={undefined} ...>
+                          <Primitive.button.Slot id="radix-_R_l..." disabled={undefined} data-disabled={undefined} ...>
+                            <LinkComponent href="/collection" className="group grou..." id="radix-_R_l..." ...>
+                              <a
+                                className="group group box-content flex h-16 w-[100px] items-center justify-center rou..."
++                               id="radix-_R_l9pbmmilb_-trigger-radix-_R_bl9pbmmilb_"
+-                               id="radix-_R_l9pbnemilb_-trigger-radix-_R_bl9pbnemilb_"
+                                disabled={undefined}
+                                data-disabled={undefined}
+                                data-state="closed"
+                                aria-expanded={false}
+                                aria-controls={undefined}
+                                data-slot="navigation-menu-trigger"
+                                onPointerEnter={function handleEvent}
+                                onPointerMove={function handleEvent}
+                                onPointerLeave={function handleEvent}
+                                onKeyDown={function}
+                                data-radix-collection-item=""
+                                ref={function}
+                                onClick={function onClick}
+                                onMouseEnter={function onMouseEnter}
+                                onTouchStart={function onTouchStart}
+                                href="/collection"
+                              >
+      ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:1057
+[   88338ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[   89343ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[   90347ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[   91349ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[   92351ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[   97354ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[  102357ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[  107359ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[  112365ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[  117368ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[  122370ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[  127375ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=V_YLJdNfc_0lg1Obdz3kF' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348

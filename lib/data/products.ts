@@ -627,7 +627,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/mushroom-lamp/mushroom-orange-off.png",
           lightOn: "/mushroom-lamp/mushroom-orange-on.png",
         },
-        collectionImage: "/mushroom-lamp/mushroom-lamp-orange-off-collection.png",
+        collectionImage: "/mushroom-lamp/kasane-tangerine-photoshopped-desktop-e413fdeb.webp",
         cartDrawerImage: "",
         collectionMobileImage: "/mushroom-lamp/mushroom-lamp-orange-off-product-mobile.png",
         mainImage: "/mushroom-lamp/kasane-tangerine-full-desktop-2e73f8a8.webp",

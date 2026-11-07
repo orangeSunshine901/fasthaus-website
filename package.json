@@ -8,7 +8,7 @@
     "unrs-resolver@1.12.2": true
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "test": "node --test --experimental-strip-types tests/*.test.ts",
     "start": "next start",

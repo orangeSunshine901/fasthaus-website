@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/store/cart";
 import { useMediaProducts } from "@/components/product/ProductMediaProvider";
+import { getCollectionMenuItems } from "@/lib/data/collection-menu";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { setPageScrollLocked } from "@/lib/page-scroll-lock";
@@ -52,18 +53,17 @@ function CartBadge({ size = 20, className = "" }: { size?: number; className?: s
 }
 
 function CollectionMegaMenuContent() {
-  const PRODUCTS = useMediaProducts();
-  const [activeProductId, setActiveProductId] = useState(PRODUCTS[0]?.id);
-  const activeProduct = PRODUCTS.find((product) => product.id === activeProductId) ?? PRODUCTS[0];
-  const previewVariant = activeProduct?.variants[0];
+  const items = getCollectionMenuItems(useMediaProducts());
+  const [activeProductId, setActiveProductId] = useState(items[0]?.product.id);
+  const activeItem = items.find(({ product }) => product.id === activeProductId) ?? items[0];
 
   return (
     <div className="grid h-[360px] grid-cols-[0.9fr_1.1fr] gap-3">
       <div className="relative h-full overflow-hidden rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)]">
-        {activeProduct && previewVariant && (
+        {activeItem && (
           <AnimatePresence initial={false} mode="wait">
             <motion.div
-              key={activeProduct.id}
+              key={activeItem.product.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -71,8 +71,8 @@ function CollectionMegaMenuContent() {
               className="absolute inset-0"
             >
               <Image
-                src={previewVariant.collectionImage}
-                alt={`${activeProduct.name} in ${previewVariant.color}`}
+                src={activeItem.image}
+                alt={`${activeItem.product.name} in ${activeItem.variant.color}`}
                 width={1080}
                 height={1080}
                 sizes="360px"
@@ -84,10 +84,10 @@ function CollectionMegaMenuContent() {
       </div>
 
       <div className="grid min-w-0 grid-rows-4 gap-1">
-        {PRODUCTS.map((product) => (
+        {items.map(({ product, variant }) => (
           <NavigationMenuLink key={product.id} asChild>
             <Link
-              href={`/product/${product.slug}`}
+              href={`/product/${product.slug}?variant=${encodeURIComponent(variant.id)}`}
               onMouseEnter={() => setActiveProductId(product.id)}
               onFocus={() => setActiveProductId(product.id)}
               className="min-w-0 overflow-hidden rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
@@ -105,7 +105,7 @@ function CollectionMegaMenuContent() {
 }
 
 export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstScroll?: boolean }) {
-  const PRODUCTS = useMediaProducts();
+  const menuItems = getCollectionMenuItems(useMediaProducts());
   const headerRef = useRef<HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [homeHeroPassed, setHomeHeroPassed] = useState(false);
@@ -460,32 +460,28 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
                   </p>
 
                   <div className="grid grid-cols-[repeat(2,minmax(0,169px))] justify-center gap-x-3 gap-y-3">
-                    {PRODUCTS.map((product) => {
-                      const variant = product.variants[0];
-
-                      return (
-                        <Link
-                          key={product.id}
-                          href={`/product/${product.slug}`}
-                          className="group min-w-0"
-                          onClick={() => setMobileOpen(false)}
-                        >
-                          <div className="relative aspect-square w-full max-w-[169px] overflow-hidden rounded-[14px] bg-[var(--color-surface-muted)]">
-                            <Image
-                              src={variant.collectionImage}
-                              alt={product.name}
-                              width={169}
-                              height={169}
-                              sizes="169px"
-                              className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                            />
-                          </div>
-                          <span className="mt-2 block text-sm font-semibold leading-5 text-[var(--color-text-primary)]">
-                            {product.name}
-                          </span>
-                        </Link>
-                      );
-                    })}
+                    {menuItems.map(({ product, variant, image }) => (
+                      <Link
+                        key={product.id}
+                        href={`/product/${product.slug}?variant=${encodeURIComponent(variant.id)}`}
+                        className="group min-w-0"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <div className="relative aspect-square w-full max-w-[169px] overflow-hidden rounded-[14px] bg-[var(--color-surface-muted)]">
+                          <Image
+                            src={image}
+                            alt={product.name}
+                            width={169}
+                            height={169}
+                            sizes="169px"
+                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                          />
+                        </div>
+                        <span className="mt-2 block text-sm font-semibold leading-5 text-[var(--color-text-primary)]">
+                          {product.name}
+                        </span>
+                      </Link>
+                    ))}
                   </div>
 
                   <Link
