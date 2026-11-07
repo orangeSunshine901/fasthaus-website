@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, Eye, EyeOff, LockKeyhole } from "lucide-react";
 
 export default function TeamLogin({ configured }: { configured: boolean }) {
@@ -17,8 +16,8 @@ export default function TeamLogin({ configured }: { configured: boolean }) {
         <div className="mt-10 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff0e8] text-[#c7471d]">
           <LockKeyhole size={22} />
         </div>
-        <h1 className="mt-5 text-3xl font-bold tracking-tight">A little room to create.</h1>
-        <p className="mt-3 text-neutral-500">Manage product photography with the team.</p>
+        <h1 className="mt-5 text-3xl font-bold tracking-tight">Fasthaus team sign-in</h1>
+        <p className="mt-3 text-neutral-500">Sign in to access the Fasthaus admin tools.</p>
         <form
           className="mt-8"
           onSubmit={async (event) => {
@@ -72,7 +71,7 @@ export default function TeamLogin({ configured }: { configured: boolean }) {
             disabled={busy || !configured}
             className="mt-5 flex w-full items-center justify-center gap-3 rounded-xl bg-[#20251e] p-3.5 font-semibold text-white disabled:opacity-50"
           >
-            {busy ? "Opening the studio…" : "Enter media studio"}
+            {busy ? "Signing in…" : "Sign in"}
             <ArrowRight size={18} />
           </button>
         </form>

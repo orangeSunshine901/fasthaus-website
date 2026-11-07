@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowDown, ArrowUp, Check, ImagePlus, LogOut, Search, Upload, X } from "lucide-react";
 import type { Product } from "@/lib/data/products";
@@ -216,7 +217,22 @@ export default function MediaEditor({ products, rows }: { products: Product[]; r
           />
           {/* <p className="mt-1 text-xs text-neutral-500">Product media</p> */}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/ddw-pricing"
+            prefetch={false}
+            className={button}
+            onClick={(event) => {
+              if (
+                anyDirty &&
+                !window.confirm("Leave the media studio and discard your unpublished changes?")
+              ) {
+                event.preventDefault();
+              }
+            }}
+          >
+            DDW pricing calculator
+          </Link>
           <a className={button} href="/" target="_blank" rel="noreferrer">
             View website ↗
           </a>

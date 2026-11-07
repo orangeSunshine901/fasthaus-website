@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { isCmsEditor } from "@/lib/cms/auth";
 import { readMediaRows } from "@/lib/cms/products";
 import type { MediaRow } from "@/lib/cms/media";
@@ -29,9 +30,14 @@ export default async function AdminPage() {
           We couldn’t load your saved images. Please try again after the media database has been
           configured.
         </p>
-        <a href="/admin" className="btn btn-primary mt-6">
-          Try again
-        </a>
+        <div className="mt-6 flex flex-wrap items-center gap-4">
+          <a href="/admin" className="btn btn-primary">
+            Try again
+          </a>
+          <Link href="/admin/ddw-pricing" prefetch={false} className="font-semibold underline">
+            DDW pricing calculator
+          </Link>
+        </div>
       </main>
     );
   return <MediaEditor products={PRODUCTS} rows={rows} />;
