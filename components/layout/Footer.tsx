@@ -211,7 +211,7 @@ export default function Footer() {
 
       {/* ── DESKTOP ── */}
       <div className="hidden md:block">
-        <div className="mx-auto grid max-w-[1240px] grid-cols-4 gap-x-12 px-8 pb-8 pt-16 lg:gap-x-20 xl:gap-x-24">
+        <div className="mx-auto grid max-w-[1240px] grid-cols-2 gap-x-12 gap-y-8 px-8 pb-8 pt-16 lg:grid-cols-4 lg:gap-x-20 xl:gap-x-24">
           {/* Link columns */}
           {linkColumns.map((col) => (
             <div key={col.heading} className="flex flex-col gap-3.5">
@@ -266,7 +266,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div
-          className="mx-auto flex max-w-[1240px] items-center justify-between gap-6 border-t px-8 pb-9 pt-5"
+          className="mx-auto flex max-w-[1240px] flex-col items-start justify-between gap-6 border-t px-8 pb-9 pt-5 lg:flex-row lg:items-center"
           style={{ borderColor: "#EEE9E3" }}
         >
           <span className="text-[13px] font-medium" style={{ color: "#8A8075" }}>

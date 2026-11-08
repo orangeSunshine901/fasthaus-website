@@ -260,7 +260,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--color-bg)" }}>
       <div className="container-page py-10 md:py-14">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[520px_1fr] lg:gap-16 xl:gap-[88px]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-8 xl:grid-cols-[520px_minmax(0,1fr)] xl:gap-[88px]">
           {/* LEFT: form */}
           <form ref={formRef} onSubmit={handlePurchase} noValidate className="flex flex-col gap-7">
             <div className="flex flex-col gap-2">
@@ -669,7 +669,7 @@ export default function CheckoutPage() {
                               updateQuantity(item.id, item.quantity - 1);
                             }}
                             disabled={quantityLocked(item) || item.quantity <= 1}
-                            className="grid h-[28px] w-[28px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
+                            className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-[28px] w-[28px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
                             style={{ color: "#6E655B" }}
                             aria-label={`Decrease ${item.productName} quantity`}
                           >
@@ -713,7 +713,7 @@ export default function CheckoutPage() {
                               quantityLocked(item) ||
                               (item.maxQuantity !== null && item.quantity >= item.maxQuantity)
                             }
-                            className="grid h-[28px] w-[28px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
+                            className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-[28px] w-[28px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
                             style={{ color: "#6E655B" }}
                             aria-label={`Increase ${item.productName} quantity`}
                           >

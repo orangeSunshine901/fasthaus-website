@@ -67,17 +67,17 @@ export const FloatingNav = ({
           duration: 0.2,
         }}
         className={cn(
-          "fixed inset-x-0 top-10 z-[5000] mx-auto flex max-w-fit items-center justify-center",
+          "fixed inset-x-0 top-10 z-[5000] mx-auto flex max-w-fit items-center justify-center md:max-xl:top-0 md:max-xl:w-full md:max-xl:max-w-none",
           className
         )}
       >
-        <div className="relative flex items-center justify-center">
+        <div className="relative flex items-center justify-center md:max-xl:w-full">
           {/* Glass background layer — clipped separately so the blur doesn't leak past the rounded corners on hover-triggered repaints */}
           <div
             aria-hidden="true"
-            className="glass-surface pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]"
+            className="glass-surface pointer-events-none absolute inset-0 overflow-hidden xl:rounded-[24px]"
           />
-          <div className="relative flex items-center justify-center gap-3 px-8 py-2 text-[#FFFDF5]">
+          <div className="relative flex items-center justify-center gap-3 px-8 py-2 text-[#FFFDF5] md:max-xl:w-full md:max-xl:justify-between">
           {leftSlot && <div className="flex items-center pr-1">{leftSlot}</div>}
 
           <div className="flex items-center gap-1">
@@ -85,26 +85,31 @@ export const FloatingNav = ({
               navItem.megaMenu ? (
                 <NavigationMenu
                   key={`link-${idx}`}
-                  className="h-full flex-none text-current"
+                  className="static h-full flex-none text-current [&>div]:!static"
                   viewport={false}
                 >
                   <NavigationMenuList className="h-full gap-0 mt-[1px]">
-                    <NavigationMenuItem className="flex h-full items-center">
-                      <NavigationMenuTrigger asChild showChevron={false} unstyled>
+                    <NavigationMenuItem className="static flex h-full items-center">
                         <Link
                           href={navItem.link}
                           onNavigate={() => requestNavigationScrollReset(navItem.link)}
-                          className="group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]"
+                          className="relative flex min-h-11 items-center gap-1 rounded-full pl-4 pr-1 py-2 text-sm font-semibold underline-offset-4 outline-none transition-colors hover:text-[var(--color-accent-amber)] hover:underline focus-visible:underline focus:text-[var(--color-accent-amber)]"
                         >
                           <span className="block sm:hidden">{navItem.icon}</span>
                           <span className="hidden sm:block">{navItem.name}</span>
+                        </Link>
+                      <NavigationMenuTrigger
+                        showChevron={false}
+                        unstyled
+                        aria-label="Browse lamp collection"
+                        className="grid h-11 w-11 place-items-center rounded-full text-current outline-none hover:text-[var(--color-accent-amber)] focus-visible:ring-2 focus-visible:ring-current data-[state=open]:text-[var(--color-accent-amber)]"
+                      >
                           <ChevronDown
-                            className="relative top-[1px] size-3 transition duration-300 group-data-[state=open]:rotate-180"
+                            className="size-4 transition duration-300 group-data-[state=open]:rotate-180"
                             aria-hidden="true"
                           />
-                        </Link>
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent className="collection-menu-content left-1/2 top-[calc(100%+16px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
+                      <NavigationMenuContent data-lenis-prevent className="collection-menu-content left-1/2 top-[calc(100%+16px)] max-h-[calc(100dvh-180px)] !w-[min(860px,calc(100vw-48px))] -translate-x-1/2 !overflow-y-auto overscroll-contain rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:max-xl:!mt-0 md:max-xl:max-h-[calc(100dvh-108px)] md:max-xl:!w-screen md:max-xl:!rounded-none">
                         {navItem.megaMenu}
                       </NavigationMenuContent>
                     </NavigationMenuItem>
@@ -116,7 +121,7 @@ export const FloatingNav = ({
                   href={navItem.link}
                   onNavigate={() => requestNavigationScrollReset(navItem.link)}
                   className={cn(
-                    "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold underline-offset-4 transition-colors hover:text-[var(--color-accent-amber)] hover:underline"
+                    "relative flex min-h-11 items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold underline-offset-4 transition-colors hover:text-[var(--color-accent-amber)] hover:underline"
                   )}
                 >
                   <span className="block sm:hidden">{navItem.icon}</span>

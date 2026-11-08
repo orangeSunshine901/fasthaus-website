@@ -76,7 +76,7 @@ export default function ContactPage() {
           business day.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Contact form */}
           <div
             className="card-surface p-6"

@@ -128,7 +128,7 @@ export default function ProductCard({ product }: Props) {
                   width={1080}
                   height={1080}
                   className="absolute inset-0 h-full w-full object-cover"
-                  sizes="(max-width: 768px) 50vw, 25vw"
+                  sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
                 />
               </picture>
             </motion.div>
@@ -143,7 +143,7 @@ export default function ProductCard({ product }: Props) {
           )}
           <div
             className={`absolute inset-x-0 bottom-[8px] flex translate-y-0 justify-center opacity-100 transition-[transform,opacity] duration-300 ease-out ${
-              hovered ? "md:translate-y-0 md:opacity-100" : "md:translate-y-[150%] md:opacity-0"
+              hovered ? "md:translate-y-0 md:opacity-100" : "pointer-fine:md:translate-y-[150%] pointer-fine:md:opacity-0"
             }`}
           >
             <div className="glass-surface glass-cta-surface relative inline-flex items-center justify-center gap-1 overflow-hidden rounded-full px-3 py-2">
@@ -170,8 +170,7 @@ export default function ProductCard({ product }: Props) {
         onClick={handleAddToCart}
         disabled={adding}
         aria-label={`Add ${product.name} to cart`}
-        className="group absolute z-20 h-7 w-7"
-        style={{ top: "16px", right: "16px" }}
+        className="group absolute top-4 right-4 z-20 grid h-7 w-7 place-items-center pointer-coarse:top-2 pointer-coarse:right-2 pointer-coarse:h-11 pointer-coarse:w-11"
       >
         {adding ? (
           <Spinner className="mx-auto size-4 text-[var(--color-accent-amber)]" />
@@ -182,7 +181,7 @@ export default function ProductCard({ product }: Props) {
             viewBox="0 0 28 28"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="h-full w-full"
+            className="h-7 w-7"
           >
             <rect
               x="0.5"
@@ -236,28 +235,27 @@ export default function ProductCard({ product }: Props) {
         </Link>
 
         <Tooltip.Provider delayDuration={0}>
-          <div className="flex items-center gap-2 pt-0.5">
+          <div className="flex items-center gap-2 pt-0.5 pointer-coarse:gap-0">
             {product.variants.map((variant) => (
               <Tooltip.Root key={variant.id}>
                 <Tooltip.Trigger asChild>
                   <button
                     type="button"
                     onClick={() => handleVariantSelect(variant)}
-                    className={`h-4 w-4 rounded-full border transition-transform duration-200 ${
-                      selectedVariant.id === variant.id ? "" : "hover:scale-[1.2]"
-                    }`}
-                    style={{
-                      backgroundColor: variant.colorHex,
-                      borderColor: "var(--color-border)",
-                      outline:
-                        selectedVariant.id === variant.id
-                          ? "2px solid var(--color-accent-amber)"
-                          : "none",
-                      outlineOffset: "2px",
-                    }}
+                    className="group grid h-4 w-4 place-items-center rounded-full pointer-coarse:h-11 pointer-coarse:w-11"
                     aria-label={`View ${product.name} in ${variant.color}`}
                     aria-pressed={selectedVariant.id === variant.id}
-                  />
+                  >
+                    <span
+                      className={`h-4 w-4 rounded-full border transition-transform duration-200 ${selectedVariant.id === variant.id ? "" : "group-hover:scale-[1.2]"}`}
+                      style={{
+                        backgroundColor: variant.colorHex,
+                        borderColor: "var(--color-border)",
+                        outline: selectedVariant.id === variant.id ? "2px solid var(--color-accent-amber)" : "none",
+                        outlineOffset: "2px",
+                      }}
+                    />
+                  </button>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
                   <Tooltip.Content

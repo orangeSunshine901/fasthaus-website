@@ -107,7 +107,7 @@ export default function CartPage() {
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         disabled={item.quantity <= 1}
-                        className="grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
+                        className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
                         style={{ color: "var(--color-text-secondary)" }}
                         aria-label={`Decrease ${item.productName} quantity`}
                       >
@@ -122,7 +122,7 @@ export default function CartPage() {
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         disabled={item.maxQuantity !== null && item.quantity >= item.maxQuantity}
-                        className="grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
+                        className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
                         style={{ color: "var(--color-text-secondary)" }}
                         aria-label={`Increase ${item.productName} quantity`}
                       >
@@ -180,7 +180,7 @@ export default function CartPage() {
                         <button
                           onClick={() => updateAddOnQuantity(item.id, ao.id, ao.quantity - 1)}
                           disabled={ao.quantity <= 1}
-                          className="grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
+                          className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
                           style={{ color: "var(--color-text-secondary)" }}
                           aria-label={`Decrease ${ao.name} quantity`}
                         >
@@ -195,7 +195,7 @@ export default function CartPage() {
                         <button
                           onClick={() => updateAddOnQuantity(item.id, ao.id, ao.quantity + 1)}
                           disabled={ao.quantity >= item.quantity}
-                          className="grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
+                          className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-10 w-10 place-items-center disabled:opacity-40 md:h-[34px] md:w-[34px]"
                           style={{ color: "var(--color-text-secondary)" }}
                           aria-label={`Increase ${ao.name} quantity`}
                         >

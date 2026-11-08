@@ -147,7 +147,7 @@ export default function PurchaseRow({
               type="button"
               onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
               disabled={quantity <= 1}
-              className="grid h-11 flex-1 place-items-center transition-colors hover:bg-[var(--color-surface)] disabled:opacity-40 md:h-[34px] md:w-[34px] md:flex-none"
+              className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-11 flex-1 place-items-center transition-colors hover:bg-[var(--color-surface)] disabled:opacity-40 md:h-[34px] md:w-[34px] md:flex-none"
               style={{ color: "var(--color-text-secondary)" }}
               aria-label="Decrease quantity"
             >
@@ -162,7 +162,7 @@ export default function PurchaseRow({
             <button
               type="button"
               onClick={() => onQuantityChange(Math.min(selectedVariant.stock, quantity + 1))}
-              className="grid h-11 flex-1 place-items-center transition-colors hover:bg-[var(--color-surface)] md:h-[34px] md:w-[34px] md:flex-none"
+              className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-11 flex-1 place-items-center transition-colors hover:bg-[var(--color-surface)] md:h-[34px] md:w-[34px] md:flex-none"
               style={{ color: "var(--color-text-secondary)" }}
               aria-label="Increase quantity"
             >

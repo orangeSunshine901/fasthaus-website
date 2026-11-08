@@ -260,7 +260,7 @@ export default function ProductGallery({
                   <button
                     type="button"
                     onClick={() => onVariantChange(variant)}
-                    className="grid h-11 w-11 place-items-center rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-2 md:h-8 md:w-8"
+                    className="grid h-11 w-11 place-items-center rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-2 md:h-8 md:w-8 pointer-coarse:min-h-11 pointer-coarse:min-w-11"
                     aria-label={`View ${name} in ${variant.color}`}
                     aria-pressed={selectedVariant.id === variant.id}
                   >

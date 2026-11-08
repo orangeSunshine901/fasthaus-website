@@ -146,7 +146,7 @@ export default function CartDrawer() {
               <button
                 onClick={closeDrawer}
                 aria-label="Close cart"
-                className="grid h-10 w-10 place-items-center rounded-full border bg-white transition-colors"
+                className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-10 w-10 place-items-center rounded-full border bg-white transition-colors"
                 style={{ borderColor: "#EEE9E3" }}
                 onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#D9D2C9")}
                 onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#EEE9E3")}
@@ -361,7 +361,7 @@ export default function CartDrawer() {
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                 disabled={quantityLocked || item.quantity <= 1}
-                                className="grid h-[30px] w-[30px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
+                                className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-[30px] w-[30px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
                                 style={{ color: "#6E655B" }}
                                 aria-label={`Decrease ${item.productName} quantity`}
                               >
@@ -383,7 +383,7 @@ export default function CartDrawer() {
                                   quantityLocked ||
                                   (item.maxQuantity !== null && item.quantity >= item.maxQuantity)
                                 }
-                                className="grid h-[30px] w-[30px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
+                                className="pointer-coarse:min-h-11 pointer-coarse:min-w-11 grid h-[30px] w-[30px] place-items-center bg-white transition-colors hover:bg-[#FAF7F3] disabled:opacity-40"
                                 style={{ color: "#6E655B" }}
                                 aria-label={`Increase ${item.productName} quantity`}
                               >

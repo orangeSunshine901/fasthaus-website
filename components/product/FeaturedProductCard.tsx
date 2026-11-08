@@ -75,7 +75,7 @@ export default function FeaturedProductCard({
                       : "opacity-100 "
                   : ""
               }`}
-              sizes="(max-width: 767px) 100vw, (max-width: 921px) 50vw, 25vw"
+              sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 25vw"
             />
             <Image
               src={displayedImages.on}
@@ -89,7 +89,7 @@ export default function FeaturedProductCard({
                     ? "opacity-100"
                     : "opacity-0"
               }`}
-              sizes="(max-width: 767px) 100vw, (max-width: 921px) 50vw, 25vw"
+              sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 25vw"
             />
           </motion.div>
         </AnimatePresence>
@@ -98,7 +98,7 @@ export default function FeaturedProductCard({
       <div
         className={`${compactMobile ? "mt-2 md:mt-4" : "mt-4"} flex justify-center transition-all duration-500 ${
           activeMobile === undefined
-            ? "pointer-events-none translate-y-2 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 focus-within:pointer-events-auto focus-within:translate-y-0 focus-within:opacity-100"
+            ? "pointer-events-none translate-y-2 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 focus-within:pointer-events-auto focus-within:translate-y-0 focus-within:opacity-100 pointer-coarse:pointer-events-auto pointer-coarse:translate-y-0 pointer-coarse:opacity-100"
             : activeMobile
               ? "pointer-events-auto translate-y-0 opacity-100"
               : "pointer-events-none translate-y-2 opacity-0"
@@ -149,7 +149,7 @@ export default function FeaturedProductCard({
       </p>
 
       <Tooltip.Provider delayDuration={0}>
-        <div className="flex items-center gap-3 mt-1">
+        <div className="flex items-center gap-3 mt-1 pointer-coarse:gap-0">
           {product.variants.map((variant) => (
             <Tooltip.Root key={variant.id}>
               <Tooltip.Trigger asChild>
@@ -157,17 +157,19 @@ export default function FeaturedProductCard({
                   type="button"
                   onPointerDown={compactMobile ? (event) => event.stopPropagation() : undefined}
                   onClick={() => setSelectedVariant(variant)}
-                  className={`relative z-20 h-[16px] w-[16px] cursor-pointer rounded-full border  transition-transform duration-200 ${
-                    selectedVariant.id === variant.id ? "" : "hover:scale-[1.24]"
-                  }`}
-                  style={{
-                    backgroundColor: variant.colorHex,
-                    outline: selectedVariant.id === variant.id ? "2px solid white" : "none",
-                    outlineOffset: "2px",
-                  }}
+                  className="group/swatch relative z-20 grid h-4 w-4 cursor-pointer place-items-center rounded-full pointer-coarse:h-11 pointer-coarse:w-11"
                   aria-label={`Select ${variant.color}`}
                   aria-pressed={selectedVariant.id === variant.id}
-                />
+                >
+                  <span
+                    className={`h-4 w-4 rounded-full border transition-transform duration-200 ${selectedVariant.id === variant.id ? "" : "group-hover/swatch:scale-[1.24]"}`}
+                    style={{
+                      backgroundColor: variant.colorHex,
+                      outline: selectedVariant.id === variant.id ? "2px solid white" : "none",
+                      outlineOffset: "2px",
+                    }}
+                  />
+                </button>
               </Tooltip.Trigger>
               <Tooltip.Portal>
                 <Tooltip.Content

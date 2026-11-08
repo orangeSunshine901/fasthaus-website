@@ -1,0 +1,188 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - paragraph [ref=e4]: We use essential cookies to run Fasthaus and, with your permission, optional cookies to understand and improve your experience.
+    - generic [ref=e5]:
+      - button "Accept all cookies" [active] [ref=e6] [cursor=pointer]
+      - generic [ref=e7]:
+        - button "Open cookie preferences" [ref=e8] [cursor=pointer]:
+          - generic [ref=e9]: Preferences
+        - link "Visit the Silktide Consent Manager page" [ref=e10]:
+          - /url: https://silktide.com/consent-manager
+  - generic [ref=e14]:
+    - generic [ref=e16]:
+      - generic [ref=e17]: Free shipping
+      - generic [ref=e24]: Eco-friendly materials
+      - generic [ref=e29]: 1-year warranty
+    - generic [ref=e35]:
+      - link "Fasthaus home" [ref=e37] [cursor=pointer]:
+        - /url: /
+        - img "Fasthaus" [ref=e38]
+      - generic [ref=e39]:
+        - navigation "Main" [ref=e40]:
+          - list [ref=e42]:
+            - listitem [ref=e43]:
+              - link "collection" [ref=e44] [cursor=pointer]:
+                - /url: /collection
+        - link "about" [ref=e48] [cursor=pointer]:
+          - /url: /about
+        - link "contact us" [ref=e50] [cursor=pointer]:
+          - /url: /contact
+      - button "Open cart" [ref=e55] [cursor=pointer]
+    - banner [ref=e60]:
+      - generic [ref=e63]:
+        - link [ref=e64] [cursor=pointer]:
+          - /url: /
+          - img "Fasthaus" [ref=e65]
+        - navigation "Main" [ref=e66]:
+          - list [ref=e68]:
+            - listitem [ref=e69]:
+              - link "collection" [ref=e70] [cursor=pointer]:
+                - /url: /collection
+            - listitem [ref=e73]:
+              - link "about" [ref=e74] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e75]:
+              - link "contact us" [ref=e76] [cursor=pointer]:
+                - /url: /contact
+        - button "Open cart" [ref=e79] [cursor=pointer]
+    - main [ref=e84]:
+      - region "Fasthaus lamp collection" [ref=e85]:
+        - generic:
+          - generic:
+            - generic:
+              - heading "NASAQ" [level=1]
+            - generic:
+              - generic:
+                - img "NASAQ lamp in COBALT BLUE"
+            - generic:
+              - paragraph: COBALT BLUE
+              - link "View NASAQ in COBALT BLUE" [ref=e89] [cursor=pointer]:
+                - /url: /product/nasaq-lamp?variant=3-cobalt-blue
+                - generic [ref=e90]: View Product
+        - generic [ref=e92]: 01 / 04
+        - paragraph [ref=e94]: NASAQ lamp, COBALT BLUE, slide 1 of 4
+      - generic [ref=e95]:
+        - navigation "Breadcrumb" [ref=e96]:
+          - link "Home" [ref=e98] [cursor=pointer]:
+            - /url: /
+          - generic [ref=e99]: / Collection
+        - generic [ref=e101]:
+          - heading "Collection" [level=1] [ref=e102]
+          - paragraph [ref=e103]: Browse our full collection of considered everyday lighting, built to last and made to love.
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - link "View NASAQ in Cobalt Blue" [ref=e106] [cursor=pointer]:
+              - /url: /product/nasaq-lamp?variant=3-cobalt-blue
+              - generic [ref=e107]:
+                - img "NASAQ in Cobalt Blue" [ref=e110]
+                - generic [ref=e111]: View Product
+            - button "Add NASAQ to cart" [ref=e115]
+            - generic [ref=e124]:
+              - link "NASAQ AED 299.00" [ref=e125] [cursor=pointer]:
+                - /url: /product/nasaq-lamp?variant=3-cobalt-blue
+                - generic [ref=e126]: NASAQ
+                - generic [ref=e127]:
+                  - img "AED" [ref=e128]
+                  - generic [ref=e129]: "299.00"
+              - generic [ref=e130]:
+                - button "View NASAQ in Cobalt Blue" [pressed] [ref=e131]
+                - button "View NASAQ in Tangerine" [ref=e132]
+                - button "View NASAQ in Marshmallow White" [ref=e133]
+          - generic [ref=e134]:
+            - link "View NUJĀJ in Matcha" [ref=e135] [cursor=pointer]:
+              - /url: /product/nujaj-desk-lamp?variant=1-matcha
+              - generic [ref=e136]:
+                - img "NUJĀJ in Matcha" [ref=e139]
+                - generic [ref=e140]: View Product
+            - button "Add NUJĀJ to cart" [ref=e144]
+            - generic [ref=e153]:
+              - link "NUJĀJ AED 329.00" [ref=e154] [cursor=pointer]:
+                - /url: /product/nujaj-desk-lamp?variant=1-matcha
+                - generic [ref=e155]: NUJĀJ
+                - generic [ref=e156]:
+                  - img "AED" [ref=e157]
+                  - generic [ref=e158]: "329.00"
+              - generic [ref=e159]:
+                - button "View NUJĀJ in Matcha" [pressed] [ref=e160]
+                - button "View NUJĀJ in Cherry Red" [ref=e161]
+                - button "View NUJĀJ in Clear" [ref=e162]
+          - generic [ref=e163]:
+            - link "View HAMRAH in Cherry Red" [ref=e164] [cursor=pointer]:
+              - /url: /product/hamrah-lamp?variant=4-cherry-red
+              - generic [ref=e165]:
+                - img "HAMRAH in Cherry Red" [ref=e168]
+                - generic [ref=e169]: View Product
+            - button "Add HAMRAH to cart" [ref=e173]
+            - generic [ref=e182]:
+              - link "HAMRAH AED 379.00" [ref=e183] [cursor=pointer]:
+                - /url: /product/hamrah-lamp?variant=4-cherry-red
+                - generic [ref=e184]: HAMRAH
+                - generic [ref=e185]:
+                  - img "AED" [ref=e186]
+                  - generic [ref=e187]: "379.00"
+              - generic [ref=e188]:
+                - button "View HAMRAH in Cherry Red" [pressed] [ref=e189]
+                - button "View HAMRAH in Cobalt Blue" [ref=e190]
+                - button "View HAMRAH in Olive Green" [ref=e191]
+          - generic [ref=e192]:
+            - link "View KASANE in Tangerine" [ref=e193] [cursor=pointer]:
+              - /url: /product/kasane-lamp?variant=2-tangerine
+              - generic [ref=e194]:
+                - img "KASANE in Tangerine" [ref=e197]
+                - generic [ref=e198]: View Product
+            - button "Add KASANE to cart" [ref=e202]
+            - generic [ref=e211]:
+              - link "KASANE AED 399.00" [ref=e212] [cursor=pointer]:
+                - /url: /product/kasane-lamp?variant=2-tangerine
+                - generic [ref=e213]: KASANE
+                - generic [ref=e214]:
+                  - img "AED" [ref=e215]
+                  - generic [ref=e216]: "399.00"
+              - generic [ref=e217]:
+                - button "View KASANE in Tangerine" [pressed] [ref=e218]
+                - button "View KASANE in Cobalt Blue" [ref=e219]
+                - button "View KASANE in Black" [ref=e220]
+    - contentinfo [ref=e221]:
+      - generic [ref=e222]:
+        - generic [ref=e223]:
+          - generic [ref=e224]:
+            - generic [ref=e225]: Shop
+            - link "Collection" [ref=e226] [cursor=pointer]:
+              - /url: /collection
+          - generic [ref=e227]:
+            - generic [ref=e228]: Studio
+            - link "About Fasthaus" [ref=e229] [cursor=pointer]:
+              - /url: /about
+            - link "Custom Projects" [ref=e230] [cursor=pointer]:
+              - /url: /contact
+          - generic [ref=e231]:
+            - generic [ref=e232]: Support
+            - link "Shipping Policy" [ref=e233] [cursor=pointer]:
+              - /url: /legal/shipping
+            - link "Refund & Return Policy" [ref=e234] [cursor=pointer]:
+              - /url: /legal/refunds
+            - link "Warranty" [ref=e235] [cursor=pointer]:
+              - /url: /legal/warranty
+            - link "FAQ" [ref=e236] [cursor=pointer]:
+              - /url: /faq
+          - generic [ref=e237]:
+            - generic [ref=e238]: Contact
+            - link "WhatsApp" [ref=e239] [cursor=pointer]:
+              - /url: https://wa.me/971527391317
+            - link "Email" [ref=e240] [cursor=pointer]:
+              - /url: mailto:hello@fasthaus.studio
+            - link "Instagram" [ref=e241] [cursor=pointer]:
+              - /url: https://www.instagram.com/fasthaus.studio/?utm_source=ig_web_button_share_sheet
+        - link "Fasthaus home" [ref=e242] [cursor=pointer]:
+          - /url: /
+          - img "Fasthaus" [ref=e243]
+        - generic [ref=e244]:
+          - generic [ref=e245]: © 2026 Fasthaus Studio is a brand of Fast Advertising FZC. All rights reserved.
+          - generic [ref=e247]:
+            - link "Privacy" [ref=e248] [cursor=pointer]:
+              - /url: /legal/privacy
+            - link "Terms" [ref=e249] [cursor=pointer]:
+              - /url: /legal/terms
+            - link "Cookies" [ref=e250] [cursor=pointer]:
+              - /url: /legal/cookies
+  - alert [ref=e251]

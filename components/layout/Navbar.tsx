@@ -36,7 +36,7 @@ function CartBadge({ size = 20, className = "" }: { size?: number; className?: s
     <button
       type="button"
       onClick={openDrawer}
-      className={`relative inline-flex cursor-pointer p-2.5 -m-2.5 ${className}`}
+      className={`relative inline-flex min-h-11 min-w-11 items-center justify-center cursor-pointer p-2.5 -m-2.5 ${className}`}
       aria-label="Open cart"
     >
       <ShoppingCart size={size} className="transition-opacity hover:opacity-70" />
@@ -58,8 +58,8 @@ function CollectionMegaMenuContent() {
   const activeItem = items.find(({ product }) => product.id === activeProductId) ?? items[0];
 
   return (
-    <div className="grid h-[360px] grid-cols-[0.9fr_1.1fr] gap-3">
-      <div className="relative h-full overflow-hidden rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)]">
+    <div className="grid gap-3 xl:h-[360px] xl:grid-cols-[0.9fr_1.1fr]">
+      <div className="relative hidden h-full overflow-hidden rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)] xl:block">
         {activeItem && (
           <AnimatePresence initial={false} mode="wait">
             <motion.div
@@ -83,17 +83,25 @@ function CollectionMegaMenuContent() {
         )}
       </div>
 
-      <div className="grid min-w-0 grid-rows-4 gap-1">
-        {items.map(({ product, variant }) => (
+      <div className="grid min-w-0 grid-cols-2 gap-3 xl:grid-cols-1 xl:grid-rows-4 xl:gap-1">
+        {items.map(({ product, variant, image }) => (
           <NavigationMenuLink key={product.id} asChild>
             <Link
               href={`/product/${product.slug}?variant=${encodeURIComponent(variant.id)}`}
               onMouseEnter={() => setActiveProductId(product.id)}
               onFocus={() => setActiveProductId(product.id)}
-              className="min-w-0 overflow-hidden rounded-[var(--radius-sm)] p-4 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)]"
+              className="min-w-0 overflow-hidden rounded-[var(--radius-sm)] p-3 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)] xl:p-4"
             >
+              <Image
+                src={image}
+                alt=""
+                width={480}
+                height={270}
+                sizes="(min-width: 1280px) 0px, 45vw"
+                className="mb-2 h-[min(16svh,160px)] w-full rounded-[var(--radius-sm)] object-cover xl:hidden"
+              />
               <span className="block text-base font-bold leading-6">{product.name}</span>
-              <span className="mt-1 block truncate text-sm leading-5 text-[var(--color-text-secondary)]">
+              <span className="mt-1 line-clamp-2 text-sm leading-5 text-[var(--color-text-secondary)] xl:block xl:truncate">
                 {product.description}
               </span>
             </Link>
@@ -310,12 +318,12 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
         {/* Desktop nav — logo | links | icons */}
         <div
           data-home-reveal-item={revealOnFirstScroll ? "" : undefined}
-          className="relative mx-auto hidden h-16 w-full max-w-[1240px] md:flex md:translate-y-8"
+          className="relative mx-auto hidden h-16 w-full md:flex xl:max-w-[1240px] xl:translate-y-8"
         >
           {/* Glass background layer — clipped separately so the blur doesn't leak past the rounded corners on hover-triggered repaints */}
           <div
             aria-hidden="true"
-            className="glass-surface pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]"
+            className="glass-surface pointer-events-none absolute inset-0 overflow-hidden xl:rounded-[24px]"
           />
           <div
             className="relative flex h-full w-full items-center justify-center px-8"
@@ -345,27 +353,32 @@ export default function Navbar({ revealOnFirstScroll = false }: { revealOnFirstS
               </Link>
 
               {/* Center links */}
-              <NavigationMenu className="h-full w-[453px] flex-none text-current" viewport={false}>
+              <NavigationMenu className="static h-full w-[360px] flex-none text-current lg:w-[453px] [&>div]:!static" viewport={false}>
                 <NavigationMenuList className="h-full w-full justify-between gap-0">
-                  <NavigationMenuItem className="flex h-full items-center">
-                    <NavigationMenuTrigger asChild showChevron={false} unstyled>
+                  <NavigationMenuItem className="static flex h-full items-center">
                       <Link
                         href="/collection"
                         className={cn(
-                          "group box-content flex h-16 w-[100px] items-center justify-center rounded-none p-2 text-sm font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:underline focus:text-[var(--color-accent-amber)] data-[state=open]:text-[var(--color-accent-amber)]",
+                          "flex h-16 items-center justify-center rounded-none px-2 text-sm font-semibold leading-6 underline-offset-4 outline-none transition-colors hover:underline focus-visible:underline focus:text-[var(--color-accent-amber)]",
                           isActive("/collection")
                             ? "text-[var(--color-accent-amber)]"
                             : "text-current"
                         )}
                       >
                         collection
+                      </Link>
+                    <NavigationMenuTrigger
+                      showChevron={false}
+                      unstyled
+                      aria-label="Browse lamp collection"
+                      className="grid h-11 w-11 place-items-center rounded-full text-current outline-none hover:text-[var(--color-accent-amber)] focus-visible:ring-2 focus-visible:ring-current data-[state=open]:text-[var(--color-accent-amber)]"
+                    >
                         <ChevronDown
-                          className="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
+                          className="size-4 transition duration-300 group-data-[state=open]:rotate-180"
                           aria-hidden="true"
                         />
-                      </Link>
                     </NavigationMenuTrigger>
-                    <NavigationMenuContent className="collection-menu-content left-1/2 top-[calc(100%+12px)] w-[min(860px,calc(100vw-48px))] -translate-x-1/2 rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:!w-[860px]">
+                    <NavigationMenuContent data-lenis-prevent className="collection-menu-content left-1/2 top-[calc(100%+12px)] max-h-[calc(100dvh-180px)] !w-[min(860px,calc(100vw-48px))] -translate-x-1/2 !overflow-y-auto overscroll-contain rounded-[var(--radius-md)] border bg-white p-3 text-[var(--color-text-primary)] shadow-xl md:max-xl:!mt-0 md:max-xl:max-h-[calc(100dvh-108px)] md:max-xl:!w-screen md:max-xl:!rounded-none">
                       <CollectionMegaMenuContent />
                     </NavigationMenuContent>
                   </NavigationMenuItem>
