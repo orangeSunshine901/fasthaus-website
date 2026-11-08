@@ -83,23 +83,24 @@ function CollectionMegaMenuContent() {
         )}
       </div>
 
-      <div className="grid min-w-0 grid-cols-2 gap-3 xl:grid-cols-1 xl:grid-rows-4 xl:gap-1">
+      <div className="grid min-w-0 grid-cols-2 gap-3 lg:grid-cols-4 xl:grid-cols-1 xl:grid-rows-4 xl:gap-1">
         {items.map(({ product, variant, image }) => (
           <NavigationMenuLink key={product.id} asChild>
             <Link
               href={`/product/${product.slug}?variant=${encodeURIComponent(variant.id)}`}
               onMouseEnter={() => setActiveProductId(product.id)}
               onFocus={() => setActiveProductId(product.id)}
-              className="min-w-0 overflow-hidden rounded-[var(--radius-sm)] p-3 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)] xl:p-4"
+              className="block min-w-0 overflow-hidden rounded-[var(--radius-sm)] p-3 outline-none transition-colors hover:bg-[var(--color-surface-muted)] focus:bg-[var(--color-surface-muted)] xl:p-4"
             >
-              <Image
-                src={image}
-                alt=""
-                width={480}
-                height={270}
-                sizes="(min-width: 1280px) 0px, 45vw"
-                className="mb-2 h-[min(16svh,160px)] w-full rounded-[var(--radius-sm)] object-cover xl:hidden"
-              />
+              <div className="relative mb-3 aspect-[3/2] overflow-hidden rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)] xl:hidden">
+                <Image
+                  src={image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1280px) 0px, (min-width: 1024px) calc(25vw - 40px), calc(50vw - 40px)"
+                  className="object-contain"
+                />
+              </div>
               <span className="block text-base font-bold leading-6">{product.name}</span>
               <span className="mt-1 line-clamp-2 text-sm leading-5 text-[var(--color-text-secondary)] xl:block xl:truncate">
                 {product.description}

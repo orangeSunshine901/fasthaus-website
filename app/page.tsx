@@ -203,7 +203,7 @@ export default async function HomePage() {
                   <article
                     key={step.title}
                     data-scroll
-                    className={`scroll-reveal-up scroll-stagger-${index + 1} flex w-full flex-col items-start gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-6 md:h-60 md:gap-5 md:p-8`}
+                    className={`scroll-reveal-up scroll-stagger-${index + 1} flex w-full flex-col items-start gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-6 md:min-h-60 md:gap-5 md:p-8`}
                   >
                     <div className="hidden h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[12px] bg-[var(--color-surface)] md:flex">
                       <Image
@@ -242,7 +242,7 @@ export default async function HomePage() {
 
               <div
                 data-scroll
-                className="scroll-reveal-soft scroll-stagger-3 flex w-full items-center gap-4 rounded-2xl bg-[#EEF7E8] p-5 md:h-20 md:gap-8 md:p-6"
+                className="scroll-reveal-soft scroll-stagger-3 flex w-full items-center gap-4 rounded-2xl bg-[#EEF7E8] p-5 md:min-h-20 md:gap-8 md:p-6"
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)]">
                   <Image
