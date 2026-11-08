@@ -806,7 +806,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                   alt={activeSlide.lampName + " lamp in " + activeSlide.colorName}
                   width={1000}
                   height={1000}
-                  sizes="(min-width: 768px) 48vw, 112vw"
+                  sizes="(min-width: 1280px) min(48vw, 700px), (min-width: 768px) min(72vw, 700px), 112vw"
                   className="absolute inset-0 h-full w-full object-contain"
                   preload={selectedIndex === 0}
                   draggable={false}

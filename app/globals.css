@@ -321,6 +321,12 @@ body:has(.product-hero[data-ui-theme="light"]) [data-product-nav] .product-nav-d
   }
 }
 
+@media (min-width: 768px) and (max-width: 1279px) {
+  .collection-hero {
+    --collection-hero-artwork-width: min(72vw, 700px);
+  }
+}
+
 /* Horizontal swipe rails (tab bars, carousels) — scrollable but chromeless */
 .scrollbar-hide {
   -ms-overflow-style: none;
