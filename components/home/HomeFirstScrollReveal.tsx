@@ -7,24 +7,37 @@ import { isPageScrollLocked } from "@/lib/page-scroll-lock";
 const SCROLL_LOCK_MS = 950;
 const TOP_DEAD_SCROLL_PX = 120;
 const SCROLL_LOCK_EVENT = "home-reveal-scroll-lock";
+const HOME_VISITED_KEY = "fasthaus_home_visited";
 const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "]);
 const DOWN_KEYS = new Set(["ArrowDown", "PageDown", "End", " "]);
 const UP_KEYS = new Set(["ArrowUp", "PageUp", "Home"]);
 
 export default function HomeFirstScrollReveal() {
   const markerRef = useRef<HTMLSpanElement>(null);
+  const visitedHome = useRef<boolean | null>(null);
   const returningHome = useReturningHome();
 
   useEffect(() => {
     const root = markerRef.current?.closest<HTMLElement>("[data-home-reveal]");
     if (!root) return;
 
+    if (visitedHome.current === null) {
+      visitedHome.current = false;
+      try {
+        visitedHome.current = localStorage.getItem(HOME_VISITED_KEY) === "1";
+        localStorage.setItem(HOME_VISITED_KEY, "1");
+      } catch {
+        // In-site return navigation still works without storage.
+      }
+    }
+    let returning = returningHome || visitedHome.current;
+
     let transitionTimer = 0;
     let transitioning = false;
     let touchStartY = 0;
     let topOverscroll = 0;
-    let ignoreRouteScroll = returningHome;
-    let hasLeftTop = !returningHome && window.scrollY > 0;
+    let ignoreRouteScroll = returning;
+    let hasLeftTop = !returning && window.scrollY > 0;
 
     const finishTransition = () => {
       transitioning = false;
@@ -35,6 +48,7 @@ export default function HomeFirstScrollReveal() {
     };
 
     const transitionTo = (state: "pending" | "revealed") => {
+      if (returning && state === "pending") return;
       if (transitioning || root.dataset.homeReveal === state) return;
 
       transitioning = true;
@@ -175,10 +189,17 @@ export default function HomeFirstScrollReveal() {
       }
     };
 
-    if (!isPageScrollLocked() && (window.scrollY > 0 || returningHome)) {
+    if (returning || (!isPageScrollLocked() && window.scrollY > 0)) {
       root.dataset.homeReveal = "revealed";
       root.dataset.homeContent = "revealed";
     }
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      returning = true;
+      root.dataset.homeReveal = "revealed";
+      root.dataset.homeContent = "revealed";
+    };
+    window.addEventListener("pageshow", handlePageShow);
     window.addEventListener("wheel", handleWheel, { passive: false, capture: true });
     window.addEventListener("touchstart", handleTouchStart, { passive: true, capture: true });
     window.addEventListener("touchmove", handleTouchMove, { passive: false, capture: true });
@@ -188,6 +209,7 @@ export default function HomeFirstScrollReveal() {
     return () => {
       window.clearTimeout(transitionTimer);
       finishTransition();
+      window.removeEventListener("pageshow", handlePageShow);
       window.removeEventListener("wheel", handleWheel, true);
       window.removeEventListener("touchstart", handleTouchStart, true);
       window.removeEventListener("touchmove", handleTouchMove, true);

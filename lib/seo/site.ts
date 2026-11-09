@@ -36,7 +36,7 @@ export const DEFAULT_OG_IMAGE = {
 /** Public business facts, all visible on /contact. Only add fields that are verified. */
 export const ORGANIZATION = {
   email: "hello@fasthaus.studio",
-  telephone: "+971527391317",
+  telephone: "+971507958591",
   logo: "/fasthaus-logo-final.svg",
   sameAs: ["https://www.instagram.com/fasthaus.studio/"],
   address: { addressLocality: "Sharjah", addressRegion: "Sharjah", addressCountry: "AE" },

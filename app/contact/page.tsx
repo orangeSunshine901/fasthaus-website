@@ -19,7 +19,7 @@ const details = [
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+971 52 739 1317",
+    value: "+971 50 795 8591",
     href: "https://wa.me/971527391317",
   },
   {

@@ -6,6 +6,7 @@ import { BadgePercent, Gift, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useMediaProducts } from "@/components/product/ProductMediaProvider";
 import { isGiftOfferRoute, shouldShowGiftOffer } from "@/lib/gift-offer";
+import { DISCOUNT_INTERACTION_GAP_MS, hasDiscountOfferEngagement, isDiscountOfferOnCooldown, REACTIVATION_IDLE_MS } from "@/lib/returning-offer";
 import { isPageScrollLocked, PAGE_SCROLL_LOCK_EVENT } from "@/lib/page-scroll-lock";
 import { CHECKOUT_DISCOUNTS_ENABLED, GIFT_WITH_ORDER_ENABLED } from "@/lib/promotions";
 import { CHECKOUT_DISCOUNT_CODE } from "@/lib/checkout/discount";
@@ -14,6 +15,7 @@ import useReturningDiscount from "./useReturningDiscount";
 
 const CONFETTI_COLORS = ["var(--color-accent-amber)", "var(--color-highlight)", "#C4884B"];
 const QUALIFIED_KEY = "fasthaus_gift_offer_qualified";
+const DISCOUNT_LAST_SHOWN_KEY = "fasthaus_returning_discount_last_shown";
 
 export default function GiftOfferBanner() {
   const pathname = usePathname();
@@ -25,11 +27,15 @@ export default function GiftOfferBanner() {
     products.some((product) => product.id === item.productId)
   ));
   const drawerOpen = useCartStore((state) => state.drawerOpen);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState<"gift" | "discount" | false>(false);
   const activeMs = useRef(0);
   const viewedLamp = useRef(false);
   const dismissed = useRef(false);
   const discountDismissed = useRef(false);
+  const discountShown = useRef(false);
+  const interactions = useRef(0);
+  const lastInteraction = useRef(0);
+  const lastCountedInteraction = useRef(-Infinity);
   const qualified = useRef(false);
   const isProductPage = products.some((product) => pathname === `/product/${product.slug}`);
 
@@ -43,16 +49,44 @@ export default function GiftOfferBanner() {
     }
 
     let lastTick = performance.now();
-    const update = () => {
-      const now = performance.now();
-      const consentOpen = ["#stcm-banner", "#stcm-modal"].some((selector) =>
+    const isBlocked = () => document.visibilityState !== "visible" || drawerOpen || isPageScrollLocked()
+      || ["#stcm-banner", "#stcm-modal"].some((selector) =>
         Boolean(document.querySelector(selector)?.getClientRects().length)
       );
-      const blocked = document.visibilityState !== "visible"
-        || drawerOpen || isPageScrollLocked() || consentOpen;
+    const recordInteraction = (event: Event) => {
+      if (!discountOffer || discountShown.current || discountDismissed.current
+        || !isGiftOfferRoute(pathname) || isBlocked()) return;
+      if (event instanceof KeyboardEvent && (event.repeat || event.target instanceof Element
+        && event.target.closest("input, textarea, select, [contenteditable]"))) return;
+      const now = performance.now();
+      if (lastInteraction.current && now - lastInteraction.current >= REACTIVATION_IDLE_MS) {
+        interactions.current = 0;
+        activeMs.current = 0;
+      }
+      lastInteraction.current = now;
+      if (now - lastCountedInteraction.current >= DISCOUNT_INTERACTION_GAP_MS) {
+        interactions.current += 1;
+        lastCountedInteraction.current = now;
+      }
+    };
+    const update = () => {
+      const now = performance.now();
+      const blocked = isBlocked();
+      if (discountOffer && !discountShown.current) {
+        try {
+          discountDismissed.current ||= isDiscountOfferOnCooldown(
+            Number(localStorage.getItem(DISCOUNT_LAST_SHOWN_KEY)), Date.now()
+          );
+        } catch {
+          // Dismissal still lasts for this page load when storage is unavailable.
+        }
+      }
       if (!blocked && isGiftOfferRoute(pathname)) activeMs.current += now - lastTick;
       lastTick = now;
-      const nextVisible = shouldShowGiftOffer({
+      const engaged = !discountOffer || discountShown.current || hasDiscountOfferEngagement(
+        activeMs.current, interactions.current, now - lastInteraction.current
+      );
+      const nextVisible = engaged && shouldShowGiftOffer({
         activeMs: activeMs.current,
         viewedLamp: viewedLamp.current,
         hasLampInCart,
@@ -61,6 +95,14 @@ export default function GiftOfferBanner() {
         blocked,
         qualified: qualified.current || discountOffer,
       });
+      if (nextVisible && discountOffer && !discountShown.current) {
+        discountShown.current = true;
+        try {
+          localStorage.setItem(DISCOUNT_LAST_SHOWN_KEY, String(Date.now()));
+        } catch {
+          // Keep the current offer usable when storage is unavailable.
+        }
+      }
       if (nextVisible && !qualified.current) {
         qualified.current = true;
         try {
@@ -69,7 +111,7 @@ export default function GiftOfferBanner() {
           // Keep the offer available in memory when storage is unavailable.
         }
       }
-      setVisible(nextVisible);
+      setVisible(nextVisible && (discountOffer ? "discount" : "gift"));
     };
     const onVisibilityChange = () => {
       lastTick = performance.now();
@@ -77,11 +119,14 @@ export default function GiftOfferBanner() {
     };
     const frame = window.requestAnimationFrame(update);
     const interval = window.setInterval(update, 1000);
+    const interactionEvents = ["click", "keydown", "wheel", "touchstart"];
+    interactionEvents.forEach((event) => window.addEventListener(event, recordInteraction, { passive: true }));
     window.addEventListener(PAGE_SCROLL_LOCK_EVENT, update);
     document.addEventListener("visibilitychange", onVisibilityChange);
     return () => {
       window.clearInterval(interval);
       window.cancelAnimationFrame(frame);
+      interactionEvents.forEach((event) => window.removeEventListener(event, recordInteraction));
       window.removeEventListener(PAGE_SCROLL_LOCK_EVENT, update);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
@@ -97,7 +142,7 @@ export default function GiftOfferBanner() {
 
   return (
     <AnimatePresence>
-      {visible && (
+      {visible === (discountOffer ? "discount" : "gift") && (
         <motion.aside
           aria-label={discountOffer ? "Returning visitor offer" : "Complimentary gift offer"}
           aria-live="polite"
