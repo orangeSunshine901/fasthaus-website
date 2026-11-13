@@ -90,6 +90,36 @@ export async function fetchVerifiedGeideaOrder(orderId: string): Promise<Verifie
   });
 }
 
+export async function fetchVerifiedGeideaOrderByReference(
+  reference: string
+): Promise<VerifiedGeideaCallback | null> {
+  const config = getGeideaConfig();
+  const response = await fetch(
+    `${config.apiBaseUrl}/pgw/api/v1/direct/order?MerchantReferenceId=${encodeURIComponent(reference)}`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${Buffer.from(`${config.merchantPublicKey}:${config.apiPassword}`).toString("base64")}`,
+      },
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    }
+  );
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Geidea reference lookup failed (${response.status}).`);
+  const body = await response.json();
+  const orderId = body?.order?.orderId;
+  if (typeof orderId !== "string")
+    throw new Error("Geidea reference lookup did not return an order.");
+  const payment = verifyGeideaOrderResponse(body, {
+    merchantPublicKey: config.merchantPublicKey,
+    orderId,
+  });
+  if (payment.merchantReferenceId !== reference)
+    throw new Error("Geidea reference does not match.");
+  return payment;
+}
+
 export async function createGeideaCheckoutSession(
   input: CreateCheckoutSessionInput
 ): Promise<GeideaCheckoutSession> {

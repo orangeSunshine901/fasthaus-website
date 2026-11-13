@@ -53,3 +53,6 @@ Apply all Supabase migrations through
 `20260902201429_split_geidea_checkout_session_modes.sql` before testing this flow. The final
 migration records whether the active session is `express` or `standard`, preventing one mode from
 reusing a session configured for the other.
+
+Customer-specific discounts and the additional migration/activation steps are documented
+in [Customer checkout discount](./customer-discount.md).

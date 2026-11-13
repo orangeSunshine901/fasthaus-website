@@ -24,7 +24,7 @@ import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { CHECKOUT_DISCOUNTS_ENABLED } from "@/lib/promotions";
-import { CHECKOUT_DISCOUNT_CODE, discountRateFor } from "@/lib/checkout/discount";
+import { discountAmountFor, normalizeDiscountCode } from "@/lib/checkout/discount";
 import { startGeideaCheckout } from "@/lib/payment/geidea-client";
 
 const EMIRATES = [
@@ -103,16 +103,27 @@ export default function CheckoutPage() {
     : "Enter your building or cluster name.";
 
   const [discountCode, setDiscountCode] = useState("");
-  const [discountApplied, setDiscountApplied] = useState(false);
+  const [appliedDiscount, setAppliedDiscount] = useState<{
+    code: string;
+    email: string;
+    subtotal: number;
+  } | null>(null);
+  const [checkingDiscount, setCheckingDiscount] = useState(false);
+  const discountRequest = useRef(0);
   const [discountError, setDiscountError] = useState<string | null>(null);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
 
   const subtotalValue = subtotal();
-  const hasDiscount = CHECKOUT_DISCOUNTS_ENABLED && discountApplied;
-  const discountAmount = hasDiscount ? subtotalValue * discountRateFor(CHECKOUT_DISCOUNT_CODE) : 0;
-  const totalValue = subtotalValue - discountAmount;
+  const hasDiscount =
+    CHECKOUT_DISCOUNTS_ENABLED &&
+    appliedDiscount !== null &&
+    appliedDiscount.email === email.trim().toLowerCase() &&
+    appliedDiscount.code === normalizeDiscountCode(discountCode) &&
+    appliedDiscount.subtotal === subtotalValue;
+  const discountAmount = hasDiscount ? discountAmountFor(appliedDiscount.code, subtotalValue) : 0;
+  const totalValue = Math.max(0, Math.round((subtotalValue - discountAmount) * 100) / 100);
   const cartSyncing = pending.length > 0;
   const checkoutDetailsReady =
     !fullNameError &&
@@ -121,7 +132,7 @@ export default function CheckoutPage() {
     !streetAddressError &&
     !unitVillaError &&
     !buildingClusterError;
-  const checkoutDisabled = !checkoutDetailsReady || purchasing || cartSyncing;
+  const checkoutDisabled = !checkoutDetailsReady || purchasing || cartSyncing || checkingDiscount;
   // Quantities freeze while an add is still optimistic or payment has started.
   const quantityLocked = (item: (typeof items)[number]) =>
     purchasing || pending.includes(item.id) || item.itemId.startsWith("optimistic:");
@@ -142,6 +153,7 @@ export default function CheckoutPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contact: { email, phone },
+        expectedTotal: totalValue,
         shippingAddress: {
           firstName,
           lastName: lastNameParts.join(" ") || firstName,
@@ -152,7 +164,10 @@ export default function CheckoutPage() {
           emirate,
           postalCode: poBox || undefined,
         },
-        discountCode: hasDiscount ? CHECKOUT_DISCOUNT_CODE : undefined,
+        discountCode:
+          CHECKOUT_DISCOUNTS_ENABLED && discountCode.trim()
+            ? normalizeDiscountCode(discountCode)
+            : undefined,
       }),
     });
     const body = (await response.json()) as Partial<CheckoutSession> & {
@@ -170,10 +185,35 @@ export default function CheckoutPage() {
     return body as CheckoutSession;
   }
 
-  function applyDiscountCode() {
-    const valid = discountRateFor(discountCode) > 0;
-    setDiscountApplied(valid);
-    setDiscountError(valid ? null : "That discount code isn’t valid.");
+  async function applyDiscountCode() {
+    const requestId = ++discountRequest.current;
+    setCheckingDiscount(true);
+    setAppliedDiscount(null);
+    setDiscountError(null);
+    try {
+      const response = await fetch("/api/checkout/discount", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: discountCode, email }),
+      });
+      const body = await response.json();
+      if (!response.ok)
+        throw new Error(body.error?.message ?? "The discount could not be checked.");
+      if (requestId === discountRequest.current) {
+        setAppliedDiscount({
+          code: body.code,
+          email: email.trim().toLowerCase(),
+          subtotal: body.subtotal,
+        });
+      }
+    } catch (error) {
+      if (requestId === discountRequest.current)
+        setDiscountError(
+          error instanceof Error ? error.message : "The discount could not be checked."
+        );
+    } finally {
+      if (requestId === discountRequest.current) setCheckingDiscount(false);
+    }
   }
 
   async function startCheckout() {
@@ -192,11 +232,18 @@ export default function CheckoutPage() {
       });
       return;
     }
-    if (cartSyncing) return;
+    if (cartSyncing || checkingDiscount) return;
+    if (CHECKOUT_DISCOUNTS_ENABLED && discountCode.trim() && !hasDiscount) {
+      setDiscountError("Apply the code again to check it for this email and cart before payment.");
+      return;
+    }
     setPurchasing(true);
     try {
       const session = await requestCheckoutSession();
-      if (session.sessionId.startsWith("test-geidea-session-")) {
+      if (
+        session.sessionId.startsWith("test-geidea-session-") ||
+        session.sessionId.startsWith("no-payment-")
+      ) {
         window.location.assign(session.cardRedirectUrl);
         return;
       }
@@ -794,10 +841,13 @@ export default function CheckoutPage() {
                     <input
                       type="text"
                       placeholder="Discount code"
+                      aria-label="Discount code"
+                      disabled={purchasing || checkingDiscount}
                       value={discountCode}
                       onChange={(e) => {
                         setDiscountCode(e.target.value);
-                        setDiscountApplied(false);
+                        discountRequest.current += 1;
+                        setAppliedDiscount(null);
                         setDiscountError(null);
                       }}
                       className="input-field h-[46px] flex-1"
@@ -808,7 +858,8 @@ export default function CheckoutPage() {
                     />
                     <button
                       type="button"
-                      onClick={applyDiscountCode}
+                      onClick={() => void applyDiscountCode()}
+                      disabled={purchasing || checkingDiscount || cartSyncing}
                       className="btn h-[46px] px-5"
                       style={{
                         backgroundColor: hasDiscount
@@ -818,7 +869,7 @@ export default function CheckoutPage() {
                         border: "none",
                       }}
                     >
-                      {hasDiscount ? "Applied" : "Apply"}
+                      {checkingDiscount ? "Checking…" : hasDiscount ? "Applied" : "Apply"}
                     </button>
                   </div>
                   {discountError && (
@@ -844,7 +895,9 @@ export default function CheckoutPage() {
                 </div>
                 {hasDiscount && (
                   <div className="type-body-sm flex justify-between">
-                    <span style={{ color: "var(--color-success)" }}>Discount code (10%)</span>
+                    <span style={{ color: "var(--color-success)" }}>
+                      Discount code ({appliedDiscount?.code})
+                    </span>
                     <span
                       className="inline-flex items-center gap-0.5"
                       style={{ color: "var(--color-success)" }}

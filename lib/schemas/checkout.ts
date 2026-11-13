@@ -36,7 +36,7 @@ export const ShippingAddressSchema = z.object({
 });
 
 export const ContactSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().trim().toLowerCase().email("Please enter a valid email address"),
   phone: z
     .string()
     .transform(normalizeUaePhone)
@@ -49,6 +49,7 @@ export const CreateOrderSchema = z
   .object({
     contact: ContactSchema,
     shippingAddress: ShippingAddressSchema,
+    expectedTotal: z.number().finite().nonnegative().optional(),
     discountCode: z.string().trim().max(32).optional(),
   })
   .strict();

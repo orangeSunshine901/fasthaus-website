@@ -7,8 +7,9 @@ import { CartError, type CartDto } from "@/lib/cart/types";
 import { createServiceClient } from "@/lib/supabase/server";
 import { allowRequest } from "@/lib/cart/rate-limit";
 import { createGeideaCheckoutSession } from "@/lib/payment/geidea";
-import { sendPaidOrderEmails } from "@/lib/payment/order-emails";
-import { discountRateFor } from "@/lib/checkout/discount";
+import { sendConfirmedOrderEmails, sendPaidOrderEmails } from "@/lib/payment/order-emails";
+import { checkoutDiscountError, recoverExpiredDiscount } from "@/lib/checkout/discount-server";
+import { normalizeDiscountCode } from "@/lib/checkout/discount";
 
 type ServiceClient = Awaited<ReturnType<typeof createServiceClient>>;
 const CHECKOUT_PAYMENT_MODE = "standard" as const;
@@ -51,8 +52,6 @@ function emailItems(cart: CartDto) {
 
 async function prepareOrder(supabase: ServiceClient, cart: CartDto, input: CreateOrderInput) {
   const subtotal = cart.subtotal / 100;
-  const discount = subtotal * discountRateFor(input.discountCode);
-  const total = Number((subtotal - discount).toFixed(2));
   const shippingAddress = { ...input.shippingAddress, phone: input.contact.phone };
   const orderItems = cart.items.flatMap((item) => [
     {
@@ -72,18 +71,19 @@ async function prepareOrder(supabase: ServiceClient, cart: CartDto, input: Creat
   ]);
   const claimExpiresAt = new Date(Date.now() + 30_000).toISOString();
   const { data, error } = await supabase
-    .rpc("prepare_checkout_order", {
+    .rpc("prepare_checkout_order_with_discount", {
       p_cart_id: cart.id!,
       p_guest_email: input.contact.email,
       p_subtotal: subtotal,
-      p_total: total,
+      p_discount_code: input.discountCode ?? "",
       p_shipping_address: shippingAddress,
       p_items: orderItems,
       p_claim_expires_at: claimExpiresAt,
       p_session_mode: CHECKOUT_PAYMENT_MODE,
     })
     .single();
-  if (error || !data) throw error ?? new Error("Order preparation failed.");
+  if (error) checkoutDiscountError(error);
+  if (!data) throw new Error("Order preparation failed.");
   return { ...(data as PreparedOrder), claimExpiresAt };
 }
 
@@ -155,7 +155,28 @@ export async function POST(request: Request) {
       throw new CartError("CART_CONFLICT", "The checkout cart could not be verified.", 409);
     }
 
+    if (
+      process.env.CHECKOUT_TEST_MODE === "true" &&
+      normalizeDiscountCode(parsed.data.discountCode ?? "") === "MAXINE100"
+    ) {
+      throw new CartError(
+        "INVALID_REQUEST",
+        "Customer discount codes require verified payment; disable checkout test mode."
+      );
+    }
+    const baseUrl = siteBaseUrl();
+    await recoverExpiredDiscount(supabase, parsed.data.discountCode ?? "");
     const order = await prepareOrder(supabase, cart, parsed.data);
+    if (
+      parsed.data.expectedTotal !== undefined &&
+      Math.round(parsed.data.expectedTotal * 100) !== Math.round(Number(order.order_total) * 100)
+    ) {
+      throw new CartError(
+        "CART_CONFLICT",
+        "Your checkout total changed. Refresh your cart and apply the code again before payment.",
+        409
+      );
+    }
     if (order.checkout_session_id && order.checkout_url && order.checkout_session_expires_at) {
       return NextResponse.json({
         orderId: order.order_id,
@@ -169,7 +190,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ orderId: order.order_id, ...session });
     }
 
-    const baseUrl = siteBaseUrl();
+    if (Number(order.order_total) === 0) {
+      const { error } = await supabase.rpc("record_checkout_payment", {
+        p_order_id: order.order_id,
+        p_provider_order_id: `no-payment-${order.order_id}`,
+        p_amount: 0,
+        p_currency: "AED",
+        p_paid: true,
+        p_terminal: true,
+        p_status: "No payment required",
+        p_reference: null,
+        p_method: "discount",
+      });
+      if (error) throw error;
+      await sendConfirmedOrderEmails(order.order_id);
+      return NextResponse.json({
+        orderId: order.order_id,
+        sessionId: `no-payment-${order.order_id}`,
+        expiresAt: order.claimExpiresAt,
+        cardRedirectUrl: `${baseUrl}/order/${order.order_id}`,
+      });
+    }
 
     if (process.env.CHECKOUT_TEST_MODE === "true") {
       const sessionId = `test-geidea-session-${order.order_id}`;
@@ -240,21 +281,14 @@ export async function POST(request: Request) {
         },
       });
     } catch (error) {
-      await supabase
-        .from("orders")
-        .update({ payment_status: "session_failed", geidea_session_expires_at: null })
-        .eq("id", order.order_id)
-        .eq("geidea_session_expires_at", order.claimExpiresAt);
-      await supabase
-        .from("carts")
-        .update({
-          status: "ACTIVE",
-          checkout_session_expires_at: null,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", cart.id)
-        .eq("checkout_session_expires_at", order.claimExpiresAt)
-        .is("checkout_session_id", null);
+      const { error: releaseError } = await supabase.rpc("complete_checkout_session", {
+        p_order_id: order.order_id,
+        p_claim_expires_at: order.claimExpiresAt,
+        p_session_id: null,
+        p_expires_at: null,
+        p_url: null,
+      });
+      if (releaseError) console.error("Could not release checkout claim", releaseError);
       console.error("Geidea session creation failed", error);
       throw new CartError(
         "CHECKOUT_FAILED",
@@ -263,42 +297,18 @@ export async function POST(request: Request) {
       );
     }
 
-    const { data: updatedOrder, error: orderUpdateError } = await supabase
-      .from("orders")
-      .update({
-        geidea_session_id: session.sessionId,
-        geidea_session_expires_at: session.expiresAt,
-        geidea_session_mode: CHECKOUT_PAYMENT_MODE,
-        payment_status: "Initiated",
-      })
-      .eq("id", order.order_id)
-      .eq("status", "pending")
-      .eq("geidea_session_expires_at", order.claimExpiresAt)
-      .select("id")
-      .maybeSingle();
-    if (orderUpdateError) throw orderUpdateError;
-    if (!updatedOrder) {
-      const current = await waitForCheckoutSession(supabase, cart.id!);
-      return NextResponse.json({ orderId: order.order_id, ...current });
-    }
-
-    const { data: updatedCart, error: cartUpdateError } = await supabase
-      .from("carts")
-      .update({
-        status: "CHECKOUT_STARTED",
-        checkout_session_id: session.sessionId,
-        checkout_session_expires_at: session.expiresAt,
-        checkout_session_mode: CHECKOUT_PAYMENT_MODE,
-        checkout_url: session.cardRedirectUrl,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", cart.id)
-      .eq("checkout_session_expires_at", order.claimExpiresAt)
-      .is("checkout_session_id", null)
-      .select("id")
-      .maybeSingle();
-    if (cartUpdateError) throw cartUpdateError;
-    if (!updatedCart) {
+    const { data: completed, error: completionError } = await supabase.rpc(
+      "complete_checkout_session",
+      {
+        p_order_id: order.order_id,
+        p_claim_expires_at: order.claimExpiresAt,
+        p_session_id: session.sessionId,
+        p_expires_at: session.expiresAt,
+        p_url: session.cardRedirectUrl,
+      }
+    );
+    if (completionError) throw completionError;
+    if (!completed) {
       const current = await waitForCheckoutSession(supabase, cart.id!);
       return NextResponse.json({ orderId: order.order_id, ...current });
     }
