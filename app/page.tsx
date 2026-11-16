@@ -6,6 +6,7 @@ import { getMediaProducts } from "@/lib/cms/products";
 import { NEWSLETTER_ENABLED } from "@/lib/promotions";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 import HomeScrollCue from "@/components/home/HomeScrollCue";
+import AfterHoursSection from "@/components/home/AfterHoursSection";
 import DesignWeekPopup from "@/components/home/DesignWeekPopup";
 import LocomotiveScrollProvider from "@/components/scroll/LocomotiveScrollProvider";
 import JsonLd from "@/components/seo/JsonLd";
@@ -329,6 +330,8 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        <AfterHoursSection />
 
         {/* Newsletter */}
         {NEWSLETTER_ENABLED && (

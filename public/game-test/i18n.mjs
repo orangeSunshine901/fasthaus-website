@@ -1,10 +1,10 @@
 import { LAMPS, INTRO_DIALOGUE } from './game.mjs';
 
 const english = {
-  title: 'After hours', pageTitle: 'After Hours Test — Fasthaus',
+  title: 'After hours', pageTitle: 'After Hours — Fasthaus',
   subtitle: 'Four lamps. Three stories to find. A little light detective work.',
   home: 'Fasthaus home', back: 'Back to the collection',
-  findLight: 'Find the light.', unlock: 'Unlock 10% off.', gameLabel: 'Fasthaus lamp guessing game',
+  gameLabel: 'Fasthaus lamp guessing game',
   studio: 'THE STUDIO', afterHours: '/ AFTER HOURS',
   progress: '{found} / {total} lit', progressLabel: '{found} of {total} lamps lit',
   chooseGroup: 'Choose a lamp from the shelves', chooseLamp: 'Choose lamp {number}: {description}', chooseLabel: 'Choose lamp {number}',
@@ -17,16 +17,15 @@ const english = {
   story: 'Story {number} of {total}', guessDetail: 'Choose the lamp on the shelf. Follow your eye.',
   hint: 'Another clue', hintsFree: 'Hints are on the house.', hintCount: '{count} / {total}',
   wrong: 'That one has a different story. Try another lamp, or ask for a clue.',
-  reveal: 'That’s {name}.', next: 'Next story', openReward: 'Open my reward',
+  reveal: 'That’s {name}.', next: 'Next story', openReward: 'Meet the lamps',
   remainingTwo: '2 more stories to discover.', remainingOne: '1 more story to discover.', perfect: 'Three for three. Nicely spotted.',
   soundOn: 'Sound on', soundOff: 'Sound off', soundUnavailable: 'Sound is unavailable in this browser. You can keep playing.',
   restart: 'Start over', replay: 'Play again',
-  rewardTitle: 'You’ve got an eye for this.', rewardDetail: 'Three bright ideas, found. A little thank-you for your curiosity.',
-  discount: '10%', off: 'off', demoReward: 'YOUR DEMO REWARD', copy: 'Copy code', copied: 'Copied',
-  copyIdle: 'Demo code — not active at checkout yet.', copySuccess: 'Copied. This demo code is not active at checkout yet.',
-  copyManual: 'Select and copy AFTERHOURS10. It is a demo code, not active at checkout.',
+  rewardTitle: 'You’ve got an eye for this.', rewardDetail: 'Three bright ideas, found. The rest is a matter of where to put them.',
+  completionNote: 'From pixels to your place. Meet the real objects.',
+  experiment: 'A Fasthaus digital experiment',
   explore: 'Explore the collection', productAlt: '{name} table lamp', footer: 'A small game by Fasthaus. Made for curious minds.',
-  prototype: 'Test page · discount not active', noScript: 'This game needs JavaScript. You can still explore the lamp collection.',
+  noScript: 'This game needs JavaScript. You can still explore the lamp collection.',
   switchLabel: 'Switch to Arabic', switchText: 'العربية',
 };
 
@@ -34,7 +33,7 @@ const arabic = {
   title: 'بعد ساعات العمل', pageTitle: 'بعد ساعات العمل | فاستهاوس',
   subtitle: 'أربعة مصابيح، وثلاث حكايات تنتظر من يكتشفها. قليلٌ من الفضول يبلغ بك بعيداً.',
   home: 'فاستهاوس، الصفحة الرئيسية', back: 'العودة إلى المجموعة',
-  findLight: 'اعثر على النور.', unlock: 'افتح خصماً بنسبة ١٠٪.', gameLabel: 'لعبة فاستهاوس لتخمين المصابيح',
+  gameLabel: 'لعبة فاستهاوس لتخمين المصابيح',
   studio: 'الاستوديو', afterHours: '/ بعد ساعات العمل',
   progress: '{found} / {total} مضاءة', progressLabel: '{found} من {total} مصابيح مضاءة',
   chooseGroup: 'اختر مصباحاً من الرفوف', chooseLamp: 'اختر المصباح {number}: {description}', chooseLabel: 'اختر المصباح {number}',
@@ -47,23 +46,22 @@ const arabic = {
   story: 'القصة {number} من {total}', guessDetail: 'اختر المصباح الموجود على الرف. اتبع عينيك.',
   hint: 'تلميح آخر', hintsFree: 'التلميحات على حساب البيت.', hintCount: '{count} / {total}',
   wrong: 'لهذا المصباح حكايةٌ أخرى. جرّب مصباحاً آخر، أو اطلب تلميحاً.',
-  reveal: 'هذا هو «{name}».', next: 'القصة التالية', openReward: 'افتح مكافأتي',
+  reveal: 'هذا هو «{name}».', next: 'القصة التالية', openReward: 'تعرّف على المصابيح',
   remainingTwo: 'بقيت قصتان لاكتشافهما.', remainingOne: 'بقيت قصةٌ واحدة لاكتشافها.', perfect: 'ثلاثة من ثلاثة. عينٌ ثاقبة.',
   soundOn: 'الصوت يعمل', soundOff: 'الصوت متوقف', soundUnavailable: 'الصوت غير متاح في هذا المتصفّح. يمكنك متابعة اللعب.',
   restart: 'ابدأ من جديد', replay: 'العب من جديد',
-  rewardTitle: 'لديك عينٌ خبيرة بهذا الأمر.', rewardDetail: 'ثلاث أفكار مضيئة، وقد وجدتَها. شكرٌ صغير على فضولك.',
-  discount: '١٠٪', off: 'خصم', demoReward: 'مكافأتك التجريبية', copy: 'انسخ الرمز', copied: 'تم النسخ',
-  copyIdle: 'رمز تجريبي، غير مفعّل عند الدفع بعد.', copySuccess: 'تم النسخ. هذا الرمز التجريبي غير مفعّل عند الدفع بعد.',
-  copyManual: 'حدّد الرمز AFTERHOURS10 وانسخه. هو رمز تجريبي غير مفعّل عند الدفع.',
+  rewardTitle: 'لديك عينٌ خبيرة بهذا الأمر.', rewardDetail: 'ثلاث أفكار مضيئة، وقد وجدتَها. بقي أن تختار لها مكاناً.',
+  completionNote: 'من البكسل إلى مساحتك. تعرّف على القطع الحقيقية.',
+  experiment: 'تجربة رقمية من فاستهاوس',
   explore: 'استكشف المجموعة', productAlt: 'مصباح الطاولة «{name}»', footer: 'لعبة صغيرة من فاستهاوس. صُنعت لأصحاب العقول الفضولية.',
-  prototype: 'صفحة تجريبية · الخصم غير مفعّل', noScript: 'تحتاج هذه اللعبة إلى جافاسكربت. لا يزال بإمكانك استكشاف مجموعة المصابيح.',
+  noScript: 'تحتاج هذه اللعبة إلى جافاسكربت. لا يزال بإمكانك استكشاف مجموعة المصابيح.',
   switchLabel: 'Switch to English', switchText: 'English',
 };
 
 const arabicIntro = [
   {label: 'ترحيب', line: 'أهلاً بك. أدركتني بعد ساعات العمل.', detail: 'تفضّل بالدخول. هناك دائماً متّسعٌ لعقلٍ فضولي آخر.', reply: 'أهلاً! ما هذا المكان؟'},
   {label: 'دردشة قصيرة', line: 'أهلاً بك في فاستهاوس. لكل مصباحٍ هنا حكاية.', detail: 'بعضها يبدأ بلؤلؤة، وبعضها بتموّجة، وبعضها بشكلٍ يتكرر. ما رأيك بلعبة تخمين صغيرة؟', reply: 'كيف تعمل اللعبة؟'},
-  {label: 'طريقة اللعب', line: 'سأعطيك تلميحاً، وعليك أن تختار المصباح.', detail: 'انقر أو المس أحد المصابيح على الرف. إن أصبتَ أضاء المصباح. اعثر على ثلاثة مصابيح لتفتح مكافأة الخصم بنسبة ١٠٪.', reply: 'ماذا لو أخطأت؟'},
+  {label: 'طريقة اللعب', line: 'سأعطيك تلميحاً، وعليك أن تختار المصباح.', detail: 'انقر أو المس أحد المصابيح على الرف. إن أصبتَ أضاء المصباح. اعثر على ثلاثة مصابيح لتكتشف حكاياتها.', reply: 'ماذا لو أخطأت؟'},
   {label: 'جاهز متى شئت', line: 'نحاول من جديد. بلا مؤقّت، وبلا خسارة محاولات.', detail: 'يمكنك طلب تلميحٍ آخر متى شعرتَ بالحيرة. هل أنت مستعد للعثور على أول مصباح مُضاء؟', reply: 'هيا نجرّب.'},
 ];
 

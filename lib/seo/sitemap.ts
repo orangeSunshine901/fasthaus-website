@@ -10,7 +10,7 @@ export type SitemapEntry = { url: string; lastModified?: Date };
  * Indexable static routes. Deliberately excluded: /cart, /checkout, /order/* (noindex),
  * /api/*, and the redirect-only routes /legal, /shipping-returns and /warranty.
  */
-export const STATIC_INDEXABLE_PATHS = ["/", "/collection", "/about", "/faq", "/contact"] as const;
+export const STATIC_INDEXABLE_PATHS = ["/", "/collection", "/about", "/faq", "/contact", "/after-hours"] as const;
 
 /** Parses human dates such as "July 17, 2026" as UTC so the sitemap date does not shift a day. */
 export function parseContentDate(value: string): Date | undefined {

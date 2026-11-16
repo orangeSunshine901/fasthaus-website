@@ -16,7 +16,7 @@ try {
   language = requested === 'ar' || requested === 'en' ? requested : localStorage.getItem('fasthaus:game-language') === 'ar' ? 'ar' : 'en';
 } catch {}
 const t = (key, values) => translate(language, key, values);
-let copyState = 'idle';
+try { sessionStorage.setItem('fasthaus_after_hours_seen', '1'); } catch {}
 let soundUnavailable = false;
 let hovered = null;
 let soundOn = false;
@@ -239,7 +239,7 @@ const targets=LAMPS.map((lamp,i)=>{
     const correct=next.phase==='reveal';state=next;
     if(correct){lastFound=lamp.id;glowStart=performance.now();chime();emit('discovery',{lamp:lamp.id,found:state.found.length});}
     update();requestDraw(correct);
-    if(correct)$('main-action').focus({preventScroll:true});
+    if(correct)$('main-action').focus();
   });
   $('lamp-targets').append(button);return button;
 });
@@ -309,10 +309,6 @@ function update(){
   requestDraw();
 }
 
-function updateCopyStatus(){
-  $('copy-code').textContent=t(copyState==='copied'?'copied':'copy');
-  $('copy-status').textContent=t(copyState==='copied'?'copySuccess':copyState==='manual'?'copyManual':'copyIdle');
-}
 
 function applyLanguage(){
   document.documentElement.lang=language;
@@ -340,7 +336,7 @@ function applyLanguage(){
     link.querySelector('strong').firstChild.textContent=lamp.name;
     link.querySelector('p').textContent=lamp.note;
   });
-  updateCopyStatus();updateSound();update();
+  updateSound();update();
 }
 
 function setLanguage(nextLanguage){
@@ -371,14 +367,14 @@ $('enter-studio').addEventListener('click',()=>{
 $('main-action').addEventListener('click',()=>{
   if(state.phase==='intro'){
     state=advanceIntro(state);update();
-    if(state.phase==='guess'){emit('start');targets[0].focus({preventScroll:true});}
+    if(state.phase==='guess'){emit('start');targets[0].focus();}
     else $('main-action').focus({preventScroll:true});
   }else if(state.phase==='reveal'){
     state=advanceGame(state);update();
     if(state.phase==='complete'){
       emit('complete',{lamps:[...state.found],attempts:state.attempts});
       $('reward-title').focus({preventScroll:true});$('reward').scrollIntoView({block:'nearest',behavior:reducedMotion.matches?'instant':'smooth'});
-    }else targets.find(b=>!b.disabled)?.focus({preventScroll:true});
+    }else targets.find(b=>!b.disabled)?.focus();
   }
 });
 $('hint-action').addEventListener('click',()=>{state=revealHint(state);update();emit('hint',{lamp:state.rounds[state.round],hint:state.hints});});
@@ -388,13 +384,9 @@ $('skip-speech').addEventListener('click',event=>{
   if(state.phase==='guess')targets.find(button=>!button.disabled)?.focus({preventScroll:true});
   else $('main-action').focus({preventScroll:true});
 });
-function restart(){state=createGame();choosingLanguage=true;glowStart=null;lastFound=null;hovered=null;copyState='idle';soundUnavailable=false;update();updateCopyStatus();requestDraw(true);$(language==='ar'?'choose-arabic':'choose-english').focus();emit('restart');}
+function restart(){state=createGame();choosingLanguage=true;glowStart=null;lastFound=null;hovered=null;soundUnavailable=false;update();requestDraw(true);$(language==='ar'?'choose-arabic':'choose-english').focus();emit('restart');}
 $('restart').addEventListener('click',restart);$('replay').addEventListener('click',restart);
 $('sound').addEventListener('click',()=>{soundOn=!soundOn;updateSound();if(soundOn)chime();});
-$('copy-code').addEventListener('click',async()=>{
-  try{await navigator.clipboard.writeText($('coupon-code').textContent);copyState='copied';updateCopyStatus();}
-  catch{const selection=window.getSelection(),range=document.createRange();range.selectNodeContents($('coupon-code'));selection.removeAllRanges();selection.addRange(range);copyState='manual';updateCopyStatus();}
-});
 LAMPS.forEach(lamp=>{
   const link=document.createElement('a');link.className='product-link';link.href=lamp.url;link.target='_blank';link.rel='noopener';
   const img=document.createElement('img');img.src=`./assets/${lamp.id}.avif`;img.alt=`${lamp.name} table lamp`;img.width=300;img.height=300;img.loading='lazy';

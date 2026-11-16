@@ -51,7 +51,7 @@ export const INTRO_DIALOGUE = [
   {
     label: 'How to play',
     line: 'I’ll give you a clue. You pick the lamp.',
-    detail: 'Click or tap one on the shelf. Get it right and it lights up. Find three to unlock the 10% reward.',
+    detail: 'Click or tap one on the shelf. Get it right and it lights up. Find three to discover their stories.',
     reply: 'What if I get it wrong?',
   },
   {
