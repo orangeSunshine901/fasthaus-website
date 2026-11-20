@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image, { getImageProps } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -11,6 +11,7 @@ import MobileGalleryImage from "./MobileGalleryImage";
 import HeroQuickBuy from "./HeroQuickBuy";
 import GalleryPreview from "./GalleryPreview";
 import type { ProductCarouselImage, ProductVariant } from "@/lib/data/products";
+import { MOBILE_HIDDEN_IMAGE } from "@/lib/data/mobile-gallery";
 
 type Props = {
   images: ProductCarouselImage[];
@@ -139,7 +140,7 @@ export default function ProductGallery({
                   <MobileGalleryImage
                     key={image.mobileSrc ?? image.src}
                     src={image.mobileSrc ?? image.src}
-                    desktopSrc={image.unoptimized ? image.src : undefined}
+                    desktopSrc={image.src}
                     unoptimized={image.unoptimized}
                     alt={imageAlt(index)}
                     priority={index === 0}
@@ -147,23 +148,7 @@ export default function ProductGallery({
                   />
                 </div>
                 <picture className="relative hidden h-full md:block">
-                  {image.mobileSrc && (
-                    <source
-                      media="(max-width: 767px)"
-                      sizes="(max-width: 440px) 100vw, 440px"
-                      srcSet={
-                        image.unoptimized ? image.mobileSrc : getImageProps({
-                          src: image.mobileSrc,
-                          alt: "",
-                          fill: true,
-                          sizes: "(max-width: 440px) 100vw, 440px",
-                          // Same URL as MobileGalleryImage's slide, so it must agree on loading
-                          // or Next's LCP check reads the slide as lazy.
-                          loading: index === 0 ? "eager" : "lazy",
-                        }).props.srcSet
-                      }
-                    />
-                  )}
+                  <source media="(max-width: 767px)" srcSet={MOBILE_HIDDEN_IMAGE} />
                   <Image
                     src={image.src}
                     unoptimized={image.unoptimized}
@@ -201,9 +186,7 @@ export default function ProductGallery({
                   transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeInOut" }}
                 >
                   <picture className="relative block h-full">
-                    {activeImage.unoptimized && activeImage.mobileSrc && (
-                      <source media="(max-width: 767px)" srcSet={activeImage.mobileSrc} />
-                    )}
+                    <source media="(max-width: 767px)" srcSet={MOBILE_HIDDEN_IMAGE} />
                     <Image
                       src={activeImage.src}
                       unoptimized={activeImage.unoptimized}

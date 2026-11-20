@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import type { ProductCarouselImage } from "@/lib/data/products";
+import { getMobileGallerySource } from "@/lib/data/mobile-gallery";
 
 type Props = {
   images: ProductCarouselImage[];
@@ -47,10 +48,10 @@ export default function GalleryPreview({ images, name, color, activeIndex, onSel
           className="relative h-14 w-11 shrink-0 overflow-hidden rounded-lg opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-text-primary)] aria-pressed:opacity-100 aria-pressed:ring-2 aria-pressed:ring-[var(--color-accent-amber)] aria-pressed:ring-offset-2 aria-pressed:ring-offset-transparent md:h-16 md:w-14 md:focus-visible:outline-[var(--hero-ui-color)]"
         >
           <Image
-            src={image.mobileSrc ?? image.src}
+            src={getMobileGallerySource(image.mobileSrc ?? image.src)}
             alt=""
             fill
-            sizes="192px"
+            sizes="(min-width: 768px) 56px, 44px"
             className="object-cover"
           />
         </button>

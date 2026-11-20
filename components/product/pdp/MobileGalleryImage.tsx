@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import {
   TransformComponent,
   TransformWrapper,
   type ReactZoomPanPinchRef,
 } from "react-zoom-pan-pinch";
-import { GALLERY_PORTRAITS } from "@/lib/data/gallery-portraits";
+import { getMobileGallerySource } from "@/lib/data/mobile-gallery";
 
 type Props = {
   src: string;
@@ -21,6 +21,7 @@ type Props = {
 export default function MobileGalleryImage({ src, desktopSrc, alt, priority, active, unoptimized }: Props) {
   const [zoomed, setZoomed] = useState(false);
   const transformRef = useRef<ReactZoomPanPinchRef>(null);
+  const mobileSource = getMobileGallerySource(src);
 
   // Reset the transform imperatively when the slide goes inactive. Keying this
   // component on `active` instead would remount the <img> on every swipe, which
@@ -49,16 +50,30 @@ export default function MobileGalleryImage({ src, desktopSrc, alt, priority, act
           contentStyle={{ position: "relative", width: "100%", height: "100%" }}
         >
           <picture>
-            {desktopSrc && <source media="(min-width: 768px)" srcSet={desktopSrc} />}
+            {desktopSrc && (
+              <source
+                media="(min-width: 768px)"
+                sizes="100vw"
+                srcSet={getImageProps({
+                  src: desktopSrc,
+                  alt: "",
+                  width: 2880,
+                  height: 1496,
+                  sizes: "100vw",
+                  unoptimized,
+                }).props.srcSet ?? desktopSrc}
+              />
+            )}
             <Image
-              src={GALLERY_PORTRAITS[src] ?? src}
-              unoptimized={unoptimized}
+              src={mobileSource}
+              unoptimized={unoptimized || mobileSource !== src}
               alt={alt}
               width={864}
               height={1147}
               // Keep optimized portrait requests pinned across zoom levels to avoid repeat transforms.
               sizes="(max-width: 440px) 100vw, 440px"
               loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
               draggable={false}
               className="absolute inset-0 mx-auto h-full w-full max-w-[440px] select-none object-contain"
             />

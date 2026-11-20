@@ -832,6 +832,16 @@ html.lenis.home-reveal-scroll-locked.lenis-stopped {
   }
 }
 
+/* Keep the frosted surface on phones without rasterizing the SVG displacement
+   filter over the moving collection background on every animation frame. */
+@media (max-width: 767px) {
+  .glass-surface,
+  .glass-backdrop {
+    -webkit-backdrop-filter: blur(8px) saturate(160%);
+    backdrop-filter: blur(8px) saturate(160%);
+  }
+}
+
 .glass-surface::after {
   content: "";
   position: absolute;

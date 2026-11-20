@@ -3,11 +3,7 @@
 import { useLayoutEffect, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { resetNavigationScrollIfRequested } from "@/lib/navigation-scroll";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const PAGE_TRANSITION = {
   duration: 0.28,
@@ -19,8 +15,16 @@ export default function PageTransition({ children }: { children: ReactNode }) {
   const reducedMotion = useReducedMotion();
 
   const refreshScrollTriggers = () => {
+    // Only the home/about stories use scroll-triggered scenes. Product and
+    // collection visits should not download the story animation engine.
+    if (pathname !== "/" && pathname !== "/about") return;
     window.requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
+      void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(
+        ([{ default: gsap }, { ScrollTrigger }]) => {
+          gsap.registerPlugin(ScrollTrigger);
+          ScrollTrigger.refresh();
+        }
+      );
     });
   };
 

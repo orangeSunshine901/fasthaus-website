@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const DEFAULT_COLORS = ["#141114", "#FF4B1F", "#FFDBD2", "#F8F6F3"] as const;
+const HERO_IMAGE_SIZES =
+  "(min-width: 1280px) min(48vw, 700px), (min-width: 768px) min(72vw, 700px), 112vw";
 const PREVIOUS_CURSOR =
   'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22m12 19-7-7 7-7%22/%3E%3Cpath d=%22M19 12H5%22/%3E%3C/svg%3E") 16 16, w-resize';
 const NEXT_CURSOR =
@@ -409,6 +411,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [transitionSequence, setTransitionSequence] = useState(0);
+  const [heroLoaded, setHeroLoaded] = useState(false);
   const shouldReduceMotion = Boolean(useReducedMotion());
 
   const palettes = useMemo(() => slides.map((slide) => createColorBuffer(slide.colors)), [slides]);
@@ -536,18 +539,47 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
   }, [activePalette]);
 
   useEffect(() => {
+    if (!heroLoaded) return;
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    if (connection?.saveData || /^(slow-)?2g$/.test(connection?.effectiveType ?? "")) return;
+
     const adjacentIndexes = [
       (selectedIndex - 1 + slideCount) % slideCount,
       (selectedIndex + 1) % slideCount,
     ];
 
-    adjacentIndexes.forEach((index) => {
-      const image = new window.Image();
-      image.src = slides[index].image;
-    });
-  }, [selectedIndex, slideCount, slides]);
+    const preloadAdjacent = () => {
+      adjacentIndexes.forEach((index) => {
+        const props = getImageProps({
+          src: slides[index].image,
+          alt: "",
+          width: 1000,
+          height: 1000,
+          sizes: HERO_IMAGE_SIZES,
+        }).props;
+        const image = new window.Image();
+        image.decoding = "async";
+        image.fetchPriority = "low";
+        image.sizes = props.sizes ?? HERO_IMAGE_SIZES;
+        if (props.srcSet) image.srcset = props.srcSet;
+        image.src = props.src;
+      });
+    };
+
+    if ("requestIdleCallback" in window) {
+      const idle = window.requestIdleCallback(preloadAdjacent, { timeout: 2000 });
+      return () => window.cancelIdleCallback(idle);
+    }
+    const timer = setTimeout(preloadAdjacent, 800);
+    return () => clearTimeout(timer);
+  }, [heroLoaded, selectedIndex, slideCount, slides]);
 
   useEffect(() => {
+    // The first product image gets the loading/decoding budget before WebGL
+    // compiles its decorative background on slower phones.
+    if (!heroLoaded) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -618,7 +650,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1 : 2);
       const width = Math.max(1, Math.round(bounds.width * dpr));
       const height = Math.max(1, Math.round(bounds.height * dpr));
 
@@ -636,6 +668,12 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       if (!documentVisible || !sectionVisible) return;
 
       const elapsed = now - lastFrameAt;
+      // A full-screen procedural shader at DPR 2 / 60fps competes with taps on
+      // mobile GPUs. Keep the same scene at a lower backing resolution / 30fps.
+      if (!needsRender && window.innerWidth < 768 && elapsed < 1000 / 30) {
+        if (isAnimating()) frame = window.requestAnimationFrame(draw);
+        return;
+      }
       animationTimeRef.current += elapsed;
       lastFrameAt = now;
 
@@ -646,7 +684,6 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
         shaderAnimationElapsedRef.current += shaderElapsed;
       }
 
-      resize();
       gl.useProgram(program);
 
       const transitionStartedAt = transitionStartedAtRef.current;
@@ -716,6 +753,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       { threshold: [0, 0.5, 1] }
     );
 
+    resize();
     resizeObserver.observe(canvas);
     intersectionObserver.observe(sectionRef.current ?? canvas);
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -730,7 +768,7 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
       gl.deleteBuffer(positions);
       gl.deleteProgram(program);
     };
-  }, []);
+  }, [heroLoaded]);
 
   const contentTransition = shouldReduceMotion ? REDUCED_TRANSITION : SLIDE_TRANSITION;
   const labelTransition = shouldReduceMotion
@@ -806,9 +844,10 @@ export default function CollectionHero({ slides }: CollectionHeroProps) {
                   alt={activeSlide.lampName + " lamp in " + activeSlide.colorName}
                   width={1000}
                   height={1000}
-                  sizes="(min-width: 1280px) min(48vw, 700px), (min-width: 768px) min(72vw, 700px), 112vw"
+                  sizes={HERO_IMAGE_SIZES}
                   className="absolute inset-0 h-full w-full object-contain"
                   preload={selectedIndex === 0}
+                  onLoad={() => setHeroLoaded(true)}
                   draggable={false}
                 />
               </motion.div>
