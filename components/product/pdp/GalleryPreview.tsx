@@ -36,7 +36,7 @@ export default function GalleryPreview({ images, name, color, activeIndex, onSel
       ref={previewRef}
       role="group"
       aria-label="Image previews"
-      className="glass-backdrop relative z-20 mx-auto my-3 flex w-max max-w-[calc(100%_-_2.5rem)] touch-pan-x gap-2.5 overflow-x-auto overscroll-contain rounded-2xl border border-white/60 bg-black/5 p-2.5 [scrollbar-width:thin] md:absolute md:right-8 md:top-1/2 md:m-0 md:max-h-[calc(100%_-_20rem)] md:max-w-none md:-translate-y-1/2 md:touch-auto md:flex-col md:overflow-x-hidden md:overflow-y-auto md:bg-transparent"
+      className="glass-backdrop relative z-20 mx-auto flex w-max max-w-full touch-pan-x gap-2.5 overflow-x-auto overscroll-contain rounded-2xl border border-white/60 bg-black/5 p-2.5 [scrollbar-width:thin] md:absolute md:right-8 md:top-1/2 md:m-0 md:max-h-[calc(100%_-_20rem)] md:max-w-none md:-translate-y-1/2 md:touch-auto md:flex-col md:overflow-x-hidden md:overflow-y-auto md:bg-transparent"
     >
       {images.map((image, index) => (
         <button

@@ -231,50 +231,6 @@ export default function ProductGallery({
           onBuyNow={onQuickBuy}
         />
 
-        <Tooltip.Provider delayDuration={0}>
-          <div
-            role="group"
-            aria-label="Choose lamp color"
-            className="glass-backdrop absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/60 px-2 py-1.5 shadow-sm md:bottom-auto md:left-8 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:flex-col md:gap-2 md:px-1.5 md:py-3"
-          >
-            {variants.map((variant) => (
-              <Tooltip.Root key={variant.id}>
-                <Tooltip.Trigger asChild>
-                  <button
-                    type="button"
-                    onClick={() => onVariantChange(variant)}
-                    className="grid h-11 w-11 place-items-center rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-2 md:h-8 md:w-8 pointer-coarse:min-h-11 pointer-coarse:min-w-11"
-                    aria-label={`View ${name} in ${variant.color}`}
-                    aria-pressed={selectedVariant.id === variant.id}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="h-9 w-9 rounded-full border-2 border-white md:h-7 md:w-7"
-                      style={{
-                        backgroundColor: variant.colorHex,
-                        boxShadow:
-                          selectedVariant.id === variant.id
-                            ? "0 0 0 2px var(--color-accent-amber)"
-                            : "0 0 0 1px var(--color-border)",
-                      }}
-                    />
-                  </button>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content
-                    side="right"
-                    sideOffset={10}
-                    className="z-50 rounded-md bg-[var(--color-text-primary)] px-2.5 py-1.5 text-xs font-medium text-white shadow-md"
-                  >
-                    {variant.color}
-                    <Tooltip.Arrow className="fill-[var(--color-text-primary)]" />
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
-            ))}
-          </div>
-        </Tooltip.Provider>
-
         {images.length > 1 && (
           <>
             <div className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 items-center justify-between px-[6px] md:inset-x-auto md:right-10 md:top-auto md:bottom-10 md:translate-y-0 md:rounded-full md:bg-white/95 md:px-1">
@@ -308,13 +264,70 @@ export default function ProductGallery({
           </>
         )}
       </div>
-      <GalleryPreview
-        images={images}
-        name={name}
-        color={selectedVariant.color}
-        activeIndex={activeIndex}
-        onSelect={(index) => emblaApi?.scrollTo(index)}
-      />
+      <div className="flex flex-col gap-4 border-b border-[var(--color-border)] px-5 py-4 md:contents">
+        <GalleryPreview
+          images={images}
+          name={name}
+          color={selectedVariant.color}
+          activeIndex={activeIndex}
+          onSelect={(index) => emblaApi?.scrollTo(index)}
+        />
+        <div className="flex items-center justify-between gap-4 md:contents">
+          <p
+            className="min-w-0 text-sm leading-5 text-[var(--color-text-secondary)] md:hidden"
+            aria-live="polite"
+          >
+            Colour
+            <br />
+            <span className="font-semibold text-[var(--color-text-primary)]">
+              {selectedVariant.color}
+            </span>
+          </p>
+          <Tooltip.Provider delayDuration={0}>
+            <div
+              role="group"
+              aria-label="Choose lamp color"
+              className="glass-backdrop z-20 flex shrink-0 items-center gap-1 rounded-full border border-white/60 px-1 py-1 md:absolute md:left-8 md:top-1/2 md:-translate-y-1/2 md:flex-col md:gap-2 md:px-1.5 md:py-3"
+            >
+              {variants.map((variant) => (
+                <Tooltip.Root key={variant.id}>
+                  <Tooltip.Trigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => onVariantChange(variant)}
+                      className="grid h-11 w-11 place-items-center rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-2 md:h-8 md:w-8 pointer-coarse:min-h-11 pointer-coarse:min-w-11"
+                      aria-label={`View ${name} in ${variant.color}`}
+                      aria-pressed={selectedVariant.id === variant.id}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="h-7 w-7 rounded-full border-2 border-white"
+                        style={{
+                          backgroundColor: variant.colorHex,
+                          boxShadow:
+                            selectedVariant.id === variant.id
+                              ? "0 0 0 2px var(--color-accent-amber)"
+                              : "0 0 0 1px var(--color-border)",
+                        }}
+                      />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      side="right"
+                      sideOffset={10}
+                      className="z-50 rounded-md bg-[var(--color-text-primary)] px-2.5 py-1.5 text-xs font-medium text-white shadow-md"
+                    >
+                      {variant.color}
+                      <Tooltip.Arrow className="fill-[var(--color-text-primary)]" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              ))}
+            </div>
+          </Tooltip.Provider>
+        </div>
+      </div>
     </div>
   );
 }

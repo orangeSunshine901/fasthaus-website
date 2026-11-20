@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ShoppingCart } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
@@ -26,6 +26,8 @@ export default function PDPClient({
     (variant) => variant.id === (searchParams.get("variant") ?? initialVariantId)
   ) ?? product.variants[0];
   const [activeImage, setActiveImage] = useState(0);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const [galleryPassed, setGalleryPassed] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<ProductTab>("materials");
 
@@ -36,6 +38,17 @@ export default function PDPClient({
   const adding = useCartStore((s) => s.pending.includes(selectedVariant.id));
   const router = useRouter();
   const drawerOpen = useCartStore((s) => s.drawerOpen);
+
+  useEffect(() => {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+    // Keep the mobile purchase bar clear of the photo and both gallery controls.
+    const observer = new IntersectionObserver(([entry]) => {
+      setGalleryPassed(entry.boundingClientRect.bottom <= 0);
+    });
+    observer.observe(gallery);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     capture(analyticsEvents.productViewed, {
@@ -129,23 +142,25 @@ export default function PDPClient({
 
   return (
     <div className="flex flex-col gap-8 lg:gap-12">
-      <ProductGallery
-        images={selectedVariant.images}
-        name={product.name}
-        description={product.designStory}
-        variants={product.variants}
-        selectedVariant={selectedVariant}
-        activeIndex={activeImage}
-        onVariantChange={handleVariantChange}
-        onQuickBuy={handleQuickBuy}
-        onSelect={(index) => {
-          setActiveImage(index);
-          capture(analyticsEvents.productImageViewed, {
-            product_id: product.id,
-            image_index: index,
-          });
-        }}
-      />
+      <div ref={galleryRef}>
+        <ProductGallery
+          images={selectedVariant.images}
+          name={product.name}
+          description={product.designStory}
+          variants={product.variants}
+          selectedVariant={selectedVariant}
+          activeIndex={activeImage}
+          onVariantChange={handleVariantChange}
+          onQuickBuy={handleQuickBuy}
+          onSelect={(index) => {
+            setActiveImage(index);
+            capture(analyticsEvents.productImageViewed, {
+              product_id: product.id,
+              image_index: index,
+            });
+          }}
+        />
+      </div>
       <PurchaseRow
         product={product}
         selectedVariant={selectedVariant}
@@ -160,7 +175,7 @@ export default function PDPClient({
       <div className="scroll-mt-28">
         <ProductTabs product={product} activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
-      {!drawerOpen && (
+      {galleryPassed && !drawerOpen && (
         <div
           aria-label="Quick purchase"
           className="sticky bottom-0 z-40 -mx-5 flex items-center gap-4 border-t border-[var(--color-border)] bg-white px-5 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden"
