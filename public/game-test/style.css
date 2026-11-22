@@ -170,3 +170,15 @@ html[dir='rtl'] #enter-studio svg { transform: none; }
 @media (prefers-reduced-motion: no-preference) {
   .primary-button, .hint-button, .language-switch { transition: background-color 160ms ease-out; }
 }
+
+/* Optional feedback stays below the product links and never interrupts play. */
+.game-feedback-prompt { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-top:24px; padding:24px 0; border-top:1px solid #41484d; }
+.game-feedback-prompt h3 { margin:0 0 8px; font-size:20px; font-weight:500; }
+.game-feedback-prompt p { max-width:52ch; margin:0; color:var(--night-muted); font-size:16px; line-height:1.6; }
+.game-feedback-prompt a { flex-shrink:0; }
+.footer-feedback { display:flex; flex-wrap:wrap; align-items:center; gap:16px; }
+.footer-feedback a,.footer-feedback button { font-size:14px; min-height:44px; display:inline-flex; align-items:center; }
+.footer-feedback button { background:transparent; border:0; padding:0; color:inherit; text-decoration:underline; text-underline-offset:4px; }
+#stcm-wrapper { --fontFamily:Satoshi,sans-serif; --primaryColor:#ff4b1f; --backgroundColor:#f8f6f3; --textColor:#4b494b; }
+#stcm-icon { display:none!important; }
+@media(max-width:600px) { .game-feedback-prompt { align-items:flex-start; flex-direction:column; gap:16px; } }

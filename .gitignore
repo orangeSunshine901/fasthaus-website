@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Firecrawl
 /artifacts
+
+# Generated consent-aware standalone game analytics bundle
+/public/game-test/analytics.js

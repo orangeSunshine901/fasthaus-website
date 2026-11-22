@@ -44,3 +44,8 @@ Funnels:
 4. `product_viewed` → `enquiry_submitted`
 
 Feature flags require no extra provider: import `posthog` from `posthog-js` and use `posthog.isFeatureEnabled()` only after consent.
+
+
+## After Hours
+
+The standalone game uses the same PostHog and Silktide configuration as the storefront. It is separately bundled because static rewrites do not mount the Next.js providers. See `docs/after-hours.md` for event definitions, consent behavior, feedback forms, dashboard links and delivery state. Feedback text is collected only by the explicitly submitted hosted survey, never as a gameplay event property.

@@ -6,6 +6,8 @@ import { ArrowUpRight, X } from "lucide-react";
 import { isPageScrollLocked } from "@/lib/page-scroll-lock";
 import { useCartStore } from "@/lib/store/cart";
 import { AFTER_HOURS_DELAY_MS, AFTER_HOURS_SESSION_KEY, AFTER_HOURS_TIME_KEY, isAfterHoursInvitationRoute } from "@/lib/after-hours";
+import { capture } from "@/lib/analytics/client";
+import { analyticsEvents } from "@/lib/analytics/events";
 import styles from "./AfterHours.module.css";
 
 export default function AfterHoursInvitation() {
@@ -41,6 +43,7 @@ export default function AfterHoursInvitation() {
       seen.current = true;
       try { sessionStorage.setItem(AFTER_HOURS_SESSION_KEY, "1"); } catch {}
       setVisible(true);
+      capture(analyticsEvents.afterHoursInvitationShown, { source_path: pathname });
     };
     const timer = window.setInterval(update, 1000);
     const pause = () => { lastTick = performance.now(); update(); };
@@ -54,14 +57,19 @@ export default function AfterHoursInvitation() {
 
   if (!visible || drawerOpen || !isAfterHoursInvitationRoute(pathname)) return null;
 
+  const dismiss = (method: string) => {
+    capture(analyticsEvents.afterHoursInvitationDismissed, { method, source_path: pathname });
+    setVisible(false);
+  };
+
   return (
     <aside className={styles.invitation} aria-label="After Hours game invitation" onKeyDown={(event) => {
-      if (event.key === "Escape") setVisible(false);
+      if (event.key === "Escape") dismiss("escape");
     }}>
-      <button className={styles.close} onClick={() => setVisible(false)} aria-label="Dismiss game invitation"><X size={20} aria-hidden="true" /></button>
+      <button className={styles.close} onClick={() => dismiss("close")} aria-label="Dismiss game invitation"><X size={20} aria-hidden="true" /></button>
       <h2>Still here? So are the lamps.</h2>
       <p>Step into After Hours, a short game about the stories behind four Fasthaus lights.</p>
-      <a href="/after-hours" className={styles.invitationLink}>Play After Hours <ArrowUpRight size={18} aria-hidden="true" /></a>
+      <a href="/after-hours?entry=invitation" className={styles.invitationLink} onClick={() => capture(analyticsEvents.afterHoursInvitationClicked, { source_path: pathname })}>Play After Hours <ArrowUpRight size={18} aria-hidden="true" /></a>
     </aside>
   );
 }

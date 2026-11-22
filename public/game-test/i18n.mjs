@@ -25,6 +25,8 @@ const english = {
   completionNote: 'From pixels to your place. Meet the real objects.',
   experiment: 'A Fasthaus digital experiment',
   explore: 'Explore the collection', productAlt: '{name} table lamp', footer: 'A small game by Fasthaus. Made for curious minds.',
+  feedbackTitle: 'One last bright idea?', feedbackDetail: 'Tell us what worked, what felt tricky, or what you would like to play next.',
+  shareFeedback: 'Share feedback', feedbackLink: 'Feedback or report a problem', cookiePreferences: 'Cookie preferences',
   noScript: 'This game needs JavaScript. You can still explore the lamp collection.',
   switchLabel: 'Switch to Arabic', switchText: 'العربية',
 };
@@ -54,6 +56,8 @@ const arabic = {
   completionNote: 'من البكسل إلى مساحتك. تعرّف على القطع الحقيقية.',
   experiment: 'تجربة رقمية من فاستهاوس',
   explore: 'استكشف المجموعة', productAlt: 'مصباح الطاولة «{name}»', footer: 'لعبة صغيرة من فاستهاوس. صُنعت لأصحاب العقول الفضولية.',
+  feedbackTitle: 'هل لديك فكرة أخيرة؟', feedbackDetail: 'أخبرنا بما أعجبك، وما وجدته صعباً، وما تودّ لعبه بعد ذلك.',
+  shareFeedback: 'شاركنا رأيك', feedbackLink: 'ملاحظات أو الإبلاغ عن مشكلة', cookiePreferences: 'تفضيلات ملفات الارتباط',
   noScript: 'تحتاج هذه اللعبة إلى جافاسكربت. لا يزال بإمكانك استكشاف مجموعة المصابيح.',
   switchLabel: 'Switch to English', switchText: 'English',
 };

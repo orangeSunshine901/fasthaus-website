@@ -23,6 +23,8 @@ try {
   const page=await browser.newPage({viewport,reducedMotion:'reduce'});
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto(`${origin}/after-hours`,{waitUntil:'networkidle'});
+  const cookiePreferences=page.getByRole('button',{name:'Preferences',exact:true});
+  if(await cookiePreferences.count()){await cookiePreferences.click();for(const label of ['Analytics cookies','Marketing cookies'])await page.getByRole('checkbox',{name:label,exact:true}).uncheck();await page.getByRole('button',{name:'Save your cookie preferences',exact:true}).click();}
   await page.screenshot({path:`${screenshots}/${name}-start.png`,fullPage:true});
   await page.locator(`#choose-${language==='en'?'english':'arabic'}`).click();
   await page.locator('#enter-studio').focus();await page.keyboard.press('Enter');
@@ -70,7 +72,7 @@ try {
  await advance(page, 59_000);assert.equal(await invitation.count(),0,'Time follows navigation');
  await advance(page, 3_000);await invitation.waitFor();
  await page.screenshot({path:`${screenshots}/invitation-mobile.png`});
- assert.equal(await invitation.getByRole('link',{name:'Play After Hours'}).getAttribute('href'),'/after-hours');
+ assert.equal(await invitation.getByRole('link',{name:'Play After Hours'}).getAttribute('href'),'/after-hours?entry=invitation');
  await invitation.getByRole('button',{name:'Dismiss game invitation'}).click();
  await page.reload({waitUntil:'networkidle'});await advance(page, 130_000);
  assert.equal(await invitation.count(),0,'Dismissal survives reload');

@@ -11,6 +11,22 @@ export const analyticsEvents = {
   enquiryStarted: "enquiry_started",
   enquirySubmitted: "enquiry_submitted",
   productImpression: "product_impression",
+  afterHoursViewed: "after_hours_viewed",
+  afterHoursEntered: "after_hours_entered",
+  afterHoursStarted: "after_hours_started",
+  afterHoursRoundStarted: "after_hours_round_started",
+  afterHoursGuessSubmitted: "after_hours_guess_submitted",
+  afterHoursLampDiscovered: "after_hours_lamp_discovered",
+  afterHoursHintUsed: "after_hours_hint_used",
+  afterHoursCompleted: "after_hours_completed",
+  afterHoursRestarted: "after_hours_restarted",
+  afterHoursShopClicked: "after_hours_shop_clicked",
+  afterHoursFeedbackOpened: "after_hours_feedback_opened",
+  afterHoursLanguageSelected: "after_hours_language_selected",
+  afterHoursExited: "after_hours_exited",
+  afterHoursInvitationShown: "after_hours_invitation_shown",
+  afterHoursInvitationDismissed: "after_hours_invitation_dismissed",
+  afterHoursInvitationClicked: "after_hours_invitation_clicked",
 } as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[keyof typeof analyticsEvents];

@@ -21,6 +21,8 @@
   <link rel="preload" href="./assets/kasane-sprite.png" as="image" type="image/png">
   <link rel="preload" href="./assets/nasaq-sprite.png" as="image" type="image/png">
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="/site-preferences.css">
+  <script type="module" async src="./analytics.js"></script>
   <script type="module" src="./app.mjs"></script>
 </head>
 <body>
@@ -65,6 +67,10 @@
         <div class="reward-heading"><div><h2 id="reward-title" tabindex="-1" data-i18n="rewardTitle">You’ve got an eye for this.</h2><p data-i18n="rewardDetail">Three bright ideas, found. The rest is a matter of where to put them.</p></div></div>
         <div class="completion-link"><p data-i18n="completionNote">From pixels to your place. Meet the real objects.</p><a href="/collection" class="primary-button shop-link"><span data-i18n="explore">Explore the collection</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div>
         <div class="collection" id="collection"></div>
+        <aside class="game-feedback-prompt" aria-labelledby="game-feedback-title">
+          <div><h3 id="game-feedback-title" data-i18n="feedbackTitle">One last bright idea?</h3><p data-i18n="feedbackDetail">Tell us what worked, what felt tricky, or what you would like to play next.</p></div>
+          <a href="/after-hours/feedback" class="primary-button" target="_blank" rel="noopener" data-game-feedback="completion"><span data-i18n="shareFeedback">Share feedback</span></a>
+        </aside>
         <button class="primary-button replay-button" id="replay"><span data-i18n="replay">Play again</span> <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5m5 0a8 8 0 1 0-3 6M20 7v5"/></svg></button>
       </section>
       <div class="game-footer"><span id="play-tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7V3Zm0 5h10M12 3v5"/></svg> Choose your reply to continue</span><div><button id="sound" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 4-5 4H3v8h3l5 4V4Zm5 5 5 6m0-6-5 6"/></svg><span>Sound off</span></button><button id="restart" hidden data-i18n="restart">Start over</button></div></div>
@@ -87,7 +93,7 @@
         </div>
       </section>
     </section>
-    <footer class="page-footer"><span data-i18n="footer">A small game by Fasthaus. Made for curious minds.</span><span class="experience-credit" data-i18n="experiment">A Fasthaus digital experiment</span></footer>
+    <footer class="page-footer"><span data-i18n="footer">A small game by Fasthaus. Made for curious minds.</span><span class="footer-feedback"><a href="/after-hours/feedback" target="_blank" rel="noopener" data-game-feedback="footer" data-i18n="feedbackLink">Feedback or report a problem</a><button type="button" id="cookie-preferences" data-i18n="cookiePreferences">Cookie preferences</button></span></footer>
     <noscript><style>.start-overlay{display:none}.game:has(.start-overlay:not([hidden])){min-height:0}</style><p class="noscript">This game needs JavaScript. You can still <a href="/collection">explore the lamp collection</a>.</p></noscript>
   </main>
 </body>

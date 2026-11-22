@@ -15,7 +15,9 @@
     "lint": "eslint",
     "images:portraits": "node scripts/generate-gallery-portraits.mjs",
     "images:mobile": "node --experimental-strip-types scripts/generate-mobile-gallery.mjs",
-    "seo:check": "node scripts/seo-check.mjs"
+    "seo:check": "node scripts/seo-check.mjs",
+    "predev": "node scripts/build-after-hours-analytics.mjs",
+    "prebuild": "node scripts/build-after-hours-analytics.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -63,6 +65,7 @@
     "playwright": "^1.63.0",
     "prettier": "^3.8.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "esbuild": "0.28.1"
   }
 }
