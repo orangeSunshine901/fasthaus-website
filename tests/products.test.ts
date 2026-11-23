@@ -3,10 +3,40 @@ import test from "node:test";
 import { existsSync } from "node:fs";
 import {
   PRODUCTS,
+  getCollectionProducts,
+  getFeaturedProducts,
   getVariantGalleryImages,
   getVariantMainImage,
   type ProductVariant,
 } from "../lib/data/products.ts";
+
+test("pink weave gets a New collection card linked to its canonical Nasaq variant", () => {
+  const nasaq = PRODUCTS.find((product) => product.slug === "nasaq-lamp")!;
+  const variant = nasaq.variants.find((variant) => variant.id === "3-pink-weave")!;
+  const cards = getCollectionProducts(PRODUCTS);
+  const card = cards.find((product) => product.name === "NASAQ WEAVE")!;
+  assert.equal(cards.length, PRODUCTS.length + 1);
+  assert.equal(cards[0], nasaq);
+  assert.equal(card.id, nasaq.id);
+  assert.equal(card.slug, nasaq.slug);
+  assert.equal(card.badge, "NEW");
+  assert.deepEqual(card.variants, [variant]);
+  assert.equal(nasaq.badge, undefined);
+  assert.equal(variant.price, 322);
+  assert.equal(variant.stock, 5);
+  assert.equal(new Set(PRODUCTS.flatMap((p) => p.variants.map((v) => v.id))).size,
+    PRODUCTS.flatMap((p) => p.variants).length);
+  assert.equal(getVariantGalleryImages(variant)[0].src, variant.mainImage);
+  assert.equal(variant.images.length, 6);
+  for (const image of variant.images) {
+    assert.notEqual(image.unoptimized, true);
+    for (const src of [image.src, image.mobileSrc!]) {
+      assert.ok(existsSync(new URL(`../public${src}`, import.meta.url)), src);
+    }
+  }
+  assert.deepEqual(getCollectionProducts([]), []);
+  assert.deepEqual(getCollectionProducts(PRODUCTS.filter((p) => p !== nasaq)), PRODUCTS.filter((p) => p !== nasaq));
+});
 
 test("every product provides material labels and a description", () => {
   for (const product of PRODUCTS) {
@@ -16,6 +46,36 @@ test("every product provides material labels and a description", () => {
       `${product.name} is missing a materials description`
     );
   }
+});
+
+test("Pink Weave placements keep each approved desktop/mobile composition together", () => {
+  const variant = PRODUCTS.flatMap((product) => product.variants).find((v) => v.id === "3-pink-weave")!;
+  const prefix = "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-";
+  assert.equal(variant.collectionImage, `${prefix}off-1x1-1200x1200.webp`);
+  assert.equal(variant.collectionMobileImage, `${prefix}off-3x4-1080x1440-761ffa6a.webp`);
+  assert.deepEqual(variant.featuredImages, {
+    lightOff: `${prefix}off-1x1-1200x1200.webp`,
+    lightOn: `${prefix}on-1x1-1200x1200.webp`,
+  });
+  assert.deepEqual(getVariantGalleryImages(variant).map(({ src, mobileSrc }) => [src, mobileSrc]), [
+    [`${prefix}off-native-2880x1496.webp`, `${prefix}off-3x4-1080x1440-761ffa6a.webp`],
+    [`${prefix}on-native-2880x1496.webp`, `${prefix}on-3x4-1080x1440-8ecda3a5.webp`],
+    ...["front-hero", "three-quarter", "rim-detail", "room-portrait"].map((scene) => [
+      `${prefix}lifestyle-${scene}-16x9-2560x1440.webp`,
+      `${prefix}lifestyle-${scene}-3x4-1080x1440.webp`,
+    ]),
+  ]);
+});
+
+test("homepage featured choices exclude Pink Weave without removing it from the catalog", () => {
+  const featured = getFeaturedProducts(PRODUCTS);
+  const nasaq = PRODUCTS.find((product) => product.slug === "nasaq-lamp")!;
+  const card = featured.find((product) => product.slug === nasaq.slug)!;
+  assert.deepEqual(card.variants, nasaq.variants.filter((variant) => variant.id !== "3-pink-weave"));
+  assert.ok(nasaq.variants.some((variant) => variant.id === "3-pink-weave"));
+  assert.ok(getCollectionProducts(PRODUCTS).some((product) => product.name === "NASAQ WEAVE"));
+  assert.deepEqual(getFeaturedProducts([]), []);
+  assert.ok(featured.every((product) => product.featured));
 });
 
 const baseVariant: ProductVariant = {

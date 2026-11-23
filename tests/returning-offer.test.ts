@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { DISCOUNT_OFFER_COOLDOWN_MS, DISCOUNT_OFFER_DELAY_MS, DISCOUNT_QUIET_MS, hasDiscountOfferEngagement, isDiscountOfferOnCooldown, qualifiesForReturningOffer, REACTIVATION_IDLE_MS, RETURN_VISIT_GAP_MS } from "../lib/returning-offer.ts";
+import { DISCOUNT_OFFER_COOLDOWN_MS, DISCOUNT_OFFER_DELAY_MS, DISCOUNT_QUIET_MS, isReturningOfferRoute, hasDiscountOfferEngagement, isDiscountOfferOnCooldown, qualifiesForReturningOffer, REACTIVATION_IDLE_MS, RETURN_VISIT_GAP_MS } from "../lib/returning-offer.ts";
 
 const now = Date.UTC(2026, 9, 26, 12);
 
@@ -37,4 +37,13 @@ test("distinguishes a return visit from a refresh or a new visitor", () => {
 test("reactivation requires at least five minutes without activity", () => {
   assert.equal(qualifiesForReturningOffer(now - REACTIVATION_IDLE_MS, now, REACTIVATION_IDLE_MS), true);
   assert.equal(qualifiesForReturningOffer(now - REACTIVATION_IDLE_MS + 1, now, REACTIVATION_IDLE_MS), false);
+});
+
+test("only shows returning offers on shopping routes", () => {
+  for (const pathname of ["/", "/cart", "/collection", "/collection/table-lamps", "/product/nasaq-lamp"]) {
+    assert.equal(isReturningOfferRoute(pathname), true, pathname);
+  }
+  for (const pathname of ["/checkout", "/checkout/complete", "/order/123", "/admin", "/contact", "/about", "/legal/privacy", "/products"]) {
+    assert.equal(isReturningOfferRoute(pathname), false, pathname);
+  }
 });

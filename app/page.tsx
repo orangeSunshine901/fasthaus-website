@@ -3,6 +3,7 @@ import Link from "next/link";
 import ShopLayout from "@/components/layout/ShopLayout";
 import FeaturedProductsCarousel from "@/components/product/FeaturedProductsCarousel";
 import { getMediaProducts } from "@/lib/cms/products";
+import { getFeaturedProducts } from "@/lib/data/products";
 import { NEWSLETTER_ENABLED } from "@/lib/promotions";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 import HomeScrollCue from "@/components/home/HomeScrollCue";
@@ -75,7 +76,7 @@ const newsletterImages = [
 ];
 
 export default async function HomePage() {
-  const featured = (await getMediaProducts()).filter((product) => product.featured);
+  const featured = getFeaturedProducts(await getMediaProducts());
 
   return (
     <LocomotiveScrollProvider>

@@ -11,7 +11,7 @@ test("menus show the requested photo variants with Hamrah last without changing 
   assert.deepEqual(items.map(({ variant }) => variant.id), ["3-white", "1-matcha", "2-tangerine", "4-cherry-red"]);
   assert.match(items[0].image, /nasaq-marshmallow-white-full-desktop/);
   assert.match(items[1].image, /nujaj-matcha-full-desktop/);
-  assert.match(items[2].image, /kasane-tangerine-photoshopped-desktop/);
+  assert.equal(items[2].image, "/mushroom-lamp/mushroom-lamp-orange-off-collection.png");
   for (const { image, variant, product } of items) {
     assert.ok(existsSync(`public${image}`), image);
     assert.ok(product.variants.includes(variant));

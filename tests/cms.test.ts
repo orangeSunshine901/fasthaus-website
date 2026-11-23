@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import sharp from "sharp";
-import { PRODUCTS } from "../lib/data/products.ts";
+import { PRODUCTS, getVariantGalleryImages } from "../lib/data/products.ts";
 import {
   applyProductMedia,
   knownProductSources,
@@ -23,6 +23,8 @@ test("media overrides reach the correct colour without changing commerce data or
   assert.equal(result[0].variants[0].collectionImage, media.collection);
   assert.equal(result[0].variants[0].images[0].src, media.images[0].src);
   assert.equal(result[0].variants[0].images[0].unoptimized, true);
+  assert.equal(result[0].variants[0].mainImage, media.images[0].src);
+  assert.deepEqual(getVariantGalleryImages(result[0].variants[0]), media.images);
   assert.equal(result[0].variants[0].price, variant.price);
   assert.equal(result[0].variants[0].sku, variant.sku);
   assert.equal(result[0].variants[0].stock, variant.stock);

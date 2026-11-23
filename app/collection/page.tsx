@@ -1,6 +1,7 @@
 import ShopLayout from "@/components/layout/ShopLayout";
 import ProductCard from "@/components/product/ProductCard";
 import { getMediaProducts } from "@/lib/cms/products";
+import { getCollectionProducts } from "@/lib/data/products";
 import CollectionHero, { type CollectionHeroSlide } from "@/components/collection/CollectionHero";
 import CollectionViewed from "@/components/analytics/CollectionViewed";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
@@ -49,7 +50,7 @@ const COLLECTION_HERO_SLIDES = [
 ] as const satisfies readonly CollectionHeroSlide[];
 
 export default async function CollectionsPage() {
-  const products = await getMediaProducts();
+  const products = getCollectionProducts(await getMediaProducts());
   const slides = COLLECTION_HERO_SLIDES.map((slide) => {
     const variantId = new URL(slide.href, "https://fasthaus.ae").searchParams.get("variant");
     const variant = products.flatMap((product) => product.variants).find((item) => item.id === variantId);
@@ -86,7 +87,7 @@ export default async function CollectionsPage() {
         {/* Product grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={`${product.id}-${product.variants[0].id}`} product={product} />
           ))}
         </div>
       </div>

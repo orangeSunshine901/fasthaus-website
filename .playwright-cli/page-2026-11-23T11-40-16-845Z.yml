@@ -1,0 +1,203 @@
+- generic [active] [ref=f17e1]:
+  - generic [ref=f17e3]:
+    - generic [ref=f17e5]:
+      - paragraph [ref=f17e6]: A gift with every lamp order
+      - generic [ref=f17e11]:
+        - generic [ref=f17e12]: Free shipping
+        - generic [ref=f17e18]: Eco-friendly materials
+        - generic [ref=f17e22]: 1-year warranty
+    - generic [ref=f17e27]:
+      - link "Fasthaus home" [ref=f17e29] [cursor=pointer]:
+        - /url: /
+        - img "Fasthaus" [ref=f17e30]
+      - generic [ref=f17e31]:
+        - navigation "Main" [ref=f17e32]:
+          - list [ref=f17e34]:
+            - listitem [ref=f17e35]:
+              - link "collection" [ref=f17e36] [cursor=pointer]:
+                - /url: /collection
+              - button "Browse lamp collection" [ref=f17e38]
+        - link "about" [ref=f17e41] [cursor=pointer]:
+          - /url: /about
+        - link "contact us" [ref=f17e43] [cursor=pointer]:
+          - /url: /contact
+      - button "Open cart" [ref=f17e48] [cursor=pointer]
+    - banner [ref=f17e53]:
+      - generic [ref=f17e56]:
+        - link [ref=f17e57] [cursor=pointer]:
+          - /url: /
+          - img "Fasthaus" [ref=f17e58]
+        - navigation "Main" [ref=f17e59]:
+          - list [ref=f17e61]:
+            - listitem [ref=f17e62]:
+              - link "collection" [ref=f17e63] [cursor=pointer]:
+                - /url: /collection
+              - button "Browse lamp collection" [ref=f17e64]
+            - listitem [ref=f17e67]:
+              - link "about" [ref=f17e68] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=f17e69]:
+              - link "contact us" [ref=f17e70] [cursor=pointer]:
+                - /url: /contact
+        - button "Open cart" [ref=f17e73] [cursor=pointer]
+    - main [ref=f17e78]:
+      - region "Fasthaus lamp collection" [ref=f17e79]:
+        - generic:
+          - generic:
+            - generic:
+              - heading "NASAQ" [level=1]
+            - generic:
+              - generic:
+                - img "NASAQ lamp in COBALT BLUE"
+            - generic:
+              - paragraph: COBALT BLUE
+              - link "View NASAQ in COBALT BLUE" [ref=f17e83] [cursor=pointer]:
+                - /url: /product/nasaq-lamp?variant=3-cobalt-blue
+                - generic [ref=f17e84]: View Product
+        - generic [ref=f17e86]: 01 / 04
+        - paragraph [ref=f17e88]: NASAQ lamp, COBALT BLUE, slide 1 of 4
+      - generic [ref=f17e89]:
+        - navigation "Breadcrumb" [ref=f17e90]:
+          - link "Home" [ref=f17e92] [cursor=pointer]:
+            - /url: /
+          - generic [ref=f17e93]: / Collection
+        - generic [ref=f17e95]:
+          - heading "Collection" [level=1] [ref=f17e96]
+          - paragraph [ref=f17e97]: Browse our full collection of considered everyday lighting, built to last and made to love.
+        - generic [ref=f17e98]:
+          - generic [ref=f17e99]:
+            - link "View NASAQ in Cobalt Blue" [ref=f17e100] [cursor=pointer]:
+              - /url: /product/nasaq-lamp?variant=3-cobalt-blue
+              - generic [ref=f17e101]:
+                - img "NASAQ in Cobalt Blue" [ref=f17e104]
+                - generic [ref=f17e105]: View Product
+            - button "Add NASAQ to cart" [ref=f17e109]
+            - generic [ref=f17e118]:
+              - link "NASAQ AED 299.00" [ref=f17e119] [cursor=pointer]:
+                - /url: /product/nasaq-lamp?variant=3-cobalt-blue
+                - generic [ref=f17e120]: NASAQ
+                - generic [ref=f17e121]:
+                  - img "AED" [ref=f17e122]
+                  - generic [ref=f17e123]: "299.00"
+              - generic [ref=f17e124]:
+                - button "View NASAQ in Cobalt Blue" [pressed] [ref=f17e125]
+                - button "View NASAQ in Tangerine" [ref=f17e127]
+                - button "View NASAQ in Marshmallow White" [ref=f17e129]
+                - button "View NASAQ in Pink · Weave shade" [ref=f17e131]
+          - generic [ref=f17e133]:
+            - link "View NASAQ WEAVE in Pink · Weave shade" [ref=f17e134] [cursor=pointer]:
+              - /url: /product/nasaq-lamp?variant=3-pink-weave
+              - generic [ref=f17e135]:
+                - img "NASAQ WEAVE in Pink · Weave shade" [ref=f17e138]
+                - generic [ref=f17e139]: NEW
+                - generic [ref=f17e140]: View Product
+            - button "Add NASAQ WEAVE to cart" [ref=f17e144]
+            - generic [ref=f17e153]:
+              - link "NASAQ WEAVE AED 322.00" [ref=f17e154] [cursor=pointer]:
+                - /url: /product/nasaq-lamp?variant=3-pink-weave
+                - generic [ref=f17e155]: NASAQ WEAVE
+                - generic [ref=f17e156]:
+                  - img "AED" [ref=f17e157]
+                  - generic [ref=f17e158]: "322.00"
+              - button "View NASAQ WEAVE in Pink · Weave shade" [pressed] [ref=f17e160]
+          - generic [ref=f17e162]:
+            - link "View NUJĀJ in Matcha" [ref=f17e163] [cursor=pointer]:
+              - /url: /product/nujaj-desk-lamp?variant=1-matcha
+              - generic [ref=f17e164]:
+                - img "NUJĀJ in Matcha" [ref=f17e167]
+                - generic [ref=f17e168]: View Product
+            - button "Add NUJĀJ to cart" [ref=f17e172]
+            - generic [ref=f17e181]:
+              - link "NUJĀJ AED 329.00" [ref=f17e182] [cursor=pointer]:
+                - /url: /product/nujaj-desk-lamp?variant=1-matcha
+                - generic [ref=f17e183]: NUJĀJ
+                - generic [ref=f17e184]:
+                  - img "AED" [ref=f17e185]
+                  - generic [ref=f17e186]: "329.00"
+              - generic [ref=f17e187]:
+                - button "View NUJĀJ in Matcha" [pressed] [ref=f17e188]
+                - button "View NUJĀJ in Cherry Red" [ref=f17e190]
+                - button "View NUJĀJ in Clear" [ref=f17e192]
+          - generic [ref=f17e194]:
+            - link "View HAMRAH in Cherry Red" [ref=f17e195] [cursor=pointer]:
+              - /url: /product/hamrah-lamp?variant=4-cherry-red
+              - generic [ref=f17e196]:
+                - img "HAMRAH in Cherry Red" [ref=f17e199]
+                - generic [ref=f17e200]: View Product
+            - button "Add HAMRAH to cart" [ref=f17e204]
+            - generic [ref=f17e213]:
+              - link "HAMRAH AED 379.00" [ref=f17e214] [cursor=pointer]:
+                - /url: /product/hamrah-lamp?variant=4-cherry-red
+                - generic [ref=f17e215]: HAMRAH
+                - generic [ref=f17e216]:
+                  - img "AED" [ref=f17e217]
+                  - generic [ref=f17e218]: "379.00"
+              - generic [ref=f17e219]:
+                - button "View HAMRAH in Cherry Red" [pressed] [ref=f17e220]
+                - button "View HAMRAH in Cobalt Blue" [ref=f17e222]
+                - button "View HAMRAH in Olive Green" [ref=f17e224]
+          - generic [ref=f17e226]:
+            - link "View KASANE in Tangerine" [ref=f17e227] [cursor=pointer]:
+              - /url: /product/kasane-lamp?variant=2-tangerine
+              - generic [ref=f17e228]:
+                - img "KASANE in Tangerine" [ref=f17e231]
+                - generic [ref=f17e232]: View Product
+            - button "Add KASANE to cart" [ref=f17e236]
+            - generic [ref=f17e245]:
+              - link "KASANE AED 399.00" [ref=f17e246] [cursor=pointer]:
+                - /url: /product/kasane-lamp?variant=2-tangerine
+                - generic [ref=f17e247]: KASANE
+                - generic [ref=f17e248]:
+                  - img "AED" [ref=f17e249]
+                  - generic [ref=f17e250]: "399.00"
+              - generic [ref=f17e251]:
+                - button "View KASANE in Tangerine" [pressed] [ref=f17e252]
+                - button "View KASANE in Cobalt Blue" [ref=f17e254]
+                - button "View KASANE in Black" [ref=f17e256]
+    - contentinfo [ref=f17e258]:
+      - generic [ref=f17e259]:
+        - generic [ref=f17e260]:
+          - generic [ref=f17e261]:
+            - generic [ref=f17e262]: Shop
+            - link "Collection" [ref=f17e263] [cursor=pointer]:
+              - /url: /collection
+          - generic [ref=f17e264]:
+            - generic [ref=f17e265]: Studio
+            - link "About Fasthaus" [ref=f17e266] [cursor=pointer]:
+              - /url: /about
+            - link "After Hours" [ref=f17e267] [cursor=pointer]:
+              - /url: /after-hours
+            - link "Custom Projects" [ref=f17e268] [cursor=pointer]:
+              - /url: /contact
+          - generic [ref=f17e269]:
+            - generic [ref=f17e270]: Support
+            - link "Shipping Policy" [ref=f17e271] [cursor=pointer]:
+              - /url: /legal/shipping
+            - link "Refund & Return Policy" [ref=f17e272] [cursor=pointer]:
+              - /url: /legal/refunds
+            - link "Warranty" [ref=f17e273] [cursor=pointer]:
+              - /url: /legal/warranty
+            - link "FAQ" [ref=f17e274] [cursor=pointer]:
+              - /url: /faq
+          - generic [ref=f17e275]:
+            - generic [ref=f17e276]: Contact
+            - link "WhatsApp" [ref=f17e277] [cursor=pointer]:
+              - /url: https://wa.me/971527391317
+            - link "Email" [ref=f17e278] [cursor=pointer]:
+              - /url: mailto:hello@fasthaus.studio
+            - link "Instagram" [ref=f17e279] [cursor=pointer]:
+              - /url: https://www.instagram.com/fasthaus.studio/?utm_source=ig_web_button_share_sheet
+        - link "Fasthaus home" [ref=f17e280] [cursor=pointer]:
+          - /url: /
+          - img "Fasthaus" [ref=f17e281]
+        - generic [ref=f17e282]:
+          - generic [ref=f17e283]: © 2026 Fasthaus Studio is a brand of Fast Advertising FZC. All rights reserved.
+          - generic [ref=f17e285]:
+            - link "Privacy" [ref=f17e286] [cursor=pointer]:
+              - /url: /legal/privacy
+            - link "Terms" [ref=f17e287] [cursor=pointer]:
+              - /url: /legal/terms
+            - link "Cookies" [ref=f17e288] [cursor=pointer]:
+              - /url: /legal/cookies
+  - button "Open Next.js Dev Tools" [ref=f17e294] [cursor=pointer]
+  - alert [ref=f17e298]

@@ -1,0 +1,50 @@
+[
+  {
+    "placement": "collection",
+    "width": 390,
+    "source": "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-3x4-1080x1440-761ffa6a.webp",
+    "status": 200,
+    "currentSrc": "http://localhost:3000/_next/image?url=%2Fstack-lamp%2Fnasaq-pink-weave%2Fnasaq-pink-weave-off-3x4-1080x1440-761ffa6a.webp&w=384&q=75",
+    "slot": {
+      "width": 335,
+      "height": 419
+    },
+    "fit": "cover"
+  },
+  {
+    "placement": "collection",
+    "width": 767,
+    "source": "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-3x4-1080x1440-761ffa6a.webp",
+    "status": 200,
+    "currentSrc": "http://localhost:3000/_next/image?url=%2Fstack-lamp%2Fnasaq-pink-weave%2Fnasaq-pink-weave-off-3x4-1080x1440-761ffa6a.webp&w=384&q=75",
+    "slot": {
+      "width": 712,
+      "height": 890
+    },
+    "fit": "cover"
+  },
+  {
+    "placement": "collection",
+    "width": 768,
+    "source": "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-1x1-1200x1200.webp",
+    "status": 200,
+    "currentSrc": "http://localhost:3000/_next/image?url=%2Fstack-lamp%2Fnasaq-pink-weave%2Fnasaq-pink-weave-off-1x1-1200x1200.webp&w=384&q=75",
+    "slot": {
+      "width": 341,
+      "height": 426
+    },
+    "fit": "cover"
+  },
+  {
+    "placement": "collection",
+    "width": 1440,
+    "source": "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-1x1-1200x1200.webp",
+    "status": 200,
+    "currentSrc": "http://localhost:3000/_next/image?url=%2Fstack-lamp%2Fnasaq-pink-weave%2Fnasaq-pink-weave-off-1x1-1200x1200.webp&w=384&q=75",
+    "slot": {
+      "width": 286,
+      "height": 358
+    },
+    "fit": "cover"
+  }
+]

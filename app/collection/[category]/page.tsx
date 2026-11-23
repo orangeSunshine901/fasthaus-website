@@ -8,6 +8,7 @@ import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import { CATEGORIES, getCategory, getCategoryProducts } from "@/lib/data/categories";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { getMediaProducts } from "@/lib/cms/products";
+import { getCollectionProducts } from "@/lib/data/products";
 
 // Unknown category slugs return a real 404 instead of an "All Products" soft-404.
 export const dynamicParams = false;
@@ -39,7 +40,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const category = getCategory(slug);
   if (!category) notFound();
 
-  const products = (await getMediaProducts()).filter((product) => product.category === category.slug);
+  const products = getCollectionProducts(
+    (await getMediaProducts()).filter((product) => product.category === category.slug)
+  );
 
   return (
     <ShopLayout>
@@ -72,7 +75,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         {products.length > 0 ? (
           <div className="grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={`${product.id}-${product.variants[0].id}`} product={product} />
             ))}
           </div>
         ) : (

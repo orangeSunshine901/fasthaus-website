@@ -1,0 +1,2 @@
+[21502719ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/product/nasaq-lamp?variant=3-cobalt-blue&_rsc=-F_mlh3BfdNX6UV5:1
+[21502730ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/product/nasaq-lamp?_rsc=-F_mlh3BfdNX6UV5:1

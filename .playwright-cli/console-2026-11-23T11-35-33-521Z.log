@@ -1,0 +1,105 @@
+[   84782ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/image?url=%2Fstack-lamp%2Fstack-lamp-blue-off-shadow.png&w=750&q=75:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/image?url=%2Fstack-lamp%2Fstack-lamp-blue-off-collection.png&w=384&q=75:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/image?url=%2Fstack-lamp%2Fnasaq-pink-weave%2Fnasaq-pink-weave-off-1x1-1200x1200.webp&w=384&q=75:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/image?url=%2Fflute-lamp%2Fflute-lamp-matcha-off-collection.png&w=384&q=75:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/image?url=%2Fpearl-lamp%2Fpearl-lamp-red-off-collection.png&w=384&q=75:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/image?url=%2Fflute-lamp%2Fflute-matcha-off-shadow.png&w=750&q=75:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/image?url=%2Fpearl-lamp%2Fpearl-lamp-red-off-shadow.png&w=750&q=75:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/ArrowRight.svg:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/dirham-icon-black.svg:1
+[   84783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/image?url=%2Fmushroom-lamp%2Fmushroom-lamp-orange-off-collection.png&w=384&q=75:1
+[   84805ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/product/nujaj-desk-lamp?variant=1-matcha&_rsc=0-sRrmntP_ODdenP:1
+[   84805ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/product/hamrah-lamp?variant=4-cherry-red&_rsc=0-sRrmntP_ODdenP:1
+[  127685ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 23ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[  127757ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  127807ms] [LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  129237ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  129402ms] [LOG] [Fast Refresh] done in 165ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  130011ms] [LOG] [Fast Refresh] done in 775ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  130024ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  130700ms] [LOG] [Fast Refresh] done in 675ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  130715ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  130881ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  130917ms] [LOG] [Fast Refresh] done in 37ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131124ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131165ms] [LOG] [Fast Refresh] done in 41ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131347ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131379ms] [LOG] [Fast Refresh] done in 33ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131506ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131542ms] [LOG] [Fast Refresh] done in 37ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131662ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131696ms] [LOG] [Fast Refresh] done in 33ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131821ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  131861ms] [LOG] [Fast Refresh] done in 40ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132067ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132105ms] [LOG] [Fast Refresh] done in 38ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132220ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132247ms] [LOG] [Fast Refresh] done in 28ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132356ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132383ms] [LOG] [Fast Refresh] done in 26ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132551ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132581ms] [LOG] [Fast Refresh] done in 31ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132727ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132754ms] [LOG] [Fast Refresh] done in 27ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  132991ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  133034ms] [LOG] [Fast Refresh] done in 44ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  133251ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  133296ms] [LOG] [Fast Refresh] done in 46ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[  133777ms] Invalid or unexpected token
+[  134939ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 21ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[  135006ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  135034ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  135247ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  135250ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  135423ms] [LOG] [Fast Refresh] done in 172ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  135424ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  135533ms] [LOG] [Fast Refresh] done in 108ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  135591ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  135619ms] [LOG] [Fast Refresh] done in 28ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  137663ms] Invalid or unexpected token
+[  138382ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 18ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[  138439ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  138460ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  138525ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  138528ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  138704ms] [LOG] [Fast Refresh] done in 176ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  138706ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  138834ms] [LOG] [Fast Refresh] done in 129ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  138902ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  138955ms] [LOG] [Fast Refresh] done in 53ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139082ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139140ms] [LOG] [Fast Refresh] done in 59ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139254ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139302ms] [LOG] [Fast Refresh] done in 47ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139423ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139459ms] [LOG] [Fast Refresh] done in 35ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139595ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139643ms] [LOG] [Fast Refresh] done in 48ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139760ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139808ms] [LOG] [Fast Refresh] done in 47ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139917ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  139967ms] [LOG] [Fast Refresh] done in 50ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140082ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140141ms] [LOG] [Fast Refresh] done in 59ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140251ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140300ms] [LOG] [Fast Refresh] done in 49ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140421ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140468ms] [LOG] [Fast Refresh] done in 46ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140579ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140612ms] [LOG] [Fast Refresh] done in 32ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140799ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140850ms] [LOG] [Fast Refresh] done in 50ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  140985ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141055ms] [LOG] [Fast Refresh] done in 69ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141198ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141255ms] [LOG] [Fast Refresh] done in 58ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141383ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141438ms] [LOG] [Fast Refresh] done in 55ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141559ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141602ms] [LOG] [Fast Refresh] done in 43ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141725ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141773ms] [LOG] [Fast Refresh] done in 48ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141882ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  141929ms] [LOG] [Fast Refresh] done in 46ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  142041ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[  142076ms] [LOG] [Fast Refresh] done in 35ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1

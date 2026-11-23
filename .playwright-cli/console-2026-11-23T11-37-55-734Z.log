@@ -1,0 +1,414 @@
+[      16ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[     431ms] Invalid or unexpected token
+[    2021ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 21ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[    2067ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2108ms] [LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2122ms] Error: Internal Next.js error: Router action dispatched before initialization.
+    at dispatchAppRouterAction (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/use-action-queue.js:50:37)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:328:61)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at Object.hmrRefresh (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:327:40)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:301:64)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at processMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:300:44)
+    at WebSocket.handleMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js:95:52)
+[    2123ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2359ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:58
+[    2362ms] [LOG] [Fast Refresh] done in 238ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2362ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2511ms] [LOG] [Fast Refresh] done in 149ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2513ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2654ms] [LOG] [Fast Refresh] done in 142ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2660ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2785ms] [LOG] [Fast Refresh] done in 124ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2789ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2812ms] [LOG] [Fast Refresh] done in 23ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2910ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    2932ms] [LOG] [Fast Refresh] done in 22ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3027ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3048ms] [LOG] [Fast Refresh] done in 21ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3154ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3192ms] [LOG] [Fast Refresh] done in 38ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3342ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3367ms] [LOG] [Fast Refresh] done in 25ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3467ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3489ms] [LOG] [Fast Refresh] done in 22ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3589ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3611ms] [LOG] [Fast Refresh] done in 22ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3708ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3731ms] [LOG] [Fast Refresh] done in 22ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3827ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3846ms] [LOG] [Fast Refresh] done in 19ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3948ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    3976ms] [LOG] [Fast Refresh] done in 27ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:45
+[    4515ms] Invalid or unexpected token
+[    5853ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 21ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[    5922ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    5962ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6147ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6151ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6323ms] [LOG] [Fast Refresh] done in 173ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6325ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6454ms] [LOG] [Fast Refresh] done in 130ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6456ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6610ms] [LOG] [Fast Refresh] done in 154ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6612ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6694ms] [LOG] [Fast Refresh] done in 83ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6739ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6760ms] [LOG] [Fast Refresh] done in 22ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6851ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6873ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6968ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    6987ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7079ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7100ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7196ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7213ms] [LOG] [Fast Refresh] done in 17ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7307ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7334ms] [LOG] [Fast Refresh] done in 27ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7427ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7460ms] [LOG] [Fast Refresh] done in 34ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7613ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7643ms] [LOG] [Fast Refresh] done in 30ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7762ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7784ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7889ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    7921ms] [LOG] [Fast Refresh] done in 33ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[    8475ms] Invalid or unexpected token
+[    9914ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 20ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[    9974ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10013ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10024ms] Error: Internal Next.js error: Router action dispatched before initialization.
+    at dispatchAppRouterAction (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/use-action-queue.js:50:37)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:328:61)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at Object.hmrRefresh (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:327:40)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:301:64)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at processMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:300:44)
+    at WebSocket.handleMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js:95:52)
+[   10025ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10272ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10276ms] [LOG] [Fast Refresh] done in 251ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10276ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10424ms] [LOG] [Fast Refresh] done in 147ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10426ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10573ms] [LOG] [Fast Refresh] done in 148ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10575ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10677ms] [LOG] [Fast Refresh] done in 101ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10720ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10750ms] [LOG] [Fast Refresh] done in 30ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10858ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10880ms] [LOG] [Fast Refresh] done in 22ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10974ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   10999ms] [LOG] [Fast Refresh] done in 25ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11098ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11122ms] [LOG] [Fast Refresh] done in 24ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11228ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11249ms] [LOG] [Fast Refresh] done in 20ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11350ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11372ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11480ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11505ms] [LOG] [Fast Refresh] done in 26ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11611ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11636ms] [LOG] [Fast Refresh] done in 26ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11744ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11767ms] [LOG] [Fast Refresh] done in 23ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11891ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   11922ms] [LOG] [Fast Refresh] done in 31ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   12383ms] Invalid or unexpected token
+[   13990ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 21ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[   14053ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14090ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14102ms] Error: Internal Next.js error: Router action dispatched before initialization.
+    at dispatchAppRouterAction (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/use-action-queue.js:50:37)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:328:61)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at Object.hmrRefresh (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:327:40)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:301:64)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at processMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:300:44)
+    at WebSocket.handleMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js:95:52)
+[   14103ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14369ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14371ms] [LOG] [Fast Refresh] done in 269ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14372ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14556ms] [LOG] [Fast Refresh] done in 184ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14558ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14693ms] [LOG] [Fast Refresh] done in 135ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14695ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14785ms] [LOG] [Fast Refresh] done in 90ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14825ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14846ms] [LOG] [Fast Refresh] done in 22ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14949ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   14970ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15067ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15086ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15194ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15220ms] [LOG] [Fast Refresh] done in 26ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15312ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15331ms] [LOG] [Fast Refresh] done in 18ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15429ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15451ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15539ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15559ms] [LOG] [Fast Refresh] done in 20ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15659ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15682ms] [LOG] [Fast Refresh] done in 24ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15777ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15803ms] [LOG] [Fast Refresh] done in 25ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15910ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   15934ms] [LOG] [Fast Refresh] done in 25ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   16049ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   16088ms] [LOG] [Fast Refresh] done in 39ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   16322ms] Invalid or unexpected token
+[   17860ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 20ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[   17920ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   17941ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18128ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18134ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18298ms] [LOG] [Fast Refresh] done in 165ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18300ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18427ms] [LOG] [Fast Refresh] done in 127ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18428ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18546ms] [LOG] [Fast Refresh] done in 118ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18547ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18634ms] [LOG] [Fast Refresh] done in 87ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18678ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18705ms] [LOG] [Fast Refresh] done in 26ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18851ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18871ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18971ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   18991ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19081ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19102ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19193ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19210ms] [LOG] [Fast Refresh] done in 17ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19322ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19350ms] [LOG] [Fast Refresh] done in 28ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19441ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19459ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19553ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19575ms] [LOG] [Fast Refresh] done in 22ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19662ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19681ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19784ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   19812ms] [LOG] [Fast Refresh] done in 27ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   20376ms] Invalid or unexpected token
+[   21958ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 26ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[   22048ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22079ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22126ms] Error: Internal Next.js error: Router action dispatched before initialization.
+    at dispatchAppRouterAction (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/use-action-queue.js:50:37)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:328:61)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at Object.hmrRefresh (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:327:40)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:301:64)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at processMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:300:44)
+    at WebSocket.handleMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js:95:52)
+[   22125ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22464ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22468ms] [LOG] [Fast Refresh] done in 343ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22469ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22705ms] [LOG] [Fast Refresh] done in 235ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22708ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22900ms] [LOG] [Fast Refresh] done in 192ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   22902ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23016ms] [LOG] [Fast Refresh] done in 115ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23066ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23091ms] [LOG] [Fast Refresh] done in 24ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23201ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23243ms] [LOG] [Fast Refresh] done in 42ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23391ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23416ms] [LOG] [Fast Refresh] done in 26ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23534ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23577ms] [LOG] [Fast Refresh] done in 44ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23744ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23772ms] [LOG] [Fast Refresh] done in 27ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23877ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23899ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   23995ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   24014ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   24121ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   24150ms] [LOG] [Fast Refresh] done in 29ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   24248ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   24267ms] [LOG] [Fast Refresh] done in 18ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   24388ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   24438ms] [LOG] [Fast Refresh] done in 50ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   24886ms] Invalid or unexpected token
+[   26752ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 31ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[   26834ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   26889ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27103ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27107ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27297ms] [LOG] [Fast Refresh] done in 190ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27299ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27443ms] [LOG] [Fast Refresh] done in 144ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27445ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27568ms] [LOG] [Fast Refresh] done in 124ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27570ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27638ms] [LOG] [Fast Refresh] done in 67ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27695ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27720ms] [LOG] [Fast Refresh] done in 25ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27816ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27837ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27934ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   27957ms] [LOG] [Fast Refresh] done in 22ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28118ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28145ms] [LOG] [Fast Refresh] done in 27ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28260ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28284ms] [LOG] [Fast Refresh] done in 25ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28407ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28431ms] [LOG] [Fast Refresh] done in 24ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28547ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28587ms] [LOG] [Fast Refresh] done in 39ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28755ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28801ms] [LOG] [Fast Refresh] done in 45ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   28967ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   29000ms] [LOG] [Fast Refresh] done in 33ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   29637ms] Invalid or unexpected token
+[   31044ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 22ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[   31108ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31150ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31439ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31442ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31619ms] [LOG] [Fast Refresh] done in 177ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31621ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31800ms] [LOG] [Fast Refresh] done in 180ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31803ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31946ms] [LOG] [Fast Refresh] done in 143ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   31949ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32092ms] [LOG] [Fast Refresh] done in 143ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32096ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32129ms] [LOG] [Fast Refresh] done in 33ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32229ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32249ms] [LOG] [Fast Refresh] done in 20ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32342ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32358ms] [LOG] [Fast Refresh] done in 16ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32454ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32481ms] [LOG] [Fast Refresh] done in 26ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32575ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32595ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32688ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32708ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32796ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32815ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32904ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   32923ms] [LOG] [Fast Refresh] done in 20ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   33013ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   33033ms] [LOG] [Fast Refresh] done in 20ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   33128ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   33153ms] [LOG] [Fast Refresh] done in 25ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   33622ms] Invalid or unexpected token
+[   35324ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 21ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[   35385ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   35430ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   35441ms] Error: Internal Next.js error: Router action dispatched before initialization.
+    at dispatchAppRouterAction (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/use-action-queue.js:50:37)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:328:61)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at Object.hmrRefresh (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:327:40)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:301:64)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at processMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:300:44)
+    at WebSocket.handleMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js:95:52)
+[   35441ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   35679ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   35683ms] [LOG] [Fast Refresh] done in 241ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   35683ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   35935ms] [LOG] [Fast Refresh] done in 252ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   35938ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36107ms] [LOG] [Fast Refresh] done in 170ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36110ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36213ms] [LOG] [Fast Refresh] done in 103ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36260ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36281ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36430ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36466ms] [LOG] [Fast Refresh] done in 36ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36588ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36637ms] [LOG] [Fast Refresh] done in 50ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36748ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36768ms] [LOG] [Fast Refresh] done in 20ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36868ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36892ms] [LOG] [Fast Refresh] done in 24ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   36998ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37017ms] [LOG] [Fast Refresh] done in 19ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37112ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37147ms] [LOG] [Fast Refresh] done in 35ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37243ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37268ms] [LOG] [Fast Refresh] done in 24ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37386ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37414ms] [LOG] [Fast Refresh] done in 29ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37516ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   37538ms] [LOG] [Fast Refresh] done in 23ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   39956ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 20ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[   40033ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40082ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40102ms] Error: Internal Next.js error: Router action dispatched before initialization.
+    at dispatchAppRouterAction (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/use-action-queue.js:50:37)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:328:61)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at Object.hmrRefresh (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router-instance.js:327:40)
+    at eval (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:301:64)
+    at startTransition (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react/cjs/react.development.js:556:27)
+    at processMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:300:44)
+    at WebSocket.handleMessage (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js:95:52)
+[   40102ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40429ms] [LOG] [Fast Refresh] done in 328ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40430ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40517ms] [LOG] [Fast Refresh] done in 88ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40519ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40668ms] [LOG] [Fast Refresh] done in 148ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40670ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40895ms] [LOG] [Fast Refresh] done in 225ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   40897ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41106ms] [LOG] [Fast Refresh] done in 209ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41113ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41142ms] [LOG] [Fast Refresh] done in 29ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41258ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41285ms] [LOG] [Fast Refresh] done in 27ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41396ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41425ms] [LOG] [Fast Refresh] done in 29ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41522ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41552ms] [LOG] [Fast Refresh] done in 31ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41644ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41667ms] [LOG] [Fast Refresh] done in 23ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41771ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41794ms] [LOG] [Fast Refresh] done in 22ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41897ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   41927ms] [LOG] [Fast Refresh] done in 29ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   42455ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   42534ms] [LOG] [Fast Refresh] done in 79ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   44919ms] [LOG] [Client Instrumentation Hook] Slow execution detected: 20ms (Note: Code download overhead is not included in this measurement) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/lib/require-instrumentation-client.js:22
+[   44996ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45036ms] [LOG] [HMR] connected @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45337ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45523ms] [LOG] [Fast Refresh] done in 186ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45525ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45675ms] [LOG] [Fast Refresh] done in 149ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45677ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45818ms] [LOG] [Fast Refresh] done in 142ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45820ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45914ms] [LOG] [Fast Refresh] done in 94ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   45965ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46005ms] [LOG] [Fast Refresh] done in 39ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46104ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46134ms] [LOG] [Fast Refresh] done in 31ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46233ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46262ms] [LOG] [Fast Refresh] done in 30ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46386ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46467ms] [LOG] [Fast Refresh] done in 81ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46660ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46680ms] [LOG] [Fast Refresh] done in 20ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46797ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46819ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46929ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   46949ms] [LOG] [Fast Refresh] done in 21ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   47054ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   47078ms] [LOG] [Fast Refresh] done in 23ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   47191ms] [LOG] [Fast Refresh] rebuilding @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   47220ms] [LOG] [Fast Refresh] done in 30ms @ https://eu-assets.i.posthog.com/static/1.439.0/posthog-recorder.js:1
+[   47826ms] Invalid or unexpected token
+[   52421ms] [WARNING] The resource http://localhost:3000/site-preferences.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/collection:1
+[   52421ms] [WARNING] The resource http://localhost:3000/_next/static/media/b5f6dddbf3e57a3e-s.p.otf?v=1795433923069 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/collection:1
+[   52421ms] [WARNING] The resource http://localhost:3000/_next/static/media/d9396795aa5ec363-s.p.woff2?v=1795433923069 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/collection:1

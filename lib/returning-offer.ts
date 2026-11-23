@@ -4,6 +4,11 @@ export const DISCOUNT_OFFER_COOLDOWN_MS = 7 * 24 * 60 * 60_000;
 export const DISCOUNT_OFFER_DELAY_MS = 45_000;
 export const DISCOUNT_INTERACTION_GAP_MS = 2_000;
 export const DISCOUNT_QUIET_MS = 3_000;
+export const DISCOUNT_OFFER_VISIBLE_MS = 12_000;
+
+export function isReturningOfferRoute(pathname: string) {
+  return pathname === "/" || pathname === "/cart" || /^\/(collection|product)(\/[^/]+)?\/?$/.test(pathname);
+}
 
 export function hasDiscountOfferEngagement(activeMs: number, interactions: number, quietMs: number) {
   return activeMs >= DISCOUNT_OFFER_DELAY_MS && interactions >= 3

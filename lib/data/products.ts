@@ -216,6 +216,60 @@ export const PRODUCTS: Product[] = [
           },
         ],
       },
+      {
+        id: "3-pink-weave",
+        color: "Pink · Weave shade",
+        colorHex: "#E7688B",
+        sku: "STL-PNK-WVE",
+        price: 322,
+        stock: 5,
+        featuredImages: {
+          lightOff: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-1x1-1200x1200.webp",
+          lightOn: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-on-1x1-1200x1200.webp",
+        },
+        collectionImage: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-1x1-1200x1200.webp",
+        // The approved ZIP revised these portraits without renaming them; version their optimized URLs.
+        collectionMobileImage:
+          "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-3x4-1080x1440-761ffa6a.webp",
+        cartDrawerImage: "",
+        mainImage: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-native-2880x1496.webp",
+        images: [
+          {
+            src: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-native-2880x1496.webp",
+            mobileSrc: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-off-3x4-1080x1440-761ffa6a.webp",
+            uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-on-native-2880x1496.webp",
+            mobileSrc: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-on-3x4-1080x1440-8ecda3a5.webp",
+            uiTheme: "dark",
+          },
+          {
+            src: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-lifestyle-front-hero-16x9-2560x1440.webp",
+            mobileSrc:
+              "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-lifestyle-front-hero-3x4-1080x1440.webp",
+            uiTheme: "light",
+          },
+          {
+            src: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-lifestyle-three-quarter-16x9-2560x1440.webp",
+            mobileSrc:
+              "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-lifestyle-three-quarter-3x4-1080x1440.webp",
+            uiTheme: "light",
+          },
+          {
+            src: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-lifestyle-rim-detail-16x9-2560x1440.webp",
+            mobileSrc:
+              "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-lifestyle-rim-detail-3x4-1080x1440.webp",
+            uiTheme: "light",
+          },
+          {
+            src: "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-lifestyle-room-portrait-16x9-2560x1440.webp",
+            mobileSrc:
+              "/stack-lamp/nasaq-pink-weave/nasaq-pink-weave-lifestyle-room-portrait-3x4-1080x1440.webp",
+            uiTheme: "light",
+          },
+        ],
+      },
     ],
     features: [],
     specifications: [
@@ -627,7 +681,7 @@ export const PRODUCTS: Product[] = [
           lightOff: "/mushroom-lamp/mushroom-orange-off.png",
           lightOn: "/mushroom-lamp/mushroom-orange-on.png",
         },
-        collectionImage: "/mushroom-lamp/kasane-tangerine-photoshopped-desktop-e413fdeb.webp",
+        collectionImage: "/mushroom-lamp/mushroom-lamp-orange-off-collection.png",
         cartDrawerImage: "",
         collectionMobileImage: "/mushroom-lamp/mushroom-lamp-orange-off-product-mobile.png",
         mainImage: "/mushroom-lamp/kasane-tangerine-full-desktop-2e73f8a8.webp",
@@ -781,8 +835,20 @@ export function getProductBySlug(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
 }
 
-export function getFeaturedProducts(): Product[] {
-  return PRODUCTS.filter((p) => p.featured);
+export function getCollectionProducts(products: Product[]): Product[] {
+  return products.flatMap((product) => {
+    const weave = product.variants.find((variant) => variant.id === "3-pink-weave");
+    return weave
+      ? [product, { ...product, name: "NASAQ WEAVE", badge: "NEW" as const, variants: [weave] }]
+      : [product];
+  });
+}
+
+export function getFeaturedProducts(products: Product[] = PRODUCTS): Product[] {
+  return products.filter((product) => product.featured).map((product) => ({
+    ...product,
+    variants: product.variants.filter((variant) => variant.id !== "3-pink-weave"),
+  }));
 }
 
 export function getNewArrivals(): Product[] {

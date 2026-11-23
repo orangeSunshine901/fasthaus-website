@@ -30,7 +30,7 @@ export default function AfterHoursInvitation() {
       const blocked = document.hidden || isPageScrollLocked() || useCartStore.getState().drawerOpen
         || document.documentElement.classList.contains("home-reveal-scroll-locked")
         || !isAfterHoursInvitationRoute(pathname)
-        || ["#stcm-banner", "#stcm-modal", '[aria-label="Returning visitor offer"]', '[aria-label="Complimentary gift offer"]']
+        || ["#stcm-banner", "#stcm-modal", '[aria-label="Returning visitor offer"]']
           .some((selector) => Boolean(document.querySelector(selector)?.getClientRects().length));
       if (!blocked && !seen.current) elapsed.current += Math.min(now - lastTick, 1500);
       lastTick = now;

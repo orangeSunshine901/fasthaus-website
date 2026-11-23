@@ -44,7 +44,6 @@ try {
 
     await page.evaluate(() => {
       sessionStorage.setItem("fasthaus_returning_discount_qualified", "1");
-      sessionStorage.setItem("fasthaus_gift_offer_qualified", "1");
       localStorage.removeItem("fasthaus_returning_discount_last_shown");
     });
     await page.reload({ waitUntil: "domcontentloaded" });
@@ -82,6 +81,28 @@ try {
     await advance(1000);
     assert.equal(await offer.count(), 1, "Show after engagement and a pause");
     assert.ok(await page.evaluate(() => Number(localStorage.getItem("fasthaus_returning_discount_last_shown"))), "Remember the impression");
+    assert.equal(await page.getByText("A gift with every lamp order", { exact: true }).isVisible(), true, "Gift stays in the announcement bar");
+    assert.equal(await page.getByRole("complementary", { name: "Complimentary gift offer" }).count(), 0, "No floating gift notification");
+    await advance(300);
+    await page.screenshot({ path: `output/playwright/offers-${mobile ? "mobile" : "desktop"}.png` });
+    const close = offer.getByRole("button", { name: "Dismiss discount offer" });
+    await close.focus();
+    await advance(15_000);
+    assert.equal(await offer.count(), 1, "Keyboard focus pauses auto-dismiss");
+    await close.evaluate((button) => button.blur());
+    if (!mobile) {
+      await offer.hover();
+      await advance(15_000);
+      assert.equal(await offer.count(), 1, "Hover pauses auto-dismiss");
+      await page.mouse.move(10, 300);
+    }
+    await advance(10_000);
+    assert.equal(await offer.count(), 1, "Allow time to read the offer");
+    await advance(3000);
+    await advance(300);
+    assert.equal(await offer.count(), 0, "Auto-dismiss after twelve visible seconds");
+    await advance(5000);
+    assert.equal(await offer.count(), 0, "An auto-dismissed offer stays dismissed");
     await page.clock.resume();
     await page.reload({ waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelector("[data-home-reveal]")?.dataset.homeReveal === "revealed");
@@ -92,6 +113,27 @@ try {
       await advance(3000);
     }
     assert.equal(await offer.count(), 0, "Cooldown survives reload and renewed engagement");
+    await page.clock.resume();
+    await page.evaluate(() => localStorage.removeItem("fasthaus_returning_discount_last_shown"));
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForFunction(() => document.querySelector("[data-home-reveal]")?.dataset.homeReveal === "revealed");
+    await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
+    await advance(46_000);
+    for (let i = 0; i < 3; i++) {
+      await interact();
+      await advance(3000);
+    }
+    assert.equal(await offer.count(), 1, "Offer can be dismissed manually");
+    if (mobile) await offer.getByRole("button", { name: "Dismiss discount offer" }).click();
+    else {
+      await offer.getByRole("button", { name: "Dismiss discount offer" }).focus();
+      await page.keyboard.press("Escape");
+    }
+    await advance(1000);
+    await advance(300);
+    assert.equal(await offer.count(), 0, "Close button and Escape dismiss immediately");
+    await advance(15_000);
+    assert.equal(await offer.count(), 0, "Manual dismissal does not resurface");
     await page.clock.resume();
     const revisit = await context.newPage();
     revisit.setDefaultTimeout(10_000);

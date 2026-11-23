@@ -80,6 +80,7 @@ export function applyProductMedia(products: Product[], rows: MediaRow[]): Produc
         collectionMobileImage: media.collectionMobile || undefined,
         cartDrawerImage: media.cart,
         collectionHeroImage: media.hero || undefined,
+        mainImage: media.images[0].src,
         images: media.images,
       };
     }),
