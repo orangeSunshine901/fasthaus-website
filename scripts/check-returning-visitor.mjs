@@ -81,7 +81,9 @@ try {
     await advance(1000);
     assert.equal(await offer.count(), 1, "Show after engagement and a pause");
     assert.ok(await page.evaluate(() => Number(localStorage.getItem("fasthaus_returning_discount_last_shown"))), "Remember the impression");
-    assert.equal(await page.getByText("A gift with every lamp order", { exact: true }).isVisible(), true, "Gift stays in the announcement bar");
+    for (const label of ["A gift with every lamp order", "Free shipping", "Eco-friendly materials", "1-year warranty"]) {
+      assert.ok(await page.getByText(label, { exact: true }).evaluateAll((nodes) => nodes.some((node) => node.getClientRects().length)), `${label} stays in the announcement bar`);
+    }
     assert.equal(await page.getByRole("complementary", { name: "Complimentary gift offer" }).count(), 0, "No floating gift notification");
     await advance(300);
     await page.screenshot({ path: `output/playwright/offers-${mobile ? "mobile" : "desktop"}.png` });
