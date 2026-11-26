@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -24,7 +24,13 @@ import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { CHECKOUT_DISCOUNTS_ENABLED } from "@/lib/promotions";
-import { discountAmountFor, normalizeDiscountCode } from "@/lib/checkout/discount";
+import { normalizeDiscountCode } from "@/lib/checkout/discount";
+import {
+  currentWhiteFridayOffer,
+  initialWhiteFridayOffer,
+  isWhiteFridayCode,
+  subscribeToWhiteFridayOffer,
+} from "@/lib/white-friday";
 import { startGeideaCheckout } from "@/lib/payment/geidea-client";
 
 const EMIRATES = [
@@ -107,6 +113,7 @@ export default function CheckoutPage() {
     code: string;
     email: string;
     subtotal: number;
+    discountAmount: number;
   } | null>(null);
   const [checkingDiscount, setCheckingDiscount] = useState(false);
   const discountRequest = useRef(0);
@@ -115,14 +122,25 @@ export default function CheckoutPage() {
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
 
+  const offer = useSyncExternalStore(subscribeToWhiteFridayOffer, currentWhiteFridayOffer, initialWhiteFridayOffer);
+  const enteredCode = normalizeDiscountCode(discountCode);
+  const expiredSaleCode =
+    offer !== undefined && appliedDiscount?.code === enteredCode &&
+    isWhiteFridayCode(enteredCode) && offer?.code !== enteredCode;
+  const expiredSaleMessage = expiredSaleCode
+    ? offer
+      ? `Use ${offer.code} for the current White Friday offer.`
+      : "The White Friday offer has ended."
+    : null;
   const subtotalValue = subtotal();
   const hasDiscount =
     CHECKOUT_DISCOUNTS_ENABLED &&
     appliedDiscount !== null &&
+    !expiredSaleCode &&
     appliedDiscount.email === email.trim().toLowerCase() &&
-    appliedDiscount.code === normalizeDiscountCode(discountCode) &&
+    appliedDiscount.code === enteredCode &&
     appliedDiscount.subtotal === subtotalValue;
-  const discountAmount = hasDiscount ? discountAmountFor(appliedDiscount.code, subtotalValue) : 0;
+  const discountAmount = hasDiscount ? appliedDiscount.discountAmount : 0;
   const totalValue = Math.max(0, Math.round((subtotalValue - discountAmount) * 100) / 100);
   const cartSyncing = pending.length > 0;
   const checkoutDetailsReady =
@@ -204,6 +222,7 @@ export default function CheckoutPage() {
           code: body.code,
           email: email.trim().toLowerCase(),
           subtotal: body.subtotal,
+          discountAmount: body.discountAmount,
         });
       }
     } catch (error) {
@@ -234,7 +253,7 @@ export default function CheckoutPage() {
     }
     if (cartSyncing || checkingDiscount) return;
     if (CHECKOUT_DISCOUNTS_ENABLED && discountCode.trim() && !hasDiscount) {
-      setDiscountError("Apply the code again to check it for this email and cart before payment.");
+      setDiscountError(expiredSaleMessage ?? "Apply the code again to check it for this email and cart before payment.");
       return;
     }
     setPurchasing(true);
@@ -585,7 +604,7 @@ export default function CheckoutPage() {
                     {purchaseError}
                   </p>
                 )}
-                {purchaseNotice && (
+                {purchaseNotice && !expiredSaleCode && (
                   <p
                     role="status"
                     className="type-body-sm"
@@ -872,13 +891,13 @@ export default function CheckoutPage() {
                       {checkingDiscount ? "Checking…" : hasDiscount ? "Applied" : "Apply"}
                     </button>
                   </div>
-                  {discountError && (
+                  {(discountError || expiredSaleMessage) && (
                     <p
                       className="type-caption-sm"
                       style={{ color: "var(--color-error)" }}
                       role="alert"
                     >
-                      {discountError}
+                      {discountError ?? expiredSaleMessage}
                     </p>
                   )}
                 </div>
