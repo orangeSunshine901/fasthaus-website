@@ -1,0 +1,72 @@
+{
+  "mobile": [
+    {
+      "width": 390,
+      "labels": [
+        "A gift with every lamp order",
+        "Free shipping",
+        "Eco-friendly materials",
+        "1-year warranty"
+      ],
+      "icons": 4,
+      "moving": true,
+      "before": "matrix(1, 0, 0, 1, -1.91165, 0)",
+      "after": "matrix(1, 0, 0, 1, -8.05854, 0)"
+    },
+    {
+      "width": 767,
+      "labels": [
+        "A gift with every lamp order",
+        "Free shipping",
+        "Eco-friendly materials",
+        "1-year warranty"
+      ],
+      "icons": 4,
+      "moving": true,
+      "before": "matrix(1, 0, 0, 1, -11.9219, 0)",
+      "after": "matrix(1, 0, 0, 1, -32.4293, 0)"
+    }
+  ],
+  "desktop": [
+    {
+      "label": "A gift with every lamp order",
+      "font": "satoshi, \"satoshi Fallback\", system-ui, sans-serif",
+      "size": "12px",
+      "weight": "400",
+      "lineHeight": "16px",
+      "gap": "6px",
+      "iconSize": 14,
+      "iconStroke": "2"
+    },
+    {
+      "label": "Free shipping",
+      "font": "satoshi, \"satoshi Fallback\", system-ui, sans-serif",
+      "size": "12px",
+      "weight": "400",
+      "lineHeight": "16px",
+      "gap": "6px",
+      "iconSize": 14,
+      "iconStroke": "2"
+    },
+    {
+      "label": "Eco-friendly materials",
+      "font": "satoshi, \"satoshi Fallback\", system-ui, sans-serif",
+      "size": "12px",
+      "weight": "400",
+      "lineHeight": "16px",
+      "gap": "6px",
+      "iconSize": 14,
+      "iconStroke": "2"
+    },
+    {
+      "label": "1-year warranty",
+      "font": "satoshi, \"satoshi Fallback\", system-ui, sans-serif",
+      "size": "12px",
+      "weight": "400",
+      "lineHeight": "16px",
+      "gap": "6px",
+      "iconSize": 14,
+      "iconStroke": "2"
+    }
+  ]
+}

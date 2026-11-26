@@ -1,3 +1,6 @@
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -42,9 +45,41 @@ export default function Marquee({
   applyMask = true,
   ...props
 }: MarqueeProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    const track = container?.firstElementChild;
+    if (!container || !track) return;
+
+    let previousDistance = 0;
+    const observer = new ResizeObserver(() => {
+      const size = track.getBoundingClientRect()[vertical ? "height" : "width"];
+      if (!size) return;
+      const distance = size + parseFloat(getComputedStyle(container).gap);
+      if (previousDistance && distance !== previousDistance) {
+        // Keep the pixel offset when an offer or font changes the track length.
+        for (const child of container.children) {
+          for (const animation of child.getAnimations()) {
+            const duration = Number(animation.effect?.getTiming().duration);
+            if (duration && typeof animation.currentTime === "number") {
+              const elapsed = animation.currentTime % duration;
+              const offset = (reverse ? duration - elapsed : elapsed) * previousDistance / distance;
+              animation.currentTime = reverse ? (duration - offset % duration) % duration : offset;
+            }
+          }
+        }
+      }
+      previousDistance = distance;
+    });
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [vertical, reverse]);
+
   return (
     <div
       {...props}
+      ref={containerRef}
       className={cn(
         "group/marquee relative flex h-full w-full p-2 [--duration:10s] [--gap:12px] [gap:var(--gap)]",
         vertical ? "flex-col" : "flex-row",
