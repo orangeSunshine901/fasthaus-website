@@ -51,6 +51,13 @@ export const CreateOrderSchema = z
     shippingAddress: ShippingAddressSchema,
     expectedTotal: z.number().finite().nonnegative().optional(),
     discountCode: z.string().trim().max(32).optional(),
+    meta: z
+      .object({
+        consent: z.boolean(),
+        fbp: z.string().max(1024).optional(),
+        fbc: z.string().max(1024).optional(),
+      })
+      .optional(),
   })
   .strict();
 

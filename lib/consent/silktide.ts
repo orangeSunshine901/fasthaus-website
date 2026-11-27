@@ -14,3 +14,9 @@ export function readSilktideAnalyticsConsent(): AnalyticsConsentState {
 
   return toAnalyticsConsentState(manager.getConsentChoice("analytics"));
 }
+
+export function readSilktideMarketingConsent(): AnalyticsConsentState {
+  if (typeof window === "undefined") return "unknown";
+  const manager = window.silktideConsentManager?.getInstance();
+  return manager ? toAnalyticsConsentState(manager.getConsentChoice("marketing")) : "unknown";
+}

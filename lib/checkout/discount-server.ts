@@ -1,4 +1,6 @@
 import "server-only";
+import { after } from "next/server";
+import { deliverMetaPurchase, metaServerConfig } from "@/lib/analytics/meta-server";
 import { sendConfirmedOrderEmails } from "@/lib/payment/order-emails";
 import { CartError } from "@/lib/cart/types";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -30,7 +32,16 @@ export async function recordCheckoutPayment(
     p_method: payment.paymentMethod,
   });
   if (error) throw error;
-  if (data === true && payment.isPaid) await sendConfirmedOrderEmails(payment.merchantReferenceId);
+  if (data === true && payment.isPaid) {
+    const config = metaServerConfig();
+    if (config) {
+      after(async () => {
+        const result = await deliverMetaPurchase(supabase, payment.merchantReferenceId, config);
+        if (result.status === "failed") console.warn("Meta Purchase delivery remains pending", result.code);
+      });
+    }
+    await sendConfirmedOrderEmails(payment.merchantReferenceId);
+  }
   return data === true;
 }
 

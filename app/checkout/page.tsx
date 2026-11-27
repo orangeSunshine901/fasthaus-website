@@ -22,6 +22,7 @@ import ShippingNotification from "@/components/checkout/ShippingNotification";
 import { useCartStore } from "@/lib/store/cart";
 import { capture } from "@/lib/analytics/client";
 import { analyticsEvents } from "@/lib/analytics/events";
+import { metaCheckoutAttribution } from "@/lib/analytics/meta-client";
 import { formatPhoneInput } from "@/lib/checkout/phone-input";
 import { CHECKOUT_DISCOUNTS_ENABLED } from "@/lib/promotions";
 import { normalizeDiscountCode } from "@/lib/checkout/discount";
@@ -186,6 +187,7 @@ export default function CheckoutPage() {
           CHECKOUT_DISCOUNTS_ENABLED && discountCode.trim()
             ? normalizeDiscountCode(discountCode)
             : undefined,
+        meta: metaCheckoutAttribution(),
       }),
     });
     const body = (await response.json()) as Partial<CheckoutSession> & {

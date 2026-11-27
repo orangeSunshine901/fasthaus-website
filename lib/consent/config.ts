@@ -35,6 +35,8 @@ export function initializeSilktide(onConsentChange: () => void, callbacks: Promp
         required: false,
         defaultValue: true,
         gtag: ["ad_storage", "ad_user_data", "ad_personalization"],
+        onAccept: onConsentChange,
+        onReject: onConsentChange,
       },
     ],
     text: {

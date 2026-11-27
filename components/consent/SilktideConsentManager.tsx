@@ -17,6 +17,7 @@ function initializeSilktide() {
       setPageScrollLocked("cookie-consent", window.matchMedia("(min-width: 768px)").matches),
     onPromptClose: () => setPageScrollLocked("cookie-consent", false),
   });
+  window.dispatchEvent(new CustomEvent("fasthaus:consent-change"));
 }
 
 export default function SilktideConsentManager() {

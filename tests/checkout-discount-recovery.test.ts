@@ -14,19 +14,31 @@ function harness({
   expired = true,
   payment = null,
   lookupFails = false,
+  trackPurchase = false,
 }: {
   session?: string | null;
   expired?: boolean;
   payment?: Record<string, unknown> | null;
   lookupFails?: boolean;
+  trackPurchase?: boolean;
 } = {}) {
   const calls: string[] = [];
+  const afterResponse: (() => Promise<void>)[] = [];
   const exports: Record<string, (...args: unknown[]) => Promise<unknown>> = {};
   class CartError extends Error {}
   runInNewContext(source, {
     exports,
     require(name: string) {
       if (name === "server-only") return {};
+      if (name === "next/server") return { after: (task: () => Promise<void>) => afterResponse.push(task) };
+      if (name.endsWith("analytics/meta-server"))
+        return {
+          metaServerConfig: () => (trackPurchase ? {} : null),
+          deliverMetaPurchase: async (_client: unknown, orderId: string) => {
+            calls.push(`purchase:${orderId}`);
+            return { status: "sent" };
+          },
+        };
       if (name.endsWith("order-emails"))
         return {
           sendConfirmedOrderEmails: async () => {
@@ -80,7 +92,7 @@ function harness({
       return { data: true, error: null };
     },
   };
-  return { calls, recover: () => exports.recoverExpiredDiscount(client, " maxine100 ") };
+  return { calls, afterResponse, recover: () => exports.recoverExpiredDiscount(client, " maxine100 ") };
 }
 const paid = {
   merchantReferenceId: "order",
@@ -111,14 +123,18 @@ test("an expired delivered session checks the provider before releasing an aband
   assert.deepEqual(h.calls, ["lookup", "release_expired_checkout_discount"]);
 });
 test("a delayed paid result redeems and sends confirmations instead of releasing", async () => {
-  const h = harness({ payment: paid });
+  const h = harness({ payment: paid, trackPurchase: true });
   await h.recover();
   assert.deepEqual(h.calls, ["lookup", "record_checkout_payment", "emails"]);
+  assert.equal(h.afterResponse.length, 1);
+  await h.afterResponse[0]();
+  assert.deepEqual(h.calls, ["lookup", "record_checkout_payment", "emails", "purchase:order"]);
 });
 test("an in-flight transaction retains the reservation after session expiry", async () => {
-  const h = harness({ payment: { ...paid, status: "InProgress", isPaid: false } });
+  const h = harness({ payment: { ...paid, status: "InProgress", isPaid: false }, trackPurchase: true });
   await h.recover();
   assert.deepEqual(h.calls, ["lookup", "record_checkout_payment"]);
+  assert.equal(h.afterResponse.length, 0);
 });
 test("provider errors and mismatched amounts fail closed without releasing", async () => {
   const unavailable = harness({ lookupFails: true });

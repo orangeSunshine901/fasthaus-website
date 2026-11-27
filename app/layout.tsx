@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import localFont from "next/font/local";
 import Script from "next/script";
 import PageTransition from "@/components/layout/PageTransition";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
+import MetaPixel from "@/components/analytics/MetaPixel";
 import SilktideConsentManager from "@/components/consent/SilktideConsentManager";
 import CartProvider from "@/components/cart/CartProvider";
 import AfterHoursInvitation from "@/components/home/AfterHoursInvitation";
@@ -150,6 +152,9 @@ export default async function RootLayout({
         </noscript>
         <GlassFilters />
         <SilktideConsentManager />
+        <Suspense fallback={null}>
+          <MetaPixel />
+        </Suspense>
         <ProductMediaProvider products={products}>
           <HomeNavigationProvider>
             <AnalyticsProvider>

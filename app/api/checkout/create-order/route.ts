@@ -10,6 +10,7 @@ import { createGeideaCheckoutSession } from "@/lib/payment/geidea";
 import { sendConfirmedOrderEmails, sendPaidOrderEmails } from "@/lib/payment/order-emails";
 import { checkoutDiscountError, recoverExpiredDiscount } from "@/lib/checkout/discount-server";
 import { normalizeDiscountCode } from "@/lib/checkout/discount";
+import { saveMetaCheckoutAttribution } from "@/lib/analytics/meta-server";
 
 type ServiceClient = Awaited<ReturnType<typeof createServiceClient>>;
 const CHECKOUT_PAYMENT_MODE = "standard" as const;
@@ -177,6 +178,7 @@ export async function POST(request: Request) {
         409
       );
     }
+    await saveMetaCheckoutAttribution(supabase, order.order_id, cookieCartId, parsed.data.meta, request);
     if (order.checkout_session_id && order.checkout_url && order.checkout_session_expires_at) {
       return NextResponse.json({
         orderId: order.order_id,
